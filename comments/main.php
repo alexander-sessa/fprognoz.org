@@ -5,9 +5,9 @@
 function getSelText(){var txt='';if(window.getSelection)txt=window.getSelection();else if(document.getSelection)txt=document.getSelection();else if(document.selection)txt=document.selection.createRange().text;return txt;}
 function c_quote(cid,inf){var c_text=getSelText();if(c_text == ''){if(contentHTML[cid]!==undefined)c_text=contentHTML[cid];else c_text=$('main',$('[commentid="'+cid+'"]')).html();var begin=1+c_text.indexOf('>'),end=c_text.lastIndexOf('<');c_text=c_text.substr(begin,end-begin)}var c_date=$('.c-comment-date',$('[commentid="'+cid+'"]')).html(),sStr='<blockquote><p><sub>'+$('.c-comment-author',$('[commentid="'+cid+'"]')).html()+' <em>писал' + inf + ' '+c_date.split(' ').join(' в ')+'</em></sub></p><p>„'+c_text+'“</p></blockquote>';var cke=eval('CKEDITOR.instances.cke'+cid);cke.insertElement(CKEDITOR.dom.element.createFromHtml(sStr,cke.document))}
 function c_quote_ta(cid,inf){var c_text=getSelText();if(c_text == ''){if(contentHTML[cid]!==undefined)c_text=contentHTML[cid];else c_text=$('main',$('[commentid="'+cid+'"]')).html();var begin=1+c_text.indexOf('>'),end=c_text.lastIndexOf('<');c_text=c_text.substr(begin,end-begin)}var c_date=$('.c-comment-date',$('[commentid="'+cid+'"]')).html(),sStr='<blockquote><p><sub>'+$('.c-comment-author',$('[commentid="'+cid+'"]')).html()+' <em>писал' + inf + ' '+c_date.split(' ').join(' в ')+'</em></sub></p><p>&bdquo;'+c_text+'&ldquo;</p></blockquote>';$('#cke'+cid).val(sStr)}
-function changeRating(id,rate_yes,rate_no,vote){$("#r_yes"+id).html(rate_yes?rate_yes:"");$("#r_no"+id).html(rate_no?rate_no:"");$.get("https://fprognoz.org/comments/vote.php",{user:"<?=$coach_name?>",id:id,vote:vote,hash:"<?=crypt($coach_name,$salt)?>"})}
-function saveContent(id,c_text){$.get("https://fprognoz.org/comments/save.php",{user:"<?=$coach_name?>",id:id,c_text:c_text,hash:"<?=crypt($coach_name,$salt)?>"})}
-function modComment(id,man,status){$.get("https://fprognoz.org/comments/mod.php",{key:"content:"+id,man:man,status:status});$("#"+(status>0?"approve":"c_block")+id).hide()}
+function changeRating(id,rate_yes,rate_no,vote){$("#r_yes"+id).html(rate_yes?rate_yes:"");$("#r_no"+id).html(rate_no?rate_no:"");$.get("comments/vote.php",{user:"<?=$coach_name?>",id:id,vote:vote,hash:"<?=crypt($coach_name,$salt)?>"})}
+function saveContent(id,c_text){$.get("comments/save.php",{user:"<?=$coach_name?>",id:id,c_text:c_text,hash:"<?=crypt($coach_name,$salt)?>"})}
+function modComment(id,man,status){$.get("comments/mod.php",{key:"content:"+id,man:man,status:status});$("#"+(status>0?"approve":"c_block")+id).hide()}
 
 var isEnabled = [], contentHTML = [];
 function toggleEditor(id) {
@@ -200,7 +200,7 @@ function c_out_comments($id, $level, $pid) {
 //        <span class="c-comment-id"><a href="/comments/admin.php?comment=' . $id .'">id:' . $id . '</a></span>';
   $out .= '
         <i onClick="$(\'#share' . $id . '\').toggle();share' . $id . '.select();return false;" class="fa fa-share-alt" aria-hidden="true" style="cursor:pointer;color:#b0b0b0" title="поделиться"> </i>
-        <input type="text" id="share' . $id . '" style="display:none;" value="https://fprognoz.org/' . $uri . '#comment-' . $id . '" size="48" />
+        <input type="text" id="share' . $id . '" style="display:none;" value="' . $this_site . '/' . $uri . '#comment-' . $id . '" size="48" />
       </header>
 
       <main id="content' . $id .'">
@@ -239,7 +239,7 @@ function c_out_comments($id, $level, $pid) {
 // обработчик
 
 while(list($k,$v)=each($_POST)) $$k=$v;
-$modurl = 'https://fprognoz.org/comments/mod.php?key=';
+$modurl = $htis_site . '/comments/mod.php?key=';
 $comments_email = 'SFP Comment System <scs@fprognoz.org>';
 
 if (isset($coach_name) && isset($parent) && ($c_text = trim($c_text))) { // добавить новый непустой коммент
@@ -279,7 +279,7 @@ if (isset($coach_name) && isset($parent) && ($c_text = trim($c_text))) { // до
         send_comment_by_email ($comments_email,
 '=?UTF-8?B?' . base64_encode($content['userid']) . '?=', $notify_user['e-mail'],
 'Получен ответ на Ваш комментарий', '
-На страницу <a href="https://fprognoz.org/' . $uri . '#comment">https://fprognoz.org/' . $uri . '#comment</a>
+На страницу <a href="' . $this_site . '/' . $uri . '#comment">' . $this_site . '/' . $uri . '#comment</a>
 пользователем ' . $redis->hget('c_user:' . $userid, 'nicknm') . ' добавлен ответ на Ваш комментарий:
 <hr />
 ' . (($status == 2) ? $c_text : strip_tags($c_text, '<p><a><strong><em><ol><ul><li><blockquote><sub><sup>')) . '
@@ -311,14 +311,14 @@ if (isset($coach_name) && isset($parent) && ($c_text = trim($c_text))) { // до
       send_comment_by_email ($comments_email,
 'Fprognoz.Org Moderator', 'alexander.sessa@gmail.com',
 'Новый комментарий', '
-На страницу <a href="https://fprognoz.org/' . $uri . '#comment">https://fprognoz.org/' . $uri . '#comment</a>
+На страницу <a href="' . $this_site . '/' . $uri . '#comment">' . $this_site . '/' . $uri . '#comment</a>
 юзером ' . $coach_name . ' добавлен комментарий следующего содержания:
 <hr />
 ' . $c_text . '
 <hr />
 Выполните одно из действий:<ul>
 <li><a href ="' . $modurl . $key . '&status=1">Проверен модератором</a></li>
-<li><a href ="https://fprognoz.org/' . $uri . '#comment">Ответить</a></li>
+<li><a href ="' . $this_site . '/' . $uri . '#comment">Ответить</a></li>
 <li><a href ="' . $modurl . $key . '&status=-1">Скрыть комментарий</a></li>
 <li><a href ="' . $modurl . $key . '&status=6">Блокировать юзера</a></li>
 </ul>

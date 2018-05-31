@@ -3,6 +3,7 @@ $time_start = microtime(true);
 date_default_timezone_set('Europe/Berlin');
 mb_internal_encoding('UTF-8');
 require_once ('/home/fp/data/config.inc.php');
+$this_site = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'];
 
 function mb_sprintf($format) {
   $argv = func_get_args();
@@ -333,6 +334,7 @@ SFP - 20 ЛЕТ!
   return $debug_str;
 }
 
+// специфика хостинга на AWS - на других серверах не использовать
 function send_email($from, $name, $email, $subj, $body) {
   $params = ['token' => 'FPrognoz.Org', 'from' => $from, 'name' => $name, 'email' => $email, 'subj' => $subj, 'body' => $body];
   $context = stream_context_create(array(
@@ -785,7 +787,13 @@ if (isset($_POST['matches']) || isset($_POST['updates']) || isset($_POST['mtscor
 else
   while(list($k,$v)=each($_GET)) $$k=$v;
 
-if (!isset($a)) $a = 'fifa';
+if (!isset($a))
+  $a = 'fifa';
+else if (!is_dir($a)) {
+  http_response_code(404);
+  $a = 'fifa';
+  $m = '404';
+}
 include ("$a/settings.inc.php");
 if (!isset($s)) $s = $cur_year;
 if (isset($m)) {

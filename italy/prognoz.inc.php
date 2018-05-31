@@ -915,9 +915,9 @@ mdetails=function(tmpd,id,pos1,pos2){
 socket=io.connect("//score2live.net:1998",{"reconnect":true,"reconnection delay":500,"max reconnection attempts":20,"secure":true})
 socket.on("connect",function(){socket.emit("hellothere")})
 socket.on("hellobz",function(){socket.emit("getscores","football(soccer)","today")})
-socket.on("scoredatas",function(d){if(sendfp){$.post("https://fprognoz.org/",{matches:JSON.stringify(d.data.matches),a:"'.$a.'"'.($l?',l:"'.$l.'"':'').',m:"prognoz",s:"'.$s.'",t:"'.$t.'"},function(json){$.each(JSON.parse(json),function(idx,obj){base.push(obj.id);base[obj.id]=obj.d})})}$("#statusline").css("display","none")})
+socket.on("scoredatas",function(d){if(sendfp){$.post("'.$this_site.'",{matches:JSON.stringify(d.data.matches),a:"'.$a.'"'.($l?',l:"'.$l.'"':'').',m:"prognoz",s:"'.$s.'",t:"'.$t.'"},function(json){$.each(JSON.parse(json),function(idx,obj){base.push(obj.id);base[obj.id]=obj.d})})}$("#statusline").css("display","none")})
 socket.on("footdetails",function(data){data=data[0];if ($(".p-table").find("tr[did="+data.id+"]").length)mdetails(data.mdetay,data.id,data.pos1,data.pos2)})
-socket.on("guncelleme",function(d){var json="";$.each(d.updates,function(index,ux){if(base[ux.idx]!==undefined){if(ux.s==4&&base[ux.idx][3]!="FT")json+=(json.length?",":"")+JSON.stringify(ux);scorefix(ux)}});if(json.length)$.post("https://fprognoz.org/",{updates:"["+json+"]",a:"'.$a.'"'.($l?',l:"'.$l.'"':'').',m:"prognoz",s:"'.$s.'",t:"'.$t.'"'.(isset($c)?',c:"'.$c.'"':'').'},function(html){$("#pl").html(html)})})
+socket.on("guncelleme",function(d){var json="";$.each(d.updates,function(index,ux){if(base[ux.idx]!==undefined){if(ux.s==4&&base[ux.idx][3]!="FT")json+=(json.length?",":"")+JSON.stringify(ux);scorefix(ux)}});if(json.length)$.post("'.$this_site.'",{updates:"["+json+"]",a:"'.$a.'"'.($l?',l:"'.$l.'"':'').',m:"prognoz",s:"'.$s.'",t:"'.$t.'"'.(isset($c)?',c:"'.$c.'"':'').'},function(html){$("#pl").html(html)})})
 //]]></script>
 <div style="position:relative;width:100%;margin:0 0 20px 0">
   <div id="statusline" style="position:relative;float:left;text-align:left;display:block">получение результатов с <a href="https://www.livescore.bz" sport="football(soccer)" data-1="today" lang="en">www.livescore.bz</a></div>

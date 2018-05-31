@@ -16,11 +16,11 @@ function make_passwd($code, $name, $mail) {
   send_email('FPrognoz.org <fp@fprognoz.org>', $name, $mail,
                    'Пароль для сайта FPrognoz.org',
 '
-Вы получили случайно-сгенерированный пароль для входа на сайт https://fprognoz.org: '.$gp.'
+Вы получили случайно-сгенерированный пароль для входа на сайт '.$this_site.': '.$gp.'
 
 При входе в качестве имени указывайте ваш e-mail: '.$mail.'
 
-Пароль можно сменить на странице https://fprognoz.org/?m=pass
+Пароль можно сменить на странице '.$this_site.'/?m=pass
 
 
 Удачи!

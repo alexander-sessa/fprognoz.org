@@ -356,7 +356,6 @@ $program_file = $season_dir . '/programs/' . $tour;
 $closed = is_file($prognoz_dir.'/closed');
 $published = is_file($prognoz_dir.'/published');
 $config = json_decode(file_get_contents($season_dir . '/fp.cfg'), true);
-$server = explode('?', $_SERVER['SCRIPT_URI'])[0];
 $query_string = $_SERVER['QUERY_STRING'];
 if ($cut = strpos($_SERVER['QUERY_STRING'], '&n=')) $query_string = substr($query_string, 0, $cut);
 if ($published) $query_string = strtr($query_string, ['prognoz' => 'result', '&renew=1' => '']);
@@ -1389,7 +1388,7 @@ cb=0;re=0;$("input[type=checkbox]").change(function(){cb+=(this.checked?1:-1);if
 })
 '
 .($today_matches || true ? '
-function mtscore(){$.post("'.$server.'",{a:"'.$a.'",m:"'.$m.'",s:"'.$s.'",t:"'.$t.'",mtscores:"1"},function(html){$("#mt").html(html)})}
+function mtscore(){$.post("'.$this_site.'",{a:"'.$a.'",m:"'.$m.'",s:"'.$s.'",t:"'.$t.'",mtscores:"1"},function(html){$("#mt").html(html)})}
 momup=function(i){clearInterval(mom[i]);mom[i]=setInterval(function(){if(!isNaN(base[i][3])){tm=+base[i][3];base[i][3]=(tm==45||tm==90)?tm+"+":++tm;row=$("#"+i)[0];row.cells[5].innerHTML="<span class=\"blink\">"+base[i][3]+"’</span>"}},60000);}
 for(i=1;i<=6;i++){if($.isArray(base[i])&&!isNaN(base[i][3]))momup(i)}
 scorefix=function(d){
@@ -1445,9 +1444,9 @@ mdetails=function(tmpd,id,pos1,pos2){
 socket=io.connect("https://score2live.net:1998",{"reconnect":true,"reconnection delay":500,"max reconnection attempts":20,"secure":true})
 socket.on("connect",function(){socket.emit("hellothere")})
 socket.on("hellobz",function(){socket.emit("getscores","football(soccer)","today")})
-socket.on("scoredatas",function(d){if(sendfp){$.post("'.$server.'",{a:"'.$a.'",m:"'.$m.'",s:"'.$s.'",t:"'.$t.'",matches:JSON.stringify(d.data.matches)},function(json){$.each(JSON.parse(json),function(idx,obj){base.push(obj.id);base[obj.id]=obj.d})})}$("#statusline").css("display","none")})
+socket.on("scoredatas",function(d){if(sendfp){$.post("'.$this_site.'",{a:"'.$a.'",m:"'.$m.'",s:"'.$s.'",t:"'.$t.'",matches:JSON.stringify(d.data.matches)},function(json){$.each(JSON.parse(json),function(idx,obj){base.push(obj.id);base[obj.id]=obj.d})})}$("#statusline").css("display","none")})
 socket.on("footdetails",function(data){data=data[0];if ($(".p-table").find("tr[did="+data.id+"]").length)mdetails(data.mdetay,data.id,data.pos1,data.pos2)})
-socket.on("guncelleme",function(d){var json="";$.each(d.updates,function(index,ux){if(base[ux.idx]!==undefined){if(ux.s==4&&base[ux.idx][3]!="FT")json+=(json.length?",":"")+JSON.stringify(ux);scorefix(ux)}});if(json.length)$.post("'.$server.'",{a:"'.$a.'",m:"'.$m.'",s:"'.$s.'",t:"'.$t.'"'.(isset($n)?',n:"'.$n.'"':'').',updates:"["+json+"]"},function(res){JSON.parse(res,function(k,v){if(k=="id")id=v;else if(k=="html")$(id).html(decodeURIComponent(v))});setInterval(mtscore,50000);})})
+socket.on("guncelleme",function(d){var json="";$.each(d.updates,function(index,ux){if(base[ux.idx]!==undefined){if(ux.s==4&&base[ux.idx][3]!="FT")json+=(json.length?",":"")+JSON.stringify(ux);scorefix(ux)}});if(json.length)$.post("'.$this_site.'",{a:"'.$a.'",m:"'.$m.'",s:"'.$s.'",t:"'.$t.'"'.(isset($n)?',n:"'.$n.'"':'').',updates:"["+json+"]"},function(res){JSON.parse(res,function(k,v){if(k=="id")id=v;else if(k=="html")$(id).html(decodeURIComponent(v))});setInterval(mtscore,50000);})})
 ' : '
 ') . '//]]></script>
 <div style="height:20px">

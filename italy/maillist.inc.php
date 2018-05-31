@@ -3069,7 +3069,7 @@ if (isset($_SESSION['Country_code']) && isset($_SESSION['Coach_name']) && isset(
             $body = iconv('CP1251', 'UTF-8//IGNORE', $body);
             $body .= "
 Следить за ходом тура в реальном времени можно на странице
-http://fprognoz.org/?a=$a&s=$s&m=prognoz&t=$t
+$this_site/?a=$a&s=$s&m=prognoz&t=$t
 ";
 //        file_put_contents($file, $body);
         }
