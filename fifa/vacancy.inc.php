@@ -8,7 +8,7 @@ function HTTP_CURL($url, $ref, $uri, $cookie) {
   $ch = curl_init(); 
   $options = array(
 CURLOPT_URL => $url,
-CURLOPT_USERAGENT => 'Mozilla/5.0 (compatible; SFPautoTrainer/1.0; +http://fprognoz.org)',
+CURLOPT_USERAGENT => 'Mozilla/5.0 (compatible; SFPautoTrainer/1.0; +https://fprognoz.org)',
 CURLOPT_COOKIEJAR => '/home/fp/fprognoz.org/sfp-team/cookie/'.$cookie,
 CURLOPT_COOKIEFILE => '/home/fp/fprognoz.org/sfp-team/cookie/'.$cookie,
 CURLOPT_HTTPHEADER => array('ACCEPT_LANGUAGE: ru', 'CONNECTION: Keep-Alive'),
@@ -53,7 +53,6 @@ if (isset($_POST['name_str'])) {
     );
     $context = stream_context_create($options);
     $fp = file_get_contents('https://www.google.com/recaptcha/api/siteverify', false, $context);
-//    $fp = HTTP_CURL('https://www.google.com/recaptcha/api/siteverify', 'https://fprognoz.org/test.html', $uri, 'getpage.txt');
     $human = strpos($fp, '"success": true') ? true : false;
   }
 }

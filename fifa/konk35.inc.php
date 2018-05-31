@@ -213,7 +213,7 @@ socket.on("scoredatas",function(d){$("#statusline").css("display","none")})
 socket.on("guncelleme",function(d){
 	json=""
 	$.each(d.updates,function(index,ux){if(base[ux.idx]!==undefined){if(ux.s==4&&base[ux.idx][3]!="FT")json+=(json.length?",":"")+JSON.stringify(ux);scorefix(ux)}})
-	if(json.length)$.ajax({type:"POST",url:"https://fprognoz.org/",data:"updates="+encodeURIComponent("["+json+"]")+params,success:function(html){$("#pl").html(html)}})
+	if(json.length)$.ajax({type:"POST",url:"'.$this_site.'",data:"updates="+encodeURIComponent("["+json+"]")+params,success:function(html){$("#pl").html(html)}})
 })
 
 //]]></script>
