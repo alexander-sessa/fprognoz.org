@@ -1,0 +1,33 @@
+<?php
+$cca          = 'ITA';
+$charset      = 'UTF-8';
+$title        = 'ФП Италии';
+$description  = 'Футбол-Прогнозная ассоциация Италии';
+$main_header  = 'Новости ФП Италии';
+$width        = 1216;
+$main_width   = 936;
+$bgcolor      = 'd6d8e4';
+$tlft_bgcolor = '1e2a64';
+$head_bgcolor = '1e2a64';
+$trgt_bgcolor = '1e2a64';
+$left_bgcolor = '1e2a64';
+$main_bgcolor = 'd6d8e4';
+$rght_bgcolor = '1e2a64';
+$blft_bgcolor = '1e2a64';
+$foot_bgcolor = '1e2a64';
+$brgt_bgcolor = '1e2a64';
+$head_ftcolor = 'ffa500';
+$main_hdcolor = 'ff4500';
+$main_hrcolor = '7c82a4';
+$left_ftcolor = 'ffd700';
+$main_ftcolor = '000000';
+$foot_ftcolor = '7c82a4';
+$rght_ftcolor = 'ffd700';
+$left_image   = 'images/logo-serieA-2010-2011.jpg';
+$rght_image   = 'images/4fd77ddeaad8d.jpg';
+$cur_year     = '2017-18';
+$president    = 'Alexander Sessa';
+$vice         = 'Serge Vasiliev';
+$pressa       = 'Vladislav Ezhergin';
+$club_edit    = false;
+?>

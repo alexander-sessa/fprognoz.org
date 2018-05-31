@@ -1,0 +1,116 @@
+
+h1		{ font-family: sans-serif;	font-size: 20px; }
+h2		{ font-family: sans-serif;	font-size: 15px; }
+h3		{ font-family: sans-serif;	font-size: 12px; }
+h6		{ font-family: sans-serif;	font-size: 6px;	font-weight: normal; }
+
+body		{ font-family: sans-serif;	font-size: 12px;	color: Black;	background-color: #d6d8e4;
+			margin-top: 4px;	margin-bottom: 0px;	text-align: center; }
+TABLE		{ table-border: 0; }
+TD		{ vertical-align: top; }
+A		{ font-family: sans-serif;	text-decoration: none; }
+
+.text9		{ font-family: sans-serif;	font-size: 9px; }
+.text10		{ font-family: sans-serif;	font-size: 10px; }
+.text11		{ font-family: sans-serif;	font-size: 11px; }
+.text12		{ font-family: sans-serif;	font-size: 12px; }
+.text12m	{ font-family: monospace;	font-size: 12px; }
+.text14		{ font-family: sans-serif;	font-size: 14px; }
+.text15		{ font-family: sans-serif;	font-size: 15px; }
+.text15b	{ font-family: sans-serif;	font-size: 15px;	font-weight: bold; }
+.text15m	{ font-family: monospace;	font-size: 12px; }
+.text18b	{ font-family: sans-serif;	font-size: 18px;	font-weight: bold; }
+.text20b	{ font-family: sans-serif;	font-size: 20px;	font-weight: bold; }
+
+
+.head		{ color: #ffa500;	background-color: #1e2a64;
+			text-align: center;	vertical-align: middle; }
+a.head		{ font-family: sans-serif;	font-size: 32px;	color: #ffa500;	font-weight: bold; }
+.side		{ color: #ffd700;	background-color: #1e2a64;	text-align: left; }
+.side A:link	{ color: #ffd700; }
+.side A:visited	{ color: #ffd700; }
+.side A:hover	{ color: #ffd700; }
+.side A.none	{ font-size: 10px;	color: lightgrey; }
+.side A.toolate	{ font-size: 10px;	color: red; }
+.side A.alarm	{ font-size: 10px;	color: #ff8888; }
+.side A.absent	{ font-size: 10px;	color: yellow; }
+.side A.playing	{ font-size: 10px;	color: cyan; }
+.side A.present	{ font-size: 10px;	color: lightgreen; }
+.side A.result	{ font-size: 10px;	color: white; }
+.side P		{ margin-top: 2px;	margin-bottom: 2px;	margin-left: 10px;	margin-right: 10px;	; }
+
+.foot		{ font-family: sans-serif;	font-size: 11px;	color: #7c82a4;	background-color: #1e2a64;
+			border-top: none;	text-align: center;	vertical-align: middle; }
+
+.main		{ font-size: 14px;	color: #000000; background-color: #d6d8e4;
+			padding: 10px 10px 10px 10px; }
+.main TABLE	{ table-border: 0;	border-bottom: 1px solid #7c82a4; }
+.main TD	{ border-top: 1px solid #7c82a4;	vertical-align: top; }
+.main TH	{ border: #7c82a4; }
+.main A:link	{ color: #0031ce; }
+.main A:visited	{ color: #0031ce; }
+.main A:hover	{ color: White; }
+.title		{ color: #ff4500; }
+.pr_str		{			font-size: 10pt;
+			width: 10px;	height: 12px;	margin: 0pt 0pt 0px 0pt;
+			vertical-align: top; }
+
+.blink	{ color: red;
+    -webkit-animation: blink 2s linear infinite;
+    -moz-animation: blink 2s linear infinite;
+    -ms-animation: blink 2s linear infinite;
+    -o-animation: blink 2s linear infinite;
+    animation: blink 2s linear infinite;
+}
+
+@-webkit-keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 1; }
+    50.01% { opacity: 0; }
+    100% { opacity: 0; }
+}
+
+@-moz-keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 1; }
+    50.01% { opacity: 0; }
+    100% { opacity: 0; }
+}
+
+@-ms-keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 1; }
+    50.01% { opacity: 0; }
+    100% { opacity: 0; }
+}
+
+@-o-keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 1; }
+    50.01% { opacity: 0; }
+    100% { opacity: 0; }
+}
+
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 1; }
+    50.01% { opacity: 0; }
+    100% { opacity: 0; }
+}
+
+.tribune li {
+    background: #1e2a64;
+    color: whitesmoke;
+    list-style-type: none;
+    padding: 8px;
+    border-radius: 10px;
+    margin-top: 4px;
+    white-space: pre-wrap;
+}
+
+.tribune b { color: yellow; }
+
+.hidden { display: none; }
+.blue { color: blue;	font-weight: bold; }
+.magenta { color: magenta;	font-weight: bold; }
+.red { color: red;	font-weight: bold; }

@@ -1,0 +1,1 @@
+../italy/editnews.inc.php
