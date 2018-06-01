@@ -60,15 +60,17 @@ function mb_vsprintf($format, $argv, $encoding=null) {
 function fp_auth($cc, $name, $password) {
   global $pwd_db;
   global $ahq_db;
-  foreach ($pwd_db[$name] as $hash) {
-    if ($hash && md5($password) == $hash) {
-      if (isset($ahq_db[$cc][$name]))
-        return $ahq_db[$cc][$name];
-      else
-        return 'player';
+  if (isset($pwd_db[$name]))
+    foreach ($pwd_db[$name] as $hash) {
+      if ($hash && md5($password) == $hash) {
+        if (isset($ahq_db[$cc][$name]))
+          return $ahq_db[$cc][$name];
+        else
+          return 'player';
 
+      }
     }
-  }
+
   return 'badlogin';
 }
 
