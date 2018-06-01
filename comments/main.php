@@ -240,7 +240,7 @@ function c_out_comments($id, $level, $pid) {
 // обработчик
 
 while(list($k,$v)=each($_POST)) $$k=$v;
-$modurl = $htis_site . '/comments/mod.php?key=';
+$modurl = $this_site . '/comments/mod.php?key=';
 $comments_email = 'SFP Comment System <scs@fprognoz.org>';
 
 if (isset($coach_name) && isset($parent) && ($c_text = trim($c_text))) { // добавить новый непустой коммент
