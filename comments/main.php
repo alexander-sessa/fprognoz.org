@@ -167,6 +167,7 @@ function c_out_comments($id, $level, $pid) {
   global $coach_name;
   global $role;
   global $c_count;
+  global $this_site;
   if (!$redis->exists('content:' . $id)) return ''; // несуществующий коммент
   $c_hash = $redis->hgetall('content:' . $id);
   if ($c_hash['status'] == -1) return ''; // не показываем скрытый коммент

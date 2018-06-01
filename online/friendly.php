@@ -702,7 +702,7 @@ if ($registered)
 }
 else
   echo '<font color="red">Чтобы организовать<br />товарищеский матч,<br />нужно залогиниться и<br />
-  <a href="http://fprognoz.org/?a=friendly&amp;m=register" target="_blank">
+  <a href="/?a=friendly&amp;m=register" target="_blank">
 <font color="red"><b>зарегистрироваться</b></font></a><br /><br />
 ... или в обратном порядке,<br />
 если у Вас ещё нет логина.</font>
