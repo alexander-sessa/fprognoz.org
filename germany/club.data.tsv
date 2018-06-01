@@ -1,0 +1,38 @@
+#код	файл с эмблемой клуба	название	город	год	стадион	мест	сайт
+1860	germany1860.png	TSV 1860 München	München	1860	Allianz-Arena	71901	http://www.tsv1860.de
+ALEMANIA	germanyALEMANNIA.png	TSV Alemannia Aachen	Aachen	1900	Neuer Tivoli	32960	http://www.alemannia-aachen.de
+ARMINIA	germanyARMINIA.png	DSC Arminia Bielefeld	Bielefeld	1905	SchücoArena	27300	http://www.arminia-bielefeld.de
+AUGSBURG	germanyAUGSBURG.png	FC Augsburg	Augsburg	1907	WWK Arena	30662	http://www.fcaugsburg.de
+BAYER	germanyBAYER.png	TSV Bayer 04 Leverkusen	Leverkusen	1904	BayArena	30210	http://www.bayer04.de
+BAYERN	germanyBAYERN.png	FC Bayern München	München	1900	Allianz-Arena	71901	http://www.fcbayern.telekom.de
+BOCHUM	germanyBOCHUM.png	VFL Bochum 1848	Bochum	1848	rewirpowerSTADION	30748	http://www.vfl-bochum.de
+BOR-D	germanyBOR-D.png	BV Borussia 09 Dortmund	Dortmund	1909	Signal-Iduna-Park	80720	http://www.bvb.de
+BOR-M	germanyBOR-M.png	Borussia VfL Mönchengladbach	Mönchengladbach	1900	Stadion im BORUSSIA-PARK	54057	http://www.borussia.de
+BRAUNSCH	germanyBRAUNSCH.png	Braunschweiger TSV Eintracht 1895	Braunschweig	1895	Eintracht-Stadion	23325	http://www.eintracht.com
+DARMSTADT	germanyDARMSTADT.png	SV Darmstadt 1898	Darmstadt	1898	Merck-Stadion am Böllenfalltor	16500	http://www.sv98.de
+DUISBURG	germanyDUISBURG.png	MDV Duisburg	Duisburg	1902	Schauinsland-Reisen-Arena	31514	http://www.msv-duisburg.de
+EINTRACHT	germanyEINTRACHT.png	Eintracht Frankfurt	Frankfurt am Main	1899	Commerzbank-Arena	52300	http://www.eintracht.de
+FREIBURG	germanyFREIBURG.png	SC Freiburg	Freiburg	1904	Schwarzwald-Stadion	24000	http://www.scfreiburg.com
+FORTUNA	germanyFORTUNA.png	Düsseldorfer TUS Fortuna 1895	Düsseldorf	1895	ESPRIT arena	54500	http://www.fortuna-duesseldorf.de
+GREUTHER	germanyGREUTHER.png	SPVGG Greuther Fürth	Fürth	1903	Stadion am Laubenweg	18000	http://www.greuther-fuerth.de
+HANNOVER	germanyHANNOVER.png	Hannover 96	Hannover	1896	HDI-Arena	49000	http://www.hannover96.de
+HANSA	germanyHANSA.png	FC Hansa Rostock	Rostock	1965	DKB Arena	29000	http://www.fc-hansa.de
+HAMBURG	germanyHAMBURG.png	Hamburger SV	Hamburg	1887	Imtech Arena	57030	http://www.hsv.de
+HEIDEN	germanyHEIDEN.png	1 FC. Heidenheim 1946	Heidenheim an der Brenz	1946	Voith-Arena	15000	http://www.fc-heidenheim.de
+HERTHA	germanyHERTHA.png	Hertha BSC	Berlin	1892	Olympiastadion Berlin	77116	http://www.herthabsc.de
+HOFFEN	germanyHOFFEN.png	TSG 1899 Hoffenheim	Sinsheim-Hoffenheim	1899	Wirsol Rhein-Neckar-Arena	30164	http://www.achtzehn99.de
+INGOL	germanyINGOL.png	FC Ingolstadt 04	Ingolstadt	2004	Audi-Sportpark	15729	http://www.fcingolstadt.de
+KAISER	germanyKAISER.png	1. FC Kaiserslautern	Kaiserslautern	1900	Fritz-Walter-Stadion	49780	http://www.fck.de
+KARLS	germanyKARLSRUHER.png	Karlsruher SC	Karlsruhe	1898	Wildparkstadion	29699	http://www.ksc.de
+KOLN	germanyKOLN.png	1. FC Köln	Köln	1948	RheinEnergieStadion	50076	http://www.fc-koeln.de
+LEIPZIG	germanyLEIPZIG.png	Rasen Ballsport Leipzig	Leipzig	2009	Red Bull Arena	44345	http://www.dierotenbullen.com
+MAINZ	germanyMAINZ.png	1. FSV Mainz 05	Mainz	1905	Coface Arena	34034	http://www.mainz05.de
+NURNBERG	germanyNURNBERG.png	1. FC Nürnberg	Nürnberg	1900	Max-Morlock-Stadion	50000	http://www.fcn.de
+PADERBORN	germanyPADERBORN.png	SC Paderborn 07	Paderborn	1907	Benteler-Arena	15306	http://www.scpaderborn07.de
+SANDHAUS	germanySANDHAUS.png	SV Sandhausen	Sandhausen	1916	Hardtwaldstadion	15414	http://www.svsandhausen.de
+SCHALKE	germanySCHALKE.png	FC Schalke 04	Gelsenkirchen	1904	Veltins-Arena	61973	http://www.schalke04.de
+STPAULI	germanySTPAULI.png	FC St. Pauli	Hamburg	1910	Millerntor-Stadion	29546	http://www.fcstpauli.com
+STUTTGART	germanySTUTTGART.png	VfB Stuttgart 1893	Stuttgart	1893	Mercedes-Benz-Arena	60469	http://www.vfb.de
+UNION	germanyUNION.png	1.FC Union Berlin	Berlin	1966	Stadion An der Alten Försterei	21717	http://www.fc-union-berlin.de
+WERDER	germanyWERDER.png	SV Werder Bremen	Bremen	1899	Weserstadion	42358	http://www.werder.de
+WOLFSBURG	germanyWOLFSBURG.png	VfL Wolfsburg	Wolfsburg	1945	VOLKSWAGEN ARENA	30000	http://www.vfl-wolfsburg.de

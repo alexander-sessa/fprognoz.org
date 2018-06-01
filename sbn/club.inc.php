@@ -1,1 +1,1 @@
-main.inc.php
+../italy/club.inc.php

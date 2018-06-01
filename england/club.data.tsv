@@ -1,0 +1,43 @@
+#код	файл с эмблемой клуба	название	город	год	стадион	мест	сайт
+ARSENAL	englandARSENAL.png	Arsenal FC	London	1886	Emirates Stadium	60355	http://www.arsenal.com
+ASTON	englandASTON.png	Aston Villa FC	Birmingham	1874	Villa Park	42788	http://www.avfc.co.uk
+BLACKBURN	englandBLACKBURN.png	Blackburn Rovers FC	Blackburn, Lancashire	1875	Ewood Park	31367	http://www.rovers.co.uk
+BLACKPOOL	englandBLACKPOOL.png	Blackpool FC	Blackpool, Lancashire	1887	Bloomfield Road	17600	http://www.blackpoolfc.co.uk
+BOLTON	englandBOLTON.png	Bolton Wanderers FC	Bolton	1874	Reebok Stadium	28723	http://www.bwfc.co.uk
+BOURNEM	englandBOURNEM.png	AFC Bournemouth	Bournemouth	1899	Vitality Stadium	12000	http://www.afcb.co.uk
+BRENTFORD	englandBRENTFORD.png	Brentford FC	Brentford	1889	Griffin Park	12763	http://www.brentfordfc.co.uk
+BRIGHTON	englandBRIGHTON.png	Brighton & Hove Albion FC	Falmer, East Sussex	1901	The American Express Community Stadium	30750	http://www.seagulls.co.uk
+BURNLEY	englandBURNLEY.png	Burnley FC	Burnley	1882	Turf Moor	22546	http://www.burnleyfootballclub.com
+CARDIFF	englandCARDIFF.png	Cardiff City FC	Cardiff	1889	Cardiff City Stadium	33000	http://www.cardiffcityfc.co.uk
+CHARLTON	englandCHARLTON.png	Charlton Athletic FC	London	1905	The Valley	27111	http://www.cafc.co.uk
+CHELSEA	englandCHELSEA.png	Chelsea FC	London	1905	Stamford Bridge	41841	http://www.chelseafc.com
+CRYSTAL	englandCRYSTAL.png	Crystal Palace FC	London	1905	Selhurst Park	26309	http://www.cpfc.co.uk
+DERBY	englandDERBY.png	Derby County FC	Derby	1884	Pride Park Stadium	33597	http://www.dcfc.co.uk
+EVERTON	englandEVERTON.png	Everton FC	Liverpool	1878	Goodison Park	40569	http://www.evertonfc.com
+FULHAM	englandFULHAM.png	Fulham FC	London	1879	Craven Cottage	25700	http://www.fulhamfc.com
+HUDDERS	englandHUDDERS.png	Huddersfield Town FC	Huddersfield, West Yorkshire	1908	The John Smith's Stadium	24554	http://www.htafc.com
+HULLCITY	englandHULLCITY.png	Hull City AFC	Hull	1904	Kingston Communications Stadium	25504	http://www.hullcityafc.net
+LEEDS	englandLEEDS.png	Leeds United FC	Leeds, West Yorkshire	1919	Elland Road	40204	http://www.leedsunited.com
+LEICESTER	englandLEICESTER.png	Leicester City FC	Leicester, Leicestershire	1884	King Power Stadium	32500	http://www.lcfc.com
+LIVERPOOL	englandLIVERPOOL.png	Liverpool FC	Liverpool	1892	Anfield	45362	http://www.liverpoolfc.tv
+MANCITY	englandMANCITY.png	Manchester City FC	Manchester	1880	Etihad Stadium	47726	http://www.mcfc.co.uk
+MANUNITED	englandMANUNITED.png	Manchester United FC	Manchester	1878	Old Trafford	76212	http://www.manutd.com
+MIDDLES	englandMIDDLES.png	Middlesbrough FC	Middlesbrough	1876	Riverside Stadium	34988	http://www.mfc.co.uk
+NEWCASTLE	englandNEWCASTLE.png	Newcastle United FC	Newcastle-upon-Tyne	1892	St. James' Park	52389	http://www.nufc.co.uk
+NORWICH	englandNORWICH.png	Norwich City FC	Norwich, Norfolk	1902	Carrow Road	27244	http://www.canaries.co.uk
+NOTTING	englandNOTTING.png	Nottingham Forest FC	Nottingham	1865	The City Ground	30576	http://www.nottinghamforest.co.uk
+PORTSM	englandPORTSM.png	Portsmouth FC	Portsmouth	1898	Fratton Park	20821	http://www.portsmouthfc.co.uk
+PRESTON	englandPRESTON.png	Preston North End FC	Preston	1863	Deepdale Stadium	23408	http://www.pnefc.net
+QUEENS	englandQUEENS.png	Queens Park Rangers FC	London	1885	Loftus Road Stadium	18360	http://www.qpr.co.uk
+READING	englandREADING.png	Reading FC	Reading, Berkshire	1871	Madejski Stadium	24200	http://www.readingfc.co.uk
+SHEFFIELD	englandSHEFFIELD.png	Sheffield United FC	Sheffield	1889	Bramall Lane	32702	http://www.sufc.co.uk
+SOUTH	englandSOUTH.png	Southampton FC	Southampton, Hampshire	1885	St. Mary's Stadium	32689	http://www.saintsfc.co.uk
+STOKECITY	englandSTOKECITY.png	Stoke City FC	Stoke-on-Trent, Staffordshire	1868	Britannia Stadium	28383	http://www.stokecityfc.com
+SUNDER	englandSUNDER.png	Sunderland AFC	Sunderland	1879	Stadium of Light	49000	http://www.safc.com
+SWANSEA	englandSWANSEA.png	Swansea City AFC	Swansea	1912	Liberty Stadium	20750	http://www.swanseacity.net
+TOTTENHAM	englandTOTTENHAM.png	Tottenham Hotspur FC	London	1882	White Hart Lane	36763	http://www.tottenhamhotspur.com
+WATFORD	englandWATFORD.png	Watford FC	Watford	1881	Vicarage Road Stadium	21577	http://www.watfordfc.com
+WESTBA	englandWESTBA.png	West Bromwich Albion FC	West Bromwich	1878	The Hawthorns	28003	http://www.wbafc.co.uk
+WESTHAM	englandWESTHAM.png	West Ham United FC	London	1895	Boleyn Ground	35303	http://www.whufc.com
+WIGAN	englandWIGAN.png	Wigan Athletic FC	Wigan	1932	The DW Stadium	25138	http://www.wiganlatics.co.uk
+WOLVER	englandWOLVER.png	Wolverhampton Wanderers FC	Wolverhampton, West Midlands	1877	Molineux Stadium	29195	http://www.wolves.co.uk
