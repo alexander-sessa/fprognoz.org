@@ -2,4 +2,5 @@ css/fa/*
 images/*
 js/ckeditor/*
 js/jquery/*
+js/socket.io/*
 old/*
