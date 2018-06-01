@@ -20,14 +20,14 @@ $ccr = array(
 'ФК Форвард' => 'ФК Форвард',
 );
 
-echo '';
+$player = isset($_SESSION['Coach_name']) ? $_SESSION['Coach_name'] : '';
 foreach($ccr as $ccode => $country) {
   $team = file($online_dir.'IST/'.$s.'/'.$ccode.'.csv');
   foreach ($team as $line) {
     list($name, $mail, $role) = explode(';', trim($line));
     $hash = base64_encode(trim($line));
     $show = true;
-    if ($name == $_SESSION['Coach_name'])
+    if ($name == $player)
       if (isset($_POST['out'])) {
         $team = file_get_contents($online_dir.'IST/'.$s.'/'.$ccode.'.csv');
         file_put_contents($online_dir.'IST/'.$s.'/'.$ccode.'.csv', str_replace($line, '', $team));
@@ -45,8 +45,8 @@ foreach($ccr as $ccode => $country) {
     <td>'.$country.'</td>
     <td>'.$name.'</td>
     <td>'.($role == 'coach' ? 'тренер' : '').'</td>
-    <td style="text-align:center">'.($name == $_SESSION['Coach_name'] ? '<input type="submit" name="out" value="выйти">' : 'да').'</td>
-    <td>'.($name == $_SESSION['Coach_name'] ? '<input id="changemail" type="text" name="'.$hash.'" value="'.$mail.'"><script>$(function(){$("#changemail").change(function(){this.form.submit();});})</script>
+    <td style="text-align:center">'.($name == $player ? '<input type="submit" name="out" value="выйти">' : 'да').'</td>
+    <td>'.($name == $player ? '<input id="changemail" type="text" name="'.$hash.'" value="'.$mail.'"><script>$(function(){$("#changemail").change(function(){this.form.submit();});})</script>
 ' : '').'</td>
   </tr>';
 
