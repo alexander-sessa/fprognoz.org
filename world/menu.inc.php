@@ -23,7 +23,17 @@
 </tr>
 <tr>
   <td valign=top class"=text3">
-  <a href='?a=<?=$a?>&m=hq'><font class=text15b color='#<?=$rght_ftcolor?>'>Президиум</font></a>
+  <a href='?a=<?=$a?>&m=cal'><font class=text15b color='#<?=$rght_ftcolor?>'>Календарь</font></a>
+  </td>
+</tr>
+<tr>
+  <td valign=top class"=text3">
+  <a href='?a=<?=$a?>&m=gen'><font class=text15b color='#<?=$rght_ftcolor?>'>Генераторы</font></a>
+  </td>
+</tr>
+<tr>
+  <td valign=top class"=text3">
+  <a href='?a=<?=$a?>&m=hq'><font class=text15b color='#<?=$rght_ftcolor?>'>Организаторы</font></a>
   </td>
 </tr>
 </table>

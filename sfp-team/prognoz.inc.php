@@ -96,8 +96,8 @@ if (is_file($program_file)) {
       $match_title = '<b>' . $line0;
     }
     $virtmatch = array();
-    $home_arr = file($prognoz_dir.'/'.$hometeam);
-    $away_arr = file($prognoz_dir.'/'.$awayteam);
+    $home_arr = is_file($prognoz_dir.'/'.$hometeam) ? file($prognoz_dir.'/'.$hometeam) : [];
+    $away_arr = is_file($prognoz_dir.'/'.$awayteam) ? file($prognoz_dir.'/'.$awayteam) : [];
     for ($i=0; $i<16; $i++) {
       if (isset($home_arr[$i])) {
         if ($l == 'PRO')

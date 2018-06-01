@@ -5,11 +5,11 @@ $tsv = '';
 $cfm = array('?' => '', 'да' => '', 'нет' => '');
 foreach ($codes as $player) if ($player[0] != '#')
 {
-  $aplayer = explode('	', trim($player));
+  $aplayer = explode('	', $player);
   if (!isset($aplayer[4])) $aplayer[4] = '';
   if (trim($aplayer[4])) $team_name = str_replace(' ', '&nbsp;', $aplayer[4]);
   else $team_name = $aplayer[1];
-  if (!isset($aplayer[5])) $aplayer[5] = '';
+  $aplayer[5] = isset($aplayer[5]) ? trim($aplayer[5]) : '';
   if (isset($_SESSION['Coach_name']) && $_SESSION['Coach_name'] == $aplayer[2])
   {
     if (isset($_POST['confirm'])) $aplayer[5] = $_POST['confirm'];
