@@ -25,13 +25,16 @@ if (isset($_SESSION['Coach_name'])) {
     }
     else {
       $usr_assocs = [];
-      foreach ($usr_db[$coach_name] as $usr_team) if (strpos($usr_team, '@')) {
-        list($usr_code, $usr_cc) = explode('@', $usr_team, 2);
-        if (in_array($usr_cc, ['BLR', 'ENG', 'ESP', 'GER', 'ITA', 'NLD', 'PRT', 'SCO', 'UKR'])) {
-          $codes = file_get_contents($online_dir . 'WL/2018/'.$usr_cc.'.csv');
-          if (($res = strpos($codes, $coach_name)) !== false) break;
-          $usr_assocs[] = $usr_cc;
-        }
+      foreach (['BLR', 'ENG', 'ESP', 'GER', 'ITA', 'NLD', 'PRT', 'SCO', 'UKR'] as $usr_cc) {
+        $codes = file_get_contents($online_dir . 'WL/2018/'.$usr_cc.'.csv');
+        foreach ($cmd_db[$usr_cc] as $team)
+          if ($team['usr'] == $coach_name) {
+            if (($res = strpos($codes, $coach_name)) !== false)
+              break 2;
+
+            $usr_assocs[] = $usr_cc;
+          }
+
       }
       if ($res === false) {
         echo '

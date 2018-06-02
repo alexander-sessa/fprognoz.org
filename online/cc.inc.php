@@ -38,6 +38,7 @@ $ccn = array(
 'NLD' => 'Netherlands',
 'PRT' => 'Portugal',
 'SCO' => 'Scotland',
+'UEFA'=> 'UEFA',
 );
 
 $ccrank = array(

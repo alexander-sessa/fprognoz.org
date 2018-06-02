@@ -7,11 +7,6 @@ function Schedule($timestamp, $country_code, $tour_code, $action, $pfname)
   file_put_contents("$dir/$timestamp.$country_code.$tour_code.$action", $pfname);
 }
 
-if (!isset($s) || !$s)
-{
-  $dir = scandir($online_dir."$cca");
-  foreach ($dir as $subdir) if ($subdir[0] == '2') $s = $subdir;
-}
 if (isset($_POST['file_text']) && $_POST['file_text'])
 {
   if ($file == 'tplpchm') $fname = $online_dir."$cca/$s/p.tpl";

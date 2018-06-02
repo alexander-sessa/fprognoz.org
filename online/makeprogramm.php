@@ -5,10 +5,10 @@ mb_internal_encoding('UTF-8');
 mb_regex_encoding('UTF-8');
 session_save_path('/var/lib/php/sessions');
 session_start();
-$online_dir = '/home/fp/data/online/';
-
-//if (isset($_SESSION['Country_code']) && isset($_SESSION['Session_team']) && isset($_SESSION['Session_password']))
-if (isset($_SESSION['Country_code']) && isset($_SESSION['Session_password'])) {
+require_once ('/home/fp/data/config.inc.php');
+include 'realteam.inc.php';
+include 'cc.inc.php';
+include 'translate.inc.php';
 
 function GetTourFromCalendar($tour, $cal) {
   $cclen = $tour[4] == 'L' ? 5 : 3;
@@ -80,18 +80,18 @@ function mkPrognozDir($timestamp, $ccode, $season, $TourCode) {
   touch($online_dir . "$ccode/$season/prognoz/$TourCode/adds");
 }
 
-include 'realteam.inc.php';
-include 'cc.inc.php';
-include 'translate.inc.php';
+$ccc = isset($_GET['cc']) ? $_GET['cc'] : '';
+if (!$ccc || !isset($_SESSION['Coach_name']))
+  die('access denied');
 
-$notice = '';
-$cal = '';
-$gen = '';
+include('/' . strtolower($ccn[$ccc]) . '/settings.inc.php');
+if ($_SESSION['Coach_name'] != $president
+ && $_SESSION['Coach_name'] != $vice
+ && !in_array($_SESSION['Coach_name'], $admin))
+  die('access denied');
 
-if (isset($_GET['cc'])) $ccc = $_GET['cc']; else $ccc = '';
-
-if (isset($_POST['rat'])) $rat = $_POST['rat']; else $rat = array();
-
+$notice = $cal = $gen = '';
+$rat = isset($_POST['rat']) ? $_POST['rat'] : [];
 $defaultadd = ' добавлять матчи здесь';
 if (isset($_POST['add'])) $add = $_POST['add'];
 elseif (isset($_GET['add'])) $add = $_GET['add'];
@@ -841,8 +841,3 @@ for ($w=-1; $w<=6; $w++)
 </table>
 </body>
 </html>
-
-<?php
-}
-else echo 'access denied';
-?>

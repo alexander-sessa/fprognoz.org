@@ -26,7 +26,7 @@ $rght_ftcolor = 'ffd700';
 $left_image   = '';
 $rght_image   = '';
 $cur_year     = '2018';
-$president    = 'Eugeny Gladyr';
+$president    = 'Eugene Gladyr';
 $vice         = 'Alexander Sessa';
 $pressa       = '';
 ?>

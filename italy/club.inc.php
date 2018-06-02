@@ -1,12 +1,5 @@
 <?php
 $ab = array();
-if (!isset($s) || !$s) {
-  $dir = scandir($online_dir . $cca, 1);
-  foreach ($dir as $s)
-    if ($s[0] == '2')
-      break;
-
-}
 $bombers_file = $online_dir . $cca . '/' . $s . '/bombers';
 if (is_file($bombers_file)) {
   $bombers = str_replace("\r", '', file_get_contents($bombers_file));
@@ -26,13 +19,12 @@ if (is_file($bombers_file)) {
 }
 $edit = $msg = '';
 if (isset($_SESSION['Coach_name']) && isset($club_edit) && $club_edit) {
-  foreach ($usr_db[$_SESSION['Coach_name']] as $team_str) {
-    $ta = explode('@', $team_str);
-    if ($ta[1] == $cca) {
-      $edit = $ta[0];
+  foreach ($cmd_db[$cca] as $code => $team)
+    if ($team['usr'] == $_SESSION['Coach_name']) {
+      $edit = $code;
       break;
     }
-  }
+
   if (isset($_POST['change'])) {
     foreach ($_POST['o'] as $pos => $bomber) {
       $ab[$edit][$pos] = $bomber;

@@ -1,41 +1,34 @@
 <?php
-error_reporting(0);
-mb_internal_encoding('UTF-8');
-
-if (isset($_SESSION['Coach_name']))
-{
+$team = [];
+if (isset($_SESSION['Coach_name'])) {
   $from = $_SESSION['Coach_name'];
-  foreach ($usr_db[trim($from)] as $team_str)
-  {
-    $ta = explode('@', $team_str);
-    if ($ta[1] == $cca)
+  foreach ($cmd_db[$cca] as $team)
+    if ($team['usr'] == $from) {
+      $email = isset($team['eml']) ? $team['eml'] : '';
       break;
+    }
 
-  }
 }
-else if (isset($_POST['from'])) $from = $_POST['from']; else $from = '';
+else
+  $from = isset($_POST['from']) ? $_POST['from'] : '';
+
 if (isset($_POST['email']))
   $email = $_POST['email'];
-else if(isset($cmd_db[$team_str]['eml'])) $email = $cmd_db[$team_str]['eml'];
-else $email = '';
-if (isset($_POST['subject'])) $subject = $_POST['subject']; else $subject = '';
-if (isset($_POST['msgtext'])) $msgtext = $_POST['msgtext']; else $msgtext = '';
-if (trim($email) && trim($from) && trim($subject) && trim($msgtext))
-{
-  echo '<p class="text15">Сообщение отправлено:</p>';
-  foreach ($ahq_db[$cca] as $pname => $prole) if ($prole == 'president')
-  {
-    foreach ($usr_db[trim($pname)] as $team_str)
-    {
-      $ta = explode('@', $team_str);
-      if ($ta[1] == $cca)
-        break;
-    }
-    send_email("\"$from\" <$email>", $pname, $cmd_db[$team_str]['eml'], $title.". Президенту: ".$_POST['subject'], $_POST['msgtext']);
-  }
+
+$subject = isset($_POST['subject']) ? $_POST['subject'] : '';
+$msgtext = isset($_POST['msgtext']) ? $_POST['msgtext'] : '';
+if (trim($email) && trim($from) && trim($subject) && trim($msgtext)) {
+  $to = '';
+  foreach ([$president, $vice] as $name)
+    $to .= $to ? ', ' : '' . $cmd_db[$cca][$name]['eml'];
+
+  echo send_email('"$from" <'.$email.'>', $pname, $to, $title.'. Президенту: '.$_POST['subject'], $_POST['msgtext']);
 }
-if (!$vice) $vice = 'должность свободна';
-if (!$pressa) $pressa = 'должность свободна';
+if (!$vice)
+  $vice = 'должность свободна';
+
+if (!$pressa)
+  $pressa = 'должность свободна';
 ?>
 <p class="text15">
 Президент ассоциации: <b><?=$president;?></b><br />

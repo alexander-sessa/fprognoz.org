@@ -321,9 +321,9 @@ if ($published) $query_string = strtr($query_string, ['prognoz' => 'result', '&r
 //$team_code = isset($_SESSION['Coach_name']) ? $_SESSION['Coach_name'] : '';
 $team_code = '';
 if (isset($_SESSION['Coach_name']))
-  foreach ($usr_db[$_SESSION['Coach_name']] as $team_str)
-    if ($cut = strpos($team_str, '@IST'))
-      $team_code = substr($team_str, 0, $cut);
+  foreach ($cmd_db['IST'] as $code => $team)
+    if ($team['usr'] == $_SESSION['Coach_name'])
+      $team_code = $code;
 
 if (!isset($renew)) $renew = false;
 if (isset($updates)) $renew = true;

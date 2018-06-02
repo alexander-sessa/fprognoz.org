@@ -16,30 +16,27 @@ function show_alert() {
 <?php
 $ok = false;
 if (isset($_POST['submitnewpass'])) {
-  if ($_SESSION['Session_password'] != trim($_POST['old_passwd']))
+  if (!$passed)
     echo '<p style="color: red">Неверно указан старый пароль!<br /></p>';
   else { // смена пароля
-    $team_codes = '';
-    foreach ($usr_db[$_SESSION['Coach_name']] as $team_str)
-    if ($team_str != 'I@FIFA' && !strpos($team_str, '@FCL') && !strpos($team_str, '@SFP')) {
-      if ($team_codes)
-        $team_codes .= ', ';
-
-      $email = $cmd_db[$team_str]['eml'];
-      list ($team_code, $country_code) = explode('@', $team_str);
-      $team_codes .= $team_code;
-      file_put_contents($online_dir.$country_code.'/passwd/'.$team_code, md5($_POST['new_passwd']).':'.$cmd_db[$team_str]['rol']);
+    $team_list = '';
+    foreach ($team_codes as $ac => $code) {
+      $team_list .= $code.', ';
+      file_put_contents($online_dir.$ac.'/passwd/'.$code, md5($_POST['new_passwd']).':player');
     }
-    echo '
-<p>Пароль изменен. Войдите на сервер с новым паролем.</p>
-<p>Для безопасности пароль выслан на email, который вы указывали для получения материалов футбол-прогноза: ';
-    send_email('FPrognoz.org <fp@fprognoz.org>', $_POST['name_str'], $email,
-               'Password for FPprognoz.org',
-'Team code(s) = '.$team_codes.'
-Password = '.$_POST['new_passwd'].'
+    send_email('FPrognoz.org <fp@fprognoz.org>', $_POST['name_str'], $sendpwd, 'ФП. Пароль для сайта ' . $this_site,
+'Вы сменили пароль для доступа на сайт ' . $this_site . '
+
+'.$_POST['new_passwd'].'
+
+Используйте его вместе с именем ' . $coach_name . ',
+или с указанным в поле "имя" кодом одной из ваших команд: '.$team_list.'
+или же с вашим e-mail адресом ' . $sendpwd . '.
 ');
     build_access();
-    echo '</p>';
+    echo '
+<p>Пароль изменен. Войдите на сервер с новым паролем.</p>
+<p>Для безопасности пароль выслан на email, который вы указывали для получения материалов футбол-прогноза.</p>';
     $ok = true;
     $role = 'badlogin';
     session_unset();
@@ -48,13 +45,13 @@ Password = '.$_POST['new_passwd'].'
 }
 if (!$ok) {
   echo '<p>Чтобы сменить пароль для входа на сайт,';
-  if (!isset($_SESSION['Session_password']))
-    echo ' сначала авторизуйтесь, указав полное имя или код любой своей команды и пароль,';
+  if (!isset($_SESSION['Coach_name']))
+    echo ' сначала авторизуйтесь, указав полное имя, или e-mail, или код любой своей команды и пароль,';
 
   echo ' заполните поля ввода на этой странице и нажмите кнопку "сменить".<br />
 Пароль будет изменен для доступа ко всем вашим командам.</p>
 <form action="?m=pass" method="post" onSubmit="return show_alert(this);">
-<p>старый пароль: <input type="password" name="old_passwd" value="" size="20" /></p>
+<p>старый пароль: <input type="password" name="pass_str" value="" size="20" /></p>
 <p>новый пароль : <input type="password" name="new_passwd" value="" size="20" />
 <input type="submit" name="submitnewpass" value=" сменить " /></p>
 </form>

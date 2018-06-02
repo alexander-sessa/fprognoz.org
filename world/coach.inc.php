@@ -57,11 +57,11 @@ echo '<p class="title text15b">&nbsp;&nbsp;&nbsp;Тренерская</p>
 <hr size="1" width="98%" />';
 if (isset($_SESSION['Coach_name']) && !isset($_POST['teamname'])) {
   $s = $cur_year;
-  $hq = file($online_dir.'WL/'.$s.'/hq');
-  $president = [];
-  foreach ($hq as $line) {
+  $file = file($online_dir.'WL/'.$s.'/hq');
+  $hq = [];
+  foreach ($file as $line) {
     list($ccode, $name, $email) = explode(';', trim($line));
-    $president[$name][] = $ccode;
+    $hq[$name][] = $ccode;
   }
   if (count($_POST)) {
     $closed = false;
@@ -76,13 +76,13 @@ if (isset($_SESSION['Coach_name']) && !isset($_POST['teamname'])) {
       file_put_contents($online_dir.'WL/'.$s.'/'.$ac.'.csv', $team);
     }
   }
-  if (isset($president[$_SESSION['Coach_name']])) {
+  if (isset($hq[$_SESSION['Coach_name']])) {
     $closed = false;
-    if (count($president[$_SESSION['Coach_name']]) > 1) {
+    if (count($hq[$_SESSION['Coach_name']]) > 1) {
       $head = '
   <div style="width:100%;padding:8px 0">
     Выберите ФП-ассоциацию: <select id="ccselect" name="cc">';
-      foreach ($president[$_SESSION['Coach_name']] as $ccode) {
+      foreach ($hq[$_SESSION['Coach_name']] as $ccode) {
         $head .= '
       <option'.((isset($ac) && $ccode == $ac) ? ' selected="selected"' : '').'>'.$ccode.'</option>';
         if (!isset($ac))
@@ -95,7 +95,7 @@ if (isset($_SESSION['Coach_name']) && !isset($_POST['teamname'])) {
   </div>';
     }
     else {
-      $ac = $president[$_SESSION['Coach_name']][0];
+      $ac = $hq[$_SESSION['Coach_name']][0];
       $head = '<input type="hidden" name="cc" value="'.$ac.'" />';
     }
     $team = file($online_dir.'WL/'.$s.'/'.$ac.'.csv');
@@ -183,7 +183,6 @@ else {
     }
     if ($human) {
       $s = $cur_year;
-      //$hq = file($online_dir.'WL/'.$s.'/hq');
       $postdata = fopen($online_dir.'WL/'.$s.'/postdata', 'a');
       fwrite($postdata, var_export($_POST, true) . ',');
       fclose($postdata);

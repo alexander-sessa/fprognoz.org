@@ -27,6 +27,6 @@ $left_image   = 'images/ucl-100.png';
 $rght_image   = 'images/uel-icon.png';
 $cur_year     = '2018-19';
 $president    = 'Eugene Plugin';
-$vice         = 'Alexander Sessa, Serge Shibaev';
+$vice         = 'Alexander Sessa';
 $pressa       = 'место вакантно';
 ?>

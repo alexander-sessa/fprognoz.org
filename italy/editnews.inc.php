@@ -1,10 +1,5 @@
     <p class="title text15b">Редактор новостей сезона</p>
 <?php
-if (!isset($s) || !$s)
-{
-  $dir = scandir($online_dir.$cca);
-  foreach ($dir as $subdir) if ($subdir[0] == '2') $s = $subdir;
-}
 if (isset($_POST['news_text']) && $_POST['news_text'])
 {
   file_put_contents($online_dir.$cca.'/'.$s.'/news', $_POST['news_text']);

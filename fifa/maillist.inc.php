@@ -11,20 +11,11 @@ $subjects = array(
 'UEFA' => 'ФП. Пресс-релиз УЕФА.',
 );
 
-//if (isset($_POST['sendmail']) && !isset($_POST['sendnews'])) $sendnews = '';
-//else $sendnews = ' checked="checked"';
 $sendnews = '';
-if (isset($_POST['sendmail']) && !isset($_POST['sendinet'])) $sendinet = '';
-else $sendinet = ' checked="checked"';
-if (isset($_SESSION['Country_code']) && isset($_SESSION['Coach_name']) && isset($_SESSION['Session_password']))
-{
-  if ($_SESSION['Coach_name'] == 'Eugeny Gladyr')
-    $country_code = 'FIFA';
-  else
-    $country_code = 'UEFA';
-
-  if (isset($_POST['sendmail']) && trim($_POST['subject']) && trim($_POST['msgtext']))
-  {
+$sendinet = (isset($_POST['sendmail']) && !isset($_POST['sendinet'])) ? '' : ' checked="checked"';
+if (isset($_SESSION['Coach_name']) && acl($_SESSION['Coach_name']) != 'player') {
+  $country_code = ($_SESSION['Coach_name'] == 'Eugeny Gladyr') ? 'FIFA' : 'UEFA';
+  if (isset($_POST['sendmail']) && trim($_POST['subject']) && trim($_POST['msgtext'])) {
 
   //////////////////////////////// SENDER
 
@@ -47,16 +38,11 @@ if (isset($_SESSION['Country_code']) && isset($_SESSION['Coach_name']) && isset(
       }
     }
   }
-  else
-  {
+  else {
 
   //////////////////////////////// EDITOR
 
-    if (!isset($_GET['file']))
-      $file = $online_dir. 'QUOTAS/2017-18/publish/".time();
-    else
-      $file = $_GET['file'];
-
+    $file = isset($_GET['file']) ? $_GET['file'] : $online_dir. "QUOTAS/$cur_year/publish/".time();
     echo '<form method="post" action="">
 <table width="100%">
 <tr><td>От:</td><td>'.htmlspecialchars($senders[$country_code]).'

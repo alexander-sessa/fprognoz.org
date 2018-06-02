@@ -2985,13 +2985,8 @@ else $sendnews = '';
 //else $sendnews = ' checked="checked"';
 if (isset($_POST['sendmail']) && !isset($_POST['sendinet'])) $sendinet = '';
 else $sendinet = ' checked="checked"';
-if (isset($_SESSION['Country_code']) && isset($_SESSION['Coach_name']) && isset($_SESSION['Session_password']))
-{
-  $country_code = $_SESSION['Country_code'];
-  $dir = scandir($online_dir."$country_code");
-  $season = '';
-  foreach ($dir as $subdir) if ($subdir[0] == '2') $season = $subdir;
-
+if (isset($_SESSION['Coach_name'])) {
+  $dir = scandir($online_dir.$cca);
   if (isset($_POST['sendmail']) && trim($_POST['subject']) && trim($_POST['msgtext']))
   {
 
@@ -3003,8 +2998,8 @@ if (isset($_SESSION['Country_code']) && isset($_SESSION['Coach_name']) && isset(
 
     if ($sendinet)
     {
-      $from = $senders[$country_code];
-      $acodes = file($online_dir."$country_code/$season/codes.tsv");
+      $from = $senders[$cca];
+      $acodes = file($online_dir."$cca/$s/codes.tsv");
       $sentto = array();
       $emails = '';
       foreach ($acodes as $scode) if ($scode[0] != '#')
@@ -3013,7 +3008,6 @@ if (isset($_SESSION['Country_code']) && isset($_SESSION['Coach_name']) && isset(
         if (!in_array($ateams[2], $sentto)) 
         {
           $sentto[] = $ateams[2];
-//          send_email($senders[$country_code], $ateams[2], $ateams[3], $_POST['subject'], $_POST['msgtext']);
           $tarr = explode(',', $ateams[3]);
           foreach ($tarr as $email)
             $emails .= $ateams[2] . ' <' . trim($email) . '>, ';
@@ -3021,7 +3015,7 @@ if (isset($_SESSION['Country_code']) && isset($_SESSION['Coach_name']) && isset(
         }
       }
       if ($emails = rtrim($emails, ', '))
-        echo send_email($senders[$country_code], '', $emails, $_POST['subject'], $_POST['msgtext']);
+        echo send_email($senders[$cca], '', $emails, $_POST['subject'], $_POST['msgtext']);
 
     }
 //    echo "<br /><a href=# onClick=history.back();>Назад</a>";
@@ -3076,7 +3070,7 @@ $this_site/?a=$a&s=$s&m=prognoz&t=$t
 /* не здесь, а при фактической публикации !!!
         touch($online_dir."$cca/$s/prognoz/$cca".strtoupper($t)."/published");
         if (!strpos(file_get_contents($online_dir."$cca/$/prognoz/$cca".strtoupper($t)."/adds"), '*'))
-          touch($online_dir."$cca/$season/prognoz/$cca".strtoupper($t)."/closed");
+          touch($online_dir."$cca/$s/prognoz/$cca".strtoupper($t)."/closed");
 */
         if ($t[0] == 'G') $subject = " Принятые прогнозы на золотой матч";
         else $subject = ' Принятые прогнозы на '.ltrim($t, '0CPGS').'-й тур';
@@ -3102,12 +3096,12 @@ $this_site/?a=$a&s=$s&m=prognoz&t=$t
     $rows = max(35, substr_count($body, "\n"));
     echo '<form action="" method="post">
 <table width="100%">
-<tr><td>От:</td><td>'.htmlspecialchars($senders[$country_code]).'
+<tr><td>От:</td><td>'.htmlspecialchars($senders[$cca]).'
 <input type="hidden" name="file" value="'.$file.'" /><img src="images/spacer.gif" width="190" height="1" alt="" />
 Получатели: игроки <input type="checkbox" name="sendinet"'.$sendinet.' />
 SU.FOOTBALL.PROGNOZ <input type="checkbox" name="sendnews"'.$sendnews.' />
 </td></tr>
-<tr><td>Тема:</td><td><input name="subject" value="'.$subjects[$country_code].$subject.'" size="96" />
+<tr><td>Тема:</td><td><input name="subject" value="'.$subjects[$cca].$subject.'" size="96" />
 <input type="submit" name="sendmail" value="Отправить" /></td></tr>
 <tr><td>Текст:</td><td><textarea name="msgtext" rows="'.$rows.'" cols="110">'.$body.'</textarea></td></tr>
 </table>

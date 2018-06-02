@@ -362,9 +362,9 @@ if ($published) $query_string = strtr($query_string, ['prognoz' => 'result', '&r
 //$team_code = isset($_SESSION['Coach_name']) ? $_SESSION['Coach_name'] : '';
 $team_code = '';
 if (isset($_SESSION['Coach_name'])) {
-  foreach ($usr_db[$_SESSION['Coach_name']] as $team_str)
-    if ($cut = strpos($team_str, '@WL'))
-      $team_code = substr($team_str, 0, $cut);
+  foreach ($cmd_db['WL'] as $code => $team)
+    if ($team['usr'] == $_SESSION['Coach_name'])
+      $team_code = $code;
 
   $team_code = $team_code ? $team_code : $_SESSION['Coach_name'];
 }

@@ -105,9 +105,9 @@ if (trim($cal)) {
 $teamCodes = array();
 if (isset($_SESSION['Coach_name'])) {
   // составление списка своих команд в этом туре
-  foreach ($usr_db[$_SESSION['Coach_name']] as $team_str)
-    if (($cut = strpos($team_str, '@' . $cca)) && !strpos($team_str, '@' . $cca . '@') && strpos($cal, $cmd_db[$team_str]['cmd']) !== false)
-        $teamCodes[] = substr($team_str, 0, $cut);
+  foreach ($cmd_db[$cca] as $code => $team)
+    if ($team['usr'] == $_SESSION['Coach_name'] && strpos($cal, $team['cmd']) !== false)
+      $teamCodes[] = $code;
 
   // отправка прогноза за несколько или за одну команду
   if (isset($_POST['submitpredict']) && isset($_POST['team_code']) && ($prognoz = trim($_POST['prognoz_str']))) {

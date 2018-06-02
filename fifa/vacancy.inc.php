@@ -114,13 +114,16 @@ else if (isset($_POST['submitvac']))
 /******/
 /* UI */
 /******/
-if (isset($_SESSION['Coach_name']) && !$pemail) {
-  foreach ($usr_db[$_SESSION['Coach_name']] as $team_str)
-    if (($pemail = $cmd_db[$team_str]['eml']))
-      break;
-}
-else echo 
+if (isset($_SESSION['Coach_name']) && !$pemail)
+  foreach ($cma_db as $cca => $teams)
+    foreach ($teams as $team)
+      if (($pemail = $team['eml']))
+        break 2;
+
+else
+  echo
 '<script src="https://www.google.com/recaptcha/api.js" async defer></script>';
+
 echo '
 <script>function onSubmit(token){document.getElementById("proform").submit();}</script>
 <p>Команды, указанные в этом разделе, отдаются желающим без конкурса. Для получения команды заполните и отправьте заявку.</p>

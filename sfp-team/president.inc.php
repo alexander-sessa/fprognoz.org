@@ -1,15 +1,11 @@
 <?php
-if (!isset($s))
-{
+if (!isset($s)) {
   $s = '';
-  if (isset($_SESSION['Country_code']))
-  {
-    $dir = scandir($online_dir.$_SESSION['Country_code']);
-    foreach ($dir as $subdir)
-      if ($subdir[0] == '2')
-        $s = $subdir;
+  $dir = scandir($online_dir.$cca);
+  foreach ($dir as $subdir)
+    if ($subdir[0] == '2')
+      $s = $subdir;
 
-  }
 }
 ?>
 <br />

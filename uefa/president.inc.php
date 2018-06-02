@@ -1,15 +1,11 @@
 <?php
-if (!isset($s))
-{
+if (!isset($s)) {
   $s = '';
-  if (isset($_SESSION['Country_code']))
-  {
-    $dir = scandir($online_dir.$_SESSION['Country_code']);
-    foreach ($dir as $subdir)
-      if ($subdir[0] == '2')
-        $s = $subdir;
+  $dir = scandir($online_dir.$cca);
+  foreach ($dir as $subdir)
+    if ($subdir[0] == '2')
+      $s = $subdir;
 
-  }
 }
 ?>
 <br />рассылка:<input type="submit" name="mailer" value="игрокам" onclick='location.href="?<?="a=$a&amp;s=$s";?>&amp;m=email";' /><input type="submit" name="mailer" value="пресс-релиз" onclick='location.href="?<?="a=$a&amp;s=$s";?>&amp;m=maillist";' /><?php if (isset($t)) {?><input type="submit" name="mailer" value="программка" onclick='location.href="?<?="a=$a&amp;s=$s&amp;l=UEFA&amp;t=$t";?>&amp;m=maillist&amp;file=program";' /><input type="submit" name="publish" value="прогнозы" onclick='location.href="?<?="a=$a&amp;s=$s&amp;l=$l&amp;t=$t";?>&amp;m=maillist&amp;file=prognoz";' /><input type="submit" name="itogi" value="итоги" onclick='location.href="?<?="a=$a&amp;s=$s&amp;l=$l&amp;t=$t";?>&amp;m=maillist&amp;file=itogi";' /><input type="submit" name="mailer" value="обзор" onclick='location.href="?<?="a=$a&amp;s=$s&amp;l=$l&amp;t=$t";?>&amp;m=maillist&amp;file=review";' /><?php }?>

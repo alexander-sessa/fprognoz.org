@@ -119,15 +119,13 @@ if (is_dir($online_dir.$country_code.'/'.$season.'/prognoz/'.$tour)) {
   require_once('online/tournament.inc.php');
   $base = get_results($lastdate);
 //  if (!isset($team_code))
-  if (isset($_SESSION['Coach_name'])) foreach ($usr_db[$_SESSION['Coach_name']] as $team_str)
-  { // определяем код команды поиском в списке зарегистрированных и календаре тура
-    $ta = explode('@', $team_str);
-    if (isset($teams[$ta[0]]) && ($guest = strpos($cal, $teams[$ta[0]])) !== false)
-    {
-      $team_code = $ta[0];
-      break;
-    }
-  }
+  if (isset($_SESSION['Coach_name']))
+    foreach ($cmd_db['FCL'] as $code => $team)
+      if ($team['usr'] == $_SESSION['Coach_name'] && ($guest = strpos($cal, $team['cmd'])) !== false) {
+        $team_code = $code;
+        break;
+      }
+
   if (strpos($programm, 'Матч на нейтральном поле! '))
     $neut = true;
   else

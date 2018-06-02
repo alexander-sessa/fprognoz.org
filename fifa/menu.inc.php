@@ -1,16 +1,10 @@
-<?php
-  $hq = '';
-  if (isset($_SESSION['Coach_name']))
-    foreach ($ahq_db as $ahq_cc => $ahq_nm)
-      if (array_key_exists($_SESSION['Coach_name'], $ahq_nm))
-        $hq = '-hq';
-?>
 <p class="text15b"><a href="/?m=hof">ЗАЛ СЛАВЫ</a></p>
 <br/>
 <p class="text15b"><a href="/?m=news">Новости</a></p>
 <p class="text15b"><a href="/?m=reglament">Правила</a></p>
 <p class="text15b"><a href="/?m=history">История ФП</a></p>
-<p class="text15b"><a href="/?m=help<?=$hq?>">Инструкция</a></p>
+<p class="text15b"><a href="/?m=help">Инструкция</a></p>
+<p class="text15b"><a href="/?m=help-hq">Организатору</a></p>
 <p class="text15b"><a href="/?m=konkurs">Конкурсы</a></p>
 <p class="text15b"><a href="/?m=vacancy">Вакансии</a></p>
 <p class="text15b"><a href="/?m=quota">Квоты</a></p>

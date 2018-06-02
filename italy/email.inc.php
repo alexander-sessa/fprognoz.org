@@ -41,32 +41,11 @@ $subjects = array(
 'IST' => 'ФП. Турнир "SFP - 20 ЛЕТ!"',
 );
 
-if (isset($_SESSION['Country_code']) && isset($_SESSION['Coach_name']) && isset($_SESSION['Session_password']))
-  $from = $senders[$_SESSION['Country_code']];
-else
-  $from = '';
-
-if (isset($_POST['subject']))
-  $subject = $_POST['subject'];
-else
-  $subject = '';
-
-if (isset($_POST['msgtext']))
-  $msgtext = $_POST['msgtext'];
-else
-  $msgtext = '';
-
-$dir = scandir($online_dir.$_SESSION['Country_code']);
-
-if ($s)
-  $season = $s;
-else
-  foreach ($dir as $subdir)
-    if ($subdir[0] == '2')
-       $season = $subdir;
-
-$acodes = file($online_dir.$_SESSION['Country_code']."/$season/codes.tsv");
-
+$from = isset($_SESSION['Coach_name']) ? $senders[$cca] : '';
+$subject = isset($_POST['subject']) ? $_POST['subject'] : '';
+$msgtext = isset($_POST['msgtext']) ? $_POST['msgtext'] : '';
+$dir = scandir($online_dir.$cca);
+$acodes = file($online_dir."$cca/$s/codes.tsv");
 if (trim($from) && trim($subject) && trim($msgtext))
 {
   echo '<p class="text15">Сообщение отправлено:</p>';
@@ -75,8 +54,7 @@ if (trim($from) && trim($subject) && trim($msgtext))
     $emails .= $cmd_db[$uname]['usr'] . ' <' . $cmd_db[$uname]['eml'] . '>, ';
 
   if ($emails = rtrim($emails, ', '))
-    send_email($from, '', $emails, $subjects[$_SESSION['Country_code']]." ".$_POST['subject'], $_POST['msgtext']);
-//    send_email($from, $cmd_db[$uname]['usr'], $cmd_db[$uname]['eml'], $subjects[$_SESSION['Country_code']]." ".$_POST['subject'], $_POST['msgtext']);
+    send_email($from, '', $emails, $subjects[$cca]." ".$_POST['subject'], $_POST['msgtext']);
 }
 ?>
 <p class="text15">Для отправки EMail отдельным игрокам ФП-ассоциации, отметьте их в левой колонке:</p>
@@ -87,7 +65,7 @@ if (trim($from) && trim($subject) && trim($msgtext))
 foreach ($acodes as $line) if (trim($line))
 {
   $ta = explode('	', $line);
-  echo '<input type="checkbox" name="pl['.$ta[0].'@'.$_SESSION['Country_code'].']" /> '.$ta[2].' ('.$ta[1].')<br />';
+  echo '<input type="checkbox" name="pl['.$ta[0].'@'.$cca.']" /> '.$ta[2].' ('.$ta[1].')<br />';
 }
 ?>
 </td>

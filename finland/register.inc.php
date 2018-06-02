@@ -63,20 +63,19 @@ if ($registered)
 else if (isset($_POST['reg']) && !$err)
 {
   if (!isset($_SESSION['Coach_name']))
-  {
     $_SESSION['Coach_name'] = ucwords(trim($_POST['user']));
-    $_SESSION['Session_password'] = trim($_POST['pass1']);
-  }
+
   if (isset($_POST['email']))
     $email = trim($_POST['email']);
   else
-    foreach ($usr_db[$_SESSION['Coach_name']] as $team_str)
-      if (($email = $cmd_db[$team_str]['eml']))
-        break;
+    foreach ($cma_db as $cca => $teams)
+      foreach ($teams as $team)
+        if (($email = $team['eml']))
+          break 2;
 
   $codestsv .= $_POST['team'].'	'.$realteams[$_POST['team']]['n'].'	'.$_SESSION['Coach_name'].'	'.$email.'	'.$realteams[$_POST['team']]['l']."\n";
   file_put_contents($online_dir."FIN/$cur_year/codes.tsv", $codestsv);
-  file_put_contents($online_dir.'FIN/passwd/'.$_POST['team'], md5(trim($_SESSION['Session_password'])).':player');
+  file_put_contents($online_dir.'FIN/passwd/'.$_POST['team'], md5(trim($_POST['pass1'])).':player');
   if (isset($_POST['pass1']))
     send_email('FPrognoz.org <fp@fprognoz.org>', $_SESSION['Coach_name'], $email,
 'Password for FPprognoz.org', 'Team code = '.$_POST['team'].'
@@ -96,8 +95,7 @@ else
 {
   echo '<form method=post>
 ';
-  if (!isset($_SESSION['Coach_name']) || !isset($_SESSION['Session_password']))
-  {
+  if (!isset($_SESSION['Coach_name'])) {
     echo 'Для участия в ФП Финляндии необходимо войти на сайт под своим именем.<br />
 Если у Вас еще нет доступа на сайт, мы можем сделать его сейчас.<br />
 Все поля обязательны к заполнению.<br />

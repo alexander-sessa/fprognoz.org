@@ -5,6 +5,38 @@ mb_internal_encoding('UTF-8');
 require_once ('/home/fp/data/config.inc.php');
 $this_site = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'];
 
+function acl($name, $a='') {
+  global $admin;
+  if ($a)
+    include ('$a/settings.inc.php');
+  else {
+    global $president;
+    global $vice;
+    global $pressa;
+  }
+  $hq = $admin;
+  if (!in_array($president, $hq))
+    $hq[] = $president;
+
+  $a = explode(',', $vice); // может быть больше одного
+  foreach ($a as $v) {
+    $v = trim($v);
+    if (!in_array($v, $hq)) $hq[] = $v;
+  }
+  if (in_array($name, $hq))
+    return 'president';
+
+  $hq = [];
+  $a = explode(',', $pressa); // может быть больше одного
+  foreach ($a as $p)
+    $hq[] = trim($p);
+
+  if (in_array($name, $hq))
+    return 'pressa';
+
+  return 'player';
+}
+
 function mb_sprintf($format) {
   $argv = func_get_args();
   array_shift($argv);
@@ -55,23 +87,6 @@ function mb_vsprintf($format, $argv, $encoding=null) {
   // Convert new format back from UTF-8 to the original encoding
   $newformat = mb_convert_encoding($newformat, $encoding, 'UTF-8');
   return vsprintf($newformat, $newargv);
-}
-
-function fp_auth($cc, $name, $password) {
-  global $pwd_db;
-  global $ahq_db;
-  if (isset($pwd_db[$name]))
-    foreach ($pwd_db[$name] as $hash) {
-      if ($hash && md5($password) == $hash) {
-        if (isset($ahq_db[$cc][$name]))
-          return $ahq_db[$cc][$name];
-        else
-          return 'player';
-
-      }
-    }
-
-  return 'badlogin';
 }
 
 function current_season($y, $m) {
@@ -134,32 +149,6 @@ function build_personal_nav() {
 
             $out .= '<a href="/?a=world&s='.$startYear.'&l=S&t='.substr($tourCode, 3).'&m='.($status == 6 ? 'result' : 'prognoz').'" class="'.$statusColor[$status].'">'.$tourCode.'</a> ';
           }
-/*
-          if ($countryCode == 'IST' && $action == 'remind' && strpos($sfp20, $_SESSION['Coach_name']) !== false) {
-            if ($world_title) {
-              $world_title = false;
-              $out .= '
-<br />
-SFP - 20 ЛЕТ!
-<br />';
-            }
-            $tour_dir = $online_dir . 'IST/'.$startYear.'/prognoz/'.$tourCode;
-            foreach ($usr_db[$_SESSION['Coach_name']] as $team_code)
-              if (strpos($team_code, '@IST'))
-                $code = substr($team_code, 0, -4);
-
-            if (is_file($tour_dir.'/published'))
-              $status = 6; // завершён
-            else if (is_file($tour_dir.'/closed'))
-              $status = 4; // играется
-            else if (strpos(file_get_contents($tour_dir.'/mail'), $code) !== false)
-              $status = 5; // есть прогноз
-            else
-              $status = ($timeStamp <= $currentTime + 86400) ? 2 : 3; // нет прогноза
-
-            $out .= '<a href="/?a=sfp-20&s='.$startYear.'&t='.substr($tourCode, 3).'&m='.($status == 6 ? 'result' : 'prognoz').'" class="'.$statusColor[$status].'">'.$tourCode.'</a> ';
-          }
-*/
           if ($countryCode == 'SFP')
             $itFName = $online_dir.$countryCode.'/'.$currentSeason.'/publish/'.substr($tourCode, 0, 3).'/it'.substr($tourCode, -2);
           elseif ($tourCode[4] == 'L')
@@ -418,11 +407,6 @@ X-Mailer: FP Informer 4.00.180121-'.$ip);
 }
 
 function build_access() {
-// "вездеход" для руководящего состава
-$add = 'I;FIFA;UEFA;Alexander Sessa;;;president;
-I;FIFA;FIFA;Eugeny Gladyr;;;president;
-I;FIFA;UEFA;Eugene Plugin;;;president;
-';
   global $ccn;
   global $data_dir;
   global $online_dir;
@@ -454,7 +438,7 @@ I;FIFA;UEFA;Eugene Plugin;;;president;
       }
     }
   }
-  file_put_contents($data_dir . 'auth/.access', $access.$add);
+  file_put_contents($data_dir . 'auth/.access', $access);
 }
 
 function script_from_cache($file) {
@@ -772,22 +756,22 @@ $ccn = array(
 'UKR' => 'Ukraine',
 'FRA' => 'France',
 'SCO' => 'Scotland',
-'UEFA' => 'UEFA',
+'UEFA'=> 'UEFA',
 'FIN' => 'Finland',
 'SBN' => 'SBN',
-'FIFA' => 'FIFA',
+'FIFA'=> 'FIFA',
 'FCL' => 'Friendly',
-'WL' => 'World',
+'WL'  => 'World',
 'IST' => 'SFP-20',
 );
-session_save_path('/var/lib/php/sessions');
-$cookie = 'fprognozmain';
+
 $role = 'badlogin';
-$debug_str = '';
-if (isset($_POST['matches']) || isset($_POST['updates']) || isset($_POST['mtscores']))
-  while(list($k,$v)=each($_POST)) $$k=$v;
-else
-  while(list($k,$v)=each($_GET)) $$k=$v;
+$notification = '';
+$ip = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'];
+$auth = isset($_POST['pass_str']) && isset($_POST['name_str']);
+$parameters = (isset($_POST['matches']) || isset($_POST['updates']) || isset($_POST['mtscores'])) ? $_POST : $_GET;
+foreach ($parameters as $k => $v)
+  $$k = $v;
 
 if (!isset($a))
   $a = 'fifa';
@@ -797,7 +781,9 @@ else if (!is_dir($a)) {
   $m = '404';
 }
 include ("$a/settings.inc.php");
-if (!isset($s)) $s = $cur_year;
+if (!isset($s))
+  $s = $cur_year;
+
 if (isset($m)) {
   if (!is_file($a . '/' . $m . '.inc.php')) {
     http_response_code(404);
@@ -805,146 +791,123 @@ if (isset($m)) {
     $m = '404';
   }
   else if ($m == 'prognoz' && $s != $cur_year)
-    $m = 'main';
+    $m = 'main'; // форма prognoz только для текущего сезона!
+
 }
 else {
-  if ($a == 'fifa' && isset($_COOKIE[$cookie]))
-    $m = 'news';
-  else {
-    $m = 'main';
-    if ($a == 'fifa')
-      setcookie($cookie, '1');
-
+  $m = 'main';
+  if ($a == 'fifa') {
+    if (isset($_COOKIE['fprognozmain']))
+      $m = 'news'; // при повторном посещении показывать новости
+    else
+      setcookie('fprognozmain', '1');
   }
 }
 if (isset($ls))
-  setcookie('fprognozls', $ls);
+   setcookie('fprognozls', $ls);
 
-$access = file($data_dir . 'auth/.access');
-$cmd_db = array(); // основная база команд
-$usr_db = array(); // соответствие игроков командам и наоборот
-$pwd_db = array(); // используется только для проверки пароля в fp_auth()
-$ahq_db = array(); // президенты и пресса
-/*
-Для аутентификации по e-mail добавить установку имени с выбором из вариантов полного имени
-*/
-foreach ($access as $access_str) {
-  list($cd, $cc, $cm, $nm, $em, $pw, $rl) = explode(';', $access_str);
-  $cmd_db[$cd.'@'.$cc] = ['ccn' => $cc, 'cmd' => $cm, 'usr' => $nm, 'eml' => $em, 'rol' => $rl];
-
-  $usr_db[$nm][] = $cd.'@'.$cc;       // связь: игрок - его команды
-  $usr_db[$cd][] = $nm;               // обратная связь: код команды - игрок
-  if (trim($em))
-    $usr_db[$em][] = $nm; // привязка имен игрока к e-mail
-
-  $pwd_db[$cd][] = $pw;
-  $pwd_db[$nm][] = $pw;
-  $pwd_db[$em][] = $pw;
-
-  if (trim($rl) && $rl[1] == 'r')
-    $ahq_db[$cc][$cd] = $rl; // pResident or pRessa
-
-}
-$notification = '';
-if (isset($_COOKIE['fprognozls']))
-  $fprognozls = $_COOKIE['fprognozls'];
-else
-  $fprognozls = 'inscore';
-
-if (isset($_SERVER['HTTP_X_FORWARDED_FOR']))
-  $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-else
-  $ip = $_SERVER['REMOTE_ADDR'];
-
+$fprognozls = isset($_COOKIE['fprognozls']) ? $_COOKIE['fprognozls'] : 'inscore';
 session_start();
 if (isset($_POST['logout'])) {
   $role = 'badlogin';
   session_unset();
   session_destroy();
 }
-if (isset($_POST['pass_str']) && isset($_POST['name_str'])) { // autentification
-/*
-  if (strpos(trim($_POST['name_str']), '@')) {
-    $role = fp_auth($cca, $_POST['name_str'], $_POST['pass_str']);
-// здесь установить $coach_name
-  }
-  else 
+$coach_name = isset($_SESSION['Coach_name']) ? $_SESSION['Coach_name'] : '';
+$passed = false;
+$sendpwd = '';
+$team_codes = [];
+
+/* изменить:
+   данные игрока нужны только при авторизованном входе и только его самого
 */
-  if (strpos(trim($_POST['name_str']), ' ')) {
-    $coach_name = ucwords($_POST['name_str']);
-    $role = fp_auth($cca, $coach_name, $_POST['pass_str']);
+$access = file($data_dir . 'auth/.access');
+$cmd_db = array(); // основная база команд
+$usr_db = array(); // соответствие игроков командам и наоборот
+if ($auth || isset($_POST['submitnewpass'])) {
+  $hash = md5($_POST['pass_str']);
+  $name_str = mb_strtoupper(isset($_POST['name_str']) ? $_POST['name_str'] : $coach_name);
+}
+foreach ($access as $access_str) {
+  list($code, $as_code, $team, $name, $mail, $pwd, $rol) = explode(';', $access_str);
+  $cmd_db[$as_code][$code] = ['ccn' => $as_code, 'cmd' => $team, 'usr' => $name, 'eml' => $mail, 'rol' => $rol];
+  ///// следующий формат устарел - удалить!
+  $cmd_db[$code.'@'.$as_code] = ['ccn' => $as_code, 'cmd' => $team, 'usr' => $name, 'eml' => $mail, 'rol' => $rol];
 
-  }
-  else
-    foreach ($usr_db[trim($_POST['name_str'])] as $coach_name) {
-      $role = fp_auth($cca, $coach_name, $_POST['pass_str']);
-      if ($role != 'badlogin')
-        break;
+  $usr_db[$name][] = $code;   // связь: имя игрока - его команды (они же - аккаунты)
+  $usr_db[$code][] = $name;   // связь: код команды - имя игрока
+  if (trim($mail))
+    $usr_db[$mail][] = $name; // привязка имен игрока к e-mail
 
-  }
-  if ($role != 'badlogin') {
-    $_SESSION['Coach_name'] = $coach_name;
-    $_SESSION['Session_password'] = $_POST['pass_str'];
-    $debug_str = build_personal_nav();
-  }
-  else { // check if should send new password
-    foreach ($usr_db[trim($_POST['name_str'])] as $team_str) {
-      $ta = explode('@', $team_str);
-      if ($ta[0] == $_POST['pass_str']) {
-        $gp = '';
-        $mix = '23456789qwertyuiopasdfghjkzxcvbnmQWERTYUPASDFGHJKLZXCVBNM';
-        for ($i=0; $i<8; $i++)
-          $gp .= $mix[rand(0,56)];
+  $usr_db[$name][] = $code.'@'.$as_code; // связь: игрок - его команды ///// устарело - удалить!
 
-        $team_codes = '';
-        foreach ($usr_db[trim($_POST['name_str'])] as $team_str) {
-          if ($team_codes)
-            $team_codes .= ', ';
-
-          $ta = explode('@', $team_str);
-          $team_codes .= $ta[0];
-          file_put_contents($online_dir.$ta[1].'/passwd/'.$ta[0], md5($gp).":player");
-        }
-        send_email('FPrognoz.org <fp@fprognoz.org>', $_POST['name_str'], $cmd_db[$team_str]['eml'],
-                   'Password for FPrognoz.org',
-'Team code(s) = '.$team_codes.'
-Password = '.$gp.'
-');
-        build_access();
-        $notification = 'Пароль выслан';
-        break;
+  if ($auth || isset($_POST['submitnewpass'])) { // аутентификация или контрольная проверка пароля
+    if ($hash == $pwd &&
+       ($name_str == mb_strtoupper($code) || $name_str == mb_strtoupper($name) || $name_str == strtoupper($mail))) {
+      $passed = true;
+      if (isset($_POST['submitnewpass'])) {
+        $sendpwd = $mail;     // для отправки сообщения о смене пароля
+        $team_codes[$as_code] = $code; // для последующей смены пароля
       }
-    }
-    if (!$notification)
-      $notification = 'Ошибка входа';
+      if (strlen($coach_name) < strlen($name))
+        $coach_name = $name; // выбираем самое длинное имя из указанных
 
+    }
+    else if ($auth && !$pwd && $_POST['pass_str'] == $code && $_POST['name_str'] == $name) {
+      $sendpwd = $mail; // выполнилось условие отправки первого пароля
+      $team_codes[$as_code] = $code;
+    }
   }
 }
-else { // restore session
-  if (isset($_SESSION['Session_password'])) {
-    $coach_name = $_SESSION['Coach_name'];
+if ($auth) {
+  if ($passed) {
+    $_SESSION['Coach_name'] = $coach_name;
     build_personal_nav();
-    if (isset($cca)) $_SESSION['Country_code'] = $cca;
-      else $cca = '';
+  }
+  else if ($sendpwd && count($team_codes)) {
+    $gp = '';
+    $mix = '23456789qwertyuiopasdfghjkzxcvbnmQWERTYUPASDFGHJKLZXCVBNM';
+    for ($i=0; $i<8; $i++)
+      $gp .= $mix[rand(0,56)];
 
-    if ($coach_name == 'Alexander Sessa')
-      $role = 'president';
-    else
-      $role = fp_auth($cca, $_SESSION['Coach_name'], $_SESSION['Session_password']);
-// confirm
-    if (isset($team)) $_SESSION['Session_team'] = $team;
-//    if (!is_file($data_dir . 'personal/'.$_SESSION['Coach_name'].'/'.date('Y', time()))) {
-//      $a = 'fifa';
-//      $m = 'confirm';
-//    }
+    $team_list = '';
+    foreach ($team_codes as $ac => $code) {
+      $team_list .= $code.', ';
+      file_put_contents($online_dir.$ac.'/passwd/'.$code, md5($gp).':player');
+    }
+    send_email('FPrognoz.org <fp@fprognoz.org>', $_POST['name_str'], $sendpwd, 'ФП. Пароль для сайта ' . $this_site,
+'Вы получили случайно-сгенерированный пароль для доступа на сайт ' . $this_site . '
+
+'.$gp.'
+
+Используйте его вместе с именем ' . $coach_name . ',
+или с указанным в поле "имя" кодом одной из ваших команд: '.$team_list.'
+или же с вашим e-mail адресом ' . $sendpwd . '.
+');
+    build_access();
+    $notification = 'Пароль выслан';
   }
-  else {
-    $role = 'badlogin';
-    session_unset();
+  else if (!$notification)
+    $notification = 'Ошибка входа';
+
+}
+else { // restored session
+  if ($coach_name) {
+    build_personal_nav();
+    if (!isset($cca))
+      $cca = '';
+
   }
+  else session_unset();
 }
 
 if (isset($_SESSION['Coach_name'])) {
+// confirm
+//  if (!is_file($data_dir . 'personal/'.$coach_name.'/'.date('Y', time()))) {
+//    $a = 'fifa';
+//    $m = 'confirm';
+//  }
+  $role = acl($_SESSION['Coach_name']);
   if ($have_redis)
     $redis = new Redis();
   else {
@@ -1168,7 +1131,7 @@ include ('fifa/register.inc.php');
 </tr>
 
 </table>
-</center><form id="gb_toggle" method="post"><input type="hidden" name="toggle_gb" value="" /></form><?=$debug_str?>
+</center><form id="gb_toggle" method="post"><input type="hidden" name="toggle_gb" value="" /></form>
 </body>
 </html>
 <?php

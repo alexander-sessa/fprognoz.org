@@ -40,7 +40,6 @@ if (isset($_POST['reg']))
   $serial = file_get_contents($online_dir.'FCL/cserial');
   file_put_contents($online_dir.'FCL/cserial', ++$serial);
   $_SESSION['Coach_name'] = ucwords($_POST['user']);
-  $_SESSION['Session_password'] = $_POST['pass1'];
   $codestsv = '';
   $codes = file($online_dir.$cca.'/'.$cur_year.'/codes.tsv');
   foreach ($codes as $player)
@@ -60,8 +59,7 @@ if (isset($_POST['reg']))
 ВНИМАНИЕ: если Вы снимете со своей команды отметку об участии, через некоторое время команда будет удалена!<br />
 ';
 }
-if (isset($_SESSION['Coach_name']) && isset($_SESSION['Session_password']))
-{
+if (isset($_SESSION['Coach_name'])) {
   $friendlyTeam = array();
   $codestsv = '';
   if (!isset($codes))
@@ -100,22 +98,16 @@ if (isset($_SESSION['Coach_name']) && isset($_SESSION['Session_password']))
 <table width="100%">
   <tr><td><b>ФП</b></td><td><b>код команды</b></td><td><b>название команды</b></td><td><b>отметка о согласии</b></td></tr>
 ';
-  foreach($usr_db[$_SESSION['Coach_name']] as $team_str)
-  {
-     $ta = explode('@', $team_str);
-     if ($ta[1] == 'FCL')
-       $team_str1 = $ta[0];
-     else
-       $team_str1 = $team_str;
+  foreach (['BLR', 'ENG', 'ESP', 'FRA', 'GER', 'ITA', 'NLD', 'PRT', 'RUS', 'PRT', 'SCO', 'UKR'] as $ac)
+    foreach ($cmd_db[$ac] as $code => $team)
+      if ($team['usr'] == $coach_name) {
+        echo '<tr><td>'.$ac.'</td><td>'.$code.'</td><td>'.$team['cmd'].'</td><td><input type="checkbox" name="ag['.$code.']"';
+        if (isset($friendlyTeam[$code.'@'.$ac]))
+          echo ' checked="checked"';
 
-     if (strlen($ta[0]) !=1 && strlen($ta[1]) == 3)
-     {
-       echo '<tr><td>'.$ta[1].'</td><td>'.$ta[0].'</td><td>'.$cmd_db[$team_str]['cmd'].'</td><td><input type="checkbox" name="ag['.$team_str.']"';
-       if (isset($friendlyTeam[$team_str1]))
-         echo ' checked="checked"';
-       echo " /></td></tr>\n";
-    }
-  }
+        echo " /></td></tr>\n";
+      }
+
   echo '</table>
 <br />
 <input type="submit" name="save" value="записать" />
