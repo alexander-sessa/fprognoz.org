@@ -35,8 +35,7 @@ function show_alert() {
 //]]></script>
 <br />
 <?php
-if (isset($_POST['reg']))
-{
+if (isset($_POST['reg'])) {
   $serial = file_get_contents($online_dir.'FCL/cserial');
   file_put_contents($online_dir.'FCL/cserial', ++$serial);
   $_SESSION['Coach_name'] = ucwords($_POST['user']);
@@ -63,31 +62,24 @@ if (isset($_SESSION['Coach_name'])) {
   $friendlyTeam = array();
   $codestsv = '';
   if (!isset($codes))
-    $codes = file($online_dir."FCL/$cur_year/codes.tsv");
+    $codes = file($online_dir.'FCL/'.$cur_year.'/codes.tsv');
 
-  foreach ($codes as $player)
-  {
-    $aplayer = explode('	', trim($player));
-    if (isset($aplayer[2]) && $aplayer[2] == $_SESSION['Coach_name'])
-      $friendlyTeam[$aplayer[0]] = $aplayer[1];
+  foreach ($codes as $player) {
+    list($code, $tname, $pname, $email, $lname, $confirm) = explode('	', $player);
+    if ($pname == $_SESSION['Coach_name'])
+      $friendlyTeam[$code] = $tname;
     else
       $codestsv .= $player;
   }
-  if (isset($_POST['save']))
-  {
+  if (isset($_POST['save'])) {
     $friendlyTeam = array();
-    foreach ($_POST['ag'] as $team_str => $status)
-    {
-     $ta = explode('@', $team_str);
-     if ($ta[1] == 'FCL')
-       $team_str1 = $ta[0];
-     else
-       $team_str1 = $team_str;
-
-      $codestsv .= $team_str1.'	'.$cmd_db[$team_str]['cmd'].'	'.$cmd_db[$team_str]['usr'].'	'.$cmd_db[$team_str]['eml']."\n";
-      $friendlyTeam[$team_str1] = $cmd_db[$team_str]['cmd'];
+    foreach ($_POST['ag'] as $team_str => $status) {
+      list($code, $ac) = explode('@', $team_str);
+      $team_str1 = ($ac == 'FCL') ? $code : $team_str;
+      $codestsv .= $team_str1.'	'.$cmd_db[$ac][$code]['cmd'].'	'.$cmd_db[$ac][$code]['usr'].'	'.$cmd_db[$ac][$code]['eml']."\n";
+      $friendlyTeam[$team_str1] = $cmd_db[$ac][$code]['cmd'];
     }
-    file_put_contents($online_dir."FCL/$cur_year/codes.tsv", $codestsv);
+    file_put_contents($online_dir.'FCL/'.$cur_year.'/codes.tsv', $codestsv);
     echo '<font color="red">записано</font><br />
 <br />
 ';
@@ -101,7 +93,7 @@ if (isset($_SESSION['Coach_name'])) {
   foreach (['BLR', 'ENG', 'ESP', 'FRA', 'GER', 'ITA', 'NLD', 'PRT', 'RUS', 'PRT', 'SCO', 'UKR'] as $ac)
     foreach ($cmd_db[$ac] as $code => $team)
       if ($team['usr'] == $coach_name) {
-        echo '<tr><td>'.$ac.'</td><td>'.$code.'</td><td>'.$team['cmd'].'</td><td><input type="checkbox" name="ag['.$code.']"';
+        echo '<tr><td>'.$ac.'</td><td>'.$code.'</td><td>'.$team['cmd'].'</td><td><input type="checkbox" name="ag['.$code.'@'.$ac.']"';
         if (isset($friendlyTeam[$code.'@'.$ac]))
           echo ' checked="checked"';
 
@@ -114,8 +106,7 @@ if (isset($_SESSION['Coach_name'])) {
 </form>
 ';
 }
-else
-{
+else {
   echo 'Для участия в товарищеских матчах необходимо войти на сайт под своим именем.<br />
 Если у Вас еще нет доступа на сайт, мы можем сделать его сейчас.<br />
 Все поля обязательны к заполнению.<br />

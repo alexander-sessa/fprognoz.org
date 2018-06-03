@@ -98,7 +98,6 @@ function build_personal_nav() {
   global $_SESSION;
   global $ccn;
   global $cmd_db;
-  global $usr_db;
   global $data_dir;
   global $online_dir;
   $debug_str = '';
@@ -159,8 +158,10 @@ function build_personal_nav() {
           $uefaflag = 0;
           $tour_dir = $online_dir.$countryCode.'/'.$currentSeason.'/prognoz/'.$tourCode;
           if ($countryCode != 'WL' && $countryCode != 'IST')
-            foreach ($usr_db[$_SESSION['Coach_name']] as $team_str)
-              if (($cut = strpos($team_str, '@'.$countryCode)) && $cut != 1 && !strpos($team_str, '@FCL')) {
+          foreach ($cmd_db[$countryCode] as $code => $team)
+          if ($team['usr'] == $_SESSION['Coach_name']) {
+            $team_str = $code.'@'.$countryCode;
+            $cut = strlen($code); ///// для совместимости. ПЕРЕДЕЛАТЬ!
 
             if (is_file($itFName)) {
               if ($uefaflag == 0)
@@ -174,18 +175,18 @@ function build_personal_nav() {
             elseif (!isset($tudb[$team_str][$tourCode])) { // первое упоминание тура
               $content = file_get_contents($online_dir.$countryCode.'/'.$currentSeason.'/programms/'.$tourCode);
               $content = substr($content, strpos($content, 'Последний с'));
-              if (!strpos($content, $cmd_db[$team_str]['cmd'])) {
+              if (!strpos($content, $cmd_db[$countryCode][$code]['cmd'])) {
                 if ($tourCode[4] != 'L')
                   $tudb[$team_str][$tourCode] = 0; // 0 - неучастие
 
               }
               elseif (is_file($tour_dir.'/closed')) {
-                $team_str1 = ($countryCode == 'SFP') ? $cmd_db[$team_str]['cmd'] : $team_str;
+                $team_str1 = ($countryCode == 'SFP') ? $cmd_db[$countryCode][$code]['cmd'] : $team_str;
                 $content = file_get_contents($tour_dir.'/mail');
                 if (strpos($content, substr($team_str1, 0, $cut).';') === false) {
                   if (is_file($tour_dir.'/adds')) {
                     $content = file_get_contents($tour_dir.'/adds');
-                    if (strpos($content, $cmd_db[$team_str]['cmd'].' ') === false)
+                    if (strpos($content, $cmd_db[$countryCode][$code]['cmd'].' ') === false)
                       $tudb[$team_str][$tourCode] = 1; // 1 - прогноза нет и больше не принимаются
                     else
                       $tudb[$team_str][$tourCode] = 4; // 4 - прогноз найден в дополнениях
@@ -201,7 +202,7 @@ function build_personal_nav() {
               else
               {
                 if ($countryCode == 'SFP')
-                  $team_str1 = $cmd_db[$team_str]['cmd'];
+                  $team_str1 = $cmd_db[$countryCode][$code]['cmd'];
                 else
                   $team_str1 = $team_str;
 
@@ -213,7 +214,7 @@ function build_personal_nav() {
                   else
                     $content = '';
 
-                  if (strpos($content, $cmd_db[$team_str]['cmd'].' ') === false) {
+                  if (strpos($content, $cmd_db[$countryCode][$code]['cmd'].' ') === false) {
                     if (($action == 'remind' && $timeStamp <= $currentTime + 86400)
                     || is_file($tour_dir.'/published'))
                       $tudb[$team_str][$tourCode] = 2; // 2 - прогноза нет и уже горит
@@ -247,26 +248,23 @@ function build_personal_nav() {
       }
     }
     $prev_fp = '';
-    foreach ($usr_db[$_SESSION['Coach_name']] as $team_str) if (!strpos($team_str, '@FCL')) {
-      $c = substr($team_str, 0, strrpos($team_str, '@'));
-      if ($c != 'I' && isset($cmd_db[$team_str])) {
-        if ($cmd_db[$team_str]['ccn'] == 'SFP') //
-          $ll = 'Сборная';
-        else
-          $ll = $cmd_db[$team_str]['cmd']; //
-
+    foreach (['BLR', 'ENG', 'ESP', 'FRA', 'GER', 'ITA', 'NLD', 'PRT', 'RUS', 'PRT', 'SCO', 'UKR'] as $countryCode) {
+     foreach ($cmd_db[$countryCode] as $c => $team)
+      if ($team['usr'] == $_SESSION['Coach_name']) {
+        $team_str = $c.'@'.$countryCode;
+        $ll = ($countryCode == 'SFP') ? 'Сборная' : $team['cmd'];
         if (substr($out, -7) != '<br />
 ') $out .= '<br />';
         if ($prev_fp == 'SFP'
-        || ($prev_fp != 'UEFA' && $cmd_db[$team_str]['ccn'] == 'UEFA')
-        || $cmd_db[$team_str]['ccn'] == 'FIN'
-        || ($prev_fp != 'FIN' && $cmd_db[$team_str]['ccn'] == 'SBN'))
+        || ($prev_fp != 'UEFA' && $countryCode == 'UEFA')
+        || $countryCode == 'FIN'
+        || ($prev_fp != 'FIN' && $countryCode == 'SBN'))
           $out .= '<img src="images/greydot.png" width="116" height="1" alt="" /><br />';
 
-        if ($cmd_db[$team_str]['ccn'] != 'WL' && $cmd_db[$team_str]['ccn'] != 'IST' && trim($ll))
-          $out .= '<a href="/?a='.strtolower($ccn[$cmd_db[$team_str]['ccn']]).'&c='.$c.'">'.$ll.' ('.$cmd_db[$team_str]['ccn'].')</a>
+        if (trim($ll))
+          $out .= '<a href="/?a='.strtolower($ccn[$countryCode]).'&c='.$c.'">'.$ll.' ('.$countryCode.')</a>
 ';
-        $prev_fp = $cmd_db[$team_str]['ccn'];
+        $prev_fp = $countryCode;
         $tout = '';
         $i = 0;
         $br = 0;
@@ -281,7 +279,7 @@ function build_personal_nav() {
             $cclen = 5;
             $ll = '&l='.substr($tcode, 0, $cclen);
           }
-          elseif ($cmd_db[$team_str]['ccn'] == 'SFP') {
+          elseif ($countryCode == 'SFP') {
             $cclen = 3;
             $ll = substr($tcode, 0, $cclen);
             if ($ll == 'PRO' || $ll == 'PRE' || $ll == 'FFP' || $ll == 'FFL' || $ll == 'TOR' || $ll == 'SPR' || $ll == 'SUP' || $ll == 'FWD' )
@@ -300,9 +298,9 @@ function build_personal_nav() {
             $linktext = 'text&ref=itog';
 
           if ($ll != '&') {
-            if ($status != 0 || $cmd_db[$team_str]['ccn'] != 'SFP') {
+            if ($status != 0 || $countryCode != 'SFP') {
               $br = 0;
-              $tout .= '<a href="/?a='.strtolower($ccn[$cmd_db[$team_str]['ccn']]).'&c='.$c.$ll.'&s='.$currentSeason.'&m='.$linktext.'&t='
+              $tout .= '<a href="/?a='.strtolower($ccn[$countryCode]).'&c='.$c.$ll.'&s='.$currentSeason.'&m='.$linktext.'&t='
                     . strtolower(substr($tcode, $cclen)) .'" class="'.$statusColor[$status].'">'.$tcode.'</a>
 ';
               if (($i += 1 + strlen($tcode)) > 15)
@@ -818,12 +816,9 @@ $passed = false;
 $sendpwd = '';
 $team_codes = [];
 
-/* изменить:
-   данные игрока нужны только при авторизованном входе и только его самого
-*/
+// изменить: $cmd_db нужна только при авторизованном входе и в большинстве скриптов только с данными одного игрока
 $access = file($data_dir . 'auth/.access');
-$cmd_db = array(); // основная база команд
-$usr_db = array(); // соответствие игроков командам и наоборот
+$cmd_db = []; // база данных команд, сгруппированная по ассоциациям
 if ($auth || isset($_POST['submitnewpass'])) {
   $hash = md5($_POST['pass_str']);
   $name_str = mb_strtoupper(isset($_POST['name_str']) ? $_POST['name_str'] : $coach_name);
@@ -831,16 +826,6 @@ if ($auth || isset($_POST['submitnewpass'])) {
 foreach ($access as $access_str) {
   list($code, $as_code, $team, $name, $mail, $pwd, $rol) = explode(';', $access_str);
   $cmd_db[$as_code][$code] = ['ccn' => $as_code, 'cmd' => $team, 'usr' => $name, 'eml' => $mail, 'rol' => $rol];
-  ///// следующий формат устарел - удалить!
-  $cmd_db[$code.'@'.$as_code] = ['ccn' => $as_code, 'cmd' => $team, 'usr' => $name, 'eml' => $mail, 'rol' => $rol];
-
-  $usr_db[$name][] = $code;   // связь: имя игрока - его команды (они же - аккаунты)
-  $usr_db[$code][] = $name;   // связь: код команды - имя игрока
-  if (trim($mail))
-    $usr_db[$mail][] = $name; // привязка имен игрока к e-mail
-
-  $usr_db[$name][] = $code.'@'.$as_code; // связь: игрок - его команды ///// устарело - удалить!
-
   if ($auth || isset($_POST['submitnewpass'])) { // аутентификация или контрольная проверка пароля
     if ($hash == $pwd &&
        ($name_str == mb_strtoupper($code) || $name_str == mb_strtoupper($name) || $name_str == strtoupper($mail))) {
@@ -902,11 +887,11 @@ else { // restored session
 }
 
 if (isset($_SESSION['Coach_name'])) {
-// confirm
-//  if (!is_file($data_dir . 'personal/'.$coach_name.'/'.date('Y', time()))) {
-//    $a = 'fifa';
-//    $m = 'confirm';
-//  }
+  if (strtotime('7/16') < time() && time() <= strtotime('9/1')
+   && !is_file($data_dir.'personal/'.$coach_name.'/'.date('Y'))) {
+    $a = 'fifa';
+    $m = 'confirm'; // кампания сбора подтверждений с 16 июля по 1 сентября
+  }
   $role = acl($_SESSION['Coach_name']);
   if ($have_redis)
     $redis = new Redis();

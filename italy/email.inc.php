@@ -45,16 +45,19 @@ $from = isset($_SESSION['Coach_name']) ? $senders[$cca] : '';
 $subject = isset($_POST['subject']) ? $_POST['subject'] : '';
 $msgtext = isset($_POST['msgtext']) ? $_POST['msgtext'] : '';
 $dir = scandir($online_dir.$cca);
-$acodes = file($online_dir."$cca/$s/codes.tsv");
-if (trim($from) && trim($subject) && trim($msgtext))
-{
-  echo '<p class="text15">Сообщение отправлено:</p>';
+$acodes = file($online_dir.$cca.'/'.$s.'/codes.tsv');
+if (trim($from) && trim($subject) && trim($msgtext)) {
   $emails = '';
-  foreach ($_POST['pl'] as $uname => $send)
-    $emails .= $cmd_db[$uname]['usr'] . ' <' . $cmd_db[$uname]['eml'] . '>, ';
+  foreach ($_POST['pl'] as $code => $send) {
+    $addresses = explode(',', $cmd_db[$cca][$code]['eml']);
+    foreach ($addresses as $address)
+      if ($address = trim($address))
+        $emails .= ($emails ? ', ' : '') . $cmd_db[$cca][$code]['usr'] . ' <' . $address . '>';
 
-  if ($emails = rtrim($emails, ', '))
-    send_email($from, '', $emails, $subjects[$cca]." ".$_POST['subject'], $_POST['msgtext']);
+  }
+  if ($emails)
+    echo send_email($from, '', $emails, $subjects[$cca]." ".$_POST['subject'], $_POST['msgtext']);
+
 }
 ?>
 <p class="text15">Для отправки EMail отдельным игрокам ФП-ассоциации, отметьте их в левой колонке:</p>
@@ -62,10 +65,9 @@ if (trim($from) && trim($subject) && trim($msgtext))
 <table width="100%">
 <tr><td rowspan="2">
 <?php
-foreach ($acodes as $line) if (trim($line))
-{
-  $ta = explode('	', $line);
-  echo '<input type="checkbox" name="pl['.$ta[0].'@'.$cca.']" /> '.$ta[2].' ('.$ta[1].')<br />';
+foreach ($acodes as $line) if (trim($line)) {
+  list($code, $tname, $uname, $email, $lname, $confirm) = explode('	', $line);
+  echo '<input type="checkbox" name="pl['.$code.']" /> '.$uname.' ('.$tname.')<br />';
 }
 ?>
 </td>
