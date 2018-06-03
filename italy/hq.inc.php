@@ -2,11 +2,13 @@
 $team = [];
 if (isset($_SESSION['Coach_name'])) {
   $from = $_SESSION['Coach_name'];
-  foreach ($cmd_db[$cca] as $team)
-    if ($team['usr'] == $from) {
-      $email = isset($team['eml']) ? $team['eml'] : '';
-      break;
-    }
+  $email = 'fp@fprognoz.org';
+  if (isset($cmd_db[$cca]))
+    foreach ($cmd_db[$cca] as $team)
+      if ($team['usr'] == $from) {
+        $email = isset($team['eml']) ? $team['eml'] : '';
+        break;
+      }
 
 }
 else
