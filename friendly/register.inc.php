@@ -65,7 +65,7 @@ if (isset($_SESSION['Coach_name'])) {
     $codes = file($online_dir.'FCL/'.$cur_year.'/codes.tsv');
 
   foreach ($codes as $player) {
-    list($code, $tname, $pname, $email, $lname, $confirm) = explode('	', $player);
+    list($code, $tname, $pname, $email) = explode('	', $player);
     if ($pname == $_SESSION['Coach_name'])
       $friendlyTeam[$code] = $tname;
     else
@@ -80,7 +80,7 @@ if (isset($_SESSION['Coach_name'])) {
       $friendlyTeam[$team_str1] = $cmd_db[$ac][$code]['cmd'];
     }
     file_put_contents($online_dir.'FCL/'.$cur_year.'/codes.tsv', $codestsv);
-    echo '<font color="red">записано</font><br />
+    echo '<font color="red">Изменение записано</font><br />
 <br />
 ';
   }

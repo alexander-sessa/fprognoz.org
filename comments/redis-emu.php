@@ -49,6 +49,12 @@ class Redis_emu {
   function exists($key) {
     return is_file($this->path . $key);
   }
+  function clone($source, $destination) {
+    if (!is_file($this->path . $source) || is_file($this->path . $destination))
+      return false;
+
+    return copy($this->path . $source, $this->path . $destination);
+  }
   function hset($key, $name, $value) {
     $this->lock($key);
     $a = $this->load($key);
