@@ -416,7 +416,7 @@ function build_access() {
         break;
 
     $codes = file($online_dir . $ccc . '/' . $s . '/codes.tsv');
-    foreach ($codes as $line) if ($line = trim($line)) {
+    foreach ($codes as $line) if (trim($line)) {
       list($code, $cmd, $name, $email) = explode("\t", $line);
       $email = trim($email);
       $code = trim($code, '- ');

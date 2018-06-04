@@ -2,12 +2,11 @@
 // === конфигурация поиска с шифрованием запроса ===============================
 $placeholder = 'имя';
 $mininput = 2; // минимальное количество символов для поиска
-$data_cfg = [];
+$data_cfg = ['cmd' => 'unique_check'];
 $iv = substr(md5('iv'.$salt, true), 0, 8);
 $key = substr(md5('pass1'.$salt, true) . md5('pass2'.$salt, true), 0, 24);
 $cfg = base64_encode(mcrypt_encrypt( MCRYPT_BLOWFISH, $key, json_encode($data_cfg), MCRYPT_MODE_CBC, $iv ));
 // =============================================================================
-
 $out = '';
 $cfm = array('?' => '', 'да' => '', 'нет' => '');
 $ccs = array('BLR','ENG','ESP','FRA','GER','ITA','NLD','PRT','RUS','SCO','UKR');
@@ -33,7 +32,6 @@ if (isset($_SESSION['Coach_name'])) {
       $season = substr($season, strpos($season, "'") + 1, 7); // формат типа "2018-19"
       if (!strpos($season, '-'))
         $season = substr($season, 0, 4); // формат типа "2018"
-
       if (isset($_POST['confirm'.$ccc]) && ($value = $_POST['confirm'.$ccc])) {
         $fn = $online_dir . $ccc . '/' . $season . '/codes.tsv';
         $codes = file($fn);
@@ -42,7 +40,6 @@ if (isset($_SESSION['Coach_name'])) {
           list($code, $team, $coach, $email, $long_name, $confirm) = explode('	', $player);
           if ($player[0] != '#' && $_SESSION['Coach_name'] == $coach)
             $confirm = $value;
-
           $coach = (isset($unique) && $unique) ? $_POST['new_name'] : $coach;
           $tsv .= $code.'	'.$team.'	'.$coach.'	'.$email.'	'.$long_name.'	'.trim($confirm).'
 ';
@@ -52,7 +49,6 @@ if (isset($_SESSION['Coach_name'])) {
       if (isset($unique) && $unique)
         if (strpos($settings, $_SESSION['Coach_name']))
           file_put_contents($fn, str_replace($_SESSION['Coach_name'], $_POST['new_name'], $settings));
-
     }
     touch($data_dir . 'personal/'.$_SESSION['Coach_name'].'/'.date('Y', time()));
     $out = '<br />
@@ -73,7 +69,6 @@ if (isset($_SESSION['Coach_name'])) {
         $out = '<br />
 Новое имя не принято, поскольку оно совпадает с уже существующим именем или кодом команды.<br />
 <a href="?a=uefa&m=hq">Свяжитесь с администрацией сайта для решения конфликта</a>.';
-
   }
   else {
     $out = '<br />
@@ -96,21 +91,18 @@ if (isset($_SESSION['Coach_name'])) {
       <td align="center"><select name="confirm'.$cca.'">';
           foreach ($cfm as $choice => $selected)
             $out .= '<option>'.$choice.'</option>';
-
           $out .= '</select></td>
     </tr>
 ';
           if ($team['eml'])
             $email = $team['eml'];
-
         }
-
     $out .= '
     <tr><td colspan="4">
       <br />
       <b>ВНИМАНИЕ</b>: с этого сезона снимается архаичное ограничение на написание имён игроков латиницей.<br />
       Вы можете сменить написание своего имени здесь и сейчас:
-<input id="new_name" type="text" name="new_name" value="'.$_SESSION['Coach_name'].'" data-tpl="<?=$cfg ?>" style="padding-left:5px" />
+<input id="new_name" type="text" name="new_name" value="'.$_SESSION['Coach_name'].'" data-tpl="'.$cfg.'" style="padding-left:5px" />
 <span id="valid_name"><i class="fa fa-check" style="color:green"> это имя используется Вами сейчас</i></span>
       <br />
     </td></tr>

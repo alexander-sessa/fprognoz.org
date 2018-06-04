@@ -24,7 +24,7 @@ if (isset($_POST['submitnewpass'])) {
       $team_list .= $code.', ';
       file_put_contents($online_dir.$ac.'/passwd/'.$code, md5($_POST['new_passwd']).':player');
     }
-    send_email('FPrognoz.org <fp@fprognoz.org>', $_POST['name_str'], $sendpwd, 'ФП. Пароль для сайта ' . $this_site,
+    send_email('FPrognoz.org <fp@fprognoz.org>', $_SESSION['Coach_name'], $sendpwd, 'ФП. Пароль для сайта ' . $this_site,
 'Вы сменили пароль для доступа на сайт ' . $this_site . '
 
 '.$_POST['new_passwd'].'
