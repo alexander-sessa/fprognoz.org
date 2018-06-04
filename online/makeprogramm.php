@@ -3,7 +3,6 @@
 date_default_timezone_set('Europe/Berlin');
 mb_internal_encoding('UTF-8');
 mb_regex_encoding('UTF-8');
-session_save_path('/var/lib/php/sessions');
 session_start();
 require_once ('/home/fp/data/config.inc.php');
 include 'realteam.inc.php';
@@ -84,7 +83,7 @@ $ccc = isset($_GET['cc']) ? $_GET['cc'] : '';
 if (!$ccc || !isset($_SESSION['Coach_name']))
   die('access denied');
 
-include('/' . strtolower($ccn[$ccc]) . '/settings.inc.php');
+include('../' . strtolower($ccn[$ccc]) . '/settings.inc.php');
 if ($_SESSION['Coach_name'] != $president
  && $_SESSION['Coach_name'] != $vice
  && !in_array($_SESSION['Coach_name'], $admin))

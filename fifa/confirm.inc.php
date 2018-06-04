@@ -1,4 +1,13 @@
 <?php
+// === конфигурация поиска с шифрованием запроса ===============================
+$placeholder = 'имя';
+$mininput = 2; // минимальное количество символов для поиска
+$data_cfg = [];
+$iv = substr(md5('iv'.$salt, true), 0, 8);
+$key = substr(md5('pass1'.$salt, true) . md5('pass2'.$salt, true), 0, 24);
+$cfg = base64_encode(mcrypt_encrypt( MCRYPT_BLOWFISH, $key, json_encode($data_cfg), MCRYPT_MODE_CBC, $iv ));
+// =============================================================================
+
 $out = '';
 $cfm = array('?' => '', 'да' => '', 'нет' => '');
 $ccs = array('BLR','ENG','ESP','FRA','GER','ITA','NLD','PRT','RUS','SCO','UKR');
@@ -75,6 +84,7 @@ if (isset($_SESSION['Coach_name'])) {
   <table width=916>
     <tr><td colspan="4"></td></tr>
     <tr><th align="left">код</th><th align="left">ассоциация</th><th align="left">команда</th><th>участие</th></tr>';
+    $email = '';
     foreach ($ccs as $cca)
       foreach ($cmd_db[$cca] as $code => $team)
         if (($team['usr'] == $_SESSION['Coach_name'])) {
@@ -90,6 +100,9 @@ if (isset($_SESSION['Coach_name'])) {
           $out .= '</select></td>
     </tr>
 ';
+          if ($team['eml'])
+            $email = $team['eml'];
+
         }
 
     $out .= '
@@ -97,10 +110,11 @@ if (isset($_SESSION['Coach_name'])) {
       <br />
       <b>ВНИМАНИЕ</b>: с этого сезона снимается архаичное ограничение на написание имён игроков латиницей.<br />
       Вы можете сменить написание своего имени здесь и сейчас:
-      <input type="text" name="new_name" value="'.$_SESSION['Coach_name'].'" style="padding-left:5px" /><br />
+<input id="new_name" type="text" name="new_name" value="'.$_SESSION['Coach_name'].'" data-tpl="<?=$cfg ?>" style="padding-left:5px" />
+<span id="valid_name"><i class="fa fa-check" style="color:green"> это имя используется Вами сейчас</i></span>
       <br />
     </td></tr>
-    <tr><td colspan="3">&nbsp;</td><td align="center"><input type="submit" name="confirm" value="отправить" /></td></tr>
+    <tr><td colspan="3">&nbsp;</td><td align="center"><input id="cfm_button" type="submit" name="confirm" value="отправить" /></td></tr>
   </table>
 </form>
 <br />
@@ -109,6 +123,39 @@ if (isset($_SESSION['Coach_name'])) {
 }
 else $out = 'Эта страница требует аутентификации';
 ?>
+<script>
+$(document).ready(function(){
+  $("#new_name").keyup(function(){
+    no=false
+    str=$(this).val()
+    if (str.length < <?=$mininput ?>) {
+      no=true
+      $("#valid_name").html('<i class="fa fa-times" style="color:red"> введите хотя бы 2 буквы</i>')
+    }
+    else {
+      if (str.indexOf(',', -1) + str.indexOf(';', -1) > 0) {
+        no=true
+        $("#valid_name").html('<i class="fa fa-times" style="color:red"> нельзя использовать знаки препинания</i>')
+      }
+      else {
+        $.post("/online/ajax.php",{
+            data: $(this).data("tpl"),
+            keyword: $(this).val(),
+            email: "<?=isset($email)?$email:'' ?>"
+          },function(r){
+            switch (r) {
+              case '1': no=true;ok='<i class="fa fa-times" style="color:red"> это имя или код заняты</i>';break;
+              case '2': no=false;ok='<i class="fa fa-check" style="color:green"> имя или код уже используется Вами</i>';break;
+              default : no=false;ok='<i class="fa fa-check" style="color:green"> такое имя допустимо</i>';
+            }
+            $("#valid_name").html(ok)
+        })
+      }
+    }
+    $("#cfm_button").prop("disabled", no)
+  })
+});
+</script>
 <span class="title text15b">&nbsp;&nbsp;&nbsp;Подтверждение участия в сезоне</span>
 <hr size="1" width="98%" />
 <?=$out?>

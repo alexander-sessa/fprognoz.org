@@ -13,6 +13,7 @@ $ccr = array(
 'UKR' => 'Украина',
 'FRA' => 'Франция',
 'SCO' => 'Шотландия',
+'Kings Forecasts' => 'Kings Forecasts',
 'Onedivision' => 'Onedivision',
 'PrimeGang' => 'PrimeGang',
 'КЛФП Харьков' => 'КЛФП Харьков',
