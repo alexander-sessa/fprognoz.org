@@ -53,6 +53,7 @@ $ccr = array(
 'SCO' => 'Шотландии',
 );
 eval('$sites = '.file_get_contents($online_dir.'WL/'.$s.'/sites.inc'));
+$head = '';
 echo '<p class="title text15b">&nbsp;&nbsp;&nbsp;Тренерская</p>
 <hr size="1" width="98%" />';
 if (isset($_SESSION['Coach_name']) && !isset($_POST['teamname'])) {
@@ -67,14 +68,16 @@ if (isset($_SESSION['Coach_name']) && !isset($_POST['teamname'])) {
     $closed = false;
     $ac = $_POST['cc'];
     $team = file_get_contents($online_dir.'WL/'.$s.'/'.$ac.'.csv');
-    while(list($k,$v)=each($_POST)) {
-      $plr = trim(base64_decode($k)).';';
-      if      ($v == 'уволить')   $team = str_replace($plr.'coach', $plr, $team);
-      else if ($v == 'назначить') $team = str_replace($plr, $plr . 'coach', $team);
-      else if ($v == 'исключить') $team = str_replace($plr . ";\n", '', $team);
-      else if ($v == 'призвать')  $team .= $plr . ";\n";
-      file_put_contents($online_dir.'WL/'.$s.'/'.$ac.'.csv', $team);
-    }
+    if (count($_POST) > 1)
+      while(list($k,$v)=each($_POST)) {
+        $plr = trim(base64_decode($k)).';';
+        if      ($v == 'уволить')   $team = str_replace($plr.'coach', $plr, $team);
+        else if ($v == 'назначить') $team = str_replace($plr, $plr . 'coach', $team);
+        else if ($v == 'исключить') $team = str_replace($plr . ";\n", '', $team);
+        else if ($v == 'призвать')  $team .= $plr . ";\n";
+        file_put_contents($online_dir.'WL/'.$s.'/'.$ac.'.csv', $team);
+      }
+
   }
   if (isset($hq[$_SESSION['Coach_name']])) {
     $closed = false;
@@ -294,6 +297,7 @@ if ($closed) {
 else if (strlen($ac) == 3) {
   $team = file($online_dir.'WL/'.$s.'/'.$ac.'.csv');
   $c = 0;
+  $player = [];
   foreach ($team as $line) {
     list($name, $mail, $role) = explode(';', trim($line));
     if ($role == 'coach') {

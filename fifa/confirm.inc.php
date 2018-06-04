@@ -3,8 +3,6 @@
 $placeholder = 'имя';
 $mininput = 2; // минимальное количество символов для поиска
 $data_cfg = ['cmd' => 'unique_check'];
-$iv = substr(md5('iv'.$salt, true), 0, 8);
-$key = substr(md5('pass1'.$salt, true) . md5('pass2'.$salt, true), 0, 24);
 $cfg = base64_encode(mcrypt_encrypt( MCRYPT_BLOWFISH, $key, json_encode($data_cfg), MCRYPT_MODE_CBC, $iv ));
 // =============================================================================
 $out = '';

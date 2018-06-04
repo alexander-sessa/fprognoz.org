@@ -3,6 +3,8 @@ $time_start = microtime(true);
 date_default_timezone_set('Europe/Berlin');
 mb_internal_encoding('UTF-8');
 require_once ('/home/fp/data/config.inc.php');
+$iv = substr(md5('iv'.$salt, true), 0, 8);
+$key = substr(md5('pass1'.$salt, true) . md5('pass2'.$salt, true), 0, 24);
 $this_site = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'];
 
 function acl($name, $a='') {
@@ -771,6 +773,10 @@ $parameters = (isset($_POST['matches']) || isset($_POST['updates']) || isset($_P
 foreach ($parameters as $k => $v)
   $$k = $v;
 
+if ($auth && !$_POST['pass_str'] && strpos($_POST['name_str'], '@') && strpos($_POST['name_str'], '.')) {
+  $m = 'authentifying';
+  $email_ok = false;
+}
 if (!isset($a))
   $a = 'fifa';
 else if (!is_dir($a)) {
@@ -806,6 +812,14 @@ if (isset($ls))
 
 $fprognozls = isset($_COOKIE['fprognozls']) ? $_COOKIE['fprognozls'] : 'inscore';
 session_start();
+if (isset($token)) { // вход по ссылке
+  $data = json_decode(trim(mcrypt_decrypt( MCRYPT_BLOWFISH, $key, base64_decode($token), MCRYPT_MODE_CBC, $iv )), true);
+  if ($data['cmd'] == 'auth_token' && $data['ts'] > time())
+    $_SESSION['Coach_name'] = $data['name'];
+  else
+    $notification = 'ссылка для входа не действительна';
+
+}
 if (isset($_POST['logout'])) {
   $role = 'badlogin';
   session_unset();
@@ -837,6 +851,12 @@ foreach ($access as $access_str) {
       if (strlen($coach_name) < strlen($name))
         $coach_name = $name; // выбираем самое длинное имя из указанных
 
+    }
+    else if ($m == 'authentifying') {
+      if ($name_str == strtoupper($mail)) {
+        $email_ok = true;
+        break;
+      }
     }
     else if ($auth && !$pwd && $_POST['pass_str'] == $code && $_POST['name_str'] == $name) {
       $sendpwd = $mail; // выполнилось условие отправки первого пароля

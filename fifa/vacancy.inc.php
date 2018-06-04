@@ -115,7 +115,7 @@ else if (isset($_POST['submitvac']))
 /* UI */
 /******/
 if (isset($_SESSION['Coach_name']) && !$pemail)
-  foreach ($cma_db as $cca => $teams)
+  foreach ($cmd_db as $cca => $teams)
     foreach ($teams as $team)
       if (($pemail = $team['eml']))
         break 2;
