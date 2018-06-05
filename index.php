@@ -817,7 +817,9 @@ if (isset($token)) { // вход по ссылке
   if ($data['cmd'] == 'auth_token' && $data['ts'] > time())
     $_SESSION['Coach_name'] = $data['name'];
   else
-    $notification = 'ссылка для входа не действительна';
+    $notification = '
+ссылка для входа<br />
+не действительна';
 
 }
 if (isset($_POST['logout'])) {

@@ -1,8 +1,8 @@
 <?php
 $team = [];
+$email = 'fp@fprognoz.org';
 if (isset($_SESSION['Coach_name'])) {
   $from = $_SESSION['Coach_name'];
-  $email = 'fp@fprognoz.org';
   if (isset($cmd_db[$cca]))
     foreach ($cmd_db[$cca] as $team)
       if ($team['usr'] == $from) {

@@ -49,6 +49,7 @@ for ($day=-1; $day<=13; $day++) {
   $content = substr($content, strpos($content, '<div class="score_pen score_cell">PN</div>'));
   $content = substr($content, 0, strpos($content, "<div class='ad-line-hide gameList_ad_bottom'>"));
   $content = str_replace('&nbsp;', ' ', $content);
+  $content = str_replace("\r", '', $content);
   $arr = explode('<div id="midbannerdiv">', $content);
   $data = '';
   for ($i = 0; $i <= 1; $i++)
@@ -102,7 +103,7 @@ for ($day=-1; $day<=13; $day++) {
         case 'Canc' : $s = 'CAN'; break;
         default     : $s = $minute;
       }
-      if ($cut = strpos($match, 'scoreh_ft')) {
+      if (!strpos($match, '<div class="scoreh_ft score_cell centerTXT"> </div>') && ($cut = strpos($match, 'scoreh_ft'))) {
         $r = substr($match, $cut + 32);
         $r = substr($r, 0, strpos($r, '</div>
 </div>'));

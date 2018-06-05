@@ -1,3 +1,5 @@
+    <p><a href="?<?="a=$a";?>&amp;m=files&amp;file=settings" class="title text15b">Редактирование основных настроек ассоциации</a></p>
+    <p>Название ассоциации, оформление страниц, текущий сезон, имена должностных лиц, разрешение редактирования составов.</p>
     <p class="title text15b">Редактирование файлов настроек сезона</p>
 <?php
 function Schedule($timestamp, $country_code, $tour_code, $action, $pfname)
@@ -19,6 +21,7 @@ if (isset($_POST['file_text']) && $_POST['file_text'])
   else if ($file == 'calcup') $fname = $online_dir."$cca/$s/calc";
   else if ($file == 'gencup') $fname = $online_dir."$cca/$s/genc";
   else if ($file == 'bombers') $fname = $online_dir."$cca/$s/bombers";
+  else if ($file == 'settings') $fname = "$a/settings.inc.php";
   else
   {
     $programm = $_POST['file_text'];
@@ -125,7 +128,7 @@ if (isset($_POST['file_text']) && $_POST['file_text'])
       file_put_contents('online/realteam.inc.php', $temp);
     }
   }
-  file_put_contents($fname, $_POST['file_text']);
+  file_put_contents($fname, str_replace("\r", '', $_POST['file_text']));
   echo "Файл $fname изменен<br />\n";
 }
 else if (isset($_GET['file']))
@@ -141,6 +144,7 @@ else if (isset($_GET['file']))
   else if ($file == 'calcup')  $file_txt = file_get_contents($online_dir."$cca/$s/calc");
   else if ($file == 'gencup')  $file_txt = file_get_contents($online_dir."$cca/$s/genc");
   else if ($file == 'bombers') $file_txt = file_get_contents($online_dir."$cca/$s/bombers");
+  else if ($file == 'settings') $file_txt = file_get_contents("$a/settings.inc.php");
   else $file_txt = '';
   $nrows = max(35, substr_count($file_txt, "\n") + 1);
   if (mb_detect_encoding($file_txt, 'UTF-8', true) === FALSE)
