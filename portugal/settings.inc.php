@@ -28,6 +28,6 @@ $rght_image   = 'images/3_peq_d1.png';
 $cur_year     = '2017-18';
 $president    = 'Kirill Goloschekov';
 $vice         = 'Alexey Plotitsa';
-$pressa       = '';
+$pressa       = 'Dmitry Redkin';
 $club_edit    = false;
 ?>

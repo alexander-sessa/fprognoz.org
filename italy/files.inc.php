@@ -129,7 +129,32 @@ if (isset($_POST['file_text']) && $_POST['file_text'])
     }
   }
   file_put_contents($fname, str_replace("\r", '', $_POST['file_text']));
-  echo "Файл $fname изменен<br />\n";
+  echo 'Файл '.$fname.' изменен<br />
+';
+  if ($file == 'settings') { // а вдруг уже новый сезон?
+    $cut = strpos($_POST['file_text'], '$cur_year');
+    $cut = strpos($_POST['file_text'], "'", $cut) + 1;
+    $len = strpos($_POST['file_text'], "'", $cut) - $cut;
+    $new = substr($_POST['file_text'], $cut, $len);
+    if ($new > $s) {
+      mkdir($online_dir."$cca/$new/bomb", 0755, true);
+      mkdir($online_dir."$cca/$new/bomc", 0755, true);
+      mkdir($online_dir."$cca/$new/boms", 0755, true);
+      mkdir($online_dir."$cca/$new/prognoz", 0755, true);
+      mkdir($online_dir."$cca/$new/programms", 0755, true);
+      mkdir($online_dir."$cca/$new/publish", 0755, true);
+      copy($online_dir."$cca/$s/codes.tsv", $online_dir."$cca/$new/codes.tsv");
+      copy($online_dir."$cca/$s/fp.cfg", $online_dir."$cca/$new/fp.cfg");
+      copy($online_dir."$cca/$s/headers", $online_dir."$cca/$new/headers");
+      copy($online_dir."$cca/$s/p.tpl", $online_dir."$cca/$new/p.tpl");
+      copy($online_dir."$cca/$s/pc.tpl", $online_dir."$cca/$new/pc.tpl");
+      copy($online_dir."$cca/$s/it.tpl", $online_dir."$cca/$new/it.tpl");
+      copy($online_dir."$cca/$s/itc.tpl", $online_dir."$cca/$new/itc.tpl");
+      echo 'Создана структура данных сезона '.$new.'.<br />
+Можно начинать!<br />
+';
+    }
+  }
 }
 else if (isset($_GET['file']))
 {

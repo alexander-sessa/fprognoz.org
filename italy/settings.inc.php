@@ -28,6 +28,6 @@ $rght_image   = 'images/4fd77ddeaad8d.jpg';
 $cur_year     = '2017-18';
 $president    = 'Alexander Sessa';
 $vice         = 'Serge Vasiliev';
-$pressa       = 'Vladislav Ezhergin';
+$pressa       = 'Mikhail Sirota';
 $club_edit    = false;
 ?>

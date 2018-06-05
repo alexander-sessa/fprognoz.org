@@ -28,6 +28,6 @@ $rght_image   = 'images/Russian_Football_Union_Logo.svg';
 $cur_year     = '2017-18';
 $president    = 'Kirill Goloschekov';
 $vice         = 'Konstantin Smetanin';
-$pressa       = '';
+$pressa       = 'Mikhail Sirota';
 $club_edit    = false;
 ?>
