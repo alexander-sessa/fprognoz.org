@@ -294,7 +294,7 @@ if ($closed) {
 </form>
 ';
 }
-else if (strlen($ac) == 3) {
+else if (isset($ac) && strlen($ac) == 3) {
   $team = file($online_dir.'WL/'.$s.'/'.$ac.'.csv');
   $c = 0;
   $player = [];
@@ -362,7 +362,8 @@ else {
   $codes = file($online_dir.'WL/'.$s.'/codes.tsv');
   $player = [];
   foreach ($codes as $line) {
-    list($code, $team, $name, $email, $role) = explode('	', trim($line));
+    list($code, $team, $name, $email, $role) = explode('	', $line);
+    $role = trim($role);
     $player[$team][$code] = ['code' => $code, 'name' => $name, 'email' => $email, 'role' => $role];
     if ($role == 'coach' && $name == $_SESSION['Coach_name']) {
       $team_name = $team;
@@ -406,7 +407,7 @@ else {
   $squad = file($online_dir.'WL/'.$s.'/'.$team_name.'.csv');
   $players = [];
   for ($i=1; $i<=12; $i++)
-    $players[$i] = ['name' => '', 'mail' => '', 'role' => ''];
+    $players[$i] = ['code' => '', 'name' => '', 'mail' => '', 'role' => ''];
 
   $i = 1;
   foreach ($squad as $line) {
