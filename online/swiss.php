@@ -17,14 +17,15 @@ $teams = [
 'Белоруссия',
 'Германия',
 'Англия',
-'Украина'
+'Украина',
+'Эстония'
 ];
 $games = []; // массив сыгранных матчей
 $tours = 8;  // количество туров
 
 // Simulator
 for ($i = 1; $i <= $tours; $i++) {
-  $res = SwissDraw($games, $teams, false);
+  $res = SwissDraw($games, $teams, true);
   //print_r($res);
   echo "<br />\n".$res[0]."<br />\n";
   echo "В $i-м туре играют:<br />\n";
@@ -33,7 +34,7 @@ for ($i = 1; $i <= $tours; $i++) {
     echo "$match<br />\n";
     list($home, $away) = explode(' - ', $match);
     if ($home == $away)
-      $games[$home][$away] = 1;
+      $games[$home][$away] = $score[$home] = 1;
     else {
       switch (floor(rand(0, 300) / 100)) {
         case 0: $games[$home][$away] = $score[$home] = 0; $games[$away][$home] = $score[$away] = 3; break;

@@ -1,8 +1,8 @@
 <?php
 /* Приоритеты подбора соперника:
-1. При нечетном количестве команд болваном должен быть слабейший из еще небывших болванами
+1. При нечетном количестве команд тур пропускает слабейший из еще не пропускавших
 2. Во втором и последующих турах сильнейшие играют с сильнейшими - к чёрту "метод пенальти":
-   важно выбрать сильнейших соперников для лидеров, а середняки итак разберутся
+   важно выбрать сильнейших соперников для лидеров, а середняки и так разберутся
 
 $games[$team1][$team2] = $result - массив сыгранных матчей 
 $teams - массив команд расставленных по убыванию рейтинга (по местам)
@@ -28,7 +28,7 @@ function SwissDraw($games, $teams, $verbose=false) {
     }
     else { // не первый тур
       $dummy = [0 => 'none'];
-      if ($hasDummy) // при необходимости выбираем кандидатов в болваны
+      if ($hasDummy) // при необходимости выбираем кандидатов на пропуск тура
         for ($i = $countTeams - 1; $i >= 0; $i--)
           if (!isset($games[$teams[$i]][$teams[$i]]))
             $dummy[] = $teams[$i];
@@ -46,6 +46,9 @@ function SwissDraw($games, $teams, $verbose=false) {
         $lasti = $lastj = '';
         $repeat = $repeats = 0;
         $m = -1;
+        if ($verbose && $hasDummy)
+          echo "Тур пропускает $byeTeam.<br />\n";
+
         // если надо повторить предыдущую итерацию, если превышено к-во попыток - стоп, иначе следущая пара
         for ($i = 0; $i < $countTeams - 1; $i++) {
           if (!$i && $verbose)
@@ -61,7 +64,7 @@ function SwissDraw($games, $teams, $verbose=false) {
           }
           if ($teams[$i] == $byeTeam) {
             if ($verbose)
-              echo 'Пропуск '.$teams[$i]." - болван.<br />\n";
+              echo 'Пропуск '.$teams[$i]." - не играет в этом туре.<br />\n";
 
           }
           else if (isset($used[$teams[$i]])) {
@@ -80,7 +83,7 @@ function SwissDraw($games, $teams, $verbose=false) {
             for ($j = $i + 1; $j < $countTeams; $j++) {
               if ($teams[$j] == $byeTeam) {
                 if ($verbose)
-                  echo $teams[$j]." - болван; ";
+                  echo $teams[$j]." пропускает тур; ";
 
               }
               else if ($i == $j) {

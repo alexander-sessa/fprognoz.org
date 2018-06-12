@@ -566,11 +566,11 @@ function bz_matches($json) {
   $res_path = $online_dir . 'results/';
   $lock = $online_dir . 'log/results.lock';
   include ('online/realteam.inc.php');
-  $matches = json_decode($json, true);
+  $matches = json_decode(stripslashes($json), true);
   $update = false;
-  $year = date('Y', time());
-  $m = date('m', time());
-  $d = date('d', time());
+  $year = date('Y');
+  $m = date('m');
+  $d = date('d');
   $week = date('W', time() - 86400);
   $fname = ($week == '52' && $m == '01') ? $res_path.($year - 1).'.'.$week : $res_path.$year.'.'.$week;
   if (lock($lock, 10000)) { // lock
@@ -582,7 +582,7 @@ function bz_matches($json) {
       list($h,$a,$d,$s,$f,$r,$g,$i,$z) = explode(',', trim($line));
       $base[$h.' - '.$a.' '.substr($d, 0, 5)] = array($h,$a,$d,$s,$f,$r,$g,$i,$z);
     }
-    foreach ($matches as $match) {
+    if (count($matches)) foreach ($matches as $match) {
       extract($match);
       $league = $uadi.': '.$ladi;
       if (in_array($league, $leagues)) {
@@ -652,9 +652,9 @@ function load_archive($fname, $updates) {
 
 function get_results_by_date($month, $day, $update = NULL) {
   global $online_dir;
-  $updates = json_decode($update, true);
+  $updates = json_decode(stripslashes($update), true);
   $date = sprintf('%02d-%02d', trim($month), trim($day));
-  $year = date('Y', time());
+  $year = date('Y');
 //  if ($month > 7) $year--;
   $base = array();
   $week = date('W', strtotime($year.'-'.$date));

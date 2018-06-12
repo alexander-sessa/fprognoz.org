@@ -671,7 +671,7 @@ function Today($year, $m, $d, $dayofweek, $minute) {
     $update = true;
     $url = 'http://www.xscores.com/soccer/livescores';
     $content = file_get_contents($url);
-    $seq = substr($content, 6 + strpos($content, 'seq = '), 8);
+    $seq = strpos($content, 'seq = ') ? substr($content, 6 + strpos($content, 'seq = '), 8) : $old_seq;
     $content = substr($content, strpos($content, '<div class="score_pen score_cell">PN</div>'));
     $content = substr($content, 0, strpos($content, "<div class='ad-line-hide gameList_ad_bottom'>"));
     $content = str_replace('&nbsp;', ' ', $content);
