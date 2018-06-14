@@ -28,6 +28,6 @@ $rght_image   = 'images/Dfb_pokal.gif';
 $cur_year     = '2017-18';
 $president    = 'Vano Opulsky';
 $vice         = 'Alexander Sessa';
-$pressa       = 'Vano Opulsky';
+$pressa       = '';
 $club_edit    = false;
 ?>

@@ -143,7 +143,7 @@ function build_personal_nav() {
               $status = 6; // завершён
             else if (is_file($tour_dir.'/closed'))
               $status = 4; // играется
-            else if (strpos(file_get_contents($tour_dir.'/mail'), strtr($_SESSION['Coach_name'], ' ', '_')) !== false)
+            else if (strpos(file_get_contents($tour_dir.'/mail'), $_SESSION['Coach_name']) !== false)
               $status = 5; // есть прогноз
             else
               $status = ($timeStamp <= $currentTime + 86400) ? 2 : 3; // нет прогноза

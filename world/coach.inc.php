@@ -320,7 +320,7 @@ else if (isset($ac) && strlen($ac) == 3) {
     foreach ($player as $name => $mail)
       if ($mail != 'coach')
         $player_col .= '
-      <input type="submit" value="исключить" name="'.base64_encode($name.';'.$mail).'" /> '.$name.'</br>';
+      <input type="submit" value="исключить" name="'.base64_encode($name.';'.$mail).'" /> '.$name.' ('.$mail.')</br>';
 
   }
   if (count($team) <= 12) {
@@ -330,7 +330,7 @@ else if (isset($ac) && strlen($ac) == 3) {
       list($code, $team, $name, $mail, $long, $conf) = explode('	', $line);
       if (!isset($player[$name]) && !is_file($data_dir . 'personal/'.$name.'/team.2018'))
         $player_col .= '
-      <input type="submit" value="призвать" name="'.base64_encode($name.';'.$mail).'" /> '.$name.' ('.$team.')</br>';
+      <input type="submit" value="призвать" name="'.base64_encode($name.';'.$mail).'" /> '.$name.' ('.$team.') ('.$mail.')</br>';
 
     }
   }

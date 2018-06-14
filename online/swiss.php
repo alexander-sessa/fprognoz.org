@@ -4,7 +4,6 @@ include ('swiss.inc.php');
 $teams = [
 'Onedivision',
 'PrimeGang',
-'Red Anfield',
 'Kings Forecasts',
 'Россия',
 'Испания',
@@ -17,8 +16,7 @@ $teams = [
 'Белоруссия',
 'Германия',
 'Англия',
-'Украина',
-'Эстония'
+'Украина'
 ];
 $games = []; // массив сыгранных матчей
 $tours = 8;  // количество туров
