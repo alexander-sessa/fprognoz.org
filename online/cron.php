@@ -322,7 +322,7 @@ function build_prognozlist($country_code, $season, $tour) {
 
     $files = scandir($prognoz_dir);
     $participants = [];
-    foreach ($files as $file) if ($file[0] != '.' && $file != 'cal' && $file != 'mail')
+    foreach ($files as $file) if ($file[0] != '.' && $file != 'cal' && $file != 'mail' && $file != 'term')
       $participants[] = $file;
 
     foreach ($participants as $cc) {
@@ -336,8 +336,8 @@ function build_prognozlist($country_code, $season, $tour) {
       $cc_pr = file($prognoz_dir . $cc);
       foreach ($cc_pr as $pr_line) if (trim($pr_line)) {
         list($code, $predict) = explode(';', $pr_line);
-//      $name = strtr($code, '_', ' ');
-        $code = strtr($code, ' ', '_');
+//        $name = strtr($code, '_', ' ');
+//        $code = strtr($code, ' ', '_');
         $predict = strtr($predict, [' ' => '']);
         if (isset($all_predicts[$cc][$code]) && $all_predicts[$cc][$code] != $predict) {
           $new = true;
@@ -358,7 +358,7 @@ function build_prognozlist($country_code, $season, $tour) {
       $cc_pr = file($path . $cc.'.csv');
       foreach ($cc_pr as $pr_line) if (trim($pr_line)) {
         $name = explode(';', $pr_line, 2)[0];
-        $code = strtr($name, ' ', '_');
+//        $code = strtr($name, ' ', '_');
         if (!isset($cc_predicts[$code])) {
           if (isset($all_predicts[$cc][$code])) {
             $new = true;
@@ -379,7 +379,7 @@ function build_prognozlist($country_code, $season, $tour) {
       $cc_pr = file($path . $cc.'.csv');
       foreach ($cc_pr as $pr_line) if (trim($pr_line)) {
         $name = explode(';', $pr_line, 2)[0];
-        $code = strtr($name, ' ', '_');
+//        $code = strtr($name, ' ', '_');
         if (isset($all_predicts[$cc][$code])) {
           $new = true;
           $cc_predicts[$code] = $all_predicts[$cc][$code];
@@ -401,10 +401,10 @@ function build_prognozlist($country_code, $season, $tour) {
       $out = '';
       foreach ($cc_predicts as $code => $predict) if (trim($predict)) {
         $n++;
-        $out .= $code.';'.$predict.';;' . ($n <= 6 ? '1' : '') . "\n";
+        $out .= $code.';'.$predict.';;' . ($n <= 5 ? '1' : '') . "\n";
       }
       foreach ($cc_predicts as $code => $predict) if (!trim($predict)) {
-        if ($n >= 6)
+        if ($n >= 5)
           $out .= "$code;;;\n";
         else {
           $n++;
@@ -923,7 +923,7 @@ https://fprognoz.org/?a=".$ccn[$cca]."$ll&s=$season&m=prognoz&t=$t".strtolower(s
           touch($online_dir . "$cca/$season/prognoz/$tour/closed");
           touch($online_dir . "schedule/task/close.$tour");
           if ($cca == 'SFP') touch($online_dir . "schedule/task/renew.$tour"); // last renew
-          if ($cca == 'IST' && $next == 2147483647) touch($online_dir . "schedule/task/pblsh.$tour"); // publish results
+          if ($cca == 'WLS' && $next == 2147483647) touch($online_dir . "schedule/task/pblsh.$tour"); // publish results
         }
         else { // reschedule
           if ($cca == 'SFP' || $cca == 'IST') {

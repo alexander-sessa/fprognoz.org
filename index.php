@@ -550,6 +550,7 @@ function bz_matches($json) {
 'UEFA: Champions League',
 'UEFA: Europa League',
 'World: Friendly',
+'FIFA: World Cup',
 'FIFA: World Cup Qualification - Africa',
 'FIFA: World Cup Qualification - Asia',
 'FIFA: World Cup Qualification - Central America',
@@ -957,7 +958,7 @@ if (isset($matches) || isset($updates) || isset($mtscores)) {
       touch($lock);
       $matches = sizeof(file($data_dir . "online/SFP/$s/prognoz/$l$t/cal"));
       for ($nm=1; $nm<=$matches; $nm++)
-        file_get_contents("https://fprognoz.org/?a=sfp-team&l=$l&s=$s&m=prognoz&t=$t&renew=1&n=$n");
+        file_get_contents("https://fprognoz.org/?a=sfp-team&l=$l&s=$s&m=prognoz&t=$t&renew=1&n=$nm");
 
       unlink($lock);
     }
@@ -967,12 +968,12 @@ if (isset($matches) || isset($updates) || isset($mtscores)) {
     }
   }
   else if ($a == 'world') {
-    $lock = $online_dir . 'log/renew.' . $l;
+    $lock = $online_dir . 'log/renew.WLS';
     if (!is_file($lock)) { // если первый, обновляем календарь
       touch($lock);
-      $matches = 7;
+      $matches = 8;
       for ($nm=1; $nm<=$matches; $nm++)
-        file_get_contents("https://fprognoz.org/?a=world&l=S&s=2018&m=prognoz&t=$t&renew=1&n=$n");
+        file_get_contents("https://fprognoz.org/?a=world&l=S&s=2018&m=prognoz&t=$t&renew=1&n=$nm");
 
       unlink($lock);
     }

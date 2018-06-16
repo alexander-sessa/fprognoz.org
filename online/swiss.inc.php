@@ -23,14 +23,15 @@ function SwissDraw($games, $teams, $verbose=false) {
         $newRounds[] = $teams[$i].' - '.$teams[$nbGames - $hasDummy + $i];
 
       if ($hasDummy)
-        $newRounds[] = $teams[$countTeams - 1].' - '.$teams[$countTeams - 1];
+        $newRounds[] = $teams[$countTeams - 1].' - Швейцария';
 
     }
     else { // не первый тур
       $dummy = [0 => 'none'];
       if ($hasDummy) // при необходимости выбираем кандидатов на пропуск тура
         for ($i = $countTeams - 1; $i >= 0; $i--)
-          if (!isset($games[$teams[$i]][$teams[$i]]))
+          //if (!isset($games[$teams[$i]][$teams[$i]]))
+          if (!isset($games[$teams[$i]][$teams[$i]]) && !isset($games[$teams[$i]]['Швейцария']))
             $dummy[] = $teams[$i];
 
       // brute force: если не находится решение, для последней определённой пары создаём в
@@ -47,7 +48,7 @@ function SwissDraw($games, $teams, $verbose=false) {
         $repeat = $repeats = 0;
         $m = -1;
         if ($verbose && $hasDummy)
-          echo "Тур пропускает $byeTeam.<br />\n";
+          echo "$byeTeam в этом туре играет с ботами.<br />\n";
 
         // если надо повторить предыдущую итерацию, если превышено к-во попыток - стоп, иначе следущая пара
         for ($i = 0; $i < $countTeams - 1; $i++) {
@@ -64,12 +65,12 @@ function SwissDraw($games, $teams, $verbose=false) {
           }
           if ($teams[$i] == $byeTeam) {
             if ($verbose)
-              echo 'Пропуск '.$teams[$i]." - не играет в этом туре.<br />\n";
+              echo 'Пропуск команды '.$teams[$i]." - не играет в этом туре.<br />\n";
 
           }
           else if (isset($used[$teams[$i]])) {
             if ($verbose)
-              echo 'Пропуск '.$teams[$i]." - уже распределена.<br />\n";
+              echo 'Пропуск команды '.$teams[$i]." - уже распределена.<br />\n";
 
             if ($i == 0)
               die('Fail');
@@ -78,7 +79,7 @@ function SwissDraw($games, $teams, $verbose=false) {
           else {
             $match = false;
             if ($verbose)
-              echo 'Поиск пары для '.$teams[$i].'. Попытка '.($repeat + 1).': ';
+              echo 'Поиск пары для команды '.$teams[$i].'. Попытка '.($repeat + 1).': ';
 
             for ($j = $i + 1; $j < $countTeams; $j++) {
               if ($teams[$j] == $byeTeam) {
@@ -98,7 +99,7 @@ function SwissDraw($games, $teams, $verbose=false) {
               }
               else if (isset($games[$teams[$i]][$teams[$j]]) || isset($games[$teams[$j]][$teams[$i]])) {
                 if ($verbose)
-                  echo $teams[$j]." уже играли; ";
+                  echo $teams[$j]." уже играли с ней; ";
 
               }
               else if (isset($fgames[$teams[$i]][$teams[$j]]) || isset($fgames[$teams[$j]][$teams[$i]])) {
@@ -153,7 +154,7 @@ function SwissDraw($games, $teams, $verbose=false) {
         $error = 'Невозможно составить список матчей.';
       else {
         if ($hasDummy)
-          $newRounds[] = $byeTeam.' - '.$byeTeam;
+          $newRounds[] = $byeTeam.' - Швейцария';
 
         if (count($newRounds) < $n)
           $error = 'Невозможно составить ПОЛНЫЙ список матчей.';

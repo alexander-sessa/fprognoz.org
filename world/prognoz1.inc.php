@@ -440,12 +440,10 @@ if (is_file($program_file)) {
     if (!$closed && isset($_POST['playersorder'])) {
       $out = '';
       $log = 'состав первого тайма:<br />';
-      if (is_file($prognoz_dir.'/'.$cc)) {
-        $lines =  file($prognoz_dir.'/'.$cc);
-        foreach ($lines as $line) if (trim($line)) {
-          list($name, $predict, $ts, $rest) = explode(';', trim($line));
-          $all_predicts[$name] = $predict;
-        }
+      $lines = file($prognoz_dir.'/'.$cc);
+      foreach ($lines as $line) if (trim($line)) {
+        list($name, $predict, $ts, $rest) = explode(';', trim($line));
+        $all_predicts[$name] = $predict;
       }
       $added = [];
       $i = 0;
@@ -457,7 +455,7 @@ if (is_file($program_file)) {
           $added[$name] = $predict;
 
         $log .= (strlen($log) > 45 ? ', ' : ' ') . ($i == 0 ? '<b>' : '') . $name . ($i++ == 5 ? '</b>' : '');
-        $out .= "$name;$predict;;\n";
+        $out .= "$name;$predict;\n";
       }
       if (count($added)) {
         $log .= '<br /> и при этом внёс прогноз' . (count($added) > 1 ? 'ы' : '');
@@ -1526,17 +1524,17 @@ socket.on("guncelleme",function(d){var json="";$.each(d.updates,function(index,u
 <div style="clear:both;"></div>
 ';
 
-    if ($published && !is_file($season_dir.'/publish/it'.$t.'.'.$n)) {
-      file_put_contents($season_dir.'/publish/it'.$t.'.'.$n, $html);
-      $statfile = fopen($season_dir.'/publish/plst'.$t, 'a');
+//    if ($published && !is_file($season_dir.'/publish/it'.$t.'.'.$n)) {
+      file_put_contents($season_dir.'/publish/1/it'.$t.'.'.$n, $html);
+      $statfile = fopen($season_dir.'/publish/1/plst'.$t, 'a');
       fwrite($statfile, var_export($players, true) . ',');
       fclose($statfile);
-      $statfile = fopen($season_dir.'/publish/tmst'.$t, 'a');
+      $statfile = fopen($season_dir.'/publish/1/tmst'.$t, 'a');
       fwrite($statfile, var_export($teams, true) . ',');
       fclose($statfile);
-    }
-    else
-      print($html);
+//    }
+//    else
+//      print($html);
 
   }
 }
