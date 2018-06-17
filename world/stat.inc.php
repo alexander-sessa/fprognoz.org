@@ -91,7 +91,12 @@ pc=[
 {co:"best",sn:"№1 тура",ln:"количество номинаций \"игрок тура\"",ta:" class=\"tdn\"",sr:"r"},
 {co:"tute",sn:"сборная",ln:"количество попаданий в сборную тура",ta:" class=\"tdn\"",sr:"r"}
 ]
-<?php include($online_dir.'WL/'.$s.'/publish/stat.'.$t); ?>
+<?php
+if (is_file($online_dir.'WL/'.$s.'/publish/stat.'.$t))
+  include($online_dir.'WL/'.$s.'/publish/stat.'.$t);
+else
+  include($online_dir.'WL/'.$s.'/publish/stat.'.$l.$t);
+?>
 </script>
 <div id="bestoftour" class="bestoftour">
 </div>

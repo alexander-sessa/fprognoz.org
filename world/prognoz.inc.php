@@ -288,21 +288,19 @@ function auto_comment($position, $newposition, $min, $home, $away) {
   if ($min % 3) {
     if (strpos($comment, 'озяев'))
       $comment = strtr($comment, [
-'Хозяева' => 'Игроки ' . $teams['home']['team'],
-'хозяева' => 'игроки ' . $teams['home']['team'],
-'хозяев' => $teams['home']['team'],
+'Хозяева' => 'Игроки сборной ' . $teams['home']['team'],
+'хозяева' => 'игроки сборной ' . $teams['home']['team'],
+'хозяев' => 'сборной ' . $teams['home']['team'],
       ]);
     else
       $comment = strtr($comment, [
-'Гости' => 'Игроки ' . $teams['away']['team'],
-'гости' => 'игроки ' . $teams['away']['team'],
-'гостей' => $teams['away']['team'],
+'Гости' => 'Игроки сборной ' . $teams['away']['team'],
+'гости' => 'игроки сборной ' . $teams['away']['team'],
+'гостей' => 'сборной ' . $teams['away']['team'],
       ]);
     $comment = strtr($comment, [
-'Сборная' => 'Сборной',
-'Жемчужина' => 'Жемчужины',
-'Мегаспорт' => 'Мегаспорта',
-'Эксперты' => 'Экспертов',
+'ия' => 'ии',
+'Украина' => 'Украины',
     ]);
   }
   return $comment;

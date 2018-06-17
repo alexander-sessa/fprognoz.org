@@ -54,7 +54,7 @@ $ccr = array(
 );
 eval('$sites = '.file_get_contents($online_dir.'WL/'.$s.'/sites.inc'));
 $head = '';
-echo '<p class="title text15b">&nbsp;&nbsp;&nbsp;Тренерская</p>
+echo '<p class="title text15b">&nbsp;&nbsp;&nbsp;Тренерская (начался турнир, поэтому добаление и изменение команд невозможно)</p>
 <hr size="1" width="98%" />';
 if (isset($_SESSION['Coach_name']) && !isset($_POST['teamname'])) {
   $s = $cur_year;
@@ -64,7 +64,7 @@ if (isset($_SESSION['Coach_name']) && !isset($_POST['teamname'])) {
     list($ccode, $name, $email) = explode(';', trim($line));
     $hq[$name][] = $ccode;
   }
-  if (count($_POST)) {
+  if (false && count($_POST)) {
     $closed = false;
     $ac = $_POST['cc'];
     $team = file_get_contents($online_dir.'WL/'.$s.'/'.$ac.'.csv');
@@ -167,7 +167,7 @@ if (isset($_SESSION['Coach_name']) && !isset($_POST['teamname'])) {
   }
 }
 else {
-  if (isset($_POST['teamname'])) {
+  if (false && isset($_POST['teamname'])) {
     if (!$_POST['teamname'] || !$_POST['teamsite'] || !$_POST['coach1'] || !$_POST['cmail1'])
       echo '<p style="color:red;font-weight:bold">Не заполнены все обязательные поля!</p>';
     else {
