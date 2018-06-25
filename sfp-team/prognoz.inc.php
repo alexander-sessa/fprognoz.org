@@ -1271,7 +1271,7 @@ if (isset($updates))
   echo $prognozlist; // REST responce on event 'FT'
 else
   echo '
-<link href="css/prognoz.css" rel="stylesheet">
+<link href="css/prognoz.css?ver=625" rel="stylesheet">
 <script>//<![CDATA[
 var '.date('\h\o\u\r\s=G,\m\i\n\u\t\e\s=i,\s\e\c\o\n\d\s=s',time()).',sendfp=false,base=[],mom=[]
 ' . $id_arr . '

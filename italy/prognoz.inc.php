@@ -768,7 +768,7 @@ if (isset($matches))
 else if (isset($updates))
   echo $prognozlist; // REST responce on event 'FT'
 else
-  echo '<link href="css/prognoz.css" rel="stylesheet">
+  echo '<link href="css/prognoz.css?ver=625" rel="stylesheet">
 <script>//<![CDATA[
 function newpredict(){
 	var i,dd,p="",ps="",min=0,max=0;

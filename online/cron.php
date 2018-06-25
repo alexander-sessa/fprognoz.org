@@ -853,7 +853,7 @@ if (true) {
 //           && strtotime($year.'-'.$base[$match][2]) > $term
 //           && strtotime($year.'-'.$base[$match][2]) < $term + 2764800) {
           if (isset($base[$match])) {
-            if ($cca == 'SFP') { // $next = end of closest unfinished match: 6600 = 2*45 + 15 + 5 min
+            if ($cca == 'SFP' || $cca == 'WL') { // $next = end of closest unfinished match: 6600 = 2*45 + 15 + 5 min
               if ($base[$match][3] != 'FT' && $base[$match][3] != 'POS' && $base[$match][3] != 'CAN') {
                 $next = min($next, 6600 + strtotime("$year-" . $base[$match][2]));
                 if ($base[$match][3] != '-') {
@@ -878,7 +878,10 @@ if (true) {
               }
               elseif ($base[$match][3] != 'POS' && $base[$match][3] != 'CAN') {
                 $minute = $base[$match][3];
-                if ($m < 11) $ms++; // matches started in main part
+                if (in_array($cca, ['BLR', 'ENG', 'ESP', 'FRA', 'GER', 'ITA', 'NLD', 'PRT', 'RUS', 'SCO', 'UKR'])
+                && $m < 11)
+                  $ms++; // matches started in main part
+
                 $s++; // matches started total
               }
             }
@@ -888,7 +891,8 @@ if (true) {
 
         if ($s && $cca != 'SFP' && $cca != 'FIN') { // send predicts after some match started
           if (is_file($online_dir . "$cca/$season/publish/$tour")) {
-            if (!strpos(file_get_contents($online_dir . "$cca/$season/publish/$tour"), '*')) {
+            if (in_array($cca, ['BLR', 'ENG', 'ESP', 'FRA', 'GER', 'ITA', 'NLD', 'PRT', 'RUS', 'SCO', 'UKR'])
+            && !strpos(file_get_contents($online_dir . "$cca/$season/publish/$tour"), '*')) {
               $log .= " due to fullhouse";
               $ms = 9; // stop monitoring and close the predict form because all predicts are here
             }
@@ -922,8 +926,12 @@ https://fprognoz.org/?a=".$ccn[$cca]."$ll&s=$season&m=prognoz&t=$t".strtolower(s
           $log .= " close web form for $tour;";
           touch($online_dir . "$cca/$season/prognoz/$tour/closed");
           touch($online_dir . "schedule/task/close.$tour");
-          if ($cca == 'SFP') touch($online_dir . "schedule/task/renew.$tour"); // last renew
-          if ($cca == 'WLS' && $next == 2147483647) touch($online_dir . "schedule/task/pblsh.$tour"); // publish results
+          if ($cca == 'SFP')
+            touch($online_dir . "schedule/task/renew.$tour"); // last renew
+
+          if ($cca == 'WL')
+            touch($online_dir . "schedule/task/pblsh.$tour"); // publish results
+
         }
         else { // reschedule
           if ($cca == 'SFP' || $cca == 'IST') {
@@ -950,9 +958,9 @@ https://fprognoz.org/?a=".$ccn[$cca]."$ll&s=$season&m=prognoz&t=$t".strtolower(s
             else $next -= 6300; // for 1st try to parse 5 min after start of the 1st match
             if ($next < $time + 300) $next = $time + 300; // reshedule failed event to next 5 min
           }
-          elseif ($cca == 'FIN') {}
+          else if ($cca == 'FIN') {}
 //          elseif (!$s && $next < $time + 60) $next = $time + 60; // waiting for the 1st match
-          elseif ($next < $time + 60) $next = $time + 60; // waiting for the match beginning
+          else if ($next < $time + 60) $next = $time + 60; // waiting for the match beginning
           $log .= ' schedule monitor ' . $tour . ' to ' . date('m-d H:i', $next) . ';';
           Schedule($next, $cca, $tour, 'monitor', $ms . "\n" . $progsched);
         }

@@ -24,7 +24,7 @@ if (trim($email) && trim($from) && trim($subject) && trim($msgtext)) {
   foreach ([$president, $vice] as $name)
     $to .= $to ? ', ' : '' . $cmd_db[$cca][$name]['eml'];
 
-  echo send_email('"$from" <'.$email.'>', $pname, $to, $title.'. Президенту: '.$_POST['subject'], $_POST['msgtext']);
+  echo send_email('"'.$from.'" <'.$email.'>', $pname, $to, $title.'. Президенту: '.$_POST['subject'], $_POST['msgtext']);
 }
 if (!$vice)
   $vice = 'должность свободна';

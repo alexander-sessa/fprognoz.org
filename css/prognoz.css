@@ -51,7 +51,7 @@
 .det table tr td em {opacity: 0.5;}
 .det img {max-height: 12px; border-width: 0px 0px 0px 0px;display: inline-block;width: auto;margin: 0px 0px;float: none !important;}
 .det table td:nth-child(2) {text-align: center !important;}
-.det .min {width:20px}
+.det .min {width:36px}
 .det .side {width:47%}
 .det .center {width:6%;text-align:center}
 .det .left {float:left;text-align:left}

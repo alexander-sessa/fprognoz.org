@@ -370,9 +370,14 @@ if (isset($_SESSION['Coach_name'])) {
 
   $team_code = $team_code ? $team_code : $_SESSION['Coach_name'];
 }
-if (!isset($renew)) $renew = false;
-if (isset($updates)) $renew = true;
-else $updates = NULL;
+if (!isset($renew))
+  $renew = false;
+
+if (isset($updates))
+  $renew = true;
+else
+  $updates = NULL;
+
 $half2 = $pr_saved = false;
 $prognozlist = $rprognoz = $protocol = $cc = $role = $log = '';
 
@@ -578,6 +583,9 @@ if (is_file($program_file)) {
   include ('online/tournament.inc.php');
   list($last_day, $last_month) = explode('.', $lastdate);
   $dm = $last_day . '.' . $last_month;
+  $day_before = strtotime('-1 day '.$last_month.'/'.$last_day);
+  $last_day = date('d', $day_before);
+  $last_month = date('m', $day_before);
   $base = get_results_by_date($last_month, $last_day, $updates);
   if ($renew)
     touch($online_dir.'schedule/task/renew.WLS'.$t);
@@ -1408,21 +1416,21 @@ $(document).ready( function() {
 
   }
 
-  if (isset($matches))      // REST responce on event 'matches'
-    echo '[' . $id_json . ']';
-  else if (isset($updates)) // REST responce on event 'FT'
-/////    echo '[{"id":"div3","html":"html 3"},{"id":"div4","html":"html 4"}]';
-    echo '[{"id":"#pl","html":"' . rawurlencode('<h2 style="text-align:right">' . $match_title . '</h2>' .
-    $prognozlist) . '"},{"id":"#pr","html":"' . rawurlencode($protocol) . '"}]';
-  else if (isset($mtscores)) // REST responce on delayed event after 'FT'
+  if (isset($mtscores)) // REST responce on delayed event after 'FT'
     echo '
     <h2>Матчи тура:</h2>
       <br />
       <br />
       ' . $cal;
+  else if (isset($matches))       // REST responce on event 'matches'
+    echo '[' . $id_json . ']';
+  else if ($updates != NULL)         // REST responce on event 'FT'
+/////    echo '[{"id":"div3","html":"html 3"},{"id":"div4","html":"html 4"}]';
+    echo '[{"id":"#pl","html":"' . rawurlencode('<h2 style="text-align:right">' . $match_title . '</h2>' .
+    $prognozlist) . '"},{"id":"#pr","html":"' . rawurlencode($protocol) . '"}]';
   else {
     $html = '
-<link href="css/prognoz.css" rel="stylesheet">
+<link href="css/prognoz.css?ver=625" rel="stylesheet">
 ' . ($published ? '<div style="height:20px"></div>' : '<script>//<![CDATA[
 var '.date('\h\o\u\r\s=G,\m\i\n\u\t\e\s=i,\s\e\c\o\n\d\s=s').',sendfp='.(date('G')>2&&$today_matches>2*$today_bz?'true':'false').',base=[],mom=[]
 ' . $id_arr . '
