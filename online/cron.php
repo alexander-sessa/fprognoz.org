@@ -862,7 +862,7 @@ if (true) {
                 }
               }
             }
-            elseif ($cca == 'FIN') { // $next = begin of closest 2nd half
+            else if ($cca == 'FIN') { // $next = begin of closest 2nd half
               if ($base[$match][3] == '-' || $base[$match][3] == 'HT' || ($base[$match][3] >= 1 && $base[$match][3] <= 45)) {
                 $next = min($next, 3600 + strtotime("$year-" . $base[$match][2]));
                 if ($base[$match][3] != '-') {
@@ -929,7 +929,7 @@ https://fprognoz.org/?a=".$ccn[$cca]."$ll&s=$season&m=prognoz&t=$t".strtolower(s
           if ($cca == 'SFP')
             touch($online_dir . "schedule/task/renew.$tour"); // last renew
 
-          if ($cca == 'WL')
+          if ($cca == 'WL' && $s == 6)
             touch($online_dir . "schedule/task/pblsh.$tour"); // publish results
 
         }

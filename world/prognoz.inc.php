@@ -1441,7 +1441,7 @@ function predict(id,dice){$("#"+id).val(dice);newpredict()}
 function show_alert(){str=$("#prognoz_str").val();t=[];t[0]=str.substring(0,9);t[1]=str.substring(9);e="";for(i=0;i<2;i++)for(j=1;j<=9;j++)if(t[i].split(j).length!=2)e+="в"+(i?"о":"")+" "+(i+1)+"-м тайме кол-во ставок \""+j+"\" не равно 1\n";if(e==""){document.forms[0].submit();return true;}else{var r=confirm("Ошибка:\n"+e+"Вы действительно хотите отправить прогноз в таком виде?");if(r==true){document.forms[0].submit();return true;}}return false;}
 $(function(){$(".dice").change(function(){newpredict()});})
 $(document).ready(function(){
-cb=0;re=0;$("input[type=checkbox]").change(function(){cb+=(this.checked?1:-1);if($(this).hasClass("bench"))re+=(this.checked?1:-1);$("#replace").prop("disabled",cb==0?false:true);$("#replace").css("color",cb==0&&re<4?"green":"red")})
+cb=0;re=0;$("input[type=checkbox]").change(function(){cb+=(this.checked?1:-1);if($(this).hasClass("bench"))re+=(this.checked?1:-1);if(cb==0&&re<4){$("#replace").prop("disabled",false);$("#replace").css("color","green")}else {$("#replace").prop("disabled",true);$("#replace").css("color","red")}})
 })
 '
 .($today_matches || true ? '
