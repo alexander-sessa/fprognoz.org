@@ -93,6 +93,8 @@ $ccn = array(
 'IST' => 'sfp-20',
 );
 
+$classic_fa = ['BLR', 'ENG', 'ESP', 'FRA', 'GER', 'ITA', 'NLD', 'PRT', 'RUS', 'SCO', 'UKR'];
+
 function get_absent_mails($country_code, $tour) {
   global $online_dir;
   $sentto = array();
@@ -213,6 +215,7 @@ function Schedule($timestamp, $country_code, $tour_code, $action, $pfname) {
   else
     file_put_contents($dir.'/'.$timestamp.'.'.$country_code.'.'.$tour_code.'.'.$action, $pfname);
 
+  return ' schedule monitor ' .$country_code.'.'.$tour_code.'.'.$action. ' to ' . date('m-d H:i', $timestamp) . ';';
 }
 
 function parse_cal_and_gen($program) {
@@ -667,10 +670,15 @@ function Today($year, $m, $d, $dayofweek, $minute) {
     $today[$h.','.$a] = array($h,$a,$d,$s,$r,$r);
   }
   $update = false;
+  $ctx = stream_context_create(['http' => [
+    'method'  => 'GET',
+    'timeout' => 5, // таймаут поолучения результатов 10 сек
+    'header'  => "Accept-language: en\r\nCookie: regionName=Europe/Amsterdam;countryLocation=NL\r\n"
+  ]]);
   if ($minute == 0) { // full reload hourly
     $update = true;
     $url = 'http://www.xscores.com/soccer/livescores';
-    $content = file_get_contents($url);
+    $content = file_get_contents($url, 0, $ctx);
     $seq = strpos($content, 'seq = ') ? substr($content, 6 + strpos($content, 'seq = '), 8) : $old_seq;
     $content = substr($content, strpos($content, '<div class="score_pen score_cell">PN</div>'));
     $content = substr($content, 0, strpos($content, "<div class='ad-line-hide gameList_ad_bottom'>"));
@@ -694,7 +702,7 @@ function Today($year, $m, $d, $dayofweek, $minute) {
       if (isset($groups[$g])) {
         $g = $groups[$g];
         list($koh, $kom) = explode(':', $ko);
-        ($koh == 0) ? $koh = 23 : $koh -= 1;
+        //($koh == 0) ? $koh = 23 : $koh -= 1;
         if (strlen($koh) == 1) $koh = '0' . $koh;
         list($match_year, $date) = explode('_', $matchday, 2);
         $date = strtr($date, '_', '-');
@@ -758,7 +766,7 @@ function Today($year, $m, $d, $dayofweek, $minute) {
   }
   else {
     $url = 'http://2admin.xscores.com:5002/stream?s=1&seq=' . $old_seq;
-    $content = file_get_contents($url);
+    $content = file_get_contents($url, 0, $ctx);
     if ($seq = substr($content, 0, 8)) {
       $matches = explode('#', $content);
       unset($matches[0]);
@@ -834,139 +842,154 @@ if (true) {
         $absent[$tour] = get_absent_mails($cca, $tour);
       }
       else if ($action == 'monitor') { // check if some match started or finished or 2nd time started
-        $tour_monitor = file("$today_dir/$file");
-        $s = 0;
-        $ms = 0;
-        $progsched = '';
-        $next = 2147483647;
+        $tour_monitor = file("$today_dir/$file", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
         $adir = scandir($online_dir . $cca);
         foreach ($adir as $subdir)
           if ($subdir[0] == '2')
             $season = $subdir;
 
-        $tfile = $online_dir . "$cca/$season/$tour/term";
-        $term = is_file($tfile) ? trim(file_get_contents($tfile)) : $time;
-        for ($m = 1; $m < sizeof($tour_monitor); $m++) if (trim($tour_monitor[$m])) {
-          list($home, $away, $minute) = explode(',', $tour_monitor[$m]);
+        $e1 = 2147483647;    // начало первого матча
+        $s = $ms = 0;        // количество начатых матчей вообще и в основной части программки
+        $progsched = '';     // программка матча для шедулера
+        $begins = [];        // начала матчей
+        $events = [];        // события
+        $unfinished = false; // стоп-флаг, предотвращающий преждевременную публикацию итогов
+        $tour_dir = $online_dir . $cca . '/' . $season . '/prognoz/' . $tour . '/';
+/*
+  события:
++ начало первого матча для публикации прогнозов
++ начало 3-х матчей из основной части (для ФП-ассоциаций)
+? начало первого матча 2-го тайма для турниров сборных с заменами
+- начало второго тайма матча (для Финляндии)
++ окончание матча
+*/
+        for ($m = 0; $m < sizeof($tour_monitor); $m++) {
+          list($home, $away, $status) = explode(',', $tour_monitor[$m]);
           $match = $home . ',' . $away;
-          $minute = '';
-//           && strtotime($year.'-'.$base[$match][2]) > $term
-//           && strtotime($year.'-'.$base[$match][2]) < $term + 2764800) {
           if (isset($base[$match])) {
-            if ($cca == 'SFP' || $cca == 'WL') { // $next = end of closest unfinished match: 6600 = 2*45 + 15 + 5 min
-              if ($base[$match][3] != 'FT' && $base[$match][3] != 'POS' && $base[$match][3] != 'CAN') {
-                $next = min($next, 6600 + strtotime("$year-" . $base[$match][2]));
-                if ($base[$match][3] != '-') {
-                  $minute = $base[$match][3];
-                  $s++; // matches started
-                }
-              }
-            }
-            else if ($cca == 'FIN') { // $next = begin of closest 2nd half
-              if ($base[$match][3] == '-' || $base[$match][3] == 'HT' || ($base[$match][3] >= 1 && $base[$match][3] <= 45)) {
-                $next = min($next, 3600 + strtotime("$year-" . $base[$match][2]));
-                if ($base[$match][3] != '-') {
-                  $minute = $base[$match][3];
-                  $s++; // matches started
-                }
-              }
-            }
-            else {
-              if ($base[$match][3] == '-') {
-                $newyear = ($month == 12 && substr($base[$match][2], 0, 2) == '01') ? 1 : 0;
-                $next = min($next, strtotime(($year + $newyear) . '-' . $base[$match][2]));
-              }
-              elseif ($base[$match][3] != 'POS' && $base[$match][3] != 'CAN') {
-                $minute = $base[$match][3];
-                if (in_array($cca, ['BLR', 'ENG', 'ESP', 'FRA', 'GER', 'ITA', 'NLD', 'PRT', 'RUS', 'SCO', 'UKR'])
-                && $m < 11)
-                  $ms++; // matches started in main part
+            $st = $base[$match][3];
+            if ($st != 'FT' && $st != 'POS' && $st != 'CAN') {
+              $begin = strtotime($year . '-' . $base[$match][2]);
+              $e1 = min($e1, $begin);
+              if ($m < 10 && $begin > time())
+                $begins[] = $begin;                 // для поиска начала 4 матча - для ФПА, если не closed
 
-                $s++; // matches started total
-              }
+              $events[] = $begin + 6480;            // окончание матча - событие для всех
+              if ($cca == 'FIN')
+                $events[] = $begin + 3600;          // начало 2 тайма - финнам
             }
-          }
-          $progsched .= $home . ',' . $away . ',' . $minute . "\n";
-        }
+            if ($st != '-') {
+              if (($cca == 'SFP' || $cca == 'WL') && $status != 'FT' && $st == 'FT')
+                touch($online_dir . 'schedule/task/renew.' . $tour); // renew после завершения матча
 
-        if ($s && $cca != 'SFP' && $cca != 'FIN') { // send predicts after some match started
-          if (is_file($online_dir . "$cca/$season/publish/$tour")) {
-            if (in_array($cca, ['BLR', 'ENG', 'ESP', 'FRA', 'GER', 'ITA', 'NLD', 'PRT', 'RUS', 'SCO', 'UKR'])
-            && !strpos(file_get_contents($online_dir . "$cca/$season/publish/$tour"), '*')) {
-              $log .= " due to fullhouse";
-              $ms = 9; // stop monitoring and close the predict form because all predicts are here
+              $status = $st;
             }
-          }
-          else {
-            $log .= " publish predicts of $tour;";
-            $prognozlist = str_replace('&lt;', '<', build_prognozlist($cca, $season, $tour));
-            file_put_contents($online_dir . "$cca/$season/publish/$tour", $prognozlist);
-            if ($tout[4] == 'L') {
-              $cclen = 5;
-              $ll = '&l='.substr($tour, 0, $cclen);
-            }
-            else {
-              $cclen = 3;
-              $ll = '';
-            }
-            $prognozlist .= "
-Следить за ходом тура в реальном времени можно на странице
-https://fprognoz.org/?a=".$ccn[$cca]."$ll&s=$season&m=prognoz&t=$t".strtolower(substr($tour, $cclen))."
-";
-            send_to_all($cca, $subjects[$cca]." Принятые прогнозы на тур $tour (авто-публикация)", $prognozlist);
-            if ($cca == 'WL' || $cca == 'IST')
-              touch($online_dir . "$cca/$season/prognoz/$tour/closed");
             else
-              touch($online_dir . "$cca/$season/prognoz/$tour/published");
+              $unfinished = true;
 
-            touch($online_dir . "schedule/task/start.$tour");
+            if ($status == 'HT')
+              $unfinished = true;
+
+            if (is_numeric($status)) {
+              $unfinished = true;
+              if ($status >= '85')
+                $events[] = $time + 60; // ожидание окончания матча ещё 60 сек
+
+            }
+          }
+          $progsched .= $home . ',' . $away . ',' . $status . "\n";
+          if ($status && $status != 'POS' && $status != 'CAN') {
+            $s++;                                   // сыгранные и играющиеся матчи
+            if ($m < 10)
+              $ms++;                                // сыгранные и играющиеся матчи в основной части программки
+
           }
         }
-        if ($next == 2147483647 || $ms > 3) { // close predict form after all matches or 4+ main started
-          $log .= " close web form for $tour;";
-          touch($online_dir . "$cca/$season/prognoz/$tour/closed");
-          touch($online_dir . "schedule/task/close.$tour");
-          if ($cca == 'SFP')
-            touch($online_dir . "schedule/task/renew.$tour"); // last renew
 
-          if ($cca == 'WL' && $s == 6)
-            touch($online_dir . "schedule/task/pblsh.$tour"); // publish results
 
-        }
-        else { // reschedule
-          if ($cca == 'SFP' || $cca == 'IST') {
-            if (is_file($online_dir . "$cca/$season/prognoz/$tour/closed")) { // if already parsed
-              if ($s) {
-                if (substr($tour, 0, 3) == 'SUP' && date('H', $time) == 15)
-                  touch($online_dir . "schedule/task/parse.$tour");           // at 15:XX must parse 2nd time for PRED.SU
-
-                touch($online_dir . "schedule/task/renew.$tour");
-              }
+        if ($s) {                                   // начат хотя бы один матч
+          if ($cca != 'SFP' && $cca != 'FIN' && !is_file($tour_dir . 'closed') && !is_file($tour_dir . 'published')) {
+            // публикация прогнозов после начала первого матча
+            $prognozlist = str_replace('&lt;', '<', build_prognozlist($cca, $season, $tour));
+            file_put_contents($online_dir . $cca . '/' . $season . '/publish/' . $tour, $prognozlist);
+            if (in_array($cca, $classic_fa) && !strpos($prognozlist, '*')) {
+              touch($tour_dir . 'closed');          // все прогнозы на месте - закрыли приём
+              $log .= ' closed due to fullhouse';
             }
-            else if ($s && $cca = 'SFP') {                      // else should parse
-              touch($online_dir . "schedule/task/parse.$tour");
-              $next -= 6000;    // for next try to parse 10 min after start of the 1st match
-              if (substr($tour, 0, 3) == 'SUP') { // schedule monitor to next day, 15:00
-                $tomorrow = $time + 86400;
-                $tomorrow_year = date('Y', $tomorrow);
-                $tomorrow_month = date('m', $tomorrow);
-                $tomorrow_day = date('d', $tomorrow);
-                $log .= " schedule monitor $tour to $tomorrow_month-$tomorrow_day 15:00;";
-                Schedule(strtotime("$tomorrow_year-$tomorrow_month-$tomorrow_day 15:00"), $cca, $tour, 'monitor', $ms . "\n" . $progsched);
-              }
-            }
-            else $next -= 6300; // for 1st try to parse 5 min after start of the 1st match
-            if ($next < $time + 300) $next = $time + 300; // reshedule failed event to next 5 min
+            $prognozlist .= '
+Следить за ходом тура в реальном времени можно на странице
+https://fprognoz.org/?a=' . $ccn[$cca] . ($tour[4] == 'L' ? '&l='.substr($tour, 0, 5) : '') .
+'&s=' . $season . '&m=prognoz&t=' . strtolower(substr($tour, -2)) . "\n";
+            send_to_all($cca, $subjects[$cca].' Принятые прогнозы на тур ' . $tour . ' (авто-публикация)', $prognozlist);
+            touch($tour_dir . ($cca == 'WL' || $cca == 'IST' ? 'closed' : 'published'));
+            touch($online_dir . 'schedule/task/start.' . $tour);
+            $log .= ' publish predicts of ' . $tour . ';';
           }
-          else if ($cca == 'FIN') {}
-//          elseif (!$s && $next < $time + 60) $next = $time + 60; // waiting for the 1st match
-          else if ($next < $time + 60) $next = $time + 60; // waiting for the match beginning
-          $log .= ' schedule monitor ' . $tour . ' to ' . date('m-d H:i', $next) . ';';
-          Schedule($next, $cca, $tour, 'monitor', $ms . "\n" . $progsched);
+          if (in_array($cca, $classic_fa) && !is_file($tour_dir . 'closed')) {
+            if ($ms > 3) {
+              touch($tour_dir . 'closed');          // закрытие приёма прогнозов
+              touch($online_dir . 'schedule/task/close.' . $tour);
+              $log .= ' close web form for ' . $tour . ' due > 3 matches from main program started;';
+            }
+            else {
+              sort($begins);
+              $events[] = $begins[3 - $ms];         // установка события начала 4-го матча из основной части программки
+            }
+          }
         }
+
+
+        else {                                      // ни один матч не начат, значит, надо создать новое событие для
+          if ($e1 == 2147483647)                    // начала первого матча
+            $events[] = strtotime('tomorrow 8:00');  // если не известно начало, дежурное событие на завтра, 8:00
+          else if ($e1 < time())                    // первый матч уже должен начаться:
+            $events[] = $time + 60;                  // ожидание его начала с проверкой каждую минуту
+          else
+            $events[] = $e1;                         // начало первого матча из программки
+        }
+
+
+        if ($unfinished && !count($events))         // остались несыгранные матчи, но нет событий:
+          $events[] = strtotime('tomorrow 8:00');    // следующая проверка завтра утром
+
+
+        if (count($events)) {
+
+          if ($cca == 'SFP') {                      // для SFP надо парсить данные с других сайтов
+            if (!is_file($tour_dir . 'closed')) {
+              touch($online_dir . 'schedule/task/parse.' . $tour);
+              if (substr($tour, 0, 3) == 'PRE')     // назначить парсинг замен для PRED.SU
+                $events[] = strtotime('tomorrow 15:00');
+
+            }
+            else if ($s && date('H:i', $time) == '15:00' && substr($tour, 0, 3) == 'PRE')
+              touch($online_dir . 'schedule/task/parse.' . $tour); // парсить 2 тайм для PRED.SU
+
+          }
+
+          sort($events);
+          $events = array_unique($events);
+          foreach ($events as $event) {
+            if ($event <= time())
+              $event = $time + 60;
+
+            $log .= Schedule($event, $cca, $tour, 'monitor', $progsched);
+          }
+        }
+
+
+        else {                                                 // больше нет событий - тур завершён
+          touch($online_dir . 'schedule/task/renew.' . $tour); // контрольный renew
+          touch($online_dir . 'schedule/task/pblsh.' . $tour); // публикация итогов
+          $log .= ' publish results of ' . $tour .';';
+        }
+
+
       }
     }
   }
+
+
   if (sizeof($absent)) { // если есть повод, разослать напоминания
     $emails = array();
     foreach ($absent as $tour => $mails) foreach ($mails as $email) $emails[$email][] = $tour;
@@ -992,7 +1015,7 @@ https://fprognoz.org/?a=".$ccn[$cca]."$ll&s=$season&m=prognoz&t=$t".strtolower(s
 ';
       $amail = explode(' ', str_replace(',', ' ', $email));
       $email = '';
-      foreach ($amail as $eml) if ($eml = trim($eml)) $email .= "$name <$eml>,";
+      foreach ($amail as $eml) if ($eml = trim($eml)) $email .= $name . ' <' . $eml . '>,';
       if ($email = rtrim($email, ','))
         send_email('Fprognoz.Org <fp@fprognoz.org>', '', $email, 'ФП. Напоминание о необходимости отправить прогнозы', $body);
 
@@ -1001,7 +1024,7 @@ https://fprognoz.org/?a=".$ccn[$cca]."$ll&s=$season&m=prognoz&t=$t".strtolower(s
 }
 if (strlen($log) > 35) {
   $logfile = fopen($online_dir . 'log/scheduler.log', 'a');
-  fwrite($logfile, $log." finished ".(microtime(true) - $time_start)."\n");
+  fwrite($logfile, $log . ' finished ' . (microtime(true) - $time_start) . "\n");
   fclose($logfile);
 }
 ?>

@@ -1130,6 +1130,7 @@ include ('fifa/register.inc.php');
   <td class="foot">
 <img src="/images/sfp-88x31.png" width="88" height="31" alt="SFP Button" title="SFP Button" />
 <a href="http://www.livescore.in/" title="Livescore.in" target="_blank"><img src="https://advert.livescore.in/livescore_in_88x31a.gif" width="88" height="31" border="0" alt="LIVESCORE.in" /></a>
+<a href="http://profi-prognoza.ru/" target="_blank"><img src="images/bannerprofi.gif" border="0" width="88" height="31" alt="Сайт cпортивного прогнозирования \"Профессионалы прогноза\"" /></a>
 <a href="http://primegang.ru/" target="_blank"><img src="images/primegang.gif" border="0" width="88" height="31" alt="Клуб футбольных прогнозистов PrimeGang" /></a>
 <?php if (false && $is_redis) echo '<img src="https://redis.io/images/redis-small.png" border="0" alt="Redis" title="Powered by Redis" />'; ?>
     <br /><br />

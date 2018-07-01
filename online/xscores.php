@@ -45,7 +45,12 @@ for ($day=-1; $day<=13; $day++) {
     $base[$data[0].' - '.$data[1].'/'.$data[6]] = $data;
   }
   $url = "http://www.xscores.com/soccer/livescores/$d-$m";
-  $content = file_get_contents($url);
+  $ctx = stream_context_create(['http' => [
+    'method'  => 'GET',
+    'timeout' => 25, // таймаут поолучения результатов, сек
+    'header'  => "Accept-language: en\r\nCookie: regionName=Europe/Amsterdam;countryLocation=NL\r\n"
+  ]]);
+  $content = file_get_contents($url, 0, $ctx);
   $out = strpos($content, 'seq = ') ? substr($content, 6 + strpos($content, 'seq = '), 8) . "\n" : $seq; // seq
   $content = substr($content, strpos($content, '<div class="score_pen score_cell">PN</div>'));
   $content = substr($content, 0, strpos($content, "<div class='ad-line-hide gameList_ad_bottom'>"));
@@ -69,7 +74,7 @@ for ($day=-1; $day<=13; $day++) {
     if (isset($groups[$g])) {
       $g = $groups[$g];
       list($koh, $kom) = explode(':', $ko);
-      ($koh == 0) ? $koh = 23 : $koh -= 1;
+      //($koh == 0) ? $koh = 23 : $koh -= 1;
       if (strlen($koh) == 1) $koh = '0' . $koh;
       list($match_year, $date) = explode('_', $matchday, 2);
       $date = strtr($date, '_', '-');
