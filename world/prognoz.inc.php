@@ -706,19 +706,19 @@ if (is_file($program_file)) {
             if (!isset($prognoz_post)) $prognoz_post = '==================';
             $program_table .= '
     <td> 1
-      <select class="dice" name="'.'dice'.($nm*3-2).'" id="'.'dice'.($nm*3-2).'"><option>=</option>';
+      <select class="dice" name="'.'dice'.($nm*3-2).'" id="'.'dice'.($nm*3-2).'"><option value="=">=</option>';
             for ($option=1; $option<10; $option++)
-              $program_table .= '<option' . ($option == $prognoz_post[$nm*3-3] ? ' selected="selected"' : '') . '>'.$option.'</option>';
+              $program_table .= '<option value="' . $option . '"' . ($option == $prognoz_post[$nm*3-3] ? ' selected="selected"' : '') . '>'.$option.'</option>';
 
             $program_table .= '</select> X
-      <select class="dice" name="'.'dice'.($nm*3-1).'" id="'.'dice'.($nm*3-1).'"><option>=</option>';
+      <select class="dice" name="'.'dice'.($nm*3-1).'" id="'.'dice'.($nm*3-1).'"><option value="=">=</option>';
             for ($option=1; $option<10; $option++)
-              $program_table .= '<option' . ($option == $prognoz_post[$nm*3-2] ? ' selected="selected"' : '') . '>'.$option.'</option>';
+              $program_table .= '<option value="' . $option . '"' . ($option == $prognoz_post[$nm*3-2] ? ' selected="selected"' : '') . '>'.$option.'</option>';
 
             $program_table .= '</select> 2
-      <select class="dice" name="'.'dice'.($nm * 3).'" id="'.'dice'.($nm * 3).'"><option>=</option>';
+      <select class="dice" name="'.'dice'.($nm * 3).'" id="'.'dice'.($nm * 3).'"><option value="=">=</option>';
             for ($option=1; $option<10; $option++)
-              $program_table .= '<option' . ($option == $prognoz_post[$nm*3-1] ? ' selected="selected"' : '') . '>'.$option.'</option>';
+              $program_table .= '<option value="' . $option . '"' . ($option == $prognoz_post[$nm*3-1] ? ' selected="selected"' : '') . '>'.$option.'</option>';
 
             $program_table .= '</select>
     </td>
@@ -813,7 +813,7 @@ if (is_file($program_file)) {
         if ($homecoach && !$half2)
           $homeline .= '   <input type="hidden" name="replace" value="replace" /><button type="submit" id="replace" style="padding:0" title="установите '.MAIN_SIZE.' галочек тем, кто будет
 играть во 2 тайме, и нажмите кнопку.
-Максимальное количество замен = 3." disabled="disabled"> <i class="fa fa-refresh"></i> </button>';
+Максимальное количество замен = 3." disabled="disabled"> <i class="fas fa-refresh"></i> </button>';
         else
           $homeline .= '      ';
       }
@@ -849,7 +849,7 @@ if (is_file($program_file)) {
         if ($awaycoach && !$half2)
           $awayline .= '   <input type="hidden" name="replace" value="replace" /><button type="submit" id="replace" style="padding:0" title="установите '.MAIN_SIZE.' галочек тем, кто будет
 играть во 2 тайме, и нажмите кнопку.
-Максимальное количество замен = 3." disabled="disabled"> <i class="fa fa-refresh"></i> </button>';
+Максимальное количество замен = 3." disabled="disabled"> <i class="fas fa-refresh"></i> </button>';
         else
           $awayline .= '      ';
     }

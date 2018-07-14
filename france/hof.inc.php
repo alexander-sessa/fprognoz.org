@@ -134,16 +134,24 @@
 <td>Andrey Vishinski<br />Cannes</td>
 <td>Cannes<br />Andrey Vishinski</td>
 </tr>
+<tr>
+<td>2017-2018</td>
+<td>Monaco<br />Vano Opulsky</td>
+<td>Marseille<br />Nikita Segal</td>
+<td>Angers<br />Gleb Arsatov</td>
+<td>Vano Opulsky<br />Monaco</td>
+<td>Marseille<br />Nikita Segal</td>
+</tr>
 </table>
 <table width="100%">
 <tr><th>лучшие игроки</th><th>команда</th><th>достижения</th></tr>
 <tr><td>Andrey Vishinski</td><td>Cannes</td><td>чемпион 2002, 2012, 2015, 2017, серебро 2007, бронза 2011, бутса 2002, 2012, 2017, кубок 2004, 2007, 2015, 2016, 2017</td></tr>
+<tr><td>Nikita Segal</td><td>Marseille</td><td>чемпион 2003, серебро 2014, 2018, бронза 2004, кубок 2006, 2012, 2014, 2018, бутса 2014</td></tr>
 <tr><td>Eugene Plugin</td><td>Лилль<br />Lyon</td><td>чемпион 2006, 2007, серебро 2003, бронза 2005, 2015, кубок 2005<br />серебро 2016, 2017, бронза 2012, бутса 2013</td></tr>
 <tr><td>Alex Rexyard</td><td>Laval</td><td>чемпион 2005, серебро 2013, 2015, бронза 2016, бутса 2004, 2007, 2015, 2016</td></tr>
-<tr><td>Nikita Segal</td><td>Marseille</td><td>чемпион 2003, серебро 2014, бронза 2004, кубок 2006, 2012, 2014, бутса 2014</td></tr>
 <tr><td>Alexey Plotitsa</td><td>ПСЖ</td><td>серебро 2000, 2002, бронза 1999, 2001, 2006, бутса 2006, кубок 2000</td></tr>
+<tr><td>Vano Opulsky</td><td>Метц<br />Monaco</td><td>серебро 2001<br />чемпион 2013, 2018, серебро 2012, бутса 2011, 2018</td></tr>
 <tr><td>Alex Zavgorodniy</td><td>Генгам</td><td>чемпион 2001, 2004, бутса 2001, 2003</td></tr>
-<tr><td>Vano Opulsky</td><td>Метц<br />Монако</td><td>серебро 2001<br />чемпион 2013, серебро 2012, бутса 2011</td></tr>
 <tr><td>Dmitry Petrov</td><td>Бордо</td><td>чемпион 2000, серебро 1999, бутса 2000</td></tr>
 <tr><td>Edward Polovoy</td><td>Сошо</td><td>чемпион 1999, бутса 1999</td></tr>
 <tr><td>Eugene Mironov</td><td>Ренн</td><td>чемпион 2011, бронза 2007</td></tr>
@@ -154,13 +162,13 @@
 <tr><td colspan="3"></td></tr>
 <tr><th>лучшие команды</th><th>тренер</th><th>достижения</th></tr>
 <tr><td>Cannes</td><td>Andrey Vishinski</td><td>чемпион 2002, 2012, 2015, 2017, серебро 2007, бронза 2011, бутса 2002, 2012, 2017, кубок 2004, 2007, 2015, 2016, 2017</td></tr>
+<tr><td>Marseille</td><td>Nikita Segal</td><td>чемпион 2003, серебро 2014, 2018, бронза 2004, кубок 2006, 2012, 2014, бутса 2014, 2018</td></tr>
 <tr><td>Laval</td><td>Alex Rexyard</td><td>чемпион 2005, серебро 2013, 2015, бронза 2016, бутса 2004, 2007, 2015, 2016</td></tr>
-<tr><td>Marseille</td><td>Nikita Segal</td><td>чемпион 2003, серебро 2014, бронза 2004, кубок 2006, 2012, 2014, бутса 2014</td></tr>
 <tr><td>ПСЖ</td><td>Alexey Plotitsa</td><td>серебро 2000, 2002, бронза 1999, 2001, 2006, бутса 2006, кубок 2000</td></tr>
+<tr><td>Monaco</td><td>Eugeny Gladyr<br />Vano Opulsky</td><td>серебро 2005<br />чемпион 2013, 2018, серебро 2012, бутса 2011, 2018</td></tr>
 <tr><td>Лилль</td><td>Eugene Plugin<br />Konstantin Smetanin</td><td>чемпион 2006, 2007, серебро 2003, бронза 2005, кубок 2005<br />бронза 2013</td></tr>
 <tr><td>Бордо</td><td>Dmitry Petrov<br />Serge Vasiliev</td><td>чемпион 2000, серебро 1999, бутса 2000<br />серебро 2011, кубок 2011</td></tr>
 <tr><td>Генгам</td><td>Alex Zavgorodniy</td><td>чемпион 2001, 2004, бутса 2001, 2003</td></tr>
-<tr><td>Монако</td><td>Eugeny Gladyr<br />Vano Opulsky</td><td>серебро 2005<br />чемпион 2013, серебро 2012, бутса 2011</td></tr>
 <tr><td>Ренн</td><td>Andrey Hrapko<br />Eugene Mironov</td><td>бутса 2005, кубок 2003<br />чемпион 2011, бронза 2007</td></tr>
 <tr><td>Lyon</td><td>Eugene Plugin</td><td>серебро 2016, 2017, бронза 2012, 2015, бутса 2013</td></tr>
 <tr><td>Nancy</td><td>Alexandr Kvasov<br />Vladislav Yezhergin</td><td>серебро 2004<br />чемпион 2016, бронза 2014, 2017</td></tr>

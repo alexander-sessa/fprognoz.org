@@ -1,9 +1,9 @@
 <?php
-$cca          = 'BLR';
+$cca          = 'CHE';
 $charset      = 'UTF-8';
-$title        = 'ФП Беларуси';
-$description  = 'Футбол-Прогнозная ассоциация Беларуси';
-$main_header  = 'Новости ФП Беларуси';
+$title        = 'ФП Швейцарии';
+$description  = 'Футбол-Прогнозная ассоциация Швейцарии';
+$main_header  = 'Новости ФП Швейцарии';
 $width        = 1216;
 $main_width   = 936;
 $bgcolor      = 'd6d8e4';
@@ -23,11 +23,11 @@ $left_ftcolor = 'ffd700';
 $main_ftcolor = '000000';
 $foot_ftcolor = '7c82a4';
 $rght_ftcolor = 'ffd700';
-$left_image   = 'images/abff-100.png';
-$rght_image   = 'images/104px-ABFF_logo.png';
-$cur_year     = '2018-19';
-$president    = 'Vitya Baranovsky';
-$vice         = 'Вячеслав Ковалевский';
+$left_image   = 'images/premiership-emblema2.jpg';
+$rght_image   = 'images/the-fa-cup.png';
+$cur_year     = '2018-1';
+$president    = 'Alexander Sessa';
+$vice         = '';
 $pressa       = '';
 $club_edit    = false;
 ?>

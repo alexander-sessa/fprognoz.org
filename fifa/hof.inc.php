@@ -171,6 +171,14 @@
 <td>Taras Avitara<br />Сталь (Каменское)</td>
 <td>Нива (Винница)<br />Igor Voznyuk</td>
 </tr>
+<tr>
+<td>2017-2018</td>
+<td>Олимпик (Донецк)<br />Alex Tarasov</td>
+<td>ФК Севастополь<br />Igor Safontsev</td>
+<td>Ильичевец (Мариуполь)<br />Pavel Khotushin</td>
+<td>Taras Avitara<br />Сталь (Каменское)</td>
+<td>Нива (Винница)<br />Igor Voznyuk</td>
+</tr>
 <tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;Россия</td></tr>
 <tr>
 <td>1998</td>
@@ -303,6 +311,14 @@
 <td>Балтика (Калининград)<br />Lesha Nilov</td>
 <td>Evgeniy Kosarev<br />ФК Уфа</td>
 <td>Анжи (Махачкала)<br />Max Ratasoff</td>
+</tr>
+<tr>
+<td>2017-2018</td>
+<td>Балтика (Калининград)<br />Lesha Nilov</td>
+<td>ФК Ростов<br />Vladislav Yezhergin</td>
+<td>Кубань (Краснодар)<br />Dmitry Pogorelov</td>
+<td>Vladislav Yezhergin<br />ФК Ростов</td>
+<td>Балтика (Калининград)<br />Lesha Nilov</td>
 </tr>
 <tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;Белоруссия</td></tr>
 <tr>
@@ -441,6 +457,14 @@
 <td>ФК Минск<br />Alex Tarasov</td>
 <td>Vitya Baranovsky<br />ФК Гомель</td>
 <td>Славия (Мозырь)<br />Sasha Baranovsky</td>
+</tr>
+<tr>
+<td>2017-2018</td>
+<td>БАТЭ (Борисов)<br />Aleks Aniskevich</td>
+<td>ФК Минск<br />Alex Tarasov</td>
+<td>Белшина (Бобруйск)<br />Alex Homenok</td>
+<td>Aleks Aniskevich<br />БАТЭ (Борисов)</td>
+<td>Неман (Гродно)<br />Ivan Shchyhlinski</td>
 </tr>
 <tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;Англия</td></tr>
 <tr>
@@ -591,6 +615,14 @@
 <td>Vitya Baranovsky<br />Newcastle United</td>
 <td>Tottenham Hotspur<br />Alexander Sessa</td>
 </tr>
+<tr>
+<td>2017-2018</td>
+<td>Reading<br />Vladislav Yezhergin</td>
+<td>Wolverhampton<br />Nikita Segal</td>
+<td>Derby County<br />Serge Shibaev</td>
+<td>Serge Shibaev<br />Derby County</td>
+<td>Middlesbrough<br />Alex Zavgorodniy</td>
+</tr>
 <tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;Германия</td></tr>
 <tr>
 <td>1998-1999</td>
@@ -727,6 +759,14 @@
 <td>Gleb Arsatov<br />Stuttgart</td>
 <td>Borussia Dortmund<br />Kirill Goloschekov</td>
 </tr>
+<tr>
+<td>2017-2018</td>
+<td>Arminia Bielefeld<br />Sacha Baranovsky</td>
+<td>1860 Munchen<br />Nikita Segal</td>
+<td>Augsburg<br />Andrei Novikov</td>
+<td>Andrey Vishinski<br />Schalke 04</td>
+<td>Greuther Fürth<br />Serge Shibaev</td>
+</tr>
 <tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;Голландия</td></tr>
 <tr>
 <td>1998-1999</td>
@@ -811,6 +851,14 @@
 <td>AZ Alkmaar<br />Lesha Nilov</td>
 <td>Vladislav Yezhergin<br />ADO Den Haag</td>
 <td>Heerenveen<br />Oleg Krupich</td>
+</tr>
+<tr>
+<td>2017-2018</td>
+<td>FC Eindhoven<br />Kirill Goloschekov</td>
+<td>FC Utrecht<br />Serge Vasiliev</td>
+<td>AZ Alkmaar<br />Lesha Nilov</td>
+<td>Vladislav Yezhergin<br />ADO Den Haag</td>
+<td>AZ Alkmaar<br />Lesha Nilov</td>
 </tr>
 <tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;Испания</td></tr>
 <tr>
@@ -961,6 +1009,14 @@
 <td>Kirill Goloschekov<br />Deportivo La Coruna</td>
 <td>Malaga<br />Vitya Baranovsky</td>
 </tr>
+<tr>
+<td>2017-2018</td>
+<td>Malaga<br />Vitya Baranovsky</td>
+<td>Deportivo La Coruna<br />Kirill Goloschekov</td>
+<td>Tenerife<br />Taras Avitara</td>
+<td>Taras Avitara<br />Tenerife</td>
+<td>Real Sociedad<br />Vano Opulsky</td>
+</tr>
 <tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;Италия</td></tr>
 <tr>
 <td>1998-1999</td>
@@ -1098,6 +1154,14 @@
 <td>Mikhail Sirota<br />Catania</td>
 <td>Modena<br />Andrey Vedeneev</td>
 </tr>
+<tr>
+<td>2017-2018</td>
+<td>Torino<br />Konstantin Nadelin</td>
+<td>Udinese<br />Serge Shibaev</td>
+<td>AS Roma<br />Vladislav Yezhergin</td>
+<td>Taras Avitara<br />SPAL Ferrara</td>
+<td>Rimini<br />Alexander Donec</td>
+</tr>
 <tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;Португалия</td></tr>
 <tr>
 <td>1998-1999</td>
@@ -1202,6 +1266,14 @@
 <td>Campomaiorense<br />Aleksander Lokalenkov</td>
 <td>Max Ratasoff<br />Academica</td>
 <td>Campomaiorense<br />Aleksander Lokalenkov</td>
+</tr>
+<tr>
+<td>2017-2018</td>
+<td>Academica Coimbra<br />Max Ratasoff</td>
+<td>Sporting Braga<br />Mikhail Sirota</td>
+<td>Sporting Lisboa<br />Kirill Goloschekov</td>
+<td>Vladislav Yezhergin<br />Chaves</td>
+<td>Chaves<br />Vladislav Yezhergin</td>
 </tr>
 <tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;Турция</td></tr>
 <tr>
@@ -1377,6 +1449,14 @@
 <td>Andrey Vishinski<br />Cannes</td>
 <td>Cannes<br />Andrey Vishinski</td>
 </tr>
+<tr>
+<td>2017-2018</td>
+<td>Monaco<br />Vano Opulsky</td>
+<td>Marseille<br />Nikita Segal</td>
+<td>Angers<br />Gleb Arsatov</td>
+<td>Vano Opulsky<br />Monaco</td>
+<td>Marseille<br />Nikita Segal</td>
+</tr>
 <tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;Шотландия</td></tr>
 <tr>
 <td>1998-1999</td>
@@ -1529,6 +1609,14 @@
 <td>Elgin City<br />Andrey Skripka</td>
 <td>Vladislav Yezhergin<br />Kilmarnok</td>
 <td>Hibernian<br />Alexander Sessa</td>
+</tr>
+<tr>
+<td>2017-2018</td>
+<td>Kilmarnok<br />Vladislav Yezhergin</td>
+<td>Inverness<br />Serge Shibaev</td>
+<td>Partick Thistle<br />Andrey Vityuk</td>
+<td>Gleb Arsatov<br />Ayr United</td>
+<td>Saint Mirren<br />Ivan Shchyhlinski</td>
 </tr>
 <tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;Австрия</td></tr>
 <tr>
@@ -1825,5 +1913,12 @@
 <td>Металлист (Харьков)<br />Украина<br />Kirill Goloschekov</td>
 <td>ФК Минск<br />Белоруссия<br />Alex Tarasov</td>
 <td>Hellas Verona<br />Италия<br />Taras Lobko</td>
+</tr>
+<tr>
+<td>2017-2018</td>
+<td>Cannes<br />Франция<br />Andrey Vishinski</td>
+<td>Kilmarnock<br />Шотландия<br />Vladislav Yezhergin</td>
+<td>Tottenham Hotspur (London)<br />Англия<br />Alexander Sessa</td>
+<td>Ternana<br />Италия<br />Max Ratasoff</td>
 </tr>
 </table>

@@ -303,7 +303,7 @@ if (is_file($program_file)) {
       <select name="'.'dice'.($nm*2-1).'" id="'.'dice'.($nm*2-1).'" '.$onchange.'>';
 //            for ($option=0; $option<10; $option++) {
             foreach (array('*','0','1','2','3','4','5','6','7','8','9') as $option) {
-               $program_table .= '<option';
+               $program_table .= '<option value="'.$option.'"';
                if (($rt == '1' || $rt == '0' || $rt == '2') && $option == $mt[0])
                  $program_table .= ' selected="selected"';
                elseif (isset($prognoz_str) && $prognoz_str && $option == $prognoz_str[$nm*2-2])
@@ -317,7 +317,7 @@ if (is_file($program_file)) {
       <select name="'.'dice'.($nm * 2).'" id="'.'dice'.($nm * 2).'" '.$onchange.'>';
 //            for ($option=0; $option<10; $option++) {
             foreach (array('*','0','1','2','3','4','5','6','7','8','9') as $option) {
-               $program_table .= '<option';
+               $program_table .= '<option value="'.$option.'"';
                if (($rt == '1' || $rt == '0' || $rt == '2') && $option == $mt[2])
                  $program_table .= ' selected="selected"';
                elseif (isset($prognoz_str) && $prognoz_str && $option == $prognoz_str[$nm*2-1])
@@ -358,9 +358,9 @@ if (is_file($program_file)) {
           elseif ($l == 'PRO') { // ProfiOpen: последние 5 матчей - счёт
             $program_table .= '
     <td>
-      <select name="'.'dice'.(6+($nm-6)*2).'" id="'.'dice'.(6+($nm-6)*2).'" '.$onchange.'><option>*</option>';
+      <select name="'.'dice'.(6+($nm-6)*2).'" id="'.'dice'.(6+($nm-6)*2).'" '.$onchange.'><option value="*">*</option>';
             for ($option=0; $option<10; $option++) {
-               $program_table .= '<option';
+               $program_table .= '<option value="'.$option.'"';
                if (($rt == '1' || $rt == '0' || $rt == '2') && $option == $mt[0])
                  $program_table .= ' selected="selected"';
                elseif (isset($prognoz_str) && $prognoz_str && $option == $prognoz_str[5+($nm-6)*2])
@@ -371,9 +371,9 @@ if (is_file($program_file)) {
                $program_table .= '>'.$option.'</option>';
             }
             $program_table .= '</select> -
-      <select name="'.'dice'.(7+($nm-6)*2).'" id="'.'dice'.(7+($nm-6)*2).'" '.$onchange.'><option>*</option>';
+      <select name="'.'dice'.(7+($nm-6)*2).'" id="'.'dice'.(7+($nm-6)*2).'" '.$onchange.'><option value="*">*</option>';
             for ($option=0; $option<10; $option++) {
-               $program_table .= '<option';
+               $program_table .= '<option value="'.$option.'"';
                if (($rt == '1' || $rt == '0' || $rt == '2') && $option == $mt[2])
                  $program_table .= ' selected="selected"';
                elseif (isset($prognoz_str) && $prognoz_str && $option == $prognoz_str[6+($nm-6)*2])

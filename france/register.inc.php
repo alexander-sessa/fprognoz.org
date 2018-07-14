@@ -1,10 +1,9 @@
-    <font color='#<?=$main_ftcolor?>' class=text15><br />
 <?php
 $registered = false;
 $codestsv = '';
-$codes = file($online_dir."FIN/$cur_year/codes.tsv");
+$codes = file($online_dir."$cca/$cur_year/codes.tsv");
 $realteams = array();
-$art = file($online_dir."FIN/$cur_year/realteams");
+$art = file($online_dir."$cca/$cur_year/realteams");
 foreach ($art as $line) if (($line = trim($line)))
 {
   $ta = explode('	', $line);
@@ -20,7 +19,7 @@ foreach ($codes as $line)
     $registered = true;
 
 }
-if (isset($_POST['reg']))
+if (isset($_POST['_reg']))
 {
   $err = false;
   if (!isset($_SESSION['Coach_name']))
@@ -28,38 +27,39 @@ if (isset($_POST['reg']))
     if (!isset($_POST['user']) || !trim($_POST['user']))
     {
       $err = true;
-      echo '<font color=red>Ошибка: не указано имя!</font><br />';
+      echo '<font color="red">Ошибка: не указано имя!</font><br />';
     }
     if (!isset($_POST['email']) || !trim($_POST['email']))
     {
       $err = true;
-      echo '<font color=red>Ошибка: не указан EMail!</font><br />';
+      echo '<font color="red">Ошибка: не указан EMail!</font><br />';
     }
     if (!strpos($_POST['email'], '@') || !strpos($_POST['email'], '.'))
     {
       $err = true;
-      echo '<font color=red>Ошибка: недопустимый формат EMail!</font><br />';
+      echo '<font color="red">Ошибка: недопустимый формат EMail!</font><br />';
     }
     if (!isset($_POST['pass1']) || !trim($_POST['pass1']))
     {
       $err = true;
-      echo '<font color=red>Ошибка: не указан пароль!</font><br />';
+      echo '<font color="red">Ошибка: не указан пароль!</font><br />';
     }
     elseif (!isset($_POST['pass2']) || trim($_POST['pass1']) != trim($_POST['pass2']))
     {
       $err = true;
-      echo '<font color=red>Ошибка: несовпадение паролей!</font><br />';
+      echo '<font color="red">Ошибка: несовпадение паролей!</font><br />';
     }
   }
   if (!isset($_POST['team']) || !trim($_POST['team']))
   {
     $err = true;
-    echo '<font color=red>Ошибка: не указано название команды!</font><br />';
+    echo '<font color="red">Ошибка: не указано название команды!</font><br />';
   }
 }
 if ($registered)
-  echo 'Вы уже зарегистрированы для участия в ФП Финляндии';
-
+  echo 'Вы уже зарегистрированы для участия в '.$title;
+else if (sizeof($codes) >= 30)
+  echo 'Регистрация в '.$title.' закончена.';
 else if (isset($_POST['reg']) && !$err)
 {
   if (!isset($_SESSION['Coach_name']))
@@ -70,12 +70,14 @@ else if (isset($_POST['reg']) && !$err)
   else
     foreach ($cma_db as $cca => $teams)
       foreach ($teams as $team)
-        if (($email = $team['eml']))
+        if ($_SESSION['Coach_name'] == $team['usr']) {
+          $email = $team['eml'];
           break 2;
+        }
 
-  $codestsv .= $_POST['team'].'	'.$realteams[$_POST['team']]['n'].'	'.$_SESSION['Coach_name'].'	'.$email.'	'.$realteams[$_POST['team']]['l']."\n";
-  file_put_contents($online_dir."FIN/$cur_year/codes.tsv", $codestsv);
-  file_put_contents($online_dir.'FIN/passwd/'.$_POST['team'], md5(trim($_POST['pass1'])).':player');
+  $codestsv .= $_POST['team'].'	'.$realteams[$_POST['team']]['n'].'	'.$_SESSION['Coach_name'].'	'.$email.'	'.$realteams[$_POST['team']]['l']."	да\n";
+  file_put_contents($online_dir."$cca/$cur_year/codes.tsv", $codestsv);
+  file_put_contents($online_dir.$cca.'/passwd/'.$_POST['team'], md5(trim($_POST['pass1'])).':player');
   if (isset($_POST['pass1']))
     send_email('FPrognoz.org <fp@fprognoz.org>', $_SESSION['Coach_name'], $email,
 'Password for FPprognoz.org', 'Team code = '.$_POST['team'].'
@@ -93,37 +95,36 @@ Password = '.$_POST['pass1'].'
 }
 else
 {
-  echo '<form method=post>
+  echo '<form action="" method="post">
 ';
   if (!isset($_SESSION['Coach_name'])) {
-    echo 'Для участия в ФП Финляндии необходимо войти на сайт под своим именем.<br />
+    echo 'Для участия в '.$title.' необходимо войти на сайт под своим именем.<br />
 Если у Вас еще нет доступа на сайт, мы можем сделать его сейчас.<br />
 Все поля обязательны к заполнению.<br />
 <br />
-Укажите своё имя (если Вы планируете в дальнейшем играть в "профессиональных" ФП-ассоциациях, то имя должно быть настоящим и полным, с фамилией):<br />
-<input type=text name=user><br />
+Укажите своё настоящее полное имя (с фамилией):<br />
+<input type="text" name="user" /><br />
 <br />
 Укажите свой EMail для получения материалов ассоциации (календарь, программки, прогнозы игроков, итоги, обзоры):<br />
-<input type=text name=email><br />
+<input type="text" name="email" /><br />
 Внимание: указание недействительного EMail-а повлечет отмену регистрации.<br />
 <br />
 Укажите пароль (дважды для проверки правильности набора):<br />
-<input type=password name=pass1><br />
-<input type=password name=pass2><br />
+<input type="password" name="pass1" /><br />
+<input type="password" name="pass2" /><br />
 ';
   }
   echo '<br />
 Выберите команду:<br />
-<select name=team>
+<select name="team">
 ';
   foreach ($realteams as $code => $names)
-    echo '<option value='.$code.'>'.$names['l'].'</option>';
+    echo '<option value="'.$code.'">'.$names['l'].'</option>';
 
   echo '</select><br />
 <br />
-<input type=submit name=reg value=зарегистрироваться>
+<input type="submit" name="reg" value="зарегистрироваться" />
 </form>
 ';
 }
 ?>
-    </font>

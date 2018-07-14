@@ -18,7 +18,7 @@ function st(k,o=""){tm.sort(cv(k,o));$.each(tc,function(i,f){if(f["co"]==k)f["sr
 function sp(k,o=""){pl.sort(cv(k,o));$.each(pc,function(i,f){if(f["co"]==k)f["sr"]=o});$.each(po,function(i,f){if(f["co"]==k){f["sr"]=o;f["ch"]=++n}})}
 function ht(id){if(id=="#teamstable"){o=to;c=tc;d=tm}else{o=po;c=pc;d=pl}
 h='<h1>Статистика '+(id=="#teamstable"?'команд':'игроков')+'</h1><p class="order">Сортировка:';o.sort(cv("ch","r"));h+=o[0]["ln"];h+='</p><table class="stattable"><tr class="statthead"><th>№</th>';
-$.each(c,function(i,f){h+='<th><a id="'+f["co"]+'" class="invert" href="javascript:;" title="'+f["ln"]+'">'+f["sn"]+'<br /><i class="fa fa-caret-'+(f["sr"]?"down":"up")+'"></i></a></th>'});h+='</tr>'
+$.each(c,function(i,f){h+='<th><a id="'+f["co"]+'" class="invert" href="javascript:;" title="'+f["ln"]+'">'+f["sn"]+'<br /><i class="fas fa-caret-'+(f["sr"]?"down":"up")+'"></i></a></th>'});h+='</tr>'
 $.each(d,function(i,r){h+='<tr><td class="tdn">'+(i+1)+'</td>';$.each(c,function(j,f){h+='<td'+f["ta"]+'>'+r[f["co"]]+'</td>'});h+='</tr>'})
 h+='</table>'
 $(id).html(h)

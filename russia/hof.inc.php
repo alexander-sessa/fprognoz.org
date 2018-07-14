@@ -134,6 +134,14 @@
 <td>Evgeniy Kosarev<br />ФК Уфа</td>
 <td>Анжи (Махачкала)<br />Max Ratasoff</td>
 </tr>
+<tr>
+<td>2017-2018</td>
+<td>Балтика (Калининград)<br />Lesha Nilov</td>
+<td>ФК Ростов<br />Vladislav Yezhergin</td>
+<td>Кубань (Краснодар)<br />Dmitry Pogorelov</td>
+<td>Vladislav Yezhergin<br />ФК Ростов</td>
+<td>Балтика (Калининград)<br />Lesha Nilov</td>
+</tr>
 </table>
 <table width="100%">
 <tr><th>лучшие игроки</th><th>команда</th><th>достижения</th></tr>
@@ -141,8 +149,10 @@
 <tr><td>Nikita Segal</td><td>ФК Москва</td><td>чемпион 2012, 2014, 2015, серебро 2016, бронза 2013, бутса 2013</td></tr>
 <tr><td>Alex Rexyard</td><td>Факел (Воронеж)</td><td>чемпион 2011, 2016, 2017, серебро 2012, 2014, бронза 2009</td></tr>
 <tr><td>Eugene Plugin</td><td>Зенит (Санкт-Петербург)</td><td>бронза 2015, 2016, бутса 2010, 2011, кубок 2016</td></tr>
+<tr><td>Lesha Nilov</td><td>Балтика (Калининград)</td><td>чемпион 2018, бутса 2014, бронза 2017, кубок 2018</td></tr>
 <tr><td>Georgy Gusev</td><td>Алания (Владикавказ)</td><td>чемпион 1999, серебро 2000, бутса 1998, 1999</td></tr>
 <tr><td>Sergey Lavrentiev</td><td>Волга (Тверь)</td><td>серебро 2003, 2008, бутса 2008, кубок 2014</td></tr>
+<tr><td>Vladislav Yezhergin</td><td>ФК Ростов</td><td>бутса 2018, серебро 2017, 2018, бронза 2014</td></tr>
 <tr><td>Alexandr Balakirev</td><td>Алания (Владикавказ)</td><td>серебро 2010, 2013, бронза 2003, 2008</td></tr>
 <tr><td>Andrey Skripka</td><td>Локомотив-2<br />Машук-КМВ (Пятигорск)</td><td>кубок 2003<br />чемпион 2009, бутса 2009</td></tr>
 <tr><td>Alex Saveliev</td><td>Ротор (Камышин)</td><td>чемпион 2001, серебро 2002, кубок 2001</td></tr>
@@ -150,18 +160,17 @@
 <tr><td>Andrey Teslin</td><td>Текстильщик (Камышин)</td><td>чемпион 2013, кубок 2012</td></tr>
 <tr><td>Max Ratasoff</td><td>Анжи (Махачкала)</td><td>бутса 2016, кубок 2017</td></tr>
 <tr><td>Igor Safontsev</td><td>Динамо (Ставрополь)</td><td>кубок 2013, 2015</td></tr>
-<tr><td>Lesha Nilov</td><td>Балтика (Калининград)</td><td>бутса 2014, бронза 2017</td></tr>
 <tr><td>Alexander Ioffe</td><td>Локомотив (Санкт-Петербург)</td><td>бронза 1999, кубок 1998</td></tr>
-<tr><td>Vladislav Yezhergin</td><td>ФК Ростов</td><td>серебро 2017, бронза 2014</td></tr>
 <tr><td colspan="3"></td></tr>
 <tr><th>лучшие команды</th><th>тренер</th><th>достижения</th></tr>
-<tr><td>Балтика (Калининград)</td><td>Alexander Koltyrin<br />Lesha Nilov</td><td>чемпион 2000, 2003, бронза 2002, бутса 2002, 2003, кубок 1999, 2002<br />бутса 2014, бронза 2017</td></tr>
+<tr><td>Балтика (Калининград)</td><td>Alexander Koltyrin<br />Lesha Nilov</td><td>чемпион 2000, 2003, бронза 2002, бутса 2002, 2003, кубок 1999, 2002<br />чемпион 2018, бутса 2014, бронза 2017, кубок 2018</td></tr>
 <tr><td>Алания (Владикавказ)</td><td>Georgy Gusev<br />Alexandr Balakirev</td><td>чемпион 1999, серебро 2000, бутса 1998, 1999<br />серебро 2010, 2013, бронза 2003, 2008</td></tr>
 <tr><td>Факел (Воронеж)</td><td>Stanislav Boyev<br />Alex Rexyard</td><td>бронза 2001<br />чемпион 2011, 2016, 2017, серебро 2012, 2014, бронза 2009</td></tr>
 <tr><td>ФК Москва</td><td>Nikita Segal</td><td>чемпион 2012, 2014, 2015, серебро 2016, бронза 2013, бутса 2013</td></tr>
 <tr><td>Зенит (Санкт-Петербург)</td><td>Michail Plakunov<br />Eugene Plugin</td><td>чемпион 2002<br />бронза 2015, 2016, бутса 2010, 2011, кубок 2016</td></tr>
 <tr><td>Ротор (Камышин)<br />Текстильщик (Камышин)</td><td>Alex Saveliev<br />Andrey Teslin</td><td>чемпион 2001, серебро 2002, кубок 2001<br />чемпион 2013, кубок 2012</td></tr>
 <tr><td>Волга (Тверь)</td><td>Sergey Lavrentiev</td><td>серебро 2003, 2008, бутса 2008, кубок 2014</td></tr>
+<tr><td>ФК Ростов</td><td>Vladislav Yezhergin</td><td>бутса 2018, серебро 2017, 2018, бронза 2014</td></tr>
 <tr><td>Торпедо (Владимир)</td><td>Oleg Kuryshev<br />Mikhail Sirota</td><td>бронза 2010, бутса 2000, кубок 2009<br />серебро 2015</td></tr>
 <tr><td>ЦСКА</td><td>Roman Evdokimov<br />Sergey Vasiliev</td><td>серебро 2001<br />чемпион 2008</td></tr>
 <tr><td>Машук-КМВ (Пятигорск)</td><td>Andrey Skripka</td><td>чемпион 2009, бутса 2009</td></tr>
@@ -170,5 +179,5 @@
 <tr><td>Динамо (Ставрополь)</td><td>Igor Safontsev</td><td>кубок 2013, 2015</td></tr>
 <tr><td>Крылья Советов (Самара)</td><td>Eugene Kovalenko<br />Roman Poroshin</td><td>бронза 1998<br />кубок 2015</td></tr>
 <tr><td>Локомотив (Санкт-Петербург)</td><td>Alexander Ioffe</td><td>бронза 1999, кубок 1998</td></tr>
-<tr><td>ФК Ростов</td><td>Vladislav Yezhergin</td><td>серебро 2017, бронза 2014</td></tr>
+<tr><td>Кубань (Краснодар)</td><td>Serge Shibaev<br />Dmitry Pogorelov</td><td>бронза 2012<br />бронза 2018</td></tr>
 </table>

@@ -150,23 +150,31 @@
 <td>Vitya Baranovsky<br />Newcastle United</td>
 <td>Tottenham Hotspur<br />Alexander Sessa</td>
 </tr>
+<tr>
+<td>2017-2018</td>
+<td>Reading<br />Vladislav Yezhergin</td>
+<td>Wolverhampton<br />Nikita Segal</td>
+<td>Derby County<br />Serge Shibaev</td>
+<td>Serge Shibaev<br />Derby County</td>
+<td>Middlesbrough<br />Alex Zavgorodniy</td>
+</tr>
 </table>
 <table width="100%">
 <tr><th>лучшие игроки</th><th>команда</th><th>достижения</th></tr>
 <tr><td>Alex Rexyard</td><td>Manchester City</td><td>чемпион 2007, 2013, серебро 2010, 2011, бронза 2009, бутса 2006, 2011</td></tr>
 <tr><td>Eugene Plugin</td><td>Fulham<br />Chelsea</td><td>бутса 2000<br />чемпион 2010, 2011, серебро 2017, кубок 2001, 2004, 2005</td></tr>
+<tr><td>Serge Shibaev</td><td>Derby County</td><td>чемпион 2006, серебро 2007, 2009, 2016, бронза 2018, бутса 2018, кубок 2007</td></tr>
 <tr><td>Eugeny Gladyr</td><td>Nottingham Forest</td><td>серебро 2002, 2003, 2005, бронза 2000, 2006, бутса 2002, кубок 2010</td></tr>
-<tr><td>Serge Shibaev</td><td>Derby County</td><td>чемпион 2006, серебро 2007, 2009, 2016, кубок 2007</td></tr>
+<tr><td>Nikita Segal</td><td>Wolverhampton</td><td>серебро 2013, 2014, 2018, бронза, 2015, кубок 2013</td></tr>
 <tr><td>Kirill Goloschekov</td><td>Blackburn Rovers</td><td>чемпион 2012, 2014, 2017, бронза 2016</td></tr>
 <tr><td>Edward Polovoy</td><td>Hull City</td><td>чемпион 2001, серебро 2000, бутса 2001, кубок 2000</td></tr>
-<tr><td>Nikita Segal</td><td>Wolverhampton</td><td>серебро 2013, 2014, бронза, 2015, кубок 2013</td></tr>
 <tr><td>Oleg Kuryshev</td><td>Manchester United</td><td>бронза 2011, 2012, кубок 2009, 2012</td></tr>
 <tr><td>Anatoly Trubarov</td><td>Newcastle United</td><td>чемпион 2002, 2004, бутса 2004</td></tr>
+<tr><td>Vlad Yezhergin</td><td>Manchester City<br />Reading</td><td>чемпион 2003, кубок 2003<br />чемпион 2018</td></tr>
 <tr><td>Oleg Antoshkiv</td><td>West Ham United</td><td>чемпион 2000, бронза 2001, бутса 1999</td></tr>
 <tr><td>Nick Gahovich</td><td>Everton</td><td>чемпион 2016, бутса 2016, бронза 2014</td></tr>
 <tr><td>Nikolay Goltsev</td><td>Sheffield United</td><td>чемпион 2005, бутса 2005</td></tr>
 <tr><td>Pavel Nikolaev</td><td>Coventry City<br />Arsenal</td><td>кубок 2006<br />чемпион 2009</td></tr>
-<tr><td>Vlad Yezhergin</td><td>Manchester City</td><td>чемпион 2003, кубок 2003</td></tr>
 <tr><td>Victor M. Boikov</td><td>Arsenal</td><td>чемпион 1999, кубок 2002</td></tr>
 <tr><td>Inna Sessa</td><td>Sunderland</td><td>бутса 2012, кубок 2011</td></tr>
 <tr><td>Vitya Baranovsky</td><td>Newcastle United</td><td>бутса 2015, кубок 2017</td></tr>
@@ -176,18 +184,19 @@
 <tr><td colspan="3"></td></tr>
 <tr><th>лучшие команды</th><th>тренер</th><th>достижения</th></tr>
 <tr><td>Manchester City</td><td>Vlad Yezhergin<br />Alex Rexyard</td><td>чемпион 2003, кубок 2003<br />чемпион 2007, 2013, серебро 2010, 2011, бронза 2009, бутса 2006, 2011</td></tr>
+<tr><td>Derby County</td><td>Serge Shibaev</td><td>чемпион 2006, серебро 2007, 2009, 2016, бронза 2018, бутса 2018, кубок 2007</td></tr>
 <tr><td>Nottingham Forest</td><td>Eugeny Gladyr</td><td>серебро 2002, 2003, 2005, бронза 2000, 2006, бутса 2002, кубок 2010</td></tr>
+<tr><td>Wolverhampton</td><td>Serge Vasiliev<br />Roman Anpilogov<br />Nikita Segal</td><td>бронза 2002<br />бутса 2010<br />серебро 2013, 2014, 2018, бронза 2015, кубок 2013</td></tr>
 <tr><td>Chelsea</td><td>Eugene Plugin</td><td>чемпион 2010, 2011, серебро 2017, кубок 2001, 2004, 2005</td></tr>
 <tr><td>Everton</td><td>Alexey Belov<br />Artyom Belov<br />Nick Gahovich</td><td>кубок 1999<br />серебро 2006, бронза 2007<br />чемпион 2016, бронза 2014, бутса 2016</td></tr>
-<tr><td>Wolverhampton</td><td>Serge Vasiliev<br />Roman Anpilogov<br />Nikita Segal</td><td>бронза 2002<br />бутса 2010<br />серебро 2013, 2014, бронза 2015, кубок 2013</td></tr>
 <tr><td>Manchester United</td><td>Oleg Kuryshev<br />Artem Sakerin</td><td>бронза 2011, 2012, кубок 2009, 2012<br />бронза 2013, бутса 2013</td></tr>
 <tr><td>Newcastle United</td><td>Anatoly Trubarov<br />Vitya Baranovsky</td><td>чемпион 2002, 2004, бутса 2004<br />бутса 2015, кубок 2017</td></tr>
-<tr><td>Derby County</td><td>Serge Shibaev</td><td>чемпион 2006, серебро 2007, 2009, 2016, кубок 2007</td></tr>
 <tr><td>West Ham United</td><td>Oleg Antoshkiv<br />Lesha Nilov</td><td>чемпион 2000, бронза 2001, бутса 1999<br />серебро 2015, бутса 2014</td></tr>
 <tr><td>Arsenal</td><td>Victor M. Boikov<br />Pavel Nikolaev<br />Konstantin Smetanin</td><td>чемпион 1999, кубок 2002<br />чемпион 2009<br />чемпион 2015</td></tr>
 <tr><td>Blackburn Rovers</td><td>Kirill Goloschekov</td><td>чемпион 2012, 2014, 2017, бронза 2016</td></tr>
 <tr><td>Hull City</td><td>Edward Polovoy</td><td>чемпион 2001, серебро 2000, бутса 2001, кубок 2000</td></tr>
 <tr><td>Sheffield United</td><td>Nikolay Goltsev</td><td>чемпион 2005, бутса 2005</td></tr>
+<tr><td>Reading</td><td>Sergey Kulakov<br />Vlad Yezhergin</td><td>бронза 2004<br />чемпион 2018</td></tr>
 <tr><td>Leicester City</td><td>Leonid Sementsov<br />Igor Safontsev</td><td>серебро 2001<br />кубок 2015</td></tr>
 <tr><td>Sunderland</td><td>Inna Sessa</td><td>бутса 2012, кубок 2011</td></tr>
 <tr><td>West Bromwich Albion</td><td>Eugene Pchelintsev<br />Andrey Donec</td><td>бутса 2009<br />кубок 2016</td></tr>

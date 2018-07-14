@@ -1,9 +1,9 @@
 <?php
 $cca          = 'WL';
 $charset      = 'UTF-8';
-$title        = 'ФП. Мировая Лига';
-$description  = 'Футбол-Прогнозная Мировая Лига';
-$main_header  = 'Новости Мировой Лиги';
+$title        = 'ФП. Лига Наций';
+$description  = 'Футбол-прогнозная Лига Наций';
+$main_header  = 'Новости Лиги Наций';
 $width        = 1216;
 $main_width   = 936;
 $bgcolor      = 'd6d8e4';

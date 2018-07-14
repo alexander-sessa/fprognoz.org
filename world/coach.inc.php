@@ -87,7 +87,7 @@ if (isset($_SESSION['Coach_name']) && !isset($_POST['teamname'])) {
     Выберите ФП-ассоциацию: <select id="ccselect" name="cc">';
       foreach ($hq[$_SESSION['Coach_name']] as $ccode) {
         $head .= '
-      <option'.((isset($ac) && $ccode == $ac) ? ' selected="selected"' : '').'>'.$ccode.'</option>';
+      <option value="'.$ccode.'"'.((isset($ac) && $ccode == $ac) ? ' selected="selected"' : '').'>'.$ccode.'</option>';
         if (!isset($ac))
           $ac = $ccode;
 

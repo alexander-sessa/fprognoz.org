@@ -25,12 +25,13 @@ function write_year_ranking($year) {
   foreach ($xl as $line) if (strlen($line) > 16) {
     $line = str_replace('	NED	', '	NLD	', $line);
     $a = explode('	', $line);
-    $nc = strlen($a[2]) < 4 ? 3 : 2;
+    $nc = is_numeric($a[2]) ? 3 : 2;
     $team = trim($a[$nc++], ' "');
     $cc = trim($a[$nc++], '"');
     $score = isset($a[$nc]) ? $a[$nc] : 0;
-    if ($team && isset($realteam[$team]))
+    if ($team && isset($realteam[$team])) {
       $out .= $realteam[$team].','.$cc.','.str_replace(',', '.', $score)."\n";
+    }
     else if ($score)
       $log .= $year.': ' . $score.' '.$cc.','.$team."\n";
 

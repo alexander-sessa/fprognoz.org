@@ -1,9 +1,9 @@
 <?php
 $cca          = 'FIFA';
 $charset      = 'UTF-8';
-$title        = 'Футбол-Прогноз';
-$description  = 'Федерация Игровых Футболпрогнозных Ассоциаций';
-$main_header  = 'Приветствуем Вас на сайте ФутболПрогноза';
+$title        = 'Футбол-прогноз';
+$description  = 'Федерация игровых футбол-прогнозных ассоциаций';
+$main_header  = 'Приветствуем Вас на сайте Футбол-прогноза';
 $width        = 1216;
 $main_width   = 936;
 $bgcolor      = 'd6d8e4';
@@ -23,7 +23,7 @@ $foot_ftcolor = '7c82a4';
 $rght_ftcolor = 'ffd700';
 $left_image   = 'images/fifa-5.jpg';
 $rght_image   = 'images/rfifa-100.png';
-$cur_year     = '2017-18';
+$cur_year     = '2018-19';
 $president    = 'Eugeny Gladyr';
 $vice         = 'Eugene Plugin';
 $pressa       = '';

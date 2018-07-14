@@ -42,7 +42,7 @@ if (!isset($teamsin)) $teamsin = '';
 if (isset($_POST['submitpredict']) && $prognoz && $name && $pemail) { // отправка прогноза
   if ($pemail) {
     send_email15('FPrognoz.org <fp@fprognoz.org>', $name, $pemail, "Konkurs", "FP_Prognoz\n$tour\n$name\n$prognoz\n- $teamsout\n+ $teamsin\n");
-    echo "<h1>Прогноз принят. Копия прогноза отправлена на адрес $pemail<br></h1>";
+    echo "<h3>Прогноз принят. Копия прогноза отправлена на адрес $pemail<br></h3>";
     $email = str_replace(',', ' ', $pemail);
     $amail = explode(' ', $email);
     $replyto = '';
@@ -80,7 +80,7 @@ X-Mailer: FP Informer 2.00.101208-'.$ip);
   else file_put_contents($tour_dir . $tour, mb_sprintf('%-22s', $name) . "$prognoz -$teamsout +$teamsin;$pemail\n");
 }
 else if (isset($_POST['submitpredict']))
-   echo "<h2>Заявка не принята - проверьте заполнение полей</h2>";
+   echo "<h3>Заявка не принята - проверьте заполнение полей</h3>";
 
 /******/
 /* UI */
@@ -115,7 +115,7 @@ echo '<form name="tform" action="/?m=konk&t=' . $t . '" enctype="multipart/form-
 <tr><td align="right">прогноз на конкурс: </td><td><input type="text" id="prognoz_str" name="prognoz_str" value="'.(isset($prognoz)?$prognoz:'').'" size="50" /></td></tr>
 </table>
 <p><input type="submit" name="submitpredict" value=" отправить прогноз " /></p>
-<p>прогноз можно набрать как непосредственно в строке ввода, так и кликая на варианты исходов матчей (1 X 2) в таблице:</p>
+<p class="text9">прогноз можно набрать как непосредственно в строке ввода, так и кликая на варианты исходов матчей (1 X 2) в таблице:</p>
 ';
 
     echo '<br />

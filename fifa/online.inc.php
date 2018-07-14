@@ -1,1 +1,0 @@
-news.inc.php

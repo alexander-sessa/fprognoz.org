@@ -88,7 +88,7 @@ if (isset($_SESSION['Coach_name'])) {
       <td>'.$team['cmd'].'</td>
       <td align="center"><select name="confirm'.$cca.'">';
           foreach ($cfm as $choice => $selected)
-            $out .= '<option>'.$choice.'</option>';
+            $out .= '<option value="'.$choice.'">'.$choice.'</option>';
           $out .= '</select></td>
     </tr>
 ';
@@ -101,7 +101,7 @@ if (isset($_SESSION['Coach_name'])) {
       <b>ВНИМАНИЕ</b>: с этого сезона снимается архаичное ограничение на написание имён игроков латиницей.<br />
       Вы можете сменить написание своего имени здесь и сейчас:
 <input id="new_name" type="text" name="new_name" value="'.$_SESSION['Coach_name'].'" data-tpl="'.$cfg.'" style="padding-left:5px" />
-<span id="valid_name"><i class="fa fa-check" style="color:green"> это имя используется Вами сейчас</i></span>
+<span id="valid_name"><i class="fas fa-check" style="color:green"> это имя используется Вами сейчас</i></span>
       <br />
     </td></tr>
     <tr><td colspan="3">&nbsp;</td><td align="center"><input id="cfm_button" type="submit" name="confirm" value="отправить" /></td></tr>
@@ -120,23 +120,23 @@ $(document).ready(function(){
     str=$(this).val()
     if (str.length < <?=$mininput ?>) {
       no=true
-      $("#valid_name").html('<i class="fa fa-times" style="color:red"> введите хотя бы 2 буквы</i>')
+      $("#valid_name").html('<i class="fas fa-times" style="color:red"> введите хотя бы 2 буквы</i>')
     }
     else {
-      if (str.indexOf(',', -1) + str.indexOf(';', -1) > 0) {
+      if (str.indexOf(',', -1) + str.indexOf(';', -1) + str.indexOf('<', -1) > 0) {
         no=true
-        $("#valid_name").html('<i class="fa fa-times" style="color:red"> нельзя использовать знаки препинания</i>')
+        $("#valid_name").html('<i class="fas fa-times" style="color:red"> нельзя использовать знаки препинания</i>')
       }
       else {
         $.post("/online/ajax.php",{
             data: $(this).data("tpl"),
-            keyword: $(this).val(),
+            nick: $(this).val(),
             email: "<?=isset($email)?$email:'' ?>"
           },function(r){
             switch (r) {
-              case '1': no=true;ok='<i class="fa fa-times" style="color:red"> это имя или код заняты</i>';break;
-              case '2': no=false;ok='<i class="fa fa-check" style="color:green"> имя или код уже используется Вами</i>';break;
-              default : no=false;ok='<i class="fa fa-check" style="color:green"> такое имя допустимо</i>';
+              case '1': no=true;ok='<i class="fas fa-times" style="color:red"> это имя или код заняты</i>';break;
+              case '2': no=false;ok='<i class="fas fa-check" style="color:green"> имя или код уже используется Вами</i>';break;
+              default : no=false;ok='<i class="fas fa-check" style="color:green"> такое имя допустимо</i>';
             }
             $("#valid_name").html(ok)
         })

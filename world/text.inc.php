@@ -74,8 +74,8 @@ else if ($ref == 'news') {
   else if (is_file($online_dir."$cca/$s/news"))
   {
     $cont = file_get_contents($online_dir."$cca/$s/news");
-    $cont = str_replace('<', '&lt;', $cont);
-    $cont = str_replace('>', '&gt;', $cont);
+//    $cont = str_replace('<', '&lt;', $cont);
+//    $cont = str_replace('>', '&gt;', $cont);
     if (mb_detect_encoding($cont, 'UTF-8', true) === FALSE)
       $cont = iconv('CP1251', 'UTF-8', str_replace('<<', '', $cont));
   }

@@ -740,7 +740,7 @@ if (is_file($program_file)) {
         if ($homecoach && !$half2)
           $homeline .= '   <input type="hidden" name="replace" value="replace" /><button type="submit" id="replace" style="padding:0" title="установите 6 галочек тем, кто будет
 играть во 2 тайме, и нажмите кнопку.
-Максимальное количество замен = 3." disabled="disabled"> <i class="fa fa-refresh"></i> </button>';
+Максимальное количество замен = 3." disabled="disabled"> <i class="fas fa-refresh"></i> </button>';
         else
           $homeline .= '      ';
       }
@@ -776,7 +776,7 @@ if (is_file($program_file)) {
         if ($awaycoach && !$half2)
           $awayline .= '   <input type="hidden" name="replace" value="replace" /><button type="submit" id="replace" style="padding:0" title="установите 6 галочек тем, кто будет
 играть во 2 тайме, и нажмите кнопку.
-Максимальное количество замен = 3." disabled="disabled"> <i class="fa fa-refresh"></i> </button>';
+Максимальное количество замен = 3." disabled="disabled"> <i class="fas fa-refresh"></i> </button>';
         else
           $awayline .= '      ';
     }

@@ -5,16 +5,16 @@
     английских команд.<br />
     <br />
     <br />
-    Чемпион Премьер-лиги - <b>Blackburn Rovers (Kirill Goloschekov)</b><br />
+    Чемпион Премьер-лиги - <b>Reading (Владислав Ежергин)</b><br />
     <br />
-    Обладатель Золотой бутсы - <b>Vitya Baranovsky (Newcastle United)</b><br />
+    Обладатель Золотой бутсы - <b>Сергей Шибаев (Derby County)</b><br />
     <br />
-    Обладатель ФПА Кубка - <b>Tottenham Hotspur (Alexander Sessa)</b><br />
+    Обладатель ФПА Кубка и Суперкубка - <b>Middlesbrough (Алекс Завгородний)</b><br />
     <br />
-    Обладатель Суперкубка и победитель Лиги Чемпионшип- <b>Brentford (Taras Avitara)</b><br />
+    Победитель Кубковой Лиги - <b>Tottenham Hotspur (Александр Сесса)</b><br />
     <br />
     <br />
-    Лучший игрок всех времен - <b>Alex Rexyard (Manchester City)</b> - 7 наград<br />
+    Лучший игрок всех времен - <b>Алекс Рексьярд (Manchester City)</b> - 7 наград<br />
     <br />
-    Лучшая команда всех времен - <b>Manchester City (Vlad Yezhergin, Alex Rexyard)</b> - 9 наград
+    Лучшая команда всех времен - <b>Manchester City (Владислав Ежергин, Алекс Рексьярд)</b> - 9 наград
     </p>

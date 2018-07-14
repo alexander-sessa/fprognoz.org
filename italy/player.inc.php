@@ -1,5 +1,6 @@
 <?php
-$codes = file($online_dir."$cca/$cur_year/codes.tsv");
+$season = isset($s) ? $s : $cur_year;
+$codes = file($online_dir."$cca/$season/codes.tsv");
 $out = '';
 $tsv = '';
 $warning = '';
@@ -27,7 +28,7 @@ foreach ($codes as $player) if ($player[0] != '#')
       $cfm['?'] = ' selected';
 //      $warning = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; !!! Пожалуйста, подтвердите свое участие !!!';
     }
-    foreach ($cfm as $choice => $selected) $out .= '<option'.$selected.'>'.$choice.'</option>';
+    foreach ($cfm as $choice => $selected) $out .= '<option value="'.$choice.'"'.$selected.'>'.$choice.'</option>';
     $out .= '</select></td><td><input type="text" name="email" value="'.$aplayer[3].'" /><input type="submit" /></td></tr>
 ';
   }
@@ -38,7 +39,7 @@ foreach ($codes as $player) if ($player[0] != '#')
 }
 if (isset($_POST["confirm"]))
 {
-  file_put_contents($online_dir."$cca/$cur_year/codes.tsv", $tsv);
+  file_put_contents($online_dir."$cca/$season/codes.tsv", $tsv);
   touch($data_dir . 'personal/'.$_SESSION["Coach_name"].'/'.date('Y', time()));
 }
 ?>

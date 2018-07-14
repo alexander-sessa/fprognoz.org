@@ -154,6 +154,14 @@
 <td>Vladislav Yezhergin<br />Kilmarnok</td>
 <td>Hibernian<br />Alexander Sessa</td>
 </tr>
+<tr>
+<td>2017-2018</td>
+<td>Kilmarnok<br />Vladislav Yezhergin</td>
+<td>Inverness<br />Serge Shibaev</td>
+<td>Partick Thistle<br />Andrey Vityuk</td>
+<td>Gleb Arsatov<br />Ayr United</td>
+<td>Saint Mirren<br />Ivan Shchyhlinski</td>
+</tr>
 </table>
 <table width="100%">
 <tr><th>лучшие игроки</th><th>команда</th><th>достижения</th></tr>
@@ -163,20 +171,21 @@
 <tr><td>Sacha Baranovsky</td><td>Celtic</td><td>серебро 2017, бронза 2004, 2006, 2009, 2011, бутса 2002</td></tr>
 <tr><td>Alexsander Rudak</td><td>Stranraer</td><td>серебро 2004, бронза 2005, 2007, 2010, бутса 2007</td></tr>
 <tr><td>Dmitry Shulkevich</td><td>Dumbarton</td><td>чемпион 2006, бутса 2004, 2005, кубок 2010</td></tr>
+<tr><td>Andrey Vityuk</td><td>Stranraer<br />Partick Thistle</td><td>чемпион 2011, 2013, бутса 2011<br />бронза 2018</td></tr>
 <tr><td>Vano Opulsky</td><td>Kilmarnock</td><td>серебро 2013, бронза 2001, бутса 2013, кубок 2011</td></tr>
-<tr><td>Andrey Vityuk</td><td>Stranraer</td><td>чемпион 2011, 2013, бутса 2011</td></tr>
+<tr><td>Serge Shibaev</td><td>Whitehill<br />Inverness</td><td>кубок 2007<br />серебро 2014, 2018, бронза 2015</td></tr>
 <tr><td>Alex Tarasov</td><td>Stranraer</td><td>чемпион 2014, 2016, серебро 2015</td></tr>
 <tr><td>Alexey Plotitsa</td><td>Livingston</td><td>серебро 2001, кубок 2000, 2001</td></tr>
+<tr><td>Ivan Shchyhlinski</td><td>Royal Albert<br />Saint Mirren</td><td>кубок 2009<br />серебро 2011, кубок 2018</td></tr>
 <tr><td>Mikola Taras</td><td>Ross County</td><td>бронза 2002, кубок 2002, 2003</td></tr>
-<tr><td>Serge Shibaev</td><td>Whitehill<br />Inverness</td><td>кубок 2007<br />серебро 2014, бронза 2015</td></tr>
 <tr><td>Elena Azarko</td><td>Spartans</td><td>чемпион 2003, бутса 2003</td></tr>
 <tr><td>Maxim Zhegachev</td><td>Queen Of South</td><td>чемпион 2000, бутса 2000</td></tr>
+<tr><td>Vladislav Yezhergin</td><td>Kilmarnock</td><td>бутса 2017, чемпион 2018</td></tr>
 <tr><td>Roman Poroshin</td><td>Dundee</td><td>чемпион 2015, кубок 2015</td></tr>
 <tr><td>Sergey Golcev</td><td>Dundee</td><td>чемпион 2004, кубок 2004</td></tr>
 <tr><td>Artem Subaev</td><td>Hibernian</td><td>чемпион 1999, бронза 2000</td></tr>
 <tr><td>Sergio Makhon</td><td>Hibernian</td><td>серебро 2005, 2008</td></tr>
 <tr><td>Alexander Fesenko</td><td>Dundee United</td><td>серебро 1999, бутса 1999</td></tr>
-<tr><td>Ivan Shchyhlinski</td><td>Royal Albert<br />Saint Mirren</td><td>кубок 2009<br />серебро 2011</td></tr>
 <tr><td>Alexander Sessa</td><td>Hibernian</td><td>бронза 2012, кубок 2017</td></tr>
 <tr><td>Slava Kovalevski</td><td>Aberdeen</td><td>серебро 2007, бронза 2003</td></tr>
 <tr><td colspan="3"></td></tr>
@@ -185,16 +194,17 @@
 <tr><td>Dundee United</td><td>Alexander Fesenko<br />Vitya Baranovsky</td><td>серебро 1999, бутса 1999<br />чемпион 2017, серебро 2002, 2003, 2012, бутса 2014, 2015, кубок 2012</td></tr>
 <tr><td>Stranraer</td><td>Alexsander Rudak<br />Andrey Vityuk<br />Alex Tarasov</td><td>серебро 2004, бронза 2005, 2007, 2010, бутса 2007<br />чемпион 2011, 2013, бутса 2011<br />чемпион 2014, 2016, серебро 2015</td></tr>
 <tr><td>Clydebank</td><td>Eugene Pchelintsev</td><td>чемпион 2007, 2010, серебро 2006, 2009, бутса 2006, 2008, 2009</td></tr>
+<tr><td>Kilmarnock</td><td>Dmitri Kimelman<br />Vano Opulsky<br />Vladislav Yezhergin</td><td>кубок 1999<br />серебро 2013, бронза 2001, бутса 2013, кубок 2011<br />бутса 2017, чемпион 2018</td></tr>
 <tr><td>Hibernian</td><td>Artem Subaev<br />Sergio Makhon<br />Alexander Sessa</td><td>чемпион 1999, бронза 2000<br />серебро 2005, 2008<br />бронза 2012, кубок 2017</td></tr>
-<tr><td>Kilmarnock</td><td>Dmitri Kimelman<br />Vano Opulsky<br />Vladislav Yezhergin</td><td>кубок 1999<br />серебро 2013, бронза 2001, бутса 2013, кубок 2011<br />бутса 2017</td></tr>
 <tr><td>Celtic</td><td>Sacha Baranovsky</td><td>серебро 2017, бронза 2004, 2006, 2009, 2011, бутса 2002</td></tr>
 <tr><td>Dundee</td><td>Sergey Golcev<br />Roman Poroshin</td><td>чемпион 2004, кубок 2004<br/>чемпион 2015, кубок 2015</td></tr>
 <tr><td>Dumbarton</td><td>Dmitry Shulkevich</td><td>чемпион 2006, бутса 2004, 2005, кубок 2010</td></tr>
 <tr><td>Ross County</td><td>Mikola Taras<br />Andry Rokecky</td><td>бронза 2002, кубок 2002, 2003<br />кубок 2016</td></tr>
 <tr><td>Livingston</td><td>Alexey Plotitsa</td><td>серебро 2001, кубок 2000, 2001</td></tr>
+<tr><td>Inverness</td><td>Sergey Shibaev</td><td>серебро 2014, 2018, бронза 2015</td></tr>
 <tr><td>Spartans</td><td>Elena Azarko</td><td>чемпион 2003, бутса 2003</td></tr>
 <tr><td>Queen Of South</td><td>Maxim Zhegachev</td><td>чемпион 2000, бутса 2000</td></tr>
-<tr><td>Inverness</td><td>Sergey Shibaev</td><td>серебро 2014, бронза 2015</td></tr>
+<tr><td>Saint Mirren</td><td>Ivan Shchyhlinski</td><td>серебро 2011, кубок 2018</td></tr>
 <tr><td>Aberdeen</td><td>Slava Kovalevski</td><td>серебро 2007, бронза 2003</td></tr>
 <tr><td>Hearts</td><td>Alexandr Panasiuk<br />Roman Fedorenko</td><td>кубок 2006<br />кубок 2014</td></tr>
 </table>

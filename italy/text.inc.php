@@ -1,4 +1,4 @@
-<div style="white-space: pre-wrap; font-family: monospace; width: 98%;">
+<div style="white-space: pre-wrap; font-family: monospace; font-size: 1.2em; line-height: 1; width: 100%;">
 <?php
 if (!isset($t))
   $t = '';

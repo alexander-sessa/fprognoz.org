@@ -6,14 +6,12 @@
     наиболее интересные матчи португальской премьер-лиги.<br />
     <br />
     <br />
-    Чемпион Примейра-лиги и обладатель Золотой бутсы - <b>Academica, Max Ratasoff</b><br />
+    Чемпион Примейра-лиги - <b>Academica, Max Ратасов</b><br />
     <br />
-    Обладатель Кубка Португалии - <b>Campomaiorense, Aleksander Lokalenkov</b><br />
-    <br />
-    Обладатель Суперкубка Португалии - <b>Belenenses, Vano Opulsky</b><br />
+    Обладатель Золотой бутсы и Кубка Португалии - <b>Chaves, Владислав Ежергин</b><br />
     <br />
     <br />
-    Лучший игрок всех времен - <b>Alexey Nilov (Benfica Lisboa)</b> - 10 наград<br />
+    Лучший игрок всех времен - <b>Алексей Нилов (Benfica Lisboa)</b> - 10 наград<br />
     <br />
-    Лучшая команда всех времен - <b>Benfica Lisboa (Vitaly Petuhov, Alexey Nilov)</b> - 11 наград
+    Лучшая команда всех времен - <b>Benfica Lisboa (Виталий Петухов, Алексей Нилов)</b> - 11 наград
 </p>

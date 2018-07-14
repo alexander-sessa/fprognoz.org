@@ -4,15 +4,15 @@
 В 2013-м ассоциация была восстановлена.<br />
 <br />
 <br />
-Чемпион и Обладатель Суперкубка  - <b>NAC Breda, Maxim Kuznetsov</b><br />
+Чемпион - <b>FC Eindhoven, Кирилл Голощёков</b><br />
 <br />
-Обладатель Золотой бутсы - <b>Vladislav Yezhergin, ADO Den Haag</b><br />
+Обладатель Золотой бутсы - <b>Владислав Ежергин, ADO Den Haag</b><br />
 <br />
-Обладатель кубка Голландии - <b>SC Heerenveen, Oleg Krupich</b><br />
-<br />
-<br />
-Лучший игрок всех времен - <b>Kirill Goloschekov, FC Eindhoven</b> - 6 наград
+Обладатель кубка Голландии - <b>AZ Alkmaar, Алексей Нилов</b><br />
 <br />
 <br />
-Лучшая команда всех времен - <b>FC Eindhoven (Maxim Zhegachev, Kirill Goloschekov)</b> - 7 наград
+Лучший игрок всех времен - <b>Кирилл Голощёков, FC Eindhoven</b> - 7 наград
+<br />
+<br />
+Лучшая команда всех времен - <b>FC Eindhoven (Максим Жегачёв, Кирилл Голощёков)</b> - 8 наград
 </p>

@@ -117,8 +117,10 @@ else if (isset($_POST['submitvac']))
 if (isset($_SESSION['Coach_name']) && !$pemail)
   foreach ($cmd_db as $cca => $teams)
     foreach ($teams as $team)
-      if (($pemail = $team['eml']))
+      if (($_SESSION['Coach_name'] == $team['usr'])) {
+        $pemail = $team['eml'];
         break 2;
+      }
 
 else
   echo
@@ -137,9 +139,9 @@ echo '
 </table>
 <p><button class="g-recaptcha" data-sitekey="6Lc8dioUAAAAAArLlgGJDVEy6nwwQDSKWrmAOvkq" data-callback="onSubmit"> отправить заявку </button></p>
 </form></center>
-Свободна команда Динамо (Брянск) (ФП России, Национальная лига).<br />
-Присылайте заявки: команда достанется первому приславшему при условии наличия квоты.<br />
-А ещё... ФК Тамбов во 2-м дивизионе России нужен? Если да, пишите.<br />
+У нас наступило межсезонье и свободные места в большинстве ФП-ассоциаций будут разыграны 1-2 сентября в Предсезонном конкурсе.<br />
+Тем не менее, открыта свободная регистрация в только что сформированную французскую Liga 2.<br />
+Зарегистрироваться и выбрать команду можно на странице <a href="?a=france&amp;m=register">РЕГИСТРАЦИЯ В ФП ФРАНЦИИ</a><br />
 <br />
 Вы также можете зарегистрировать команду для участия в клубных товарищеских матчах (<a href="?a=friendly&amp;m=register">Регистрация</a>)<br />
 и в любительской ФП-ассоциации Финляндии (<a href="?a=finland&amp;m=register">РЕГИСТРАЦИЯ В ФП ФИНЛЯНДИИ</a>).<br />

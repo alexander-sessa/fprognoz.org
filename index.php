@@ -1,4 +1,9 @@
 <?php
+/*
+- отправка токена с учетом смены пароля (закомментировано)
+- смена пароля по токену или сразу после входа
+- забыл пароль
+*/
 $time_start = microtime(true);
 date_default_timezone_set('Europe/Berlin');
 mb_internal_encoding('UTF-8');
@@ -104,15 +109,15 @@ function build_personal_nav() {
   global $online_dir;
   $debug_str = '';
   $currentTime = time();
-  if (!is_file($data_dir . 'personal/'.$_SESSION['Coach_name'].'/nav.inc')
+  if (!is_file($data_dir . 'personal/'.$_SESSION['Coach_name'].'/navbar.inc')
   || !isset($_SESSION['Next_Event'])
   || $_SESSION['Next_Event'] <= $currentTime) {
-    $statusColor = array('0' => 'none', '1' => 'toolate', '2' => 'alarm', '3' => 'absent', '4' => 'playing', '5' => 'present', '6' => 'result');
+    $statusColor = array('0' => 'noplay', '1' => 'toolate', '2' => 'alarm', '3' => 'absent', '4' => 'playing', '5' => 'present', '6' => 'result');
     $tudb = array();
     $out = '';
     $nextEvent = $currentTime + 300;
-//    $startTime = $currentTime - 259200; // - 3 day
-    $startTime = $currentTime - 518400; // - 6 day
+    $startTime = $currentTime - 1259200; // - 3 day
+//    $startTime = $currentTime - 518400; // - 6 day
     $startDay = date('d', $startTime);
     $startMonth = date('m', $startTime);
     $startYear = date('Y', $startTime);
@@ -121,7 +126,7 @@ function build_personal_nav() {
     $currentSeason = current_season($startYear, $startMonth);
     $world = file_get_contents($online_dir . 'WL/'.$startYear.'/codes.tsv');
 //    $sfp20 = file_get_contents($online_dir . 'IST/'.$startYear.'/codes.tsv');
-    $world_title = true;
+    $tout = '';
     for ($nm=0; $nm <= 1; $nm++) {
       $dir = scandir($online_dir . 'schedule/'.$sched[$nm]);
       foreach ($dir as $fname) if ($fname[0] != '.' && ($nm || $fname >= $startDay)) {
@@ -131,13 +136,6 @@ function build_personal_nav() {
 //if ($_SESSION['Coach_name'] == 'Alexander Sessa') echo $event."<br />\n";
 // World
           if ($countryCode == 'WL' && $action == 'remind' && strpos($world, $_SESSION['Coach_name']) !== false) {
-            if ($world_title) {
-              $world_title = false;
-              $out .= '
-<br />
-Мировая лига
-<br />';
-            }
             $tour_dir = $online_dir . 'WL/'.$startYear.'/prognoz/'.$tourCode;
             if (is_file($tour_dir.'/published'))
               $status = 6; // завершён
@@ -147,8 +145,9 @@ function build_personal_nav() {
               $status = 5; // есть прогноз
             else
               $status = ($timeStamp <= $currentTime + 86400) ? 2 : 3; // нет прогноза
-
-            $out .= '<a href="/?a=world&s='.$startYear.'&l=S&t='.substr($tourCode, 3).'&m='.($status == 6 ? 'result' : 'prognoz').'" class="'.$statusColor[$status].'">'.$tourCode.'</a> ';
+            $tout .= '
+                                <a class="'.$statusColor[$status].'" href="/?a=world&s='.$startYear.'&l=S&t='.substr($tourCode, 3).'&m='.($status == 6 ? 'result' : 'prognoz').'">'.$tourCode.'</a>
+';
           }
           if ($countryCode == 'SFP')
             $itFName = $online_dir.$countryCode.'/'.$currentSeason.'/publish/'.substr($tourCode, 0, 3).'/it'.substr($tourCode, -2);
@@ -249,34 +248,19 @@ function build_personal_nav() {
         }
       }
     }
+    if ($tout)
+      $out .= '
+                            <li class="nav-item">' . $tout .'
+                            </li>';
+
     $prev_fp = '';
     foreach (['BLR', 'ENG', 'ESP', 'FRA', 'GER', 'ITA', 'NLD', 'PRT', 'RUS', 'PRT', 'SCO', 'UKR'] as $countryCode) {
-     foreach ($cmd_db[$countryCode] as $c => $team)
-      if ($team['usr'] == $_SESSION['Coach_name']) {
+      $tout = '';
+      foreach ($cmd_db[$countryCode] as $c => $team) if ($team['usr'] == $_SESSION['Coach_name']) {
         $team_str = $c.'@'.$countryCode;
         $ll = ($countryCode == 'SFP') ? 'Сборная' : $team['cmd'];
-        if (substr($out, -7) != '<br />
-') $out .= '<br />';
-        if ($prev_fp == 'SFP'
-        || ($prev_fp != 'UEFA' && $countryCode == 'UEFA')
-        || $countryCode == 'FIN'
-        || ($prev_fp != 'FIN' && $countryCode == 'SBN'))
-          $out .= '<img src="images/greydot.png" width="116" height="1" alt="" /><br />';
-
-        if (trim($ll))
-          $out .= '<a href="/?a='.strtolower($ccn[$countryCode]).'&c='.$c.'">'.$ll.' ('.$countryCode.')</a>
-';
         $prev_fp = $countryCode;
-        $tout = '';
-        $i = 0;
-        $br = 0;
-//         if ($status > 0)
         if (isset($tudb[$team_str])) foreach ($tudb[$team_str] as $tcode => $status) {
-          if ($i == 0 && $br == 0) {
-            $br = 1;
-            $tout .= '<br />
-';
-          }
           if (strlen($tcode) > 3 && $tcode[4] == 'L') {
             $cclen = 5;
             $ll = '&l='.substr($tcode, 0, $cclen);
@@ -299,27 +283,20 @@ function build_personal_nav() {
           else
             $linktext = 'text&ref=itog';
 
-          if ($ll != '&') {
-            if ($status != 0 || $countryCode != 'SFP') {
-              $br = 0;
-              $tout .= '<a href="/?a='.strtolower($ccn[$countryCode]).'&c='.$c.$ll.'&s='.$currentSeason.'&m='.$linktext.'&t='
-                    . strtolower(substr($tcode, $cclen)) .'" class="'.$statusColor[$status].'">'.$tcode.'</a>
-';
-              if (($i += 1 + strlen($tcode)) > 15)
-                $i = 0;
+          if ($ll != '&' && ($status != 0 || $countryCode != 'SFP'))
+            $tout .= '
+                                <a class="'.$statusColor[$status].'" href="/?a='.strtolower($ccn[$countryCode]).'&c='.$c.$ll.'&s='.$currentSeason
+                    .'&m='.$linktext.'&t='.strtolower(substr($tcode, $cclen)).'">'.$tcode.'</a>';
 
-           }
-           else
-             $i = -1;
-
-          }
         }
-        if ($tout)
-          $out .= $tout;
-
       }
+      if ($tout)
+        $out .= '
+                            <li class="nav-item">' . $tout .'
+                            </li>';
+
     }
-    file_put_contents($data_dir . 'personal/'.$_SESSION['Coach_name'].'/nav.inc', $out);
+    file_put_contents($data_dir . 'personal/'.$_SESSION['Coach_name'].'/navbar.inc', $out);
     $_SESSION['Next_Event'] = $nextEvent;
   }
   return $debug_str;
@@ -381,8 +358,8 @@ function send_predict($country_code, $season, $team_code, $tour, $prognoz, $enem
       $content = file_get_contents($tour_dir . '/mail');
       file_put_contents($tour_dir . '/mail', $content . "$team_code;$prognoz;$time;$pena\n");
       unlink($lock);
-      if (is_file($data_dir . 'personal/' . $name . '/nav.inc'))
-        unlink($data_dir . 'personal/' . $name . '/nav.inc');
+      if (is_file($data_dir . 'personal/' . $name . '/navbar.inc'))
+        unlink($data_dir . 'personal/' . $name . '/navbar.inc');
 
     }
     else
@@ -411,7 +388,7 @@ function build_access() {
   global $data_dir;
   global $online_dir;
   $access = '';
-  foreach ($ccn as $ccc => $cname) if ($ccc != 'SBN' && $ccc != 'FIFA') {
+  foreach ($ccn as $ccc => $cname) if ($ccc != 'SBN' && $ccc != 'FCL' && $ccc != 'FIFA') {
     $dir = scandir($online_dir.$ccc, 1);
     foreach ($dir as $s)
       if ($s[0] == '2')
@@ -701,8 +678,7 @@ function parse_cal_and_gen($program) {
   $acal = array();
   $agen = array();
   $calfp = explode("\n", $program);
-  unset($calfp[1]);
-  unset($calfp[0]);
+  unset($calfp[1], $calfp[0]);
   foreach ($calfp as $line) if ((strpos($line, ' - ') || strpos($line, ' *'))
                               && !mb_strpos($line, 'ГОСТИ') && !mb_strpos($line, 'Гости')) {
     if (strpos($line, '*')) { // parse line with generator
@@ -759,12 +735,39 @@ $ccn = array(
 'SCO' => 'Scotland',
 'UEFA'=> 'UEFA',
 'FIN' => 'Finland',
-'SBN' => 'SBN',
+'CHE' => 'Швейцария',
 'FIFA'=> 'FIFA',
 'FCL' => 'Friendly',
+'UNL' => 'World',
 'WL'  => 'World',
 'IST' => 'SFP-20',
 );
+
+$fa = [
+'fifa'    => 'ФП ФИФА',
+'uefa'    => 'ФП УЕФА',
+'sfp-team'=> 'Сборная SFP',
+'world'   => 'Лига Наций',
+'england' => 'Англия',
+'belarus' => 'Белоруссия',
+'germany' => 'Германия',
+'netherlands' => 'Голландия',
+'spain'   => 'Испания',
+'italy'   => 'Италия',
+'portugal'=> 'Португалия',
+'russia'  => 'Россия',
+'ukraine' => 'Украина',
+'france'  => 'Франция',
+'scotland'=> 'Шотландия',
+'switzerland' => 'Швейцария',
+'finland' => 'Финляндия',
+'austria' => 'Австрия',
+'belgium' => 'Бельгия',
+'greece'  => 'Греция',
+'turkey'  => 'Турция',
+];
+
+$classic_fa = ['AUS', 'BEL', 'BLR', 'ENG', 'ESP', 'FRA', 'GER', 'GRE', 'ITA', 'NLD', 'PRT', 'RUS', 'SCO', 'TUR', 'UKR'];
 
 $role = 'badlogin';
 $notification = '';
@@ -778,6 +781,7 @@ if ($auth && !$_POST['pass_str'] && strpos($_POST['name_str'], '@') && strpos($_
   $m = 'authentifying';
   $email_ok = false;
 }
+$sidebar_show = false;
 if (!isset($a))
   $a = 'fifa';
 else if (!is_dir($a)) {
@@ -785,22 +789,20 @@ else if (!is_dir($a)) {
   $a = 'fifa';
   $m = '404';
 }
-include ("$a/settings.inc.php");
-if (!isset($s))
-  $s = $cur_year;
+else if (count($_GET) == 1 || count($_GET) == 2 && isset($_GET['s']))
+  $sidebar_show = true; // не сворачивать левое меню при выборе ассоциации и сезона
 
+include ("$a/settings.inc.php");
 if (isset($m)) {
   if (!is_file($a . '/' . $m . '.inc.php')) {
     http_response_code(404);
     $a = 'fifa';
     $m = '404';
   }
-  else if ($m == 'prognoz' && $s != $cur_year)
-    $m = 'main'; // форма prognoz только для текущего сезона!
-
 }
 else {
-  $m = 'main';
+  $m = isset($s) ? 'text' : 'main';
+  $ref = 'news';
   if ($a == 'fifa') {
     if (isset($_COOKIE['fprognozmain']))
       $m = 'news'; // при повторном посещении показывать новости
@@ -808,10 +810,371 @@ else {
       setcookie('fprognozmain', '1');
   }
 }
+if (!isset($s))
+  $s = $cur_year;
+
+$season = '';
+$ccd = ($a == 'sfp-20') ? 'WL' : $cca;
+if (is_dir($online_dir.$ccd))
+  $dir = scandir($online_dir.$ccd, 1);
+
+foreach ($dir as $subdir)
+  if (($subdir[0] == '2') || ($subdir[0] == '1')) {
+    $seasons[] = $subdir; // список сезонов для меню
+    if (!isset($s))
+      $s = $subdir;
+
+  }
+
+if ($cca == 'UNL') { // для показа в Лиге Наций подобрать еще и сезоны Мировой Лиги
+  $dir = scandir($online_dir.'WL', 1);
+  foreach ($dir as $subdir)
+    if (($subdir[0] == '2') || ($subdir[0] == '1'))
+      $seasons[] = $subdir;
+
+}
+if (!isset($t))
+  $t = '01';
+
+if ($m == 'prognoz' && $s != $cur_year)
+  $m = 'main'; // форма prognoz только для текущего сезона!
+
 if (isset($ls))
    setcookie('fprognozls', $ls);
 
 $fprognozls = isset($_COOKIE['fprognozls']) ? $_COOKIE['fprognozls'] : 'inscore';
+
+
+////////// SIDEBAR
+
+
+$sidebar = '';
+
+if (in_array($cca, $classic_fa)) { // сбор туров сезона для классических асоциаций
+  $tournaments = ['R' => [], 'G' => [], 'P' => [], 'C' => [], 'S' => []];
+  $tnames = ['R' => 'Чемпионат', 'G' => 'Золотой матч', 'P' => 'Плей-офф', 'C' => 'Кубок', 'S' => 'Суперкубок'];
+  $cclen = strlen($cca);
+
+  $season_dir = $online_dir.$cca.'/'.$s.'/';
+  if (is_dir($season_dir.'programms')) {
+    $dir = scandir($season_dir.'programms');
+    unset($dir[1], $dir[0]);
+    foreach ($dir as $prog) {
+      $tour = substr($prog, $cclen);
+      if (is_numeric($tour[0]))
+        $tournaments['R'][] = $tour; // регулярный чемпионат
+      else
+        $tournaments[$tour[0]][] = substr($tour, 1); // прочие турниры с буквенным модификатором
+
+    }
+    foreach ($tournaments as $tindex => $ttours)
+      if (count($ttours)) {
+        rsort($ttours, SORT_NUMERIC);
+        $tname = ($tindex == 'G' && count($ttours) > 1) ? 'Золотой турнир' : $tnames[$tindex];
+        $sidebar .= '
+                <li class="active">
+                    <a href="#'.$tindex.'Submenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">'.$tname.'</a>
+                    <ul class="collapse list-unstyled" id="'.$tindex.'Submenu">';
+        foreach ($ttours as $to) {
+          $tt = ltrim(strtr($to, ['NEW' => '']), '0');
+          if ($tt < 10) $tt = ' ' . $tt;
+          if ($tindex != 'R')
+            $to = strtolower($tindex) . $to;
+
+          $prefix = '<a href="?a='.$a.'&amp;s='.$s.'&amp;t='.$to;
+          $sidebar .= '
+                        <li>
+                            <div class="tlinks">
+                            '.$prefix.'&amp;m=text&amp;ref=prog">тур&nbsp;<span>'.$tt.'</span></a>:&nbsp;';
+          if (is_file($season_dir . 'publish/it' . $to))
+            $sidebar .= $prefix.'&amp;m=text&amp;ref=itog">итоги,</a>&nbsp;'.$prefix.'&amp;m=text&amp;ref=rev">обзор</a>';
+          else
+            $sidebar .=  $prefix.'&amp;m=prognoz"> &nbsp; прогнозы</a>';
+          $sidebar .= '
+                            </div>
+                        </li>';
+        }
+        $sidebar .= '
+                    </ul>
+                </li>';
+      }
+
+    if (is_file($season_dir.'cham.inc'))
+      $sidebar .= '
+                <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=cham">Турнирная таблица</a></li>';
+
+    if (is_file($season_dir.'gold.inc'))
+      $sidebar .= '
+                <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=gold">Золотая бутса</a></li>';
+
+    if (is_file($season_dir.'cup.inc'))
+      $sidebar .= '
+                <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=cup">Сетка кубка</a></li>';
+
+    if (is_file($season_dir.'cal'))
+      $sidebar .= '
+                <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=cal">Календарь</a></li>';
+
+    if (is_file($season_dir.'gen'))
+      $sidebar .= '
+                <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=gen">Генераторы</a></li>';
+
+    if (is_file($season_dir.'bombers'))
+      $sidebar .= '
+                <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=club">Команды</a></li>';
+
+    if (is_file($season_dir.'codes.tsv'))
+      $sidebar .= '
+                <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=player">Игроки</a></li>';
+
+  }
+  $sidebar .= '
+                <li><a href="?a='.$a.'&amp;m=hq">Президиум</a></li>
+                <li><a href="?a='.$a.'&amp;m=hof">ЗАЛ СЛАВЫ</a></li>';
+}
+
+else if ($a == 'switzerland') { // сбор туров сезона Швейцарии
+  $season_dir = $online_dir.$cca.'/'.$s.'/';
+  if (is_dir($season_dir.'programs')) {
+    $ttours = [];
+    $dir = scandir($season_dir.'programs');
+    unset($dir[1], $dir[0]);
+    foreach ($dir as $prog)
+      $ttours[] = substr($prog, 3);
+
+    if (count($ttours)) {
+      rsort($ttours, SORT_NUMERIC);
+      $tname = 'Чемпионат';
+      $sidebar .= '
+                <li class="active">
+                    <a href="#CHESubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">'.$tname.'</a>
+                    <ul class="collapse list-unstyled" id="CHESubmenu">';
+      foreach ($ttours as $to) {
+        $tt = ' ' . ltrim($to, '0');
+        $prefix = '<a href="?a='.$a.'&amp;s='.$s.'&amp;t='.$to;
+        $sidebar .= '
+                        <li>
+                            <div class="tlinks">
+                            '.$prefix.'&amp;m=text&amp;ref=prog">тур&nbsp;<span>'.$tt.'</span></a>:&nbsp;';
+        if (is_file($season_dir . 'publish/it' . $to))
+          $sidebar .= $prefix.'&amp;m=text&amp;ref=itog">итоги,</a>&nbsp;'.$prefix.'&amp;m=text&amp;ref=rev">обзор</a>';
+        else
+          $sidebar .=  $prefix.'&amp;m=prognoz"> &nbsp; прогнозы</a>';
+        $sidebar .= '
+                            </div>
+                        </li>';
+      }
+      $sidebar .= '
+                    </ul>
+                </li>';
+    }
+
+    if (is_file($season_dir.'cham.inc'))
+      $sidebar .= '
+                <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=cham">Турнирная таблица</a></li>';
+
+    if (is_file($season_dir.'gold.inc'))
+      $sidebar .= '
+                <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=gold">Золотая бутса</a></li>';
+
+    if (is_file($season_dir.'cal'))
+      $sidebar .= '
+                <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=cal">Календарь</a></li>';
+
+    if (is_file($season_dir.'gen'))
+      $sidebar .= '
+                <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=gen">Генераторы</a></li>';
+
+    if (is_file($season_dir.'bombers'))
+      $sidebar .= '
+                <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=club">Команды</a></li>';
+
+    if (is_file($season_dir.'codes.tsv'))
+      $sidebar .= '
+                <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=player">Игроки</a></li>';
+
+  }
+  $sidebar .= '
+                <li><a href="?a='.$a.'&amp;m=hq">Президиум</a></li>
+                <li><a href="?a='.$a.'&amp;m=hof">ЗАЛ СЛАВЫ</a></li>';
+}
+
+else if ($a == 'uefa') { // сбор туров сезона для еврокубков
+  $leagues = ['GOLDL' => 'Золотая Лига', 'CHAML' => 'Лига Чемпионов', 'CUPSL' => 'Кубковая Лига', 'UEFAL' => 'Лига Европы'];
+  $tournaments = ['GOLDL' => [], 'CHAML' => [], 'CUPSL' => [], 'UEFAL' => []];
+  $season_dir = $online_dir.$cca.'/'.$s.'/';
+  if (is_dir($season_dir.'programms')) {
+    $dir = scandir($season_dir.'programms');
+    unset($dir[1], $dir[0]);
+    foreach ($dir as $prog) {
+      $tour = substr($prog, 5);
+      $tournaments[substr($prog, 0, 5)][] = $tour;
+    }
+    foreach ($tournaments as $league => $ttours)
+      if (count($ttours)) {
+        rsort($ttours, SORT_NUMERIC);
+        $tname = $leagues[$league];
+        $sidebar .= '
+                <li class="active">
+                    <a href="#'.$league.'Submenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">'.$tname.'</a>
+                    <ul class="collapse list-unstyled" id="'.$league.'Submenu">';
+        foreach ($ttours as $to) {
+          $tt = ltrim(strtr($to, ['NEW' => '']), '0');
+          if ($tt < 10) $tt = ' ' . $tt;
+          $prefix = '<a href="?a='.$a.'&amp;s='.$s.'&amp;l='.$league.'&amp;t='.$to;
+          $sidebar .= '
+                        <li>
+                            <div class="tlinks">
+                            '.$prefix.'&amp;m=text&amp;ref=prog">тур&nbsp;<span>'.$tt.'</span></a>:&nbsp;';
+          if (is_file($season_dir . 'publish/' . $league . '/itc' . $to))
+            $sidebar .= $prefix.'&amp;m=text&amp;ref=itog">итоги,</a>&nbsp;'.$prefix.'&amp;m=text&amp;ref=rev">обзор</a>';
+          else
+            $sidebar .=  $prefix.'&amp;m=prognoz"> &nbsp; прогнозы</a>';
+          $sidebar .= '
+                            </div>
+                        </li>';
+        }
+        $sidebar .= '
+                    </ul>
+                </li>';
+      }
+
+    if (is_file($season_dir.'bombers'))
+      $sidebar .= '
+                <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=club">Команды</a></li>';
+
+    if (is_file($season_dir.'codes.tsv'))
+      $sidebar .= '
+                <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=player">Игроки</a></li>';
+
+  }
+  $sidebar .= '
+                <li><a href="?a='.$a.'&amp;m=hof">ЗАЛ СЛАВЫ</a></li>';
+}
+
+else if ($a == 'sfp-team') { // сбор туров сезона для SFP
+  $leagues = [
+'PRO' => 'ProfiOpen',
+'FFP' => 'Фестиваль ФП',
+'PRE' => 'PREDвидение',
+'TOR' => 'Лига КСП «Торпедо»',
+'VOO' => 'Спартакиада',
+'SPR' => 'Спартакиада',
+'FWD' => 'Эксперт-Лига'
+];
+  $tournaments = ['PRO' => [], 'FFP' => [], 'PRE' => [], 'TOR' => [], 'SPR' => [], 'FWD' => []];
+  $season_dir = $online_dir.$cca.'/'.$s.'/';
+  foreach ($leagues as $league => $tname)
+    if (is_dir($season_dir.$league)) {
+      $sidebar .= '
+                <li class="active">
+                    <a href="#'.$league.'Submenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">'.$tname.'</a>
+                    <ul class="collapse list-unstyled" id="'.$league.'Submenu">';
+      $dir = scandir($season_dir.$league, 1);
+      foreach ($dir as $tt)
+        if (!in_array($tt[0], ['.', 'n'])) {
+          $to = $tt;
+          $prefix = '<a href="?a='.$a.'&amp;s='.$s.'&amp;l='.$league.'&amp;t='.$to;
+          $sidebar .= '
+                        <li>
+                            <div class="tlinks">
+                            '.$prefix.'&amp;m=text&amp;ref=prog">тур&nbsp;<span>'.$tt.'</span></a>:&nbsp;';
+          if (is_file($season_dir . 'publish/' . $league . '/it' . $to))
+            $sidebar .= $prefix.'&amp;m=text&amp;ref=itog">итоги</a>';
+          else
+            $sidebar .=  $prefix.'&amp;m=prognoz">прогнозы</a>';
+          $sidebar .= '
+                            </div>
+                        </li>';
+        }
+
+      $sidebar .= '
+                    </ul>
+                </li>';
+    }
+
+  if (is_file($season_dir.'codes.tsv'))
+    $sidebar .= '
+                <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=player">Состав команды</a></li>';
+
+}
+
+else if ($a == 'world' || $a == 'sfp-20') { // сбор туров Мировой Лиги и Лиги Наций + юбилейный турнир
+  $tnames = ['ULN' => 'Лига Наций', 'WL' => 'Мировая Лига', 'IST' => 'Турнир SFP-20!'];
+  foreach ($tnames as $code => $tname) {
+    $season_dir = $online_dir.$code.'/'.$s.'/';
+    $aa = $code == 'IST' ? 'sfp-20' : 'world';
+    if (is_dir($season_dir.'programs')) { // хоть здесь каталог без ошибки назван :)
+      $sidebar .= '
+                <li class="active">
+                    <a href="#'.$code.'Submenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">'.$tname.'</a>
+                    <ul class="collapse list-unstyled" id="'.$code.'Submenu">';
+      $dir = scandir($season_dir.'programs', 1);
+      foreach ($dir as $prog)
+        if ($prog[0] != '.') {
+          $tt = substr($prog, 3);
+          $to = $tt;
+          $prefix = '<a href="?a='.$aa.'&amp;s='.$s.'&amp;t='.$to;
+          $sidebar .= '
+                        <li>
+                            <div class="tlinks">
+                            '.$prefix.'&amp;m=text&amp;ref=prog">тур&nbsp;<span>'.$tt.'</span></a>:&nbsp;';
+          if (is_file($season_dir . 'publish/it' . $to))
+            $sidebar .= $prefix.'&amp;m=text&amp;ref=itog">итоги,</a>&nbsp;'.$prefix.'&amp;m=text&amp;ref=rev">обзор</a>';
+          else
+            $sidebar .=  $prefix.'&amp;m=prognoz"> &nbsp; прогнозы</a>';
+          $sidebar .= '
+                            </div>
+                        </li>';
+        }
+
+      $sidebar .= '
+                    </ul>
+                </li>';
+      if (is_file($season_dir.'publish/table.cal'))
+        $sidebar .= '
+                <li><a href="?a='.$aa.'&amp;s='.$s.'&amp;m=table">Турнирная таблица</a></li>';
+
+      if (is_file($season_dir.'cal'))
+        $sidebar .= '
+                <li><a href="?a='.$aa.'&amp;s='.$s.'&amp;m=cal">Календарь</a></li>';
+
+      if (is_file($season_dir.'gen'))
+        $sidebar .= '
+                <li><a href="?a='.$aa.'&amp;s='.$s.'&amp;m=gen">Генераторы</a></li>';
+
+      if (is_file($season_dir.'codes.tsv'))
+        $sidebar .= '
+                <li><a href="?a='.$aa.'&amp;s='.$s.'&amp;m=player">Игроки</a></li>';
+
+    }
+  }
+  $sidebar .= '
+                <li><a href="?a='.$a.'&amp;m=coach">Тренерская</a></li>
+                <li><a href="?a='.$a.'&amp;m=hq">Президиум</a></li>
+                <li><a href="?a='.$a.'&amp;m=hof">ЗАЛ СЛАВЫ</a></li>';
+}
+
+else if ($a == 'fifa')
+  $sidebar .= '
+                <li><a href="?m=news">Новости</a></li>
+                <li><a href="?m=reglament">Регламент</a></li>
+                <li><a href="?m=history">История SFP</a></li>
+                <li><a href="?m=help">Инструкция</a></li>
+                <li><a href="?m=help-hq">Организатору</a></li>
+                <li><a href="?m=konkurs">Конкурсы</a></li>
+                <li><a href="?m=vacancy">Вакансии</a></li>
+                <li><a href="?m=quota">Квоты игроков</a></li>
+                <li><a href="http://forum.fprognoz.org" target="forum">Форум</a></li>
+                <li><a href="?m=real">Веб-сайты</a></li>
+                <li><a href="?m=video">Видеотрансляции</a></li>
+                <li><a href="?m=live&amp;ls='.$fprognozls.'">Результаты</a></li>
+                <li><a href="?m=hof">ЗАЛ СЛАВЫ</a></li>';
+
+
+///////// /SIDEBAR
+
+
 session_start();
 if (isset($token)) { // вход по ссылке
   $data = json_decode(trim(mcrypt_decrypt( MCRYPT_BLOWFISH, $key, base64_decode($token), MCRYPT_MODE_CBC, $iv )), true);
@@ -823,7 +1186,7 @@ if (isset($token)) { // вход по ссылке
 не действительна';
 
 }
-if (isset($_POST['logout'])) {
+if (isset($_GET['logout'])) {
   $role = 'badlogin';
   session_unset();
   session_destroy();
@@ -987,163 +1350,392 @@ if (isset($matches) || isset($updates) || isset($mtscores)) {
 }
 else {
 ?>
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
+
 <head>
-  <meta charset="utf-8">
-  <title><?=$title?></title>
-  <meta name="description" content="SFP">
-  <meta name="author" content="Alexander Sessa">
-  <link href="css/main.css" rel="stylesheet">
-  <link href="css/popup.css" rel="stylesheet">
-  <link href="css/fa/css/font-awesome.min.css" rel="stylesheet">
-  <link href="js/croppic/croppic.css" rel="stylesheet">
-  <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-  ga('create', 'UA-92920347-1', 'auto');
-  ga('send', 'pageview');
-  </script>
-  <!--[if lt IE 9]>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
-  <![endif]-->
-  <script src='/js/jquery/jquery-3.2.1.min.js'></script>
-  <script src='/js/jquery/jquery.color.js'></script>
-  <script src='/js/socket.io/socket.io.slim.js'></script>
-<script>
-$.browser = {};
-$.browser.mozilla = /mozilla/.test(navigator.userAgent.toLowerCase()) && !/webkit/.test(navigator.userAgent.toLowerCase());
-$.browser.webkit = /webkit/.test(navigator.userAgent.toLowerCase());
-$.browser.opera = /opera/.test(navigator.userAgent.toLowerCase());
-$.browser.msie = /msie/.test(navigator.userAgent.toLowerCase());
-$(document).ready(function(){
-  $("a[name=modal]").click(function(e){e.preventDefault();$('.overlay').fadeTo("fast",0.65);$("#mwin").addClass("popup-show")});
-  $(".popup .close,.overlay").click(function(e){e.preventDefault();$(".overlay").hide();$("#mwin").removeClass("popup-show")});
-});
-</script>
-</head>
-<body>
-<div class="overlay"></div>
-<center>
-<table cellspacing="0" cellpadding="0" border="0" width="<?=1216?>px">
+    <title><?=$title?></title>
 
-<tr style="height: 110px;">
-  <td width="140px" class="head">
-    <a href="/" class="side"><img src="/images/sfp-100.png" alt="Main Page" /></a>
-  </td>
-  <td width="936px" class="head">
-    <a href="/?a=<?=$a?>" class="head"><br />
-    &nbsp;<?=$description?></a>
-    <?php if ($role == 'president' || $role == 'pressa') include script_from_cache("$a/$role.inc.php");?>
-  </td>
-  <td width="140px" class="head">
-    <a href="/?a=uefa"><img src="/images/uefa.gif" alt="UEFA" /></a>
-    <a href="/?a=ukraine"><img src="/images/ukraine.gif" alt="UKR" /></a>
-    <a href="/?a=russia"><img src="/images/russia.gif" alt="RUS" /></a>
-    <a href="/?a=belarus"><img src="/images/belarus.gif" alt="BLR" /></a>
-    <br />
-    <a href="/?a=england"><img src="/images/england.gif" alt="ENG" /></a>
-    <a href="/?a=germany"><img src="/images/germany.gif" alt="GER" /></a>
-    <a href="/?a=spain"><img src="/images/spain.gif" alt="ESP" /></a>
-    <a href="/?a=italy"><img src="/images/italy.gif" alt="ITA" /></a>
-    <br />
-    <a href="/?a=netherlands"><img src="/images/netherlands.gif" alt="NLD" /></a>
-    <a href="/?a=portugal"><img src="/images/portugal.gif" alt="PRT" /></a>
-    <a href="/?a=france"><img src="/images/france.gif" alt="FRA" /></a>
-    <a href="/?a=scotland"><img src="/images/scotland.gif" alt="SCO" /></a>
-    <br />
-    <a href="/?a=turkey"><img src="/images/turkey.gif" alt="TUR" /></a>
-    <a href="/?a=austria"><img src="/images/austria.gif" alt="AUT" /></a>
-    <a href="/?a=belgium"><img src="/images/belgium.gif" alt="BEL" /></a>
-    <a href="/?a=greece"><img src="/images/greece.gif" alt="GRC" /></a>
-    <br />
-    <a href="/?a=finland"><img src="/images/finland.gif" alt="FIN" /></a>
-    <a href="/?a=world"><img src="/images/fifa23x15.png" alt="WORLD" /></a>
-    <a href="/?a=sfp-team"><img src="/images/sfp23x15.png" alt="SFP" /></a>
-    <a href="/?a=friendly"><img src="/images/fcl23x15.png" alt="FCL" /></a>
-    <br />
-  </td>
-</tr>
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link href="css/fp.css?ver=90" rel="stylesheet">
+    <link href="js/croppic/croppic.css" rel="stylesheet">
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-<tr>
-  <td align="center" height="100%" class="side">
-    &nbsp;<?php include script_from_cache("$a/left.inc.php");?>
-  </td>
-  <td align="left" class="main">
-    <?php include script_from_cache("$a/$m.inc.php");?>
-    <?php if ($gb_status == 'on') include 'comments/main.php';?>
+        ga('create', 'UA-92920347-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+    <!--[if lt IE 9]>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Font Awesome JS -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT" crossorigin="anonymous"></script>
+    <!-- Popper.JS UMD ver. -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    <script src="/js/jquery/jquery.color.js"></script>
+    <script src="/js/socket.io/socket.io.slim.js"></script>
+    <script type="text/javascript">
+        $.browser={};
+        $.browser.mozilla=/mozilla/.test(navigator.userAgent.toLowerCase())&&!/webkit/.test(navigator.userAgent.toLowerCase());
+        $.browser.webkit=/webkit/.test(navigator.userAgent.toLowerCase());
+        $.browser.opera=/opera/.test(navigator.userAgent.toLowerCase());
+        $.browser.msie=/msie/.test(navigator.userAgent.toLowerCase());
+        function validateEmail(email){var re=/\S+@\S+\.\S+/;return re.test(email)}
+        var fg=0
+        function passwordCheck(str){
+            $.post("/online/ajax.php",{
+                data:$("#pass_str").data("tpl"),
+                nick:$("#name_str").val(),
+                pswd:str
+            },
+            function(r){
+                if(r=='0'){
+                    $("#valid_name").html('<span style="color:lightsalmon"><i class="fas fa-times" /> неверный пароль</span>');fg=setTimeout(function(){$("#forget").show()},17000)
+                }
+                else if(r=='1'){
+                    $("#valid_name").html('<span style="color:lightgreen"><i class="fas fa-check" /> добро пожаловать!</span>');$("#l_form").submit()
+                }
+                else if(r=='2'){
+                    $("#valid_name").html('<span style="color:lightgreen"><i class="fas fa-check" /> пароль выслан</span>')
+                }
+            })
+        }
+        function emailCheck(str){
+            $.post("/online/ajax.php",{
+                data:$("#name_str").data("tpl"),
+                nick:str,
+                email:str
+            },
+            function(r){
+                if(r=='0')
+                    $("#valid_name").html('<span style="color:lightsalmon"><i class="fas fa-times" /> такой e-mail не найден</span>')
+                else {
+                    str=$("#pass_str").val()
+                    if (str.length)
+                        passwordCheck(str)
+                    else
+                        $("#valid_name").html('<span style="color:lightblue;cursor:pointer" onClick="tokenSend(); return false" title="Вам будет выслана ссылка для входа"><i class="fas fa-check" /> войти без пароля?</span>')
+                }
+            })
+        }
+        function nicknameCheck(str){
+            $.post("/online/ajax.php",{
+                data:$("#name_str").data("tpl"),
+                nick:str,
+                email:""
+            },function(r){
+                if(r=='0')
+                    $("#valid_name").html('<span style="color:lightsalmon"><i class="fas fa-times" /> имя/e-mail не найдены</span>');
+                else{
+                    str=$("#pass_str").val()
+                    if (str.length)
+                        passwordCheck(str)
+                    else
+                        $("#valid_name").html('<span style="color:lightgreen"><i class="fas fa-check" /> теперь введите пароль</span>');
+                }
+            })
+        }
+        function tokenSend(){
+            $.post("/online/ajax.php",{
+                data:$("#l_form").data("tpl"),
+                nick:$("#name_str").val()
+            },function(r){
+                if(r==1)
+                    $("#valid_name").html('<span style="color:lightgreen"><i class="fas fa-check" /> проверьте вашу почту</span>')
+                else
+                    $("#valid_name").html('<span style="color:lightsalmon"><i class="fas fa-times" /> не удалось отправить</span>')
+            })
+        }
+        function newPassword(){
+            return true;
+        }
+        $(document).ready(function(){
 <?php
-include ('fifa/register.inc.php');
+  if (isset($_GET['logout']))
+    echo '            history.pushState(null, "'.$title.'", "'.$this_site.'")
+';
 ?>
-  </td>
-  <td valign="top" class="side">
-    <br /><br />
-    <?php include script_from_cache("$a/menu.inc.php");?>
-    <br />
-    <form method="post" action="">
-<?php if (!isset($_SESSION['Coach_name']) || $role == 'badlogin') {?>
-    <p>&nbsp;имя, e-mail или код:<br /><input type="text" name="name_str" size="12" /></p>
-    <p>&nbsp;пароль:<br /><input type="password" name="pass_str" size="12" /></p>
-    <br />
-    <p><input type="submit" name="login" value="Вход" /></p>
-    <br />
-<?php if ($notification) echo "<p>$notification</p>"; else {?>
-    <p class="text11">У Вас нет пароля?<br />
+            $('#sidebarCollapse').on('click',function(){
+                $('#sidebar').toggleClass('active');
+                $('#sidebar').toggleClass('collapsed');
+                $(this).toggleClass('active');
+                $(this).toggleClass('collapsed');
+                //$('#navbarFlag').toggle();
+            });
+            $('#rightbarCollapse').on('click',function(){
+                $('#rightbar').toggleClass('active');
+                $(this).toggleClass('active');
+                if($('#rightbarIconUser').is(':hidden')){
+                    $('#rightbarIconUser').show();
+                    $('#rightbarIconUserX').hide();
+                }
+                else if($('#rightbarIconUserX').is(':hidden')){
+                    $('#rightbarIconUser').hide();
+                    $('#rightbarIconUserX').show();
+                }
+            });
+            $("a[name=modal]").click(function(e){e.preventDefault();$('.overlay').fadeTo("fast",0.65);$("#mwin").addClass("popup-show")});
+            $(".popup .close,.overlay").click(function(e){e.preventDefault();$(".overlay").hide();$("#mwin").removeClass("popup-show")});
+            $("#name_str").blur(function(){
+                if(!$("#name_str").is(":hover")){
+                    str=$(this).val()
+                    if(str.length<2)
+                        $("#valid_name").html('<span style="color:pink"><i class="fas fa-times"></i> введите хотя бы 2 буквы</span>')
+                    else if(validateEmail(str))
+                        emailCheck(str)
+                    else
+                        nicknameCheck(str)
+                }
+            })
+            $("#pass_str").keyup(function(){
+                if($("#pass_str").is(":focus")){
+                    clearTimeout(fg)
+                    str=$(this).val()
+                    if (str.length)
+                        passwordCheck(str)
+                    else{
+                        str=$("#name_str").val()
+                        if(validateEmail(str))
+                            emailCheck(str)
+                        else
+                            $("#valid_name").html('<span style="color:lightgreen"><i class="fas fa-check" /> теперь введите пароль</span>')
+                    }
+                }
+            })
+        });
+    </script>
+</head>
+
+<body>
+
+    <div class="wrapper">
+        <!-- Sidebar Holder -->
+        <nav id="sidebar"<?=($sidebar_show ? ' class="active"' : '')?>>
+            <div class="sidebar-header">
+                <a href="/"><h5>SFP - симпатичный футбол-прогноз</h5></a>
+            </div>
+
+            <ul class="list-unstyled components">
+                <li class="active">
+                    <a href="#assocSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><img src="images/63x42/<?=($a == 'sfp-20' ? 'world' : $a)?>.png" class="flag" /><?=($a == 'sfp-20' ? 'Лига Наций' : $fa[$a])?></a>
+                    <ul class="collapse list-unstyled" id="assocSubmenu">
+<?php
+foreach ($fa as $ae => $ar)
+  echo '
+                        <li>
+                            <a href="?a='.$ae.'"><img src="images/63x42/'.$ae.'.png" class="flag" />'.$ar.'</a>
+                        </li>
+';
+?>
+                    </ul>
+                </li>
+                <li class="active">
+                    <a href="#seasonSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Сезон <?=$s?></a>
+                    <ul class="collapse list-unstyled" id="seasonSubmenu">
+<?php
+foreach ($seasons as $ss)
+  echo '
+                        <li>
+                            <a href="?a='.$a.'&s='.$ss.'">'.$ss.'</a>
+                        </li>
+';
+?>
+                    </ul>
+                </li>
+<?=$sidebar?>
+            </ul>
+        </nav>
+
+        <!-- Page Content Holder -->
+        <div id="content">
+            <header class="header">
+                <h3><?=$description?></h3>
+            </header>
+            <nav class="navbar navbar-expand-lg navbar-lignt bg-light">
+                <div class="container-fluid">
+                    <button type="button" id="sidebarCollapse" class="navbar-btn<?=($sidebar_show ? ' active' : '')?>">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                    <button type="button" id="rightbarCollapse" class="navbar-btn">
+                        <div id="rightbarIconUser"><i class="fas fa-user"></i></div>
+                        <div id="rightbarIconUserX"><i class="fas fa-user-times"></i></div>
+                    </button>
+                    <button type="button" id="navbarFlag" class="navbar-flag" style="background: url(images/63x42/<?=$a?>.png) no-repeat; background-size: 100%; display:none" onClick="location.href='?a=<?=$a?>'">
+                    </button>
+                    <button class="btn btn-light d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarMyTours" aria-controls="navbarMyTours" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fas fa-align-justify"></i>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarMyTours">
+                        <ul class="nav navbar-nav ml-auto">
+<?php
+  if (isset($_SESSION['Coach_name'])) {
+    if (!is_file($data_dir . 'personal/'.$_SESSION['Coach_name'].'/navbar.inc'))
+      build_personal_nav();
+
+    include($data_dir . 'personal/'.$_SESSION['Coach_name'].'/navbar.inc');
+  }
+  echo '
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="main">';
+  include ($a . '/' . $m . '.inc.php');
+  if ($gb_status == 'on')
+    include 'comments/main.php';
+
+  include ('fifa/register.inc.php'); // регистрация в сборных ассоциаций
+  echo '
+            </div>
+        </div>
+        <nav id="rightbar">
+            <div class="rightbar-header">';
+  if (!isset($_SESSION['Coach_name']) || $role == 'badlogin') {
+    $data_cfg = ['cmd' => 'unique_check'];
+    $ncfg = base64_encode(mcrypt_encrypt( MCRYPT_BLOWFISH, $key, json_encode($data_cfg), MCRYPT_MODE_CBC, $iv ));
+    $data_cfg = ['cmd' => 'password_check'];
+    $pcfg = base64_encode(mcrypt_encrypt( MCRYPT_BLOWFISH, $key, json_encode($data_cfg), MCRYPT_MODE_CBC, $iv ));
+    $data_cfg = ['cmd' => 'send_token'];
+    $tcfg = base64_encode(mcrypt_encrypt( MCRYPT_BLOWFISH, $key, json_encode($data_cfg), MCRYPT_MODE_CBC, $iv ));
+    echo '
+                <form id="l_form" method="POST" data-tpl="'.$tcfg.'">
+                    <p><input type="text" id="name_str" name="name_str" data-tpl="'.$ncfg.'" placeholder="имя, e-mail или код" /></p>
+                    <p><input type="password" id="pass_str" name="pass_str" data-tpl="'.$pcfg.'" placeholder="пароль"/></p>
+                    <p id="valid_name"><input type="submit" name="login" value="Вход" /></p>
+                </form>';
+    if ($notification)
+      echo '
+                <h6>' . $notification . '</h6>';
+    else
+      echo '
+                <h0>
+У Вас нет пароля?<br />
 Укажите полное имя,<br />
 а в поле пароля -<br />
 код вашей команды.<br />
 После нажатия кнопки<br />
 "Вход" пароль будет<br />
-выслан на ваш емейл</p>
-<?php }
-    } else {?>
-    <p>Добро пожаловать,<br /><span style="color: lightgreen;"><b><?=$_SESSION['Coach_name']?></b></span></p>
-    <br />
-    <p>Ваши команды/туры:</p>
-    <p>
+выслан на ваш емейл
+                </h0>';
+
+  }
+  else {
+    echo '
+                <h5>Добро пожаловать,
+                <span style="color: lightgreen;"><b>' . $_SESSION['Coach_name'] . '</b></span> !</h5>
+            </div>
+
+            <ul class="list-unstyled components">
+                <li class="active">
+                    <a href="#cmdSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Ваши команды</a>
+                    <ul class="collapse list-unstyled" id="cmdSubmenu">';
+    foreach ($cmd_db as $cc => $cc_data)
+      foreach ($cc_data as $code => $team)
+        if ($team['usr'] == $_SESSION['Coach_name'])
+          echo '
+                <li><a href="?a=' . strtolower($ccn[$cc]) . '">' . ($cc == 'SFP' ? 'Сборная сайта' : $team['cmd']) . ' (' . $cc . ')</a></li>
+';
+?>
+                    </ul>
+                </li>
+                <li class="active">
+                    <a class="dropdown-item" href="#" onClick="document.getElementById('gb_toggle').submit(); return false;">Показ фан-зоны &nbsp; <img src="images/<?=$gb_status?>.gif" border = "0" alt="<?=$gb_status?>" /></a>
+<form id="gb_toggle" method="post"><input type="hidden" name="toggle_gb" value="" /></form>
+                    <a class="dropdown-item" id="change_pass" href="?m=pass"<?=(isset($data['ts']) ? ' data-ts="'.$data['ts'].'" onClick="newPassword()"' : (isset($_POST['pass_str']) ? ' data-ts="'.time().'" onClick="newPassword()"' : ''))?>>Смена пароля</a>
+                    <a class="dropdown-item" href="?logout=1">Выход</a>
+                    <p></p>
+                </li>
 <?php
-  if (isset($_SESSION['Coach_name'])) {
-    if (!is_file($data_dir . 'personal/'.$_SESSION['Coach_name'].'/nav.inc'))
-      build_personal_nav();
+      if ($role == 'president') { ?>
+                <li><a href="/online/makeprogramm.php?cc=<?=$cca?>" target="MakeProgram">Создать новый тур</a></li>
+                <li class="active">
+                    <a href="#mailSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Рассылка</a>
+                    <ul class="collapse list-unstyled" id="mailSubmenu">
+                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;m=email";">Выбранным игрокам</a></li>
+                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;m=maillist">Пресс-релиз</a></li>
+                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;t=<?=$t?>&amp;m=maillist&amp;file=program">Программка</a></li>
+                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;t=<?=$t?>&amp;m=maillist&amp;file=prognoz">Прогнозы</a></li>
+                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;t=<?=$t?>&amp;m=maillist&amp;file=itogi">Итоги</a></li>
+                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;t=<?=$t?>&amp;m=maillist&amp;file=review">Обзор</a></li>
+                    </ul>
+                </li>
+                <li class="active">
+                    <a href="#editSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Редактирование</a>
+                    <ul class="collapse list-unstyled" id="editSubmenu">
+                        <li><a href="?a=<?=$a?>&amp;m=files&amp;file=settings">Основные настройки</a></li>
+                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;m=editnews">Новости</a></li>
+                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;m=codestsv">Игроки</a></li>
+                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;m=files&amp;file=calchm">Календарь</a></li>
+                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;m=files&amp;file=genchm">Генераторы</a></li>
+                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;m=files&amp;file=calcup">Календарь кубка</a></li>
+                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;m=files&amp;file=gencup">Генераторы кубка</a></li>
+                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;m=files&amp;file=bombers">Бомбардиры</a></li>
+                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;t=<?=$t?>&amp;m=files&amp;file=program">Программка тура</a></li>
+                    </ul>
+                </li>
+                <li class="active">
+                    <a href="#tplSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Макеты</a>
+                    <ul class="collapse list-unstyled" id="tplSubmenu">
+                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;m=files&amp;file=tplpchm">Программка</a></li>
+                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;m=files&amp;file=tplpcup">Программка кубка</a></li>
+                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;m=files&amp;file=tplichm">Итоги тура</a></li>
+                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;m=files&amp;file=tplicup">Итоги плей-офф тура</a></li>
+                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;m=files&amp;file=tplrev">Шапка обзора</a></li>
+                    </ul>
+                </li>
+<?php
+      }
+      else if ($role == 'pressa') {
+?>
+                <li class="active">
+                    <a href="#mailSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Рассылка</a>
+                    <ul class="collapse list-unstyled" id="mailSubmenu">
+                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;m=email";">Выбранным игрокам</a></li>
+                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;m=maillist">Пресс-релиз</a></li>
+                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;t=<?=$t?>&amp;m=maillist&amp;file=review">Обзор</a></li>
+                    </ul>
+                </li>
+<?php
+      }
+?>
+            </ul>
+<?php
+    }
+?>
+        </nav>
+    </div>
 
-    include script_from_cache($data_dir . 'personal/'.$_SESSION['Coach_name'].'/nav.inc');
-  }?>
-    </p>
-    <br />
-    <br />
-    <p>&nbsp;&nbsp;<a href="/?m=pass">Сменить пароль</a></p>
-    <br />
-    <p><input type="submit" name="logout" value="Выход" /></p>
-<?php } ?>
-    <br />
-    </form>
-  </td>
-</tr>
-
-<tr style="height: 110px;">
-  <td class="foot">
-    <img src="<?=$left_image?>" height="100" alt="" />
-  </td>
-  <td class="foot">
-<img src="/images/sfp-88x31.png" width="88" height="31" alt="SFP Button" title="SFP Button" />
-<a href="http://www.livescore.in/" title="Livescore.in" target="_blank"><img src="https://advert.livescore.in/livescore_in_88x31a.gif" width="88" height="31" border="0" alt="LIVESCORE.in" /></a>
-<a href="http://profi-prognoza.ru/" target="_blank"><img src="images/bannerprofi.gif" border="0" width="88" height="31" alt="Сайт cпортивного прогнозирования \"Профессионалы прогноза\"" /></a>
-<a href="http://primegang.ru/" target="_blank"><img src="images/primegang.gif" border="0" width="88" height="31" alt="Клуб футбольных прогнозистов PrimeGang" /></a>
-<?php if (false && $is_redis) echo '<img src="https://redis.io/images/redis-small.png" border="0" alt="Redis" title="Powered by Redis" />'; ?>
-    <br /><br />
-    Site Design: Alexander Sessa, Serge Vasiliev. Elapsed time <?=round(microtime(true) - $time_start, 3)?> sec
-  </td>
-  <td class="foot">
-    <img src="<?=$rght_image?>" height="100" alt="" />
-  </td>
-</tr>
-
-</table>
-</center><form id="gb_toggle" method="post"><input type="hidden" name="toggle_gb" value="" /></form>
+    <footer class="footer">
+        <p>
+            <img src="/images/sfp-88x31.png" width="88" height="31" alt="SFP Button" title="SFP Button" />
+            <a href="http://www.livescore.in/" title="Livescore.in" target="_blank"><img src="https://advert.livescore.in/livescore_in_88x31a.gif" width="88" height="31" border="0" alt="LIVESCORE.in" /></a>
+            <a href="http://profi-prognoza.ru/" target="_blank"><img src="images/bannerprofi.gif" border="0" width="88" height="31" alt="Сайт cпортивного прогнозирования \"Профессионалы прогноза\"" /></a>
+            <a href="http://primegang.ru/" target="_blank"><img src="images/primegang.gif" border="0" width="88" height="31" alt="Клуб футбольных прогнозистов PrimeGang" /></a>
+            <?=(false && $is_redis ? '<img src="https://redis.io/images/redis-small.png" border="0" alt="Redis" title="Powered by Redis" />':'')?>
+        </p>
+        <p>
+            Design and code: Alexander Sessa. Elapsed time <?=round(microtime(true) - $time_start, 3)?> sec
+        </p>
+    </footer>
 </body>
+
 </html>
 <?php
 }

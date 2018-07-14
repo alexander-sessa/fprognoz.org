@@ -887,9 +887,6 @@ if (true) {
             else
               $unfinished = true;
 
-            if ($status == 'HT')
-              $unfinished = true;
-
             if (is_numeric($status)) {
               $unfinished = true;
               if ($status >= '85')
@@ -898,6 +895,9 @@ if (true) {
             }
           }
           $progsched .= $home . ',' . $away . ',' . $status . "\n";
+          if ($status == '' || $status == 'HT')
+              $unfinished = true;
+
           if ($status && $status != 'POS' && $status != 'CAN') {
             $s++;                                   // сыгранные и играющиеся матчи
             if ($m < 10)

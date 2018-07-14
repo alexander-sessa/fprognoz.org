@@ -219,12 +219,12 @@ if (!$closed && sizeof($teamCodes)) {
   else {
     $head .= '<select name="team_code">';
     foreach ($teamCodes as $tc) {
-      $head .= '<option';
+      $head .= '<option value="'.$tc.'"';
       $selected = '';
       (isset($c) && $c == $tc) ? $selected = ' selected="selected"' : $c = $tc;
       $head .= $selected.'>'.$tc.'</option>';
     }
-    $head .= '<option>один прогноз всем</option></select><br />';
+    $head .= '<option value="один прогноз всем">один прогноз всем</option></select><br />';
   }
   $head .= 'прогноз на тур: <input type="text" id="prognoz_str" name="prognoz_str" value="" size="50" />
 <input type="hidden" name="enemy_str" value="" />

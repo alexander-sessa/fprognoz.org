@@ -7,14 +7,14 @@
     шотландской Премьер-лиги.<br />
     <br />
     <br />
-    Чемпион Премьершипа - <b>Dundee United, Vitya Baranovsky</b><br />
+    Чемпион Премьершипа и Победитель Золотой Лиги - <b>Kilmarnock, Владислав Ежергин</b><br />
     <br />
-    Обладатель Золотой бутсы - <b>Vladislav Yezhergin, Kilmarnock</b><br />
+    Обладатель Золотой бутсы - <b>Глеб Арсатов, Ayr United</b><br />
     <br />
-    Обладатель Кубка Шотландии - <b>Hibernian, Alexander Sessa</b><br />
+    Обладатель Кубка Шотландии - <b>Saint Mirren, Иван Щиглинский</b><br />
     <br />
     <br />
-    Лучший игрок всех времен - <b>Eugene Plugin (Rangers)</b> - 14 наград<br />
+    Лучший игрок всех времен - <b>Евгений Плугин (Rangers)</b> - 14 наград<br />
     <br />
-    Лучшая команда всех времен - <b>Rangers (Oleg A Chutchev, Eugene Plugin)</b> - 15 наград
+    Лучшая команда всех времен - <b>Rangers (Олег Чутчев, Евгений Плугин)</b> - 15 наград
 </p>

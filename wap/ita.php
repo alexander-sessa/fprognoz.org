@@ -1,6 +1,6 @@
 <?php
 @header("Content-type: text/vnd.wap.wml");
-$season = '2017-18';
+$season = '2018-19';
 $cc = substr($_SERVER['PHP_SELF'], 0, strpos($_SERVER['PHP_SELF'], '.'));
 $cc = substr($cc, strrpos($cc, '/') + 1);
 $country_code = strtoupper($cc);

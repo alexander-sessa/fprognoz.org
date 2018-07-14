@@ -19,14 +19,14 @@ function toggleEditor(id) {
 	if (isEnabled[id]) {
 		if (eval("CKEDITOR.instances.content"+id) && eval("CKEDITOR.instances.content"+id+".checkDirty()")) reset.style.display = "inline";
 		content.setAttribute("contenteditable", false);
-		toggle.innerHTML = '<i class="fa fa-pencil-square-o" aria-hidden="true"></i> Исправить';
+		toggle.innerHTML = '<i class="fas fa-edit" aria-hidden="true"></i> Исправить';
 		isEnabled[id] = false;
 		if (eval("CKEDITOR.instances.content"+id)) eval("CKEDITOR.instances.content"+id+".destroy()");
 		saveContent(id, content.innerHTML);
 	}
 	else {
 		content.setAttribute("contenteditable", true);
-		toggle.innerHTML = '<i class="fa fa-floppy-o c-save" aria-hidden="true"></i> <span class="c-save">Записать<span>';
+		toggle.innerHTML = '<i class="fas fa-save c-save" aria-hidden="true"></i> <span class="c-save">Записать<span>';
 		isEnabled[id] = true;
 		if (!eval("CKEDITOR.instances.content"+id)) CKEDITOR.inline("content"+id, {startupFocus:true});
 	}
@@ -89,7 +89,7 @@ function c_make_form($prefix, $id, $hidden) {
       <div id="cropContainerModal" class="c-croppic" style="width:96px;height:96px;">';
     (isset($c_user['avatar']) && trim($c_user['avatar']))
       ? $c_form .= '<img src="images/avatars/96/' . $c_user['avatar'] .'" /></div>'
-      : $c_form .= '<i class="fa fa-picture-o" aria-hidden="true"></i> &nbsp;загрузите &nbsp;аватар</div>';
+      : $c_form .= '<i class="fas fa-camera" aria-hidden="true"></i> &nbsp;загрузите &nbsp;аватар</div>';
   }
 
   $c_form .= '
@@ -134,12 +134,12 @@ function c_vote_comment($id) {
           <span class="c-comment-null">Разделяете мнение?</span>
           <span class="c-comment-good">да</span>
           <a onClick="changeRating(' . $id . ',' . ($rate_yes + 1) . ',' . $rate_no . ',1);return false;">
-            <i class="fa fa-thumbs-o-up c-comment-like" aria-hidden="true"></i> 
+            <i class="fas fa-thumbs-up c-comment-like" aria-hidden="true"></i> 
           </a>
           <span id="r_yes' . $id . '" class="c-comment-yes" title="согласен">' . ($rate_yes ? $rate_yes : ' ') . '</span>
           <span class="c-comment-bad">нет</span>
           <a class="material-icons md-18 c-comment-dislike" onClick="changeRating(' . $id  . ',' . $rate_yes . ',' . ($rate_no + 1) . ',0);return false;">
-            <i class="fa fa-thumbs-o-down c-comment-dislike" aria-hidden="true"></i> 
+            <i class="fas fa-thumbs-down c-comment-dislike" aria-hidden="true"></i> 
           </a>
           <span id="r_no' . $id . '" class="c-comment-no" title="не согласен">' . ($rate_no ? $rate_no : ' ') . '</span>
         </span>
@@ -151,15 +151,15 @@ function c_inline_editor($id, $text, $owner) {
   return '
         <script>contentHTML[' . $id . ']="' . strtr($text, $escape_chars) . '";</script>
         &nbsp;
-        <a id="toggle' . $id . '" style="cursor:pointer" onClick="toggleEditor(' . $id . ');"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Исправить</a>
-        <a id="reset' . $id . '" style="display:none;cursor:pointer" onClick="this.style.display=' . "'none'" . ';content' . $id . '.innerHTML=contentHTML[' . $id . '];saveContent(' . $id . ',contentHTML[' . $id . ']);"><i class="fa fa-undo c-undo" aria-hidden="true"></i> <span class="c-undo">Отмена</span></a>';
+        <a id="toggle' . $id . '" style="cursor:pointer" onClick="toggleEditor(' . $id . ');"><i class="fas fa-edit" aria-hidden="true"></i> Исправить</a>
+        <a id="reset' . $id . '" style="display:none;cursor:pointer" onClick="this.style.display=' . "'none'" . ';content' . $id . '.innerHTML=contentHTML[' . $id . '];saveContent(' . $id . ',contentHTML[' . $id . ']);"><i class="fas fa-undo c-undo" aria-hidden="true"></i> <span class="c-undo">Отмена</span></a>';
 }
 
 function c_moderation($id, $status) {
   return '
-        &nbsp; <a style="cursor:pointer" onClick="modComment(' . $id . ', 0, -1);"><i class="fa fa-ban" aria-hidden="true"></i> Скрыть</a>'
+        &nbsp; <a style="cursor:pointer" onClick="modComment(' . $id . ', 0, -1);"><i class="fas fa-ban" aria-hidden="true"></i> Скрыть</a>'
       . ($status == 0 ? '
-        &nbsp; <a id="approve' . $id . '" style="cursor:pointer" onClick="modComment(' . $id . ', 0, 1);"><i class="fa fa-check-square-o" aria-hidden="true"></i> Одобрить</a>' : '');
+        &nbsp; <a id="approve' . $id . '" style="cursor:pointer" onClick="modComment(' . $id . ', 0, 1);"><i class="fas fa-check-square" aria-hidden="true"></i> Одобрить</a>' : '');
 }
 
 function c_out_comments($id, $level, $pid) {
@@ -200,8 +200,8 @@ function c_out_comments($id, $level, $pid) {
 //  if ($role == 'president') $out .= '
 //        <span class="c-comment-id"><a href="/comments/admin.php?comment=' . $id .'">id:' . $id . '</a></span>';
   $out .= '
-        <i onClick="$(\'#share' . $id . '\').toggle();share' . $id . '.select();return false;" class="fa fa-share-alt" aria-hidden="true" style="cursor:pointer;color:#b0b0b0" title="поделиться"> </i>
-        <input type="text" id="share' . $id . '" style="display:none;" value="' . $this_site . '/' . $uri . '#comment-' . $id . '" size="48" />
+        <i onClick="$(\'#share' . $id . '\').toggle();share' . $id . '.select();return false;" class="fas fa-share-alt" aria-hidden="true" style="cursor:pointer;color:#b0b0b0" title="поделиться"> </i>
+        <input type="text" id="share' . $id . '" style="display:none;width:350px;height:15px;font-size:12px;" value="' . $this_site . '/' . $uri . '#comment-' . $id . '" />
       </header>
 
       <main id="content' . $id .'">
@@ -213,8 +213,8 @@ function c_out_comments($id, $level, $pid) {
   if (isset($coach_name)) {                    // кнопки ответа на коммент
 //isEditorEnabled(' . $id . '){CKEDITOR.replace("cke'.$id.'",{height:"80px"})}
     $out .= '
-        <a onClick=\'if(!isEditorEnabled('.$id.'))CKEDITOR.replace("cke'.$id.'",{height:"80px"});$("#comment'.$id.'").toggle()\' style="cursor:pointer"><i class="fa fa-reply" aria-hidden="true"></i> Ответить</a>
-        &nbsp; <a onClick=\'if(!isEditorEnabled('.$id.')){c_quote_ta('.$id.',"");CKEDITOR.replace("cke'.$id.'",{height:"80px"});$("#comment'.$id.'").show()}else{$("#comment'.$id.'").show();c_quote(' . $id . ',"")}\' style="cursor:pointer"><i class="fa fa-quote-right" aria-hidden="true"></i> Цитировать</a>';
+        <a onClick=\'if(!isEditorEnabled('.$id.'))CKEDITOR.replace("cke'.$id.'",{height:"80px"});$("#comment'.$id.'").toggle()\' style="cursor:pointer"><i class="fas fa-reply" aria-hidden="true"></i> Ответить</a>
+        &nbsp; <a onClick=\'if(!isEditorEnabled('.$id.')){c_quote_ta('.$id.',"");CKEDITOR.replace("cke'.$id.'",{height:"80px"});$("#comment'.$id.'").show()}else{$("#comment'.$id.'").show();c_quote(' . $id . ',"")}\' style="cursor:pointer"><i class="fas fa-quote-right" aria-hidden="true"></i> Цитировать</a>';
     if ($role == 'president' || ($coach_name == $c_hash['userid'] && !$redis->exists('comment:' . $id)))
       $out .= c_inline_editor($id, $c_hash['c_text'], $coach_name); // кнопки редактирования коммента
 
@@ -333,7 +333,7 @@ $id = $a . ':' . $s;
 $redis_prefix = 'page';
 echo '<a name="comment"></a>
 <div id="comment" style="background:white;margin-top:10px;padding-top:5px;text-align:center;width:100%">' .
-(isset($coach_name) ? '  <h2>ФАН-ЗОНА. Здесь Вы можете оставить свой комментарий</h2>' : ' <h2>ФАН-ЗОНА. Для полного доступа необходимо авторизоваться на сайте</h2><br />') .
+(isset($coach_name) ? '  <h5>ФАН-ЗОНА. Здесь Вы можете оставить свой комментарий</h5>' : ' <h5>ФАН-ЗОНА. Для полного доступа необходимо авторизоваться на сайте</h5><br />') .
      c_make_form($redis_prefix, $id, false) . '
 </div>';        // prefix, id, hidden - главная форма
 $c_count = 0;                                                      // счетчик комментов для вывода на вкладке

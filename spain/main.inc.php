@@ -5,12 +5,14 @@
     испанских команд.<br />
     <br />
     <br />
-    Чемпион и обладатель Золотой бутсы - <b>Deportivo La Coruna, Kirill Goloschekov</b><br />
+    Чемпион и обладатель Золотой бутсы - <b>Malaga, Виктор Барановский</b><br />
     <br />
-    Обладатель Кубка и Суперкубка Испании, победитель Лиги Чемпионов - <b>Malaga, Vitya Baranovsky</b><br />
+    Обладатель Кубка Испании - <b>Real Sociedad, Иван Опульский</b><br />
+    <br />
+    Обладатель Золотой бутсы и Суперкубка Испании - <b>Tenerife, Тарас Авитара</b><br />
     <br />
     <br />
-    Лучший игрок всех времен - <b>Nikita Segal (Oviedo, Valencia)</b> - 10 наград<br />
+    Лучший игрок всех времен - <b>Никита Сегаль (Oviedo, Valencia)</b> - 10 наград<br />
     <br />
-    Лучшая команда всех времен - <b>Deportivo La Coruna (Pavel Khotushin, Eugene Pchelintsev, Kirill Goloschekov)</b> - 12 наград
+    Лучшая команда всех времен - <b>Deportivo La Coruna (Павел Хотюшин, Евгений Пчелинцев, Кирилл Голощёков)</b> - 13 наград
 </p>
