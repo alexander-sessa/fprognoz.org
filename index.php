@@ -1362,8 +1362,7 @@ else {
 
     <!-- Bootstrap CSS CDN -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-    <link href="css/fp.css?ver=90" rel="stylesheet">
-    <link href="js/croppic/croppic.css" rel="stylesheet">
+    <link href="css/fp.css?ver=92" rel="stylesheet">
     <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -1560,53 +1559,9 @@ foreach ($seasons as $ss)
             </ul>
         </nav>
 
-        <!-- Page Content Holder -->
-        <div id="content">
-            <header class="header">
-                <h3><?=$description?></h3>
-            </header>
-            <nav class="navbar navbar-expand-lg navbar-lignt bg-light">
-                <div class="container-fluid">
-                    <button type="button" id="sidebarCollapse" class="navbar-btn<?=($sidebar_show ? ' active' : '')?>">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </button>
-                    <button type="button" id="rightbarCollapse" class="navbar-btn">
-                        <div id="rightbarIconUser"><i class="fas fa-user"></i></div>
-                        <div id="rightbarIconUserX"><i class="fas fa-user-times"></i></div>
-                    </button>
-                    <button type="button" id="navbarFlag" class="navbar-flag" style="background: url(images/63x42/<?=$a?>.png) no-repeat; background-size: 100%; display:none" onClick="location.href='?a=<?=$a?>'">
-                    </button>
-                    <button class="btn btn-light d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarMyTours" aria-controls="navbarMyTours" aria-expanded="false" aria-label="Toggle navigation">
-                        <i class="fas fa-align-justify"></i>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarMyTours">
-                        <ul class="nav navbar-nav ml-auto">
-<?php
-  if (isset($_SESSION['Coach_name'])) {
-    if (!is_file($data_dir . 'personal/'.$_SESSION['Coach_name'].'/navbar.inc'))
-      build_personal_nav();
-
-    include($data_dir . 'personal/'.$_SESSION['Coach_name'].'/navbar.inc');
-  }
-  echo '
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-
-            <div class="main">';
-  include ($a . '/' . $m . '.inc.php');
-  if ($gb_status == 'on')
-    include 'comments/main.php';
-
-  include ('fifa/register.inc.php'); // регистрация в сборных ассоциаций
-  echo '
-            </div>
-        </div>
         <nav id="rightbar">
-            <div class="rightbar-header">';
+            <div class="rightbar-header">
+<?php
   if (!isset($_SESSION['Coach_name']) || $role == 'badlogin') {
     $data_cfg = ['cmd' => 'unique_check'];
     $ncfg = base64_encode(mcrypt_encrypt( MCRYPT_BLOWFISH, $key, json_encode($data_cfg), MCRYPT_MODE_CBC, $iv ));
@@ -1720,6 +1675,53 @@ foreach ($seasons as $ss)
     }
 ?>
         </nav>
+
+        <!-- Page Content Holder -->
+        <div id="content">
+            <header class="header">
+                <h3><?=$description?></h3>
+            </header>
+            <nav class="navbar navbar-expand-lg navbar-lignt bg-light">
+                <div class="container-fluid">
+                    <button type="button" id="sidebarCollapse" class="navbar-btn<?=($sidebar_show ? ' active' : '')?>">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                    <button type="button" id="rightbarCollapse" class="navbar-btn">
+                        <div id="rightbarIconUser"><i class="fas fa-user"></i></div>
+                        <div id="rightbarIconUserX"><i class="fas fa-user-times"></i></div>
+                    </button>
+                    <button type="button" id="navbarFlag" class="navbar-flag" style="background: url(images/63x42/<?=$a?>.png) no-repeat; background-size: 100%; display:none" onClick="location.href='?a=<?=$a?>'">
+                    </button>
+                    <button class="btn btn-light d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarMyTours" aria-controls="navbarMyTours" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fas fa-align-justify"></i>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarMyTours">
+                        <ul class="nav navbar-nav ml-auto">
+<?php
+  if (isset($_SESSION['Coach_name'])) {
+    if (!is_file($data_dir . 'personal/'.$_SESSION['Coach_name'].'/navbar.inc'))
+      build_personal_nav();
+
+    include($data_dir . 'personal/'.$_SESSION['Coach_name'].'/navbar.inc');
+  }
+  echo '
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="main">';
+  include ($a . '/' . $m . '.inc.php');
+  if ($gb_status == 'on')
+    include 'comments/main.php';
+
+  include ('fifa/register.inc.php'); // регистрация в сборных ассоциаций
+?>
+            </div>
+        </div>
+
     </div>
 
     <footer class="footer">

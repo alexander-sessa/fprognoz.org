@@ -1,38 +1,38 @@
 <link href="css/comments.css" rel="stylesheet">
-<script src="/js/ckeditor/ckeditor.js"></script>
+<link href="js/croppic/croppic.css" rel="stylesheet">
+<script src="https://cdn.ckeditor.com/ckeditor5/10.1.0/classic/ckeditor.js"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/10.1.0/inline/ckeditor.js"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/10.1.0/classic/translations/ru.js"></script>
 <script src="/js/croppic/croppic-3.0.min.js"></script>
 <script>//<![CDATA[
-function getSelText(){var txt='';if(window.getSelection)txt=window.getSelection();else if(document.getSelection)txt=document.getSelection();else if(document.selection)txt=document.selection.createRange().text;return txt;}
-function c_quote(cid,inf){var c_text=getSelText();if(c_text == ''){if(contentHTML[cid]!==undefined)c_text=contentHTML[cid];else c_text=$('main',$('[commentid="'+cid+'"]')).html();var begin=1+c_text.indexOf('>'),end=c_text.lastIndexOf('<');c_text=c_text.substr(begin,end-begin)}var c_date=$('.c-comment-date',$('[commentid="'+cid+'"]')).html(),sStr='<blockquote><p><sub>'+$('.c-comment-author',$('[commentid="'+cid+'"]')).html()+' <em>писал' + inf + ' '+c_date.split(' ').join(' в ')+'</em></sub></p><p>„'+c_text+'“</p></blockquote>';var cke=eval('CKEDITOR.instances.cke'+cid);cke.insertElement(CKEDITOR.dom.element.createFromHtml(sStr,cke.document))}
-function c_quote_ta(cid,inf){var c_text=getSelText();if(c_text == ''){if(contentHTML[cid]!==undefined)c_text=contentHTML[cid];else c_text=$('main',$('[commentid="'+cid+'"]')).html();var begin=1+c_text.indexOf('>'),end=c_text.lastIndexOf('<');c_text=c_text.substr(begin,end-begin)}var c_date=$('.c-comment-date',$('[commentid="'+cid+'"]')).html(),sStr='<blockquote><p><sub>'+$('.c-comment-author',$('[commentid="'+cid+'"]')).html()+' <em>писал' + inf + ' '+c_date.split(' ').join(' в ')+'</em></sub></p><p>&bdquo;'+c_text+'&ldquo;</p></blockquote>';$('#cke'+cid).val(sStr)}
+var isEnabled=[],contentHTML=[],cke=[],cke_config={language:"ru"}
+function c_quote_ta(cid,inf){com=$('[commentid="'+cid+'"]');c_text=$("main",com).html();var begin=1+c_text.indexOf('>'),end=c_text.lastIndexOf('<');c_text=c_text.substr(begin,end-begin);var c_date=$(".c-comment-date",com).html(),sStr="<blockquote><p><sub>"+$(".c-comment-author",com).html()+" <em>писал" + inf + ' '+c_date.split(' ').join(" в ")+"</em></sub></p><p>&bdquo;"+c_text+"&ldquo;</p></blockquote><p></p>";$("#cke"+cid).val(sStr)}
 function changeRating(id,rate_yes,rate_no,vote){$("#r_yes"+id).html(rate_yes?rate_yes:"");$("#r_no"+id).html(rate_no?rate_no:"");$.get("comments/vote.php",{user:"<?=$coach_name?>",id:id,vote:vote,hash:"<?=crypt($coach_name,$salt)?>"})}
 function saveContent(id,c_text){$.get("comments/save.php",{user:"<?=$coach_name?>",id:id,c_text:c_text,hash:"<?=crypt($coach_name,$salt)?>"})}
 function modComment(id,man,status){$.get("comments/mod.php",{key:"content:"+id,man:man,status:status});$("#"+(status>0?"approve":"c_block")+id).hide()}
 
-var isEnabled = [], contentHTML = [];
+function isEditorEnabled(id){if(cke[id])return true;else cke[id]=1;return false}
 function toggleEditor(id) {
-	var reset = document.getElementById("reset"+id),
-	   toggle = document.getElementById("toggle"+id),
-	  content = document.getElementById("content"+id);
-
-	if (isEnabled[id] == undefined) isEnabled[id] = false;
-	if (isEnabled[id]) {
-		if (eval("CKEDITOR.instances.content"+id) && eval("CKEDITOR.instances.content"+id+".checkDirty()")) reset.style.display = "inline";
-		content.setAttribute("contenteditable", false);
-		toggle.innerHTML = '<i class="fas fa-edit" aria-hidden="true"></i> Исправить';
-		isEnabled[id] = false;
-		if (eval("CKEDITOR.instances.content"+id)) eval("CKEDITOR.instances.content"+id+".destroy()");
-		saveContent(id, content.innerHTML);
+	var reset=document.getElementById("reset"+id),toggle=document.getElementById("toggle"+id),content=document.getElementById("content"+id)
+	if(isEnabled[id]==undefined)isEnabled[id]=null
+	if(isEnabled[id]){
+		editor=isEnabled[id]
+		if(editor.model.document.differ)reset.style.display="inline"
+		toggle.innerHTML='<i class="fas fa-edit" aria-hidden="true"></i> Исправить'
+		editor.destroy()
+		isEnabled[id]=null
+		saveContent(id,content.innerHTML)
 	}
-	else {
-		content.setAttribute("contenteditable", true);
-		toggle.innerHTML = '<i class="fas fa-save c-save" aria-hidden="true"></i> <span class="c-save">Записать<span>';
-		isEnabled[id] = true;
-		if (!eval("CKEDITOR.instances.content"+id)) CKEDITOR.inline("content"+id, {startupFocus:true});
+	else{
+		toggle.innerHTML='<i class="fas fa-save c-save" aria-hidden="true"></i> <span class="c-save">Записать<span>'
+		InlineEditor
+			.create(document.querySelector("#content"+id),cke_config)
+			.then(function(editor){
+				isEnabled[id]=editor
+				editor.ui.focusTracker.set("isFocused",true)
+			})
 	}
 }
-cke=[]
-function isEditorEnabled(id){if(cke[id])return true;else cke[id]=1;return false}
 //]]></script>
 <?php
 function send_comment_by_email($from, $name, $email, $subj, $body) {
@@ -114,13 +114,14 @@ function c_make_form($prefix, $id, $hidden) {
       </div>
     </footer>
     </form>' . ($hidden ? '' : '
-    <script>CKEDITOR.replace("%CKEDID%",{height:"80px"});</script>') . '
+    <script>ClassicEditor.create(document.querySelector("#%CKEDID%"),cke_config)</script>
+') . '
   </div>
 ';
   $c_form = str_replace('%PARENT%', $prefix.':'.$id, $c_form);
   $c_form = str_replace('%USERID%',     $coach_name, $c_form);
   $c_form = str_replace('%FORMID%',   $prefix . $id, $c_form);
-  $c_form = str_replace('%CKEDID%',     'cke' . $id, $c_form);
+  $c_form = str_replace('%CKEDID%',     'cke' . strtr($id, ':', '_'), $c_form);
   ($hidden) ? $c_form = str_replace('%HIDDEN%', ' style="display: none;"', $c_form) : $c_form = str_replace('%HIDDEN%', '', $c_form);
   return $c_form;
 }
@@ -188,7 +189,6 @@ function c_out_comments($id, $level, $pid) {
   else
     $out .= '
       <div class="c-comment-icon' . ($c_user['status'] == 2 ? ' bg_gold' : '') . '">' . $initials . '</div>';
-//    <div class="c-comment-info" commentid="' . $id . '">
   $out .= '
     </aside>
     <div class="c-comment-info" style="position:relative;padding-left:' . (60 + min($level, 5) * 48) . 'px" commentid="' . $id . '">
@@ -196,10 +196,7 @@ function c_out_comments($id, $level, $pid) {
         <a name="comment-' . $id . '"></a>
         <span class="c-comment-author ' . (isset($c_user['status']) && $c_hash['status'] == 2 ? ' c-moderator' : '')
           . '">' . $author . '</span>
-        <span class="c-comment-date">' . date('j-m-Y G:i', $c_hash['tstamp']) . '</span>';
-//  if ($role == 'president') $out .= '
-//        <span class="c-comment-id"><a href="/comments/admin.php?comment=' . $id .'">id:' . $id . '</a></span>';
-  $out .= '
+        <span class="c-comment-date">' . date('j-m-Y G:i', $c_hash['tstamp']) . '</span>
         <i onClick="$(\'#share' . $id . '\').toggle();share' . $id . '.select();return false;" class="fas fa-share-alt" aria-hidden="true" style="cursor:pointer;color:#b0b0b0" title="поделиться"> </i>
         <input type="text" id="share' . $id . '" style="display:none;width:350px;height:15px;font-size:12px;" value="' . $this_site . '/' . $uri . '#comment-' . $id . '" />
       </header>
@@ -211,10 +208,9 @@ function c_out_comments($id, $level, $pid) {
 
       <footer>';
   if (isset($coach_name)) {                    // кнопки ответа на коммент
-//isEditorEnabled(' . $id . '){CKEDITOR.replace("cke'.$id.'",{height:"80px"})}
     $out .= '
-        <a onClick=\'if(!isEditorEnabled('.$id.'))CKEDITOR.replace("cke'.$id.'",{height:"80px"});$("#comment'.$id.'").toggle()\' style="cursor:pointer"><i class="fas fa-reply" aria-hidden="true"></i> Ответить</a>
-        &nbsp; <a onClick=\'if(!isEditorEnabled('.$id.')){c_quote_ta('.$id.',"");CKEDITOR.replace("cke'.$id.'",{height:"80px"});$("#comment'.$id.'").show()}else{$("#comment'.$id.'").show();c_quote(' . $id . ',"")}\' style="cursor:pointer"><i class="fas fa-quote-right" aria-hidden="true"></i> Цитировать</a>';
+        <a onClick=\'if(!isEditorEnabled('.$id.'))ClassicEditor.create(document.querySelector("#cke'.$id.'"),{height:"80px"}).then(function(editor){cke["'.$id.'"]=editor});$("#comment'.$id.'").toggle()\' style="cursor:pointer"><i class="fas fa-reply" aria-hidden="true"></i> Ответить</a>
+        &nbsp; <a onClick=\'if(isEditorEnabled('.$id.')){editor=cke['.$id.'];editor.destroy()}c_quote_ta('.$id.',"");ClassicEditor.create(document.querySelector("#cke'.$id.'"),{height:"80px"}).then(function(editor){cke["'.$id.'"]=editor});$("#comment'.$id.'").show()\' style="cursor:pointer"><i class="fas fa-quote-right" aria-hidden="true"></i> Цитировать</a>';
     if ($role == 'president' || ($coach_name == $c_hash['userid'] && !$redis->exists('comment:' . $id)))
       $out .= c_inline_editor($id, $c_hash['c_text'], $coach_name); // кнопки редактирования коммента
 
@@ -248,8 +244,6 @@ if (isset($coach_name) && isset($parent) && ($c_text = trim($c_text))) { // до
     $nicknm = strip_tags($nicknm); // оформляем как нового юзера комментов
     c_register_user($nicknm);
   }
-///  elseif (isset($notify) && $notify)
-///    $redis->hset('c_user:' . $coach_name, 'e-mail', $user['email']); // добавить|освежить емейл для уведомления
 
   $userid = $coach_name;
 
@@ -269,25 +263,8 @@ if (isset($coach_name) && isset($parent) && ($c_text = trim($c_text))) { // до
     if (($status == 1 || $status == 2) && $parent[0] == 'c') {// если добавлен ответ на чей-то коммент
       $pid = explode(':', $parent)[1];
       $content = $redis->hgetall('content:' . $pid);
-///      if ($content['answer'] == 1)
-///        $redis->hset('content:' . $pid, 'answer', 2);         // есть ответ!
       if ($status == 2 && $content['status'] == 0)
         $redis->hset('content:' . $pid, 'status', 1);         // ответил президент == одобрение
-/* ///
-      // если автор предка хочет видеть ответы, шлём ему весточку
-      if ($content['notify']) {
-        $notify_user = $redis->hgetall('c_user:' . $content['userid']);
-        send_comment_by_email ($comments_email,
-'=?UTF-8?B?' . base64_encode($content['userid']) . '?=', $notify_user['e-mail'],
-'Получен ответ на Ваш комментарий', '
-На страницу <a href="' . $this_site . '/' . $uri . '#comment">' . $this_site . '/' . $uri . '#comment</a>
-пользователем ' . $redis->hget('c_user:' . $userid, 'nicknm') . ' добавлен ответ на Ваш комментарий:
-<hr />
-' . (($status == 2) ? $c_text : strip_tags($c_text, '<p><a><strong><em><ol><ul><li><blockquote><sub><sup>')) . '
-<hr />
-');
-      }
-*/
     }
 
     // запись коммента
@@ -303,8 +280,6 @@ if (isset($coach_name) && isset($parent) && ($c_text = trim($c_text))) { // до
       'c_text' => $c_text,
       'status' => $status,
     ]);
-//      'notify' => $notify,
-//    if (isset($answer)) $redis->hset($key, 'answer', $answer);
     if (isset($ctitle)) $redis->hset($key, 'title', $ctitle);
 
     // комментарии обычного пользователя, а также требующие ответа, отправляются модератору
@@ -332,8 +307,10 @@ if (!isset($s)) $s = $cur_year;
 $id = $a . ':' . $s;
 $redis_prefix = 'page';
 echo '<a name="comment"></a>
-<div id="comment" style="background:white;margin-top:10px;padding-top:5px;text-align:center;width:100%">' .
-(isset($coach_name) ? '  <h5>ФАН-ЗОНА. Здесь Вы можете оставить свой комментарий</h5>' : ' <h5>ФАН-ЗОНА. Для полного доступа необходимо авторизоваться на сайте</h5><br />') .
+<div id="comment" style="background:white;margin-top:10px;padding-top:5px;text-align:left;width:100%">
+  <div style="text-align:center">
+    <h5>ФАН-ЗОНА. ' . (isset($coach_name) ? 'Здесь Вы можете оставить свой комментарий' : 'Для полного доступа необходимо авторизоваться на сайте') . '</h5>
+  </div>' .
      c_make_form($redis_prefix, $id, false) . '
 </div>';        // prefix, id, hidden - главная форма
 $c_count = 0;                                                      // счетчик комментов для вывода на вкладке

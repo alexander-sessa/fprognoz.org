@@ -176,6 +176,7 @@ pre {
 
 
 #sidebar {
+    order: 1;
     min-width: 250px;
     max-width: 250px;
     background: #1e2a64;
@@ -242,6 +243,7 @@ pre {
 }
 
 #rightbar {
+    order: 3;
     min-width: 250px;
     max-width: 250px;
     background: #1e2a64;
@@ -308,6 +310,7 @@ ul ul a {
     CONTENT STYLE
 ----------------------------------------------------- */
 #content {
+    order: 2;
     width: 100%;
     min-height: 100vh;
     transition: all 0.3s;
