@@ -50,10 +50,10 @@ if (isset($_SESSION['Coach_name']) && acl($_SESSION['Coach_name']) != 'player') 
 Получатели: игроки <input type="checkbox" name="sendinet"'.$sendinet.' />
 SU.FOOTBALL.PROGNOZ <input type="checkbox" name="sendnews"'.$sendnews.' disabled="disabled" />
 </td></tr>
-<tr><td>Тема:</td><td><input name="subject" value="'.$subjects[$country_code].'" size="80" />
+<tr><td>Тема:</td><td><input name="subject" value="'.$subjects[$country_code].'" size="100" />
 <img src="images/spacer.gif" width="82" height="1" alt="" />
 <input type="submit" name="sendmail" value="Отправить" /></td></tr>
-<tr><td>Текст:</td><td><textarea name="msgtext" rows="35" cols="80"></textarea></td></tr>
+<tr><td>Текст:</td><td><textarea name="msgtext" rows="35" cols="100"></textarea></td></tr>
 </table>
 </form>
 ';

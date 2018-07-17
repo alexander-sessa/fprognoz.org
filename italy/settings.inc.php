@@ -26,8 +26,8 @@ $rght_ftcolor = 'ffd700';
 $left_image   = 'images/logo-serieA-2010-2011.jpg';
 $rght_image   = 'images/4fd77ddeaad8d.jpg';
 $cur_year     = '2018-19';
-$president    = 'Alexander Sessa';
+$president    = 'Александр Сесса';
 $vice         = 'Serge Vasiliev';
-$pressa       = 'Mikhail Sirota';
+$pressa       = 'Михаил Сирота';
 $club_edit    = false;
 ?>

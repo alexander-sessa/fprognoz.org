@@ -26,8 +26,8 @@ $rght_ftcolor = 'ffd700';
 $left_image   = 'images/premiership-emblema2.jpg';
 $rght_image   = 'images/the-fa-cup.png';
 $cur_year     = '2018-19';
-$president    = 'Eugene Plugin';
-$vice         = 'Alexander Sessa';
+$president    = 'Eugene (Joker) Plugin';
+$vice         = 'Александр Сесса';
 $pressa       = '';
 $club_edit    = false;
 ?>

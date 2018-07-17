@@ -58,7 +58,7 @@ if (isset($_POST['_reg']))
 }
 if ($registered)
   echo 'Вы уже зарегистрированы для участия в '.$title;
-else if (sizeof($codes) >= 30)
+else if (sizeof($codes) >= 33)
   echo 'Регистрация в '.$title.' закончена.';
 else if (isset($_POST['reg']) && !$err)
 {

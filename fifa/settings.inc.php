@@ -25,6 +25,6 @@ $left_image   = 'images/fifa-5.jpg';
 $rght_image   = 'images/rfifa-100.png';
 $cur_year     = '2018-19';
 $president    = 'Eugeny Gladyr';
-$vice         = 'Eugene Plugin';
+$vice         = 'Eugene (Joker) Plugin';
 $pressa       = '';
 ?>

@@ -27,7 +27,7 @@ $left_image   = 'images/bundesliga.gif';
 $rght_image   = 'images/Dfb_pokal.gif';
 $cur_year     = '2018-19';
 $president    = 'Vano Opulsky';
-$vice         = 'Alexander Sessa';
+$vice         = 'Александр Сесса';
 $pressa       = '';
 $club_edit    = false;
 ?>

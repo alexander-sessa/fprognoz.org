@@ -1,5 +1,7 @@
 <?php
 /*
+- редактирование страниц посредством CKEditor
+- вставка вырезанной цитаты в комментариях
 - отправка токена с учетом смены пароля (закомментировано)
 - смена пароля по токену или сразу после входа
 - забыл пароль
@@ -847,7 +849,6 @@ $fprognozls = isset($_COOKIE['fprognozls']) ? $_COOKIE['fprognozls'] : 'inscore'
 
 ////////// SIDEBAR
 
-
 $sidebar = '';
 
 if (in_array($cca, $classic_fa)) { // сбор туров сезона для классических асоциаций
@@ -928,6 +929,9 @@ if (in_array($cca, $classic_fa)) { // сбор туров сезона для к
                 <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=player">Игроки</a></li>';
 
   }
+  if ($cca == 'FRA')
+    $sidebar .= '
+                <li><a href="?a='.$a.'&amp;m=register">Выбор команды</a></li>';
   $sidebar .= '
                 <li><a href="?a='.$a.'&amp;m=hq">Президиум</a></li>
                 <li><a href="?a='.$a.'&amp;m=hof">ЗАЛ СЛАВЫ</a></li>';
@@ -995,6 +999,7 @@ else if ($a == 'switzerland') { // сбор туров сезона Швейца
 
   }
   $sidebar .= '
+                <li><a href="?a='.$a.'&amp;m=register">Выбор команды</a></li>
                 <li><a href="?a='.$a.'&amp;m=hq">Президиум</a></li>
                 <li><a href="?a='.$a.'&amp;m=hof">ЗАЛ СЛАВЫ</a></li>';
 }
@@ -1362,7 +1367,7 @@ else {
 
     <!-- Bootstrap CSS CDN -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-    <link href="css/fp.css?ver=92" rel="stylesheet">
+    <link href="css/fp.css?ver=97" rel="stylesheet">
     <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -1515,11 +1520,25 @@ else {
                     }
                 }
             })
+
+            $(window).scroll(function(){
+                if($(this).scrollTop()>100)
+                    $('.scrollToTop').fadeIn();
+                else
+                    $('.scrollToTop').fadeOut();
+            });
+            $('.scrollToTop').click(function(){
+                $('html,body').animate({scrollTop:0},800);
+                return false;
+            });
+
         });
     </script>
 </head>
 
 <body>
+
+    <a href="#" class="scrollToTop"><i class="fas fa-arrow-circle-up"></i></a>
 
     <div class="wrapper">
         <!-- Sidebar Holder -->
@@ -1736,6 +1755,7 @@ foreach ($seasons as $ss)
             Design and code: Alexander Sessa. Elapsed time <?=round(microtime(true) - $time_start, 3)?> sec
         </p>
     </footer>
+
 </body>
 
 </html>

@@ -26,8 +26,8 @@ $rght_ftcolor = 'ffd700';
 $left_image   = 'images/russia_icon.png';
 $rght_image   = 'images/Russian_Football_Union_Logo.svg';
 $cur_year     = '2018-19';
-$president    = 'Kirill Goloschekov';
+$president    = 'Кирилл Голощёков';
 $vice         = 'Konstantin Smetanin';
-$pressa       = 'Mikhail Sirota';
+$pressa       = 'Михаил Сирота';
 $club_edit    = false;
 ?>

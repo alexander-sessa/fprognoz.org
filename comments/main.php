@@ -1,12 +1,11 @@
-<link href="css/comments.css" rel="stylesheet">
+<link href="css/comments.css?ver=2" rel="stylesheet">
 <link href="js/croppic/croppic.css" rel="stylesheet">
-<script src="https://cdn.ckeditor.com/ckeditor5/10.1.0/classic/ckeditor.js"></script>
 <script src="https://cdn.ckeditor.com/ckeditor5/10.1.0/inline/ckeditor.js"></script>
-<script src="https://cdn.ckeditor.com/ckeditor5/10.1.0/classic/translations/ru.js"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/10.1.0/inline/translations/ru.js"></script>
 <script src="/js/croppic/croppic-3.0.min.js"></script>
 <script>//<![CDATA[
 var isEnabled=[],contentHTML=[],cke=[],cke_config={language:"ru"}
-function c_quote_ta(cid,inf){com=$('[commentid="'+cid+'"]');c_text=$("main",com).html();var begin=1+c_text.indexOf('>'),end=c_text.lastIndexOf('<');c_text=c_text.substr(begin,end-begin);var c_date=$(".c-comment-date",com).html(),sStr="<blockquote><p><sub>"+$(".c-comment-author",com).html()+" <em>писал" + inf + ' '+c_date.split(' ').join(" в ")+"</em></sub></p><p>&bdquo;"+c_text+"&ldquo;</p></blockquote><p></p>";$("#cke"+cid).val(sStr)}
+function c_quote(cid,inf){com=$('[commentid="'+cid+'"]');c_text=$("main",com).html();var begin=1+c_text.indexOf('>'),end=c_text.lastIndexOf('<');c_text=c_text.substr(begin,end-begin);var c_date=$(".c-comment-date",com).html(),sStr="<blockquote><p><sub>"+$(".c-comment-author",com).html()+" <em>писал" + inf + ' '+c_date.split(' ').join(" в ")+"</em></sub></p><p>&bdquo;"+c_text+"&ldquo;</p></blockquote><p></p>";$("#cke"+cid).html($("#cke"+cid).html()+sStr)}
 function changeRating(id,rate_yes,rate_no,vote){$("#r_yes"+id).html(rate_yes?rate_yes:"");$("#r_no"+id).html(rate_no?rate_no:"");$.get("comments/vote.php",{user:"<?=$coach_name?>",id:id,vote:vote,hash:"<?=crypt($coach_name,$salt)?>"})}
 function saveContent(id,c_text){$.get("comments/save.php",{user:"<?=$coach_name?>",id:id,c_text:c_text,hash:"<?=crypt($coach_name,$salt)?>"})}
 function modComment(id,man,status){$.get("comments/mod.php",{key:"content:"+id,man:man,status:status});$("#"+(status>0?"approve":"c_block")+id).hide()}
@@ -96,7 +95,8 @@ function c_make_form($prefix, $id, $hidden) {
     </aside>
     <main class="c-text-cnt">';
   $c_form .= '
-      <textarea id="%CKEDID%" name="c_text" class="c-textarea" required></textarea>
+      <textarea id="ta_%CKEDID%" name="c_text" hidden></textarea>
+      <div id="%CKEDID%" name="c_text" class="c-textarea"></div>
     </main>
     <footer class="c-submit-cnt">
       <div class="c-submit-left">';
@@ -106,15 +106,13 @@ function c_make_form($prefix, $id, $hidden) {
         <input type="text" name="nicknm" value="" /><br />';
   }
   $c_form .= '
-        <!--label><input type="checkbox" name="answer" value="1" /> Жду ответ</label><br />
-        <label><input type="checkbox" name="notify" /> Уведомлять об ответах на мой комментарий на e-mail</label-->
       </div>
       <div class="c-submit">
-        <button class="c-button">Комментировать</button>
+        <button class="c-button" onClick="$(\'#ta_%CKEDID%\').val($(\'#%CKEDID%\').html())">Комментировать</button>
       </div>
     </footer>
     </form>' . ($hidden ? '' : '
-    <script>ClassicEditor.create(document.querySelector("#%CKEDID%"),cke_config)</script>
+    <script>InlineEditor.create(document.querySelector("#%CKEDID%"),cke_config)</script>
 ') . '
   </div>
 ';
@@ -209,8 +207,8 @@ function c_out_comments($id, $level, $pid) {
       <footer>';
   if (isset($coach_name)) {                    // кнопки ответа на коммент
     $out .= '
-        <a onClick=\'if(!isEditorEnabled('.$id.'))ClassicEditor.create(document.querySelector("#cke'.$id.'"),{height:"80px"}).then(function(editor){cke["'.$id.'"]=editor});$("#comment'.$id.'").toggle()\' style="cursor:pointer"><i class="fas fa-reply" aria-hidden="true"></i> Ответить</a>
-        &nbsp; <a onClick=\'if(isEditorEnabled('.$id.')){editor=cke['.$id.'];editor.destroy()}c_quote_ta('.$id.',"");ClassicEditor.create(document.querySelector("#cke'.$id.'"),{height:"80px"}).then(function(editor){cke["'.$id.'"]=editor});$("#comment'.$id.'").show()\' style="cursor:pointer"><i class="fas fa-quote-right" aria-hidden="true"></i> Цитировать</a>';
+        <a onClick=\'if(!isEditorEnabled('.$id.'))InlineEditor.create(document.querySelector("#cke'.$id.'"),cke_config).then(function(editor){cke["'.$id.'"]=editor});$("#comment'.$id.'").toggle()\' style="cursor:pointer"><i class="fas fa-reply" aria-hidden="true"></i> Ответить</a>
+        &nbsp; <a onClick=\'if(isEditorEnabled('.$id.')){editor=cke['.$id.'];editor.destroy()}c_quote('.$id.',"");InlineEditor.create(document.querySelector("#cke'.$id.'"),cke_config).then(function(editor){cke["'.$id.'"]=editor});$("#comment'.$id.'").show()\' style="cursor:pointer"><i class="fas fa-quote-right" aria-hidden="true"></i> Цитировать</a>';
     if ($role == 'president' || ($coach_name == $c_hash['userid'] && !$redis->exists('comment:' . $id)))
       $out .= c_inline_editor($id, $c_hash['c_text'], $coach_name); // кнопки редактирования коммента
 

@@ -27,7 +27,7 @@ $left_image   = 'images/lfp-logo-100.png';
 $rght_image   = 'images/lfp-100.png';
 $cur_year     = '2018-19';
 $president    = 'Serge Shibaev';
-$vice         = 'Alexander Sessa';
+$vice         = 'Александр Сесса';
 $pressa       = 'Vladislav Ezhergin';
 $club_edit    = false;
 ?>

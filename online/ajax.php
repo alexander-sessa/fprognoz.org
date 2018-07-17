@@ -205,5 +205,19 @@ if (isset($data['cmd'])) {
 //Внимание: смена пароля возможна только со страницы, на которую ведёт временная ссылка.
     echo ($ret[0] == r ? '0' : '1');
   }
+
+  // запись файла
+  if ($data['cmd'] == 'save_file') {
+    include ('../' . $data['a'] . '/settings.inc.php');
+    if ($data['author'] == $president || $data['author'] == $vice || in_array($data['author'], $admin)) {
+      if ($data['m'] == 'main')
+        $file = $data_dir . 'online/' . $cca . '/news';
+      else
+        $file = $data_dir . 'online/' . $cca . '/' . $data['s'] . '/' . $data['m'];
+      copy($file, $file . '.' . time());
+      file_put_contents($file, urldecode($_POST['text']));
+    }
+    echo '';
+  }
 }
 ?>

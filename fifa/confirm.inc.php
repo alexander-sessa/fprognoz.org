@@ -24,8 +24,8 @@ if (isset($_SESSION['Coach_name'])) {
           }
     }
     foreach ($ccs as $ccc) {
-      $fn = strtolower($ccn[$ccc]).'/settings.inc.php';
-      $settings = file_get_contents($fn);
+      $fs = strtolower($ccn[$ccc]).'/settings.inc.php';
+      $settings = file_get_contents($fs);
       $season = substr($settings, strpos($settings, '$cur_year') + 10);
       $season = substr($season, strpos($season, "'") + 1, 7); // формат типа "2018-19"
       if (!strpos($season, '-'))
@@ -36,9 +36,10 @@ if (isset($_SESSION['Coach_name'])) {
         $tsv = '';
         foreach ($codes as $player) {
           list($code, $team, $coach, $email, $long_name, $confirm) = explode('	', $player);
-          if ($player[0] != '#' && $_SESSION['Coach_name'] == $coach)
+          if ($player[0] != '#' && $_SESSION['Coach_name'] == $coach) {
             $confirm = $value;
-          $coach = (isset($unique) && $unique) ? $_POST['new_name'] : $coach;
+            $coach = (isset($unique) && $unique) ? $_POST['new_name'] : $coach;
+          }
           $tsv .= $code.'	'.$team.'	'.$coach.'	'.$email.'	'.$long_name.'	'.trim($confirm).'
 ';
         }
@@ -46,7 +47,7 @@ if (isset($_SESSION['Coach_name'])) {
       }
       if (isset($unique) && $unique)
         if (strpos($settings, $_SESSION['Coach_name']))
-          file_put_contents($fn, str_replace($_SESSION['Coach_name'], $_POST['new_name'], $settings));
+          file_put_contents($fs, str_replace($_SESSION['Coach_name'], $_POST['new_name'], $settings));
     }
     touch($data_dir . 'personal/'.$_SESSION['Coach_name'].'/'.date('Y', time()));
     $out = '<br />
@@ -56,7 +57,9 @@ if (isset($_SESSION['Coach_name'])) {
     if (isset($unique))
       if ($unique) {
         $out = '<br />
-Смена имени вступит в силу со следующим открытием любой страницы сайта.<br />';
+Смена имени вступит в силу после перезахода на сайт.<br />
+Изменение влияет только на новый и будущие сезоны.<br />
+';
         rename($data_dir.'personal/'.$_SESSION['Coach_name'], $data_dir.'personal/'.$_POST['new_name']);
         // clone - мой метод клонирования ключа - в настоящем redis его нет!
         $redis->clone('c_user:'.$_SESSION['Coach_name'], 'c_user:'.$_POST['new_name']);
@@ -74,7 +77,7 @@ if (isset($_SESSION['Coach_name'])) {
 Пожалуйста, подтвердите Ваше согласие играть командой в новом сезоне (заменив "<b>?</b>" на "<b>да</b>") или отказ от команды ("<b>нет</b>").<br />
 <br />
 <form action="?a=fifa&m=confirm" method="post">
-  <table width=916>
+  <table>
     <tr><td colspan="4"></td></tr>
     <tr><th align="left">код</th><th align="left">ассоциация</th><th align="left">команда</th><th>участие</th></tr>';
     $email = '';
@@ -101,7 +104,7 @@ if (isset($_SESSION['Coach_name'])) {
       <b>ВНИМАНИЕ</b>: с этого сезона снимается архаичное ограничение на написание имён игроков латиницей.<br />
       Вы можете сменить написание своего имени здесь и сейчас:
 <input id="new_name" type="text" name="new_name" value="'.$_SESSION['Coach_name'].'" data-tpl="'.$cfg.'" style="padding-left:5px" />
-<span id="valid_name"><i class="fas fa-check" style="color:green"> это имя используется Вами сейчас</i></span>
+<span id="valid_name" style="color:green"><i class="fas fa-check"></i> это имя используется Вами сейчас</span>
       <br />
     </td></tr>
     <tr><td colspan="3">&nbsp;</td><td align="center"><input id="cfm_button" type="submit" name="confirm" value="отправить" /></td></tr>
@@ -120,12 +123,12 @@ $(document).ready(function(){
     str=$(this).val()
     if (str.length < <?=$mininput ?>) {
       no=true
-      $("#valid_name").html('<i class="fas fa-times" style="color:red"> введите хотя бы 2 буквы</i>')
+      $("#valid_name").html('<span style="color:red"><i class="fas fa-times"></i> введите хотя бы 2 буквы</span>')
     }
     else {
       if (str.indexOf(',', -1) + str.indexOf(';', -1) + str.indexOf('<', -1) > 0) {
         no=true
-        $("#valid_name").html('<i class="fas fa-times" style="color:red"> нельзя использовать знаки препинания</i>')
+        $("#valid_name").html('<span style="color:red"><i class="fas fa-times"></i> нельзя использовать знаки препинания</span>')
       }
       else {
         $.post("/online/ajax.php",{
@@ -134,9 +137,9 @@ $(document).ready(function(){
             email: "<?=isset($email)?$email:'' ?>"
           },function(r){
             switch (r) {
-              case '1': no=true;ok='<i class="fas fa-times" style="color:red"> это имя или код заняты</i>';break;
-              case '2': no=false;ok='<i class="fas fa-check" style="color:green"> имя или код уже используется Вами</i>';break;
-              default : no=false;ok='<i class="fas fa-check" style="color:green"> такое имя допустимо</i>';
+              case '1': no=true;ok='<span style="color:red"><i class="fas fa-times"></i> это имя или код заняты</span>';break;
+              case '2': no=false;ok='<span style="color:green"><i class="fas fa-check"></i> имя или код уже используется Вами</span>';break;
+              default : no=false;ok='<span style="color:green"><i class="fas fa-check"></i> такое имя допустимо</span>';
             }
             $("#valid_name").html(ok)
         })

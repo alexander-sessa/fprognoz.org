@@ -48,6 +48,8 @@ pre {
 .main A:hover	{ color: white; }
 .title		{ color: #ff4500; }
 
+h4		{ color: #ff4500; }
+
 .pr_str {
     font-size: 1em;
     width: 0.9em;
@@ -387,8 +389,6 @@ ul ul a {
     margin: 0 auto;
     display: block;
     background: #555;
-    transition: all 0.8s cubic-bezier(0.810, -0.330, 0.345, 1.375);
-    transition-delay: 0.2s;
 }
 
 #rightbarCollapse.active span {
@@ -404,6 +404,47 @@ ul ul a {
 
 #rightbarIconUserX {
     display: block;
+}
+
+#inlineEditor {
+    width: 40px;
+    height: 40px;
+    background: whitesmoke;
+    cursor: pointer;
+    margin-left: 15px;
+}
+
+#inlineEditor span {
+    width: 80%;
+    height: 2px;
+    margin: 0 auto;
+    display: block;
+    background: #555;
+}
+
+#saveIcon {
+    display: none;
+}
+
+#editIcon {
+    display: block;
+}
+
+/* ---------------------------------------------------
+    SCROLL TO TOP
+----------------------------------------------------- */
+.scrollToTop{
+    display: none;
+    position: fixed;
+    bottom: 10px;
+    left: 25px;
+    z-index: 99;
+    font-size: 48px;
+    color: lightblue;
+    opacity: 0.5;
+}
+.scrollToTop:hover{
+    color: whitesmoke;
 }
 
 /* ---------------------------------------------------

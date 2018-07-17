@@ -27,7 +27,7 @@ $left_image   = 'images/ligue_1-100.png';
 $rght_image   = 'images/coupe_de_la_ligue1-100.png';
 $cur_year     = '2018-19';
 $president    = 'Alexey Plotitsa';
-$vice         = 'Kirill Goloschekov';
+$vice         = 'Кирилл Голощёков';
 $pressa       = 'Vladislav Ezhergin';
 $club_edit    = false;
 ?>
