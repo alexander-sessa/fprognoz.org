@@ -727,3 +727,11 @@ ul ul a {
 .det .center {width:6%;text-align:center}
 .det .left {float:left;text-align:left}
 .det .right {float:right;text-align:right}
+
+.monospace {
+	white-space: pre-wrap;
+	font-family: monospace;
+	font-size: 1.2em;
+	line-height: 1;
+	width: 100%;
+}

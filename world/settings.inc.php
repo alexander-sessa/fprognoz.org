@@ -1,5 +1,5 @@
 <?php
-$cca          = 'WL';
+$cca          = 'UNL';
 $charset      = 'UTF-8';
 $title        = 'ФП. Лига Наций';
 $description  = 'Футбол-прогнозная Лига Наций';
@@ -27,6 +27,6 @@ $left_image   = '';
 $rght_image   = '';
 $cur_year     = '2018';
 $president    = 'Eugene Gladyr';
-$vice         = 'Alexander Sessa';
+$vice         = 'Александр Сесса';
 $pressa       = '';
 ?>

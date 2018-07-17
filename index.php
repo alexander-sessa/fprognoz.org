@@ -794,23 +794,33 @@ else if (!is_dir($a)) {
 else if (count($_GET) == 1 || count($_GET) == 2 && isset($_GET['s']))
   $sidebar_show = true; // не сворачивать левое меню при выборе ассоциации и сезона
 
+$editable_class = '';
 include ("$a/settings.inc.php");
-if (isset($m)) {
+if (isset($m) && $m != 'news') {
   if (!is_file($a . '/' . $m . '.inc.php')) {
     http_response_code(404);
     $a = 'fifa';
     $m = '404';
   }
 }
-else {
-  $m = isset($s) ? 'text' : 'main';
-  $ref = 'news';
-  if ($a == 'fifa') {
-    if (isset($_COOKIE['fprognozmain']))
-      $m = 'news'; // при повторном посещении показывать новости
-    else
-      setcookie('fprognozmain', '1');
+else { // если не запрошен контент, надо показать хоть что-то:
+  if (isset($s))
+    $m = 'news';                        // новости сезона
+  else {
+    $m = 'main';                        // информация об ассоциации
+    if ($a == 'fifa')
+      if (!isset($_COOKIE['fprognozmain']))
+        setcookie('fprognozmain', '1'); // один раз покажем информацию о сайте
+      else {
+        $s = $cur_year;                 // потом всегда показывать свежие новости
+        $m = 'news';
+      }
+
   }
+  $news = file_get_contents($online_dir . $cca . '/' . (isset($s) ? $s . '/' : '') . 'news');
+  if (strpos($news, '</p>') || strpos($news, '<br'))
+    $editable_class = ' class="monospace"'; // text
+
 }
 if (!isset($s))
   $s = $cur_year;
@@ -848,6 +858,7 @@ $fprognozls = isset($_COOKIE['fprognozls']) ? $_COOKIE['fprognozls'] : 'inscore'
 
 
 ////////// SIDEBAR
+
 
 $sidebar = '';
 
@@ -1367,7 +1378,7 @@ else {
 
     <!-- Bootstrap CSS CDN -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-    <link href="css/fp.css?ver=97" rel="stylesheet">
+    <link href="css/fp.css?ver=98" rel="stylesheet">
     <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -1473,26 +1484,26 @@ else {
     echo '            history.pushState(null, "'.$title.'", "'.$this_site.'")
 ';
 ?>
-            $('#sidebarCollapse').on('click',function(){
-                $('#sidebar').toggleClass('active');
-                $('#sidebar').toggleClass('collapsed');
-                $(this).toggleClass('active');
-                $(this).toggleClass('collapsed');
-                //$('#navbarFlag').toggle();
+            $("#sidebarCollapse").on("click",function(){
+                $("#sidebar").toggleClass("active");
+                $("#sidebar").toggleClass("collapsed");
+                $(this).toggleClass("active");
+                $(this).toggleClass("collapsed");
+                //$("#navbarFlag").toggle();
             });
-            $('#rightbarCollapse').on('click',function(){
-                $('#rightbar').toggleClass('active');
-                $(this).toggleClass('active');
-                if($('#rightbarIconUser').is(':hidden')){
-                    $('#rightbarIconUser').show();
-                    $('#rightbarIconUserX').hide();
+            $("#rightbarCollapse").on("click",function(){
+                $("#rightbar").toggleClass("active");
+                $(this).toggleClass("active");
+                if($("#rightbarIconUser").is(":hidden")){
+                    $("#rightbarIconUser").show();
+                    $("#rightbarIconUserX").hide();
                 }
-                else if($('#rightbarIconUserX').is(':hidden')){
-                    $('#rightbarIconUser').hide();
-                    $('#rightbarIconUserX').show();
+                else if($("#rightbarIconUserX").is(":hidden")){
+                    $("#rightbarIconUser").hide();
+                    $("#rightbarIconUserX").show();
                 }
             });
-            $("a[name=modal]").click(function(e){e.preventDefault();$('.overlay').fadeTo("fast",0.65);$("#mwin").addClass("popup-show")});
+            $("a[name=modal]").click(function(e){e.preventDefault();$(".overlay").fadeTo("fast",0.65);$("#mwin").addClass("popup-show")});
             $(".popup .close,.overlay").click(function(e){e.preventDefault();$(".overlay").hide();$("#mwin").removeClass("popup-show")});
             $("#name_str").blur(function(){
                 if(!$("#name_str").is(":hover")){
@@ -1523,14 +1534,45 @@ else {
 
             $(window).scroll(function(){
                 if($(this).scrollTop()>100)
-                    $('.scrollToTop').fadeIn();
+                    $(".scrollToTop").fadeIn();
                 else
-                    $('.scrollToTop').fadeOut();
+                    $(".scrollToTop").fadeOut();
             });
-            $('.scrollToTop').click(function(){
-                $('html,body').animate({scrollTop:0},800);
+            $(".scrollToTop").click(function(){
+                $("html,body").animate({scrollTop:0},400);
                 return false;
             });
+
+            cke_config={language:"ru"}
+            editable=null
+            $("#editIcon").click(function(){
+                $("#saveIcon").show();
+                $("#editIcon").hide();
+                if($("#editable").hasClass("monospace"))
+                    $("div#editable").replaceWith('<textarea id="editable" class="monospace" style="width:100%;height:'+$("#editable").html().split("\n").length+'em">'+$("#editable").html()+"</textarea>")
+                else{
+                    InlineEditor
+                    .create(document.querySelector("#editable"),cke_config)
+                    .then(function(editor){
+                        editable=editor;
+                        editor.ui.focusTracker.set("isFocused",true)
+                    })
+                }
+            })
+
+            $("#saveIcon").click(function(){
+                $("#editIcon").show();
+                $("#saveIcon").hide();
+                if($("#editable").hasClass("monospace"))
+                    $("textarea#editable").replaceWith('<div id="editable" class="monospace">'+$("#editable").val()+"</div>")
+                else
+                    editable.destroy()
+
+                $.post("/online/ajax.php",{
+                    data:$("#saveIcon").data("tpl"),
+                    text:encodeURIComponent($("#editable").html())
+                },function(r){})
+            })
 
         });
     </script>
@@ -1654,7 +1696,6 @@ foreach ($seasons as $ss)
                     <a href="#editSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Редактирование</a>
                     <ul class="collapse list-unstyled" id="editSubmenu">
                         <li><a href="?a=<?=$a?>&amp;m=files&amp;file=settings">Основные настройки</a></li>
-                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;m=editnews">Новости</a></li>
                         <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;m=codestsv">Игроки</a></li>
                         <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;m=files&amp;file=calchm">Календарь</a></li>
                         <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;m=files&amp;file=genchm">Генераторы</a></li>
@@ -1711,8 +1752,20 @@ foreach ($seasons as $ss)
                         <div id="rightbarIconUser"><i class="fas fa-user"></i></div>
                         <div id="rightbarIconUserX"><i class="fas fa-user-times"></i></div>
                     </button>
-                    <button type="button" id="navbarFlag" class="navbar-flag" style="background: url(images/63x42/<?=$a?>.png) no-repeat; background-size: 100%; display:none" onClick="location.href='?a=<?=$a?>'">
-                    </button>
+<?php
+  if (isset($news) && $role == 'president') {
+    $data_cfg = ['cmd' => 'save_file', 'author' => $_SESSION['Coach_name'], 'a' => $a, 's' => $s, 'm' => $m];
+    $scfg = base64_encode(mcrypt_encrypt( MCRYPT_BLOWFISH, $key, json_encode($data_cfg), MCRYPT_MODE_CBC, $iv ));
+    echo '
+<script src="https://cdn.ckeditor.com/ckeditor5/10.1.0/inline/ckeditor.js"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/10.1.0/inline/translations/ru.js"></script>
+                    <button type="button" id="inlineEditor" class="navbar-btn">
+                        <div id="editIcon"><i class="fas fa-edit"></i></div>
+                        <div id="saveIcon" data-tpl="' . $scfg . '"><i class="fas fa-save"></i></div>
+                    </button>';
+}
+?>
+                    <button type="button" id="navbarFlag" class="navbar-flag" style="background: url(images/63x42/<?=$a?>.png) no-repeat; background-size: 100%; display:none" onClick="location.href='?a=<?=$a?>'"></button>
                     <button class="btn btn-light d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarMyTours" aria-controls="navbarMyTours" aria-expanded="false" aria-label="Toggle navigation">
                         <i class="fas fa-align-justify"></i>
                     </button>
@@ -1731,8 +1784,15 @@ foreach ($seasons as $ss)
                 </div>
             </nav>
 
-            <div class="main">';
-  include ($a . '/' . $m . '.inc.php');
+            <div class="main">
+                <div id="editable"' . $editable_class . '>';
+  if (isset($news))
+    echo $news;
+  else
+    include ($a . '/' . $m . '.inc.php');
+
+  echo '
+                </div>';
   if ($gb_status == 'on')
     include 'comments/main.php';
 
