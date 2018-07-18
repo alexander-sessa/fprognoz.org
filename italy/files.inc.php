@@ -1,6 +1,3 @@
-    <p><a href="?<?="a=$a";?>&amp;m=files&amp;file=settings" class="title text15b">Редактирование основных настроек ассоциации</a></p>
-    <p>Название ассоциации, оформление страниц, текущий сезон, имена должностных лиц, разрешение редактирования составов.</p>
-    <p class="title text15b">Редактирование файлов настроек сезона</p>
 <?php
 function Schedule($timestamp, $country_code, $tour_code, $action, $pfname)
 {

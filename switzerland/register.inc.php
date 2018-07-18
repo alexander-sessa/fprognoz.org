@@ -19,9 +19,9 @@ foreach ($codes as $line)
     $registered = true;
 
 }
+$err = false;
 if (isset($_POST['_reg']))
 {
-  $err = false;
   if (!isset($_SESSION['Coach_name']))
   {
     if (!isset($_POST['user']) || !trim($_POST['user']))
@@ -68,7 +68,7 @@ else if (isset($_POST['reg']) && !$err)
   if (isset($_POST['email']))
     $email = trim($_POST['email']);
   else
-    foreach ($cma_db as $cca => $teams)
+    foreach ($cmd_db as $cca => $teams)
       foreach ($teams as $team)
         if ($_SESSION['Coach_name'] == $team['usr']) {
           $email = $team['eml'];
@@ -77,13 +77,13 @@ else if (isset($_POST['reg']) && !$err)
 
   $codestsv .= $_POST['team'].'	'.$realteams[$_POST['team']]['n'].'	'.$_SESSION['Coach_name'].'	'.$email.'	'.$realteams[$_POST['team']]['l']."	да\n";
   file_put_contents($online_dir."$cca/$cur_year/codes.tsv", $codestsv);
-  file_put_contents($online_dir.$cca.'/passwd/'.$_POST['team'], md5(trim($_POST['pass1'])).':player');
-  if (isset($_POST['pass1']))
+  if (isset($_POST['pass1'])) {
+    file_put_contents($online_dir.$cca.'/passwd/'.$_POST['team'], md5(trim($_POST['pass1'])).':player');
     send_email('FPrognoz.org <fp@fprognoz.org>', $_SESSION['Coach_name'], $email,
 'Password for FPprognoz.org', 'Team code = '.$_POST['team'].'
 Password = '.$_POST['pass1'].'
 ');
-
+  }
   build_access();
   echo 'Регистрация успешна.<br />
 Код команды:'.$_POST['team'].'<br />

@@ -783,6 +783,14 @@ if ($auth && !$_POST['pass_str'] && strpos($_POST['name_str'], '@') && strpos($_
   $m = 'authentifying';
   $email_ok = false;
 }
+if (isset($ls))
+   setcookie('fprognozls', $ls);
+
+$fprognozls = isset($_COOKIE['fprognozls']) ? $_COOKIE['fprognozls'] : 'inscore';
+$editable_class = '';
+
+////////// определяем, что показывать, если нечего показывать
+
 $sidebar_show = false;
 if (!isset($a))
   $a = 'fifa';
@@ -794,14 +802,16 @@ else if (!is_dir($a)) {
 else if (count($_GET) == 1 || count($_GET) == 2 && isset($_GET['s']))
   $sidebar_show = true; // не сворачивать левое меню при выборе ассоциации и сезона
 
-$editable_class = '';
 include ("$a/settings.inc.php");
-if (isset($m) && $m != 'news') {
+if (isset($m) && !in_array($m, ['main', 'news'])) { // проверка на псевдо-скрипты
   if (!is_file($a . '/' . $m . '.inc.php')) {
     http_response_code(404);
     $a = 'fifa';
     $m = '404';
   }
+  if ($m == 'prognoz' && isset($s) && $s != $cur_year)
+    $m = 'news'; // форма prognoz только для текущего сезона!
+
 }
 else { // если не запрошен контент, надо показать хоть что-то:
   if (isset($s))
@@ -817,11 +827,26 @@ else { // если не запрошен контент, надо показат
       }
 
   }
-  $news = file_get_contents($online_dir . $cca . '/' . (isset($s) ? $s . '/' : '') . 'news');
-  if (strpos($news, '</p>') || strpos($news, '<br'))
-    $editable_class = ' class="monospace"'; // text
-
 }
+if ($m == 'main' || $m == 'news') {
+  $fn = $online_dir . $cca . '/' . (isset($s) ? $s . '/' : '') . 'news';
+  $content = file_get_contents(is_file($fn) ? $fn : $online_dir . $cca . '/news');
+}
+
+////////// другие псевдо-скрипты
+
+if (isset($content) && !trim($content) && !strpos($content, '</p>') && !strpos($content, '<br'))
+  $editable_class = ' class="monospace"'; // text, но если всё удалить, должно разрешить ввести html
+
+if ($m == 'cal' || $m == 'gen') {
+  $content = file_get_contents($online_dir . $cca . '/' . $s . '/' . $m);
+  $editable_class = ' class="monospace"';
+}
+
+
+////////// построение левого меню
+
+$sidebar = '';
 if (!isset($s))
   $s = $cur_year;
 
@@ -832,7 +857,7 @@ if (is_dir($online_dir.$ccd))
 
 foreach ($dir as $subdir)
   if (($subdir[0] == '2') || ($subdir[0] == '1')) {
-    $seasons[] = $subdir; // список сезонов для меню
+    $seasons[] = $subdir;
     if (!isset($s))
       $s = $subdir;
 
@@ -847,20 +872,6 @@ if ($cca == 'UNL') { // для показа в Лиге Наций подобр�
 }
 if (!isset($t))
   $t = '01';
-
-if ($m == 'prognoz' && $s != $cur_year)
-  $m = 'main'; // форма prognoz только для текущего сезона!
-
-if (isset($ls))
-   setcookie('fprognozls', $ls);
-
-$fprognozls = isset($_COOKIE['fprognozls']) ? $_COOKIE['fprognozls'] : 'inscore';
-
-
-////////// SIDEBAR
-
-
-$sidebar = '';
 
 if (in_array($cca, $classic_fa)) { // сбор туров сезона для классических асоциаций
   $tournaments = ['R' => [], 'G' => [], 'P' => [], 'C' => [], 'S' => []];
@@ -1019,7 +1030,7 @@ else if ($a == 'uefa') { // сбор туров сезона для евроку
   $leagues = ['GOLDL' => 'Золотая Лига', 'CHAML' => 'Лига Чемпионов', 'CUPSL' => 'Кубковая Лига', 'UEFAL' => 'Лига Европы'];
   $tournaments = ['GOLDL' => [], 'CHAML' => [], 'CUPSL' => [], 'UEFAL' => []];
   $season_dir = $online_dir.$cca.'/'.$s.'/';
-  if (is_dir($season_dir.'programms')) {
+  if (substr($s, 0, 4) != '2008' && is_dir($season_dir.'programms')) { // в 2008-м была другая структура
     $dir = scandir($season_dir.'programms');
     unset($dir[1], $dir[0]);
     foreach ($dir as $prog) {
@@ -1188,8 +1199,7 @@ else if ($a == 'fifa')
                 <li><a href="?m=hof">ЗАЛ СЛАВЫ</a></li>';
 
 
-///////// /SIDEBAR
-
+////////// аутентификация
 
 session_start();
 if (isset($token)) { // вход по ссылке
@@ -1327,6 +1337,9 @@ else {
   $is_redis = false;
   $gb_status = 'off';
 }
+
+////////// rest-обработчик
+
 if (isset($matches) || isset($updates) || isset($mtscores)) {
   if (isset($matches))
     bz_matches($matches);
@@ -1555,7 +1568,7 @@ else {
                     .create(document.querySelector("#editable"),cke_config)
                     .then(function(editor){
                         editable=editor;
-                        editor.ui.focusTracker.set("isFocused",true)
+                        $("#editable").click().focus()
                     })
                 }
             })
@@ -1623,6 +1636,9 @@ foreach ($seasons as $ss)
         <nav id="rightbar">
             <div class="rightbar-header">
 <?php
+
+////////// персональное меню (правое)
+
   if (!isset($_SESSION['Coach_name']) || $role == 'badlogin') {
     $data_cfg = ['cmd' => 'unique_check'];
     $ncfg = base64_encode(mcrypt_encrypt( MCRYPT_BLOWFISH, $key, json_encode($data_cfg), MCRYPT_MODE_CBC, $iv ));
@@ -1753,7 +1769,7 @@ foreach ($seasons as $ss)
                         <div id="rightbarIconUserX"><i class="fas fa-user-times"></i></div>
                     </button>
 <?php
-  if (isset($news) && $role == 'president') {
+  if (isset($content) && $role == 'president') {
     $data_cfg = ['cmd' => 'save_file', 'author' => $_SESSION['Coach_name'], 'a' => $a, 's' => $s, 'm' => $m];
     $scfg = base64_encode(mcrypt_encrypt( MCRYPT_BLOWFISH, $key, json_encode($data_cfg), MCRYPT_MODE_CBC, $iv ));
     echo '
@@ -1786,8 +1802,8 @@ foreach ($seasons as $ss)
 
             <div class="main">
                 <div id="editable"' . $editable_class . '>';
-  if (isset($news))
-    echo $news;
+  if (isset($content))
+    echo $content;
   else
     include ($a . '/' . $m . '.inc.php');
 

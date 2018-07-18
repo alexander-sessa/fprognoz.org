@@ -215,7 +215,14 @@ if (isset($data['cmd'])) {
       else
         $file = $data_dir . 'online/' . $cca . '/' . $data['s'] . '/' . $data['m'];
       copy($file, $file . '.' . time());
-      file_put_contents($file, urldecode($_POST['text']));
+      $text = urldecode($_POST['text']);
+      if (strpos($text, '</p>')) {
+        $tidy = new tidy;
+        $tidy->parseString($text, ['indent' => true, 'show-body-only' => true, 'wrap' => 200], 'utf8');
+        $tidy->cleanRepair();
+        $text = $tidy->value;
+      }
+      file_put_contents($file, $text);
     }
     echo '';
   }
