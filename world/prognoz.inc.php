@@ -1151,13 +1151,17 @@ $coach_form = false;
 
   }
   $minheight = count($cc_predicts) * 22 + 10;
-  $prognozlist = '
-<style type="text/css">* html { overflow-x: hidden; }</style>
+/*
+проверить работоспособность с jquery-ui
 <script type="text/javascript" src="js/iutil.js"></script>
-<script type="text/javascript" src="js/jquery.mobile.vmouse.min.js"></script>
 <script type="text/javascript" src="js/idrag.vmouse.js"></script>
 <script type="text/javascript" src="js/idrop.js"></script>
 <script type="text/javascript" src="js/isortables.1.2.2.js"></script>
+*/
+  $prognozlist = '
+<style type="text/css">* html { overflow-x: hidden; }</style>
+<script type="text/javascript" src="js/jquery.mobile.vmouse.min.js"></script>
+<script src="js/jquery/jquery-ui.min.js"></script>
 <style>
 .dropzone {
 	border: 1px solid #bbb;

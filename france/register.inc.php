@@ -68,7 +68,7 @@ else if (isset($_POST['reg']) && !$err)
   if (isset($_POST['email']))
     $email = trim($_POST['email']);
   else
-    foreach ($cma_db as $cca => $teams)
+    foreach ($cma_db as $ccode => $teams)
       foreach ($teams as $team)
         if ($_SESSION['Coach_name'] == $team['usr']) {
           $email = $team['eml'];

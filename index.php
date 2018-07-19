@@ -1410,45 +1410,41 @@ else {
     <a href="#" class="scrollToTop"><i class="fas fa-arrow-circle-up"></i></a>
 
     <div class="wrapper">
-        <!-- Sidebar Holder -->
-        <nav id="sidebar"<?=($sidebar_show ? ' class="active"' : '')?>>
+<?php
+
+////////// меню навигации (левое)
+
+echo '
+        <nav id="sidebar"'.($sidebar_show ? ' class="active"' : '').'>
             <div class="sidebar-header">
                 <a href="/"><h5>SFP - симпатичный футбол-прогноз</h5></a>
             </div>
 
             <ul class="list-unstyled components">
                 <li class="active">
-                    <a href="#assocSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><img src="images/63x42/<?=($a == 'sfp-20' ? 'world' : $a)?>.png" class="flag" /><?=($a == 'sfp-20' ? 'Лига Наций' : $fa[$a])?></a>
-                    <ul class="collapse list-unstyled" id="assocSubmenu">
-<?php
+                    <a href="#assocSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><img src="images/63x42/'.($a == 'sfp-20' ? 'world' : $a).'.png" class="flag" />'.($a == 'sfp-20' ? 'Лига Наций' : $fa[$a]).'</a>
+                    <ul class="collapse list-unstyled" id="assocSubmenu">';
 foreach ($fa as $ae => $ar)
   echo '
-                        <li>
-                            <a href="?a='.$ae.'"><img src="images/63x42/'.$ae.'.png" class="flag" />'.$ar.'</a>
-                        </li>
-';
-?>
+                        <li><a href="?a='.$ae.'"><img src="images/63x42/'.$ae.'.png" class="flag" />'.$ar.'</a></li>';
+echo '
                     </ul>
                 </li>
                 <li class="active">
-                    <a href="#seasonSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Сезон <?=$s?></a>
-                    <ul class="collapse list-unstyled" id="seasonSubmenu">
-<?php
+                    <a href="#seasonSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Сезон '.$s.'</a>
+                    <ul class="collapse list-unstyled" id="seasonSubmenu">';
 foreach ($seasons as $ss)
   echo '
-                        <li>
-                            <a href="?a='.$a.'&s='.$ss.'">'.$ss.'</a>
-                        </li>
-';
-?>
+                        <li><a href="?a='.$a.'&s='.$ss.'">'.$ss.'</a></li>';
+echo '
                     </ul>
                 </li>
-<?=$sidebar?>
+'.$sidebar.'
             </ul>
         </nav>
 
-        <nav id="rightbar">
-<?php
+        <nav id="rightbar">';
+
 ////////// персональное меню (правое)
 
   echo '
@@ -1485,7 +1481,7 @@ foreach ($seasons as $ss)
   else {
     echo '
                 <h5>Добро пожаловать,
-                <span style="color: lightgreen;"><b>' . $_SESSION['Coach_name'] . '</b></span> !</h5>
+                <span style="color: lightgreen;"><b>'.$_SESSION['Coach_name'].'</b></span> !</h5>
             </div>
 
             <ul class="list-unstyled components">
@@ -1496,84 +1492,80 @@ foreach ($seasons as $ss)
       foreach ($cc_data as $code => $team)
         if ($team['usr'] == $_SESSION['Coach_name'])
           echo '
-                <li><a href="?a=' . strtolower($ccn[$cc]) . '">' . ($cc == 'SFP' ? 'Сборная сайта' : $team['cmd']) . ' (' . $cc . ')</a></li>
+                <li><a href="?a='.strtolower($ccn[$cc]).'">'.($cc == 'SFP' ? 'Сборная сайта' : $team['cmd']).' ('.$cc.')</a></li>
 ';
-?>
+
+    echo '
                     </ul>
                 </li>
                 <li class="active">
-                    <a class="dropdown-item" href="#" onClick="document.getElementById('gb_toggle').submit(); return false;">Показ фан-зоны &nbsp; <img src="images/<?=$gb_status?>.gif" border = "0" alt="<?=$gb_status?>" /></a>
+                    <a class="dropdown-item" href="#" onClick="document.getElementById(\'gb_toggle\').submit(); return false;">Показ фан-зоны &nbsp; <img src="images/'.$gb_status.'.gif" border = "0" alt="'.$gb_status.'" /></a>
 <form id="gb_toggle" method="post"><input type="hidden" name="toggle_gb" value="" /></form>
-                    <a class="dropdown-item" id="change_pass" href="?m=pass"<?=(isset($data['ts']) ? ' data-ts="'.$data['ts'].'" onClick="newPassword()"' : (isset($_POST['pass_str']) ? ' data-ts="'.time().'" onClick="newPassword()"' : ''))?>>Смена пароля</a>
+                    <a class="dropdown-item" id="change_pass" href="?m=pass"'.(isset($data['ts']) ? ' data-ts="'.$data['ts'].'" onClick="newPassword()"' : (isset($_POST['pass_str']) ? ' data-ts="'.time().'" onClick="newPassword()"' : '')).'>Смена пароля</a>
                     <a class="dropdown-item" href="?logout=1">Выход</a>
                     <p></p>
-                </li>
-<?php
-      if ($role == 'president') { ?>
-                <li><a href="/online/makeprogramm.php?cc=<?=$cca?>" target="MakeProgram">Создать новый тур</a></li>
+                </li>';
+    if ($role == 'president')
+      echo '
+                <li><a href="/online/makeprogramm.php?cc='.$cca.'" target="MakeProgram">Создать новый тур</a></li>
                 <li class="active">
                     <a href="#mailSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Рассылка</a>
                     <ul class="collapse list-unstyled" id="mailSubmenu">
-                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;m=email";">Выбранным игрокам</a></li>
-                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;m=maillist">Пресс-релиз</a></li>
-                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;t=<?=$t?>&amp;m=maillist&amp;file=program">Программка</a></li>
-                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;t=<?=$t?>&amp;m=maillist&amp;file=prognoz">Прогнозы</a></li>
-                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;t=<?=$t?>&amp;m=maillist&amp;file=itogi">Итоги</a></li>
-                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;t=<?=$t?>&amp;m=maillist&amp;file=review">Обзор</a></li>
+                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=email">Выбранным игрокам</a></li>
+                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=maillist">Пресс-релиз</a></li>
+                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;t='.$t.'&amp;m=maillist&amp;file=program">Программка</a></li>
+                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;t='.$t.'&amp;m=maillist&amp;file=prognoz">Прогнозы</a></li>
+                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;t='.$t.'&amp;m=maillist&amp;file=itogi">Итоги</a></li>
+                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;t='.$t.'&amp;m=maillist&amp;file=review">Обзор</a></li>
                     </ul>
                 </li>
                 <li class="active">
                     <a href="#editSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Редактирование</a>
                     <ul class="collapse list-unstyled" id="editSubmenu">
-                        <li><a href="?a=<?=$a?>&amp;m=files&amp;file=settings">Основные настройки</a></li>
-                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;m=codestsv">Игроки</a></li>
-                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;m=files&amp;file=calchm">Календарь</a></li>
-                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;m=files&amp;file=genchm">Генераторы</a></li>
-                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;m=files&amp;file=calcup">Календарь кубка</a></li>
-                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;m=files&amp;file=gencup">Генераторы кубка</a></li>
-                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;m=files&amp;file=bombers">Бомбардиры</a></li>
-                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;t=<?=$t?>&amp;m=files&amp;file=program">Программка тура</a></li>
+                        <li><a href="?a='.$a.'&amp;m=files&amp;file=settings">Основные настройки</a></li>
+                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=codestsv">Игроки</a></li>
+                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=files&amp;file=calchm">Календарь</a></li>
+                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=files&amp;file=genchm">Генераторы</a></li>
+                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=files&amp;file=calcup">Календарь кубка</a></li>
+                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=files&amp;file=gencup">Генераторы кубка</a></li>
+                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=files&amp;file=bombers">Бомбардиры</a></li>
+                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;t='.$t.'&amp;m=files&amp;file=program">Программка тура</a></li>
                     </ul>
                 </li>
                 <li class="active">
                     <a href="#tplSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Макеты</a>
                     <ul class="collapse list-unstyled" id="tplSubmenu">
-                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;m=files&amp;file=tplpchm">Программка</a></li>
-                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;m=files&amp;file=tplpcup">Программка кубка</a></li>
-                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;m=files&amp;file=tplichm">Итоги тура</a></li>
-                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;m=files&amp;file=tplicup">Итоги плей-офф тура</a></li>
-                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;m=files&amp;file=tplrev">Шапка обзора</a></li>
+                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=files&amp;file=tplpchm">Программка</a></li>
+                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=files&amp;file=tplpcup">Программка кубка</a></li>
+                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=files&amp;file=tplichm">Итоги тура</a></li>
+                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=files&amp;file=tplicup">Итоги плей-офф тура</a></li>
+                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=files&amp;file=tplrev">Шапка обзора</a></li>
                     </ul>
-                </li>
-<?php
-      }
-      else if ($role == 'pressa') {
-?>
+                </li>';
+    else if ($role == 'pressa')
+      echo '
                 <li class="active">
                     <a href="#mailSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Рассылка</a>
                     <ul class="collapse list-unstyled" id="mailSubmenu">
-                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;m=email";">Выбранным игрокам</a></li>
-                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;m=maillist">Пресс-релиз</a></li>
-                        <li><a href="?a=<?=$a?>&amp;s=<?=$s?>&amp;t=<?=$t?>&amp;m=maillist&amp;file=review">Обзор</a></li>
+                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=email";">Выбранным игрокам</a></li>
+                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=maillist">Пресс-релиз</a></li>
+                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;t='.$t.'&amp;m=maillist&amp;file=review">Обзор</a></li>
                     </ul>
-                </li>
-<?php
-      }
-?>
-            </ul>
-<?php
-    }
-?>
+                </li>';
+    echo '
+            </ul>';
+  }
+  echo '
         </nav>
 
         <!-- Page Content Holder -->
-        <div id="content">
+        <content id="content">
             <header class="header">
-                <h3><?=$description?></h3>
+                <h3>'.$description.'</h3>
             </header>
             <nav class="navbar navbar-expand-lg navbar-lignt bg-light">
                 <div class="container-fluid">
-                    <button type="button" id="sidebarCollapse" class="navbar-btn<?=($sidebar_show ? ' active' : '')?>" title="Свернуть/показать панель навигации">
+                    <button type="button" id="sidebarCollapse" class="navbar-btn'.($sidebar_show ? ' active' : '').'" title="Свернуть/показать панель навигации">
                         <span></span>
                         <span></span>
                         <span></span>
@@ -1581,8 +1573,7 @@ foreach ($seasons as $ss)
                     <button type="button" id="rightbarCollapse" class="navbar-btn">
                         <div id="rightbarIconUser" title="Показать личный кабинет"><i class="fas fa-user"></i></div>
                         <div id="rightbarIconUserX" title="Свернуть личный кабинет"><i class="fas fa-user-times"></i></div>
-                    </button>
-<?php
+                    </button>';
   if (isset($content) && $role == 'president') {
     $data_cfg = ['cmd' => 'save_file', 'author' => $_SESSION['Coach_name'], 'a' => $a, 's' => $s, 'm' => $m];
     $scfg = base64_encode(mcrypt_encrypt( MCRYPT_BLOWFISH, $key, json_encode($data_cfg), MCRYPT_MODE_CBC, $iv ));
@@ -1601,14 +1592,14 @@ foreach ($seasons as $ss)
                         <div id="mailIcon" title="Подготовить текст к рассылке"><i class="fas fa-envelope-open"></i></div>
                         <div id="sendIcon" title="Рассылка текста" style="display:none"><i class="fas fa-envelope"></i></div>
                     </button>';
-?>
-                    <button type="button" id="navbarFlag" class="navbar-flag" style="background: url(images/63x42/<?=$a?>.png) no-repeat; background-size: 100%; display:none" onClick="location.href='?a=<?=$a?>'"></button>
+
+  echo '
+                    <button type="button" id="navbarFlag" class="navbar-flag" style="background: url(images/63x42/'.$a.'.png) no-repeat; background-size: 100%; display:none" onClick="location.href=\'?a='.$a.'\'"></button>
                     <button class="btn btn-light d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarMyTours" aria-controls="navbarMyTours" aria-expanded="false" aria-label="Toggle navigation">
                         <i class="fas fa-align-justify"></i>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarMyTours">
-                        <ul class="nav navbar-nav ml-auto">
-<?php
+                        <ul class="nav navbar-nav ml-auto">';
   if (isset($_SESSION['Coach_name'])) {
     if (!is_file($data_dir . 'personal/'.$_SESSION['Coach_name'].'/navbar.inc'))
       build_personal_nav();
@@ -1630,13 +1621,16 @@ foreach ($seasons as $ss)
 
   echo '
                 </div>';
+
   if ($gb_status == 'on')
     include 'comments/main.php';
 
   include ('fifa/register.inc.php'); // регистрация в сборных ассоциаций
-?>
+
+  echo '
             </div>
-        </div>
+        </content>';
+?>
 
     </div>
 
