@@ -1,6 +1,12 @@
 <?php
 /*
-- редактирование страниц посредством CKEditor
+- редактирование настроек сезона
+- генерирование календаря и "генераторов"
+- переписать files: у всех редактирующих скриптов должна работать кнопка saveIcon
+- у президентов в player кнопка редактирования, включающая codestsv
+- рассылки по кнопке "конверт"
+- добавить показ (и редактирование?) пресс-релизов
+- двойное редатирование (текст + html), где это возможно, и фоормирование сообщений с обеими частями
 - вставка вырезанной цитаты в комментариях
 - отправка токена с учетом смены пароля (закомментировано)
 - смена пароля по токену или сразу после входа
@@ -803,17 +809,7 @@ else if (count($_GET) == 1 || count($_GET) == 2 && isset($_GET['s']))
   $sidebar_show = true; // не сворачивать левое меню при выборе ассоциации и сезона
 
 include ("$a/settings.inc.php");
-if (isset($m) && !in_array($m, ['main', 'news'])) { // проверка на псевдо-скрипты
-  if (!is_file($a . '/' . $m . '.inc.php')) {
-    http_response_code(404);
-    $a = 'fifa';
-    $m = '404';
-  }
-  if ($m == 'prognoz' && isset($s) && $s != $cur_year)
-    $m = 'news'; // форма prognoz только для текущего сезона!
-
-}
-else { // если не запрошен контент, надо показать хоть что-то:
+if (!isset($m)) { // если не запрошен контент, надо показать хоть что-то:
   if (isset($s))
     $m = 'news';                        // новости сезона
   else {
@@ -828,20 +824,26 @@ else { // если не запрошен контент, надо показат
 
   }
 }
+else if (!in_array($m, ['main', 'news', 'cal', 'gen'])) { // проверка на псевдо-скрипты -
+  if (!is_file($a . '/' . $m . '.inc.php')) {             // им не требуется наличие файла
+    http_response_code(404);
+    $a = 'fifa';
+    $m = '404';
+  }
+  if ($m == 'prognoz' && isset($s) && $s != $cur_year)
+    $m = 'news'; // форма prognoz только для текущего сезона!
+
+}
 if ($m == 'main' || $m == 'news') {
   $fn = $online_dir . $cca . '/' . (isset($s) ? $s . '/' : '') . 'news';
   $content = file_get_contents(is_file($fn) ? $fn : $online_dir . $cca . '/news');
 }
-
-////////// другие псевдо-скрипты
-
-if (isset($content) && !trim($content) && !strpos($content, '</p>') && !strpos($content, '<br'))
-  $editable_class = ' class="monospace"'; // text, но если всё удалить, должно разрешить ввести html
-
 if ($m == 'cal' || $m == 'gen') {
   $content = file_get_contents($online_dir . $cca . '/' . $s . '/' . $m);
   $editable_class = ' class="monospace"';
 }
+else if (isset($content) && trim($content) && !strpos($content, '</p>') && !strpos($content, '<br'))
+  $editable_class = ' class="monospace"'; // text, но если всё удалить, должно разрешить ввести html
 
 
 ////////// построение левого меню
@@ -1391,204 +1393,16 @@ else {
 
     <!-- Bootstrap CSS CDN -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-    <link href="css/fp.css?ver=98" rel="stylesheet">
-    <script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-        ga('create', 'UA-92920347-1', 'auto');
-        ga('send', 'pageview');
-    </script>
-    <!--[if lt IE 9]>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
-    <![endif]-->
-
-    <!-- Font Awesome JS -->
+    <link href="css/fp.css?ver=108" rel="stylesheet">
+    <!--[if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script><![endif]-->
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
-    <!-- jQuery CDN -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT" crossorigin="anonymous"></script>
-    <!-- Popper.JS UMD ver. -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <!-- Bootstrap JS -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    <script src="/js/fp.js?ver=4"></script>
     <script src="/js/jquery/jquery.color.js"></script>
     <script src="/js/socket.io/socket.io.slim.js"></script>
-    <script type="text/javascript">
-        $.browser={};
-        $.browser.mozilla=/mozilla/.test(navigator.userAgent.toLowerCase())&&!/webkit/.test(navigator.userAgent.toLowerCase());
-        $.browser.webkit=/webkit/.test(navigator.userAgent.toLowerCase());
-        $.browser.opera=/opera/.test(navigator.userAgent.toLowerCase());
-        $.browser.msie=/msie/.test(navigator.userAgent.toLowerCase());
-        function validateEmail(email){var re=/\S+@\S+\.\S+/;return re.test(email)}
-        var fg=0
-        function passwordCheck(str){
-            $.post("/online/ajax.php",{
-                data:$("#pass_str").data("tpl"),
-                nick:$("#name_str").val(),
-                pswd:str
-            },
-            function(r){
-                if(r=='0'){
-                    $("#valid_name").html('<span style="color:lightsalmon"><i class="fas fa-times" /> неверный пароль</span>');fg=setTimeout(function(){$("#forget").show()},17000)
-                }
-                else if(r=='1'){
-                    $("#valid_name").html('<span style="color:lightgreen"><i class="fas fa-check" /> добро пожаловать!</span>');$("#l_form").submit()
-                }
-                else if(r=='2'){
-                    $("#valid_name").html('<span style="color:lightgreen"><i class="fas fa-check" /> пароль выслан</span>')
-                }
-            })
-        }
-        function emailCheck(str){
-            $.post("/online/ajax.php",{
-                data:$("#name_str").data("tpl"),
-                nick:str,
-                email:str
-            },
-            function(r){
-                if(r=='0')
-                    $("#valid_name").html('<span style="color:lightsalmon"><i class="fas fa-times" /> такой e-mail не найден</span>')
-                else {
-                    str=$("#pass_str").val()
-                    if (str.length)
-                        passwordCheck(str)
-                    else
-                        $("#valid_name").html('<span style="color:lightblue;cursor:pointer" onClick="tokenSend(); return false" title="Вам будет выслана ссылка для входа"><i class="fas fa-check" /> войти без пароля?</span>')
-                }
-            })
-        }
-        function nicknameCheck(str){
-            $.post("/online/ajax.php",{
-                data:$("#name_str").data("tpl"),
-                nick:str,
-                email:""
-            },function(r){
-                if(r=='0')
-                    $("#valid_name").html('<span style="color:lightsalmon"><i class="fas fa-times" /> имя/e-mail не найдены</span>');
-                else{
-                    str=$("#pass_str").val()
-                    if (str.length)
-                        passwordCheck(str)
-                    else
-                        $("#valid_name").html('<span style="color:lightgreen"><i class="fas fa-check" /> теперь введите пароль</span>');
-                }
-            })
-        }
-        function tokenSend(){
-            $.post("/online/ajax.php",{
-                data:$("#l_form").data("tpl"),
-                nick:$("#name_str").val()
-            },function(r){
-                if(r==1)
-                    $("#valid_name").html('<span style="color:lightgreen"><i class="fas fa-check" /> проверьте вашу почту</span>')
-                else
-                    $("#valid_name").html('<span style="color:lightsalmon"><i class="fas fa-times" /> не удалось отправить</span>')
-            })
-        }
-        function newPassword(){
-            return true;
-        }
-        $(document).ready(function(){
-<?php
-  if (isset($_GET['logout']))
-    echo '            history.pushState(null, "'.$title.'", "'.$this_site.'")
-';
-?>
-            $("#sidebarCollapse").on("click",function(){
-                $("#sidebar").toggleClass("active");
-                $("#sidebar").toggleClass("collapsed");
-                $(this).toggleClass("active");
-                $(this).toggleClass("collapsed");
-                //$("#navbarFlag").toggle();
-            });
-            $("#rightbarCollapse").on("click",function(){
-                $("#rightbar").toggleClass("active");
-                $(this).toggleClass("active");
-                if($("#rightbarIconUser").is(":hidden")){
-                    $("#rightbarIconUser").show();
-                    $("#rightbarIconUserX").hide();
-                }
-                else if($("#rightbarIconUserX").is(":hidden")){
-                    $("#rightbarIconUser").hide();
-                    $("#rightbarIconUserX").show();
-                }
-            });
-            $("a[name=modal]").click(function(e){e.preventDefault();$(".overlay").fadeTo("fast",0.65);$("#mwin").addClass("popup-show")});
-            $(".popup .close,.overlay").click(function(e){e.preventDefault();$(".overlay").hide();$("#mwin").removeClass("popup-show")});
-            $("#name_str").blur(function(){
-                if(!$("#name_str").is(":hover")){
-                    str=$(this).val()
-                    if(str.length<2)
-                        $("#valid_name").html('<span style="color:pink"><i class="fas fa-times"></i> введите хотя бы 2 буквы</span>')
-                    else if(validateEmail(str))
-                        emailCheck(str)
-                    else
-                        nicknameCheck(str)
-                }
-            })
-            $("#pass_str").keyup(function(){
-                if($("#pass_str").is(":focus")){
-                    clearTimeout(fg)
-                    str=$(this).val()
-                    if (str.length)
-                        passwordCheck(str)
-                    else{
-                        str=$("#name_str").val()
-                        if(validateEmail(str))
-                            emailCheck(str)
-                        else
-                            $("#valid_name").html('<span style="color:lightgreen"><i class="fas fa-check" /> теперь введите пароль</span>')
-                    }
-                }
-            })
-
-            $(window).scroll(function(){
-                if($(this).scrollTop()>100)
-                    $(".scrollToTop").fadeIn();
-                else
-                    $(".scrollToTop").fadeOut();
-            });
-            $(".scrollToTop").click(function(){
-                $("html,body").animate({scrollTop:0},400);
-                return false;
-            });
-
-            cke_config={language:"ru"}
-            editable=null
-            $("#editIcon").click(function(){
-                $("#saveIcon").show();
-                $("#editIcon").hide();
-                if($("#editable").hasClass("monospace"))
-                    $("div#editable").replaceWith('<textarea id="editable" class="monospace" style="width:100%;height:'+$("#editable").html().split("\n").length+'em">'+$("#editable").html()+"</textarea>")
-                else{
-                    InlineEditor
-                    .create(document.querySelector("#editable"),cke_config)
-                    .then(function(editor){
-                        editable=editor;
-                        $("#editable").click().focus()
-                    })
-                }
-            })
-
-            $("#saveIcon").click(function(){
-                $("#editIcon").show();
-                $("#saveIcon").hide();
-                if($("#editable").hasClass("monospace"))
-                    $("textarea#editable").replaceWith('<div id="editable" class="monospace">'+$("#editable").val()+"</div>")
-                else
-                    editable.destroy()
-
-                $.post("/online/ajax.php",{
-                    data:$("#saveIcon").data("tpl"),
-                    text:encodeURIComponent($("#editable").html())
-                },function(r){})
-            })
-
-        });
-    </script>
 </head>
 
 <body>
@@ -1634,11 +1448,11 @@ foreach ($seasons as $ss)
         </nav>
 
         <nav id="rightbar">
-            <div class="rightbar-header">
 <?php
-
 ////////// персональное меню (правое)
 
+  echo '
+            <div class="rightbar-header" data-log="' . (isset($_GET['logout']) ? 'out' : 'in') . '">';
   if (!isset($_SESSION['Coach_name']) || $role == 'badlogin') {
     $data_cfg = ['cmd' => 'unique_check'];
     $ncfg = base64_encode(mcrypt_encrypt( MCRYPT_BLOWFISH, $key, json_encode($data_cfg), MCRYPT_MODE_CBC, $iv ));
@@ -1759,14 +1573,14 @@ foreach ($seasons as $ss)
             </header>
             <nav class="navbar navbar-expand-lg navbar-lignt bg-light">
                 <div class="container-fluid">
-                    <button type="button" id="sidebarCollapse" class="navbar-btn<?=($sidebar_show ? ' active' : '')?>">
+                    <button type="button" id="sidebarCollapse" class="navbar-btn<?=($sidebar_show ? ' active' : '')?>" title="Свернуть/показать панель навигации">
                         <span></span>
                         <span></span>
                         <span></span>
                     </button>
                     <button type="button" id="rightbarCollapse" class="navbar-btn">
-                        <div id="rightbarIconUser"><i class="fas fa-user"></i></div>
-                        <div id="rightbarIconUserX"><i class="fas fa-user-times"></i></div>
+                        <div id="rightbarIconUser" title="Показать личный кабинет"><i class="fas fa-user"></i></div>
+                        <div id="rightbarIconUserX" title="Свернуть личный кабинет"><i class="fas fa-user-times"></i></div>
                     </button>
 <?php
   if (isset($content) && $role == 'president') {
@@ -1776,10 +1590,17 @@ foreach ($seasons as $ss)
 <script src="https://cdn.ckeditor.com/ckeditor5/10.1.0/inline/ckeditor.js"></script>
 <script src="https://cdn.ckeditor.com/ckeditor5/10.1.0/inline/translations/ru.js"></script>
                     <button type="button" id="inlineEditor" class="navbar-btn">
-                        <div id="editIcon"><i class="fas fa-edit"></i></div>
-                        <div id="saveIcon" data-tpl="' . $scfg . '"><i class="fas fa-save"></i></div>
+                        <div id="editIcon" title="Редактировать"><i class="fas fa-edit"></i></div>
+                        <div id="saveIcon" class="navbar-btn-icon" data-tpl="' . $scfg . '" title="Сохранить изменения"><i class="fas fa-save"></i></div>
                     </button>';
-}
+  }
+  if ($role == 'president' && in_array($m, ['cal', 'gen', 'main', 'news', 'prognoz', 'prog', 'itog', 'rev'])
+   || $role == 'pressa' && in_array($m, ['main', 'news', 'rev']))
+    echo '
+                    <button type="button" id="sendMail" class="navbar-btn">
+                        <div id="mailIcon" title="Подготовить текст к рассылке"><i class="fas fa-envelope-open"></i></div>
+                        <div id="sendIcon" title="Рассылка текста" style="display:none"><i class="fas fa-envelope"></i></div>
+                    </button>';
 ?>
                     <button type="button" id="navbarFlag" class="navbar-flag" style="background: url(images/63x42/<?=$a?>.png) no-repeat; background-size: 100%; display:none" onClick="location.href='?a=<?=$a?>'"></button>
                     <button class="btn btn-light d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarMyTours" aria-controls="navbarMyTours" aria-expanded="false" aria-label="Toggle navigation">
