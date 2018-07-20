@@ -728,6 +728,33 @@ function parse_cal_and_gen($program) {
   return [$cal, $gen];
 }
 
+function season_config($file) {
+  $config = file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+  $cal = $config[2]; // если не будет переобъявлен в этапах
+  $season_config = json_decode($config[4], true);
+  $season_config[0]['lang'] = isset($season_config[0]['турнир']) || !isset($season_config[0]['type']) ? 'ru' : 'en';
+  foreach($season_config as $n => $tournament)
+    if ($season_config[0]['lang'] == 'en') {
+      if (!isset($tournament['type']))
+        if ($cal == 'calc' || isset($tournament['format'][0]['cal']) && $tournament['format'][0]['cal'] == 'calc')
+          $season_config[$n]['type'] = 'cup';
+        else
+          $season_config[$n]['type'] = 'chm'; // по умолчанию - чемпионат
+
+      if (!isset($tournament['format'][0]['cal']))
+        $season_config[$n]['format'][0]['cal'] = ($season_config[$n]['type'] == 'cup') ? 'calc' : $cal;
+
+      if (isset($tournament['format'][1]) && !isset($tournament['format'][1]['cal']))
+        $season_config[$n]['format'][1]['cal'] = 'calp'; // предполагаем, что это 2-й этап чемпионата: плей-офф
+
+    }
+    else {
+      // при неоходимости переведём на английский
+    }
+
+  return $season_config;
+}
+
 $ccn = array(
 'SFP' => 'SFP-team',
 'ENG' => 'England',
@@ -809,6 +836,145 @@ else if (count($_GET) == 1 || count($_GET) == 2 && isset($_GET['s']))
   $sidebar_show = true; // не сворачивать левое меню при выборе ассоциации и сезона
 
 include ("$a/settings.inc.php");
+
+////////// аутентификация
+
+session_start();
+if (isset($token)) { // вход по ссылке
+  $data = json_decode(trim(mcrypt_decrypt( MCRYPT_BLOWFISH, $key, base64_decode($token), MCRYPT_MODE_CBC, $iv )), true);
+  if ($data['cmd'] == 'auth_token' && $data['ts'] > time())
+    $_SESSION['Coach_name'] = $data['name'];
+  else
+    $notification = '
+ссылка для входа<br />
+не действительна';
+
+}
+if (isset($_GET['logout'])) {
+  $role = 'badlogin';
+  session_unset();
+  session_destroy();
+}
+$coach_name = isset($_SESSION['Coach_name']) ? $_SESSION['Coach_name'] : '';
+$passed = false;
+$sendpwd = '';
+$team_codes = [];
+
+// изменить: $cmd_db нужна только при авторизованном входе и в большинстве скриптов только с данными одного игрока
+$access = file($data_dir . 'auth/.access');
+$cmd_db = []; // база данных команд, сгруппированная по ассоциациям
+if ($auth || isset($_POST['submitnewpass'])) {
+  $hash = md5($_POST['pass_str']);
+  $name_str = mb_strtoupper(isset($_POST['name_str']) ? $_POST['name_str'] : $coach_name);
+}
+foreach ($access as $access_str) {
+  list($code, $as_code, $team, $name, $mail, $pwd, $rol) = explode(';', $access_str);
+  $cmd_db[$as_code][$code] = ['ccn' => $as_code, 'cmd' => $team, 'usr' => $name, 'eml' => $mail, 'rol' => $rol];
+  if ($auth || isset($_POST['submitnewpass'])) { // аутентификация или контрольная проверка пароля
+    if ($hash == $pwd &&
+       ($name_str == mb_strtoupper($code) || $name_str == mb_strtoupper($name) || $name_str == strtoupper($mail))) {
+      $passed = true;
+      if (isset($_POST['submitnewpass'])) {
+        $sendpwd = $mail;     // для отправки сообщения о смене пароля
+        $team_codes[$as_code] = $code; // для последующей смены пароля
+      }
+      if (strlen($coach_name) < strlen($name))
+        $coach_name = $name; // выбираем самое длинное имя из указанных
+
+    }
+    else if ($m == 'authentifying') {
+      if ($name_str == strtoupper($mail)) {
+        $email_ok = true;
+        break;
+      }
+    }
+    else if ($auth && !$pwd && $_POST['pass_str'] == $code && $_POST['name_str'] == $name) {
+      $sendpwd = $mail; // выполнилось условие отправки первого пароля
+      $team_codes[$as_code] = $code;
+    }
+  }
+}
+if ($auth) {
+  if ($passed) {
+    $_SESSION['Coach_name'] = $coach_name;
+    build_personal_nav();
+  }
+  else if ($sendpwd && count($team_codes)) {
+    $gp = '';
+    $mix = '23456789qwertyuiopasdfghjkzxcvbnmQWERTYUPASDFGHJKLZXCVBNM';
+    for ($i=0; $i<8; $i++)
+      $gp .= $mix[rand(0,56)];
+
+    $team_list = '';
+    foreach ($team_codes as $ac => $code) {
+      $team_list .= $code.', ';
+      file_put_contents($online_dir.$ac.'/passwd/'.$code, md5($gp).':player');
+    }
+    send_email('FPrognoz.org <fp@fprognoz.org>', $_POST['name_str'], $sendpwd, 'ФП. Пароль для сайта ' . $this_site,
+'Вы получили случайно-сгенерированный пароль для доступа на сайт ' . $this_site . '
+
+'.$gp.'
+
+Используйте его вместе с именем ' . $coach_name . ',
+или с указанным в поле "имя" кодом одной из ваших команд: '.$team_list.'
+или же с вашим e-mail адресом ' . $sendpwd . '.
+
+Пароль можно сменить на странице '.$this_site.'/?m=pass
+');
+    build_access();
+    $notification = 'Пароль выслан';
+  }
+  else if (!$notification)
+    $notification = 'Ошибка входа';
+
+}
+else { // restored session
+  if ($coach_name) {
+    build_personal_nav();
+    if (!isset($cca))
+      $cca = '';
+
+  }
+  else session_unset();
+}
+
+if (isset($_SESSION['Coach_name'])) {
+  if (strtotime('7/16') < time() && time() <= strtotime('9/1')
+   && !is_file($data_dir.'personal/'.$coach_name.'/'.date('Y'))) {
+    $a = 'fifa';
+    $m = 'confirm'; // кампания сбора подтверждений с 16 июля по 1 сентября
+  }
+  $role = acl($_SESSION['Coach_name']);
+  if ($have_redis)
+    $redis = new Redis();
+  else {
+    include('comments/redis-emu.php');
+    $redis = new Redis_emu();
+  }
+  $is_redis = $redis->connect($redis_host, $redis_port);
+
+  if (is_file($data_dir . 'personal/'.$_SESSION['Coach_name'].'/gb.inc')) {
+    if (isset($_POST['toggle_gb'])) {
+      unlink($data_dir . 'personal/'.$_SESSION['Coach_name'].'/gb.inc');
+      $gb_status = 'off';
+    }
+    else $gb_status = 'on';
+  }
+  else {
+    if (isset($_POST['toggle_gb'])) {
+      if (!is_dir($data_dir . 'personal/'.$_SESSION['Coach_name']))
+        mkdir($data_dir . 'personal/'.$_SESSION['Coach_name'], 0755);
+
+      touch($data_dir . 'personal/'.$_SESSION['Coach_name'].'/gb.inc');
+      $gb_status = 'on';
+    }
+    else $gb_status = 'off';
+  }
+}
+else {
+  $is_redis = false;
+  $gb_status = 'off';
+}
 if (!isset($m)) { // если не запрошен контент, надо показать хоть что-то:
   if (isset($s))
     $m = 'news';                        // новости сезона
@@ -824,8 +990,8 @@ if (!isset($m)) { // если не запрошен контент, надо п�
 
   }
 }
-else if (!in_array($m, ['main', 'news', 'cal', 'gen'])) { // проверка на псевдо-скрипты -
-  if (!is_file($a . '/' . $m . '.inc.php')) {             // им не требуется наличие файла
+else if (!in_array($m, ['main', 'news', 'cal', 'gen', 'set'])) { // проверка на псевдо-скрипты -
+  if (!is_file($a . '/' . $m . '.inc.php')) {                    // им не требуется наличие файла
     http_response_code(404);
     $a = 'fifa';
     $m = '404';
@@ -838,9 +1004,13 @@ if ($m == 'main' || $m == 'news') {
   $fn = $online_dir . $cca . '/' . (isset($s) ? $s . '/' : '') . 'news';
   $content = file_get_contents(is_file($fn) ? $fn : $online_dir . $cca . '/news');
 }
-if ($m == 'cal' || $m == 'gen') {
+else if ($m == 'cal' || $m == 'gen') {
   $content = file_get_contents($online_dir . $cca . '/' . $s . '/' . $m);
   $editable_class = ' class="monospace"';
+}
+else if ($m == 'set' && $role == 'president') {
+  $config = season_config($online_dir . $cca . '/' . $cur_year . '/fp.cfg');
+  $content = var_export($config, true);
 }
 else if (isset($content) && trim($content) && !strpos($content, '</p>') && !strpos($content, '<br'))
   $editable_class = ' class="monospace"'; // text, но если всё удалить, должно разрешить ввести html
@@ -1200,145 +1370,6 @@ else if ($a == 'fifa')
                 <li><a href="?m=live&amp;ls='.$fprognozls.'">Результаты</a></li>
                 <li><a href="?m=hof">ЗАЛ СЛАВЫ</a></li>';
 
-
-////////// аутентификация
-
-session_start();
-if (isset($token)) { // вход по ссылке
-  $data = json_decode(trim(mcrypt_decrypt( MCRYPT_BLOWFISH, $key, base64_decode($token), MCRYPT_MODE_CBC, $iv )), true);
-  if ($data['cmd'] == 'auth_token' && $data['ts'] > time())
-    $_SESSION['Coach_name'] = $data['name'];
-  else
-    $notification = '
-ссылка для входа<br />
-не действительна';
-
-}
-if (isset($_GET['logout'])) {
-  $role = 'badlogin';
-  session_unset();
-  session_destroy();
-}
-$coach_name = isset($_SESSION['Coach_name']) ? $_SESSION['Coach_name'] : '';
-$passed = false;
-$sendpwd = '';
-$team_codes = [];
-
-// изменить: $cmd_db нужна только при авторизованном входе и в большинстве скриптов только с данными одного игрока
-$access = file($data_dir . 'auth/.access');
-$cmd_db = []; // база данных команд, сгруппированная по ассоциациям
-if ($auth || isset($_POST['submitnewpass'])) {
-  $hash = md5($_POST['pass_str']);
-  $name_str = mb_strtoupper(isset($_POST['name_str']) ? $_POST['name_str'] : $coach_name);
-}
-foreach ($access as $access_str) {
-  list($code, $as_code, $team, $name, $mail, $pwd, $rol) = explode(';', $access_str);
-  $cmd_db[$as_code][$code] = ['ccn' => $as_code, 'cmd' => $team, 'usr' => $name, 'eml' => $mail, 'rol' => $rol];
-  if ($auth || isset($_POST['submitnewpass'])) { // аутентификация или контрольная проверка пароля
-    if ($hash == $pwd &&
-       ($name_str == mb_strtoupper($code) || $name_str == mb_strtoupper($name) || $name_str == strtoupper($mail))) {
-      $passed = true;
-      if (isset($_POST['submitnewpass'])) {
-        $sendpwd = $mail;     // для отправки сообщения о смене пароля
-        $team_codes[$as_code] = $code; // для последующей смены пароля
-      }
-      if (strlen($coach_name) < strlen($name))
-        $coach_name = $name; // выбираем самое длинное имя из указанных
-
-    }
-    else if ($m == 'authentifying') {
-      if ($name_str == strtoupper($mail)) {
-        $email_ok = true;
-        break;
-      }
-    }
-    else if ($auth && !$pwd && $_POST['pass_str'] == $code && $_POST['name_str'] == $name) {
-      $sendpwd = $mail; // выполнилось условие отправки первого пароля
-      $team_codes[$as_code] = $code;
-    }
-  }
-}
-if ($auth) {
-  if ($passed) {
-    $_SESSION['Coach_name'] = $coach_name;
-    build_personal_nav();
-  }
-  else if ($sendpwd && count($team_codes)) {
-    $gp = '';
-    $mix = '23456789qwertyuiopasdfghjkzxcvbnmQWERTYUPASDFGHJKLZXCVBNM';
-    for ($i=0; $i<8; $i++)
-      $gp .= $mix[rand(0,56)];
-
-    $team_list = '';
-    foreach ($team_codes as $ac => $code) {
-      $team_list .= $code.', ';
-      file_put_contents($online_dir.$ac.'/passwd/'.$code, md5($gp).':player');
-    }
-    send_email('FPrognoz.org <fp@fprognoz.org>', $_POST['name_str'], $sendpwd, 'ФП. Пароль для сайта ' . $this_site,
-'Вы получили случайно-сгенерированный пароль для доступа на сайт ' . $this_site . '
-
-'.$gp.'
-
-Используйте его вместе с именем ' . $coach_name . ',
-или с указанным в поле "имя" кодом одной из ваших команд: '.$team_list.'
-или же с вашим e-mail адресом ' . $sendpwd . '.
-
-Пароль можно сменить на странице '.$this_site.'/?m=pass
-');
-    build_access();
-    $notification = 'Пароль выслан';
-  }
-  else if (!$notification)
-    $notification = 'Ошибка входа';
-
-}
-else { // restored session
-  if ($coach_name) {
-    build_personal_nav();
-    if (!isset($cca))
-      $cca = '';
-
-  }
-  else session_unset();
-}
-
-if (isset($_SESSION['Coach_name'])) {
-  if (strtotime('7/16') < time() && time() <= strtotime('9/1')
-   && !is_file($data_dir.'personal/'.$coach_name.'/'.date('Y'))) {
-    $a = 'fifa';
-    $m = 'confirm'; // кампания сбора подтверждений с 16 июля по 1 сентября
-  }
-  $role = acl($_SESSION['Coach_name']);
-  if ($have_redis)
-    $redis = new Redis();
-  else {
-    include('comments/redis-emu.php');
-    $redis = new Redis_emu();
-  }
-  $is_redis = $redis->connect($redis_host, $redis_port);
-
-  if (is_file($data_dir . 'personal/'.$_SESSION['Coach_name'].'/gb.inc')) {
-    if (isset($_POST['toggle_gb'])) {
-      unlink($data_dir . 'personal/'.$_SESSION['Coach_name'].'/gb.inc');
-      $gb_status = 'off';
-    }
-    else $gb_status = 'on';
-  }
-  else {
-    if (isset($_POST['toggle_gb'])) {
-      if (!is_dir($data_dir . 'personal/'.$_SESSION['Coach_name']))
-        mkdir($data_dir . 'personal/'.$_SESSION['Coach_name'], 0755);
-
-      touch($data_dir . 'personal/'.$_SESSION['Coach_name'].'/gb.inc');
-      $gb_status = 'on';
-    }
-    else $gb_status = 'off';
-  }
-}
-else {
-  $is_redis = false;
-  $gb_status = 'off';
-}
 
 ////////// rest-обработчик
 
