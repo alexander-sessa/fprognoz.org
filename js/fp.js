@@ -27,4 +27,5 @@ $(".add_stage").click(function(){addStage(this);$(".delete_stage").off("click").
 $(".delete_stage").click(function(){$("#"+$(this).data("id")).remove();$("#div-"+$(this).data("id")).remove();$("#div-"+$(this).data("id")).remove()})
 $("#season_settings").change(function(){$("#ConfigEditor").show();$("#saveCfgIcon").css("background","orangered")})
 $("#ConfigEditor").click(function(){$.ajax({type:"POST",url:"/online/ajax.php",data:"data="+encodeURIComponent($("#saveCfgIcon").data("tpl"))+'&'+$("#season_settings").serialize(),success:function(r){$("#saveCfgIcon").css("background","green")}})})
+$("#MainForm").change(function(){$("#SubmitForm").show()})
 })

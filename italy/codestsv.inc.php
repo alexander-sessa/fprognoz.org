@@ -1,6 +1,6 @@
     <p class="title text15b">Редактор команд и игроков</p>
 <?php
-if (isset($_POST['confirm']))
+if (isset($_POST['code']))
 {
   $tsv = '';
   for ($i=0; $i<sizeof($_POST['code']); $i++) if ($_POST['code'][$i])
@@ -13,7 +13,7 @@ else
 {
   $codes = file($online_dir."$cca/$cur_year/codes.tsv");
   $out = '';
-  echo '<form action="" method="post"><table><tr><th>коды</th><th>команды</th><th>тренеры</th><th>адреса</th><th>длинные названия команд</th><th>уч.</th></tr>';
+  echo '<form id="MainForm" action="" method="POST"><table><tr><th>коды</th><th>команды</th><th>тренеры</th><th>адреса</th><th>длинные названия команд</th><th>уч.</th></tr>';
   $i = 0;
   foreach ($codes as $player)
   {
@@ -38,6 +38,6 @@ else
 <td><input type="text" name="long[]" value="" size="24" /></td>
 <td><input type="text" name="play[]" value="" size="2" /></td>
 </tr>
-</table><input type="submit" name="confirm" value="записать" /></form>';
+</table><!--input type="submit" name="confirm" value="записать" /--></form>';
 }
 ?>

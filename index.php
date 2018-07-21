@@ -1,7 +1,6 @@
 <?php
 /*
 - переписать files: у всех редактирующих скриптов должна работать кнопка saveIcon
-- у президентов в player кнопка редактирования, включающая codestsv
 - рассылки по кнопке "конверт"
 - добавить показ (и редактирование?) пресс-релизов
 - двойное редатирование (текст + html), где это возможно, и фоормирование сообщений с обеими частями
@@ -1419,14 +1418,14 @@ else {
 
     <!-- Bootstrap CSS CDN -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-    <link href="css/fp.css?ver=128" rel="stylesheet">
+    <link href="css/fp.css?ver=130" rel="stylesheet">
     <!--[if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script><![endif]-->
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
-    <script src="/js/fp.js?ver=66"></script>
+    <script src="/js/fp.js?ver=67"></script>
     <script src="/js/jquery/jquery.color.js"></script>
     <script src="/js/socket.io/socket.io.slim.js"></script>
 </head>
@@ -1612,6 +1611,18 @@ echo '
     echo '
                     <button type="button" id="ConfigEditor" class="navbar-btn" style="display:none">
                         <div id="saveCfgIcon" class="navbar-btn-icon" data-tpl="' . $scfg . '" title="Сохранить изменения"><i class="fas fa-save"></i></div>
+                    </button>';
+  }
+  else if ($m == 'player' && $role == 'president') {
+    echo '
+                    <button type="button" id="EditLink" class="navbar-btn" onClick="location.href=\'?a='.$a.'&s='.$s.'&m=codestsv\'">
+                        <div title="Редактировать"><i class="fas fa-edit"></i></div>
+                    </button>';
+  }
+  else if ($m == 'codestsv' && $role == 'president') {
+    echo '
+                    <button type="button" id="SubmitForm" class="navbar-btn" style="display:none" onClick="$(\'#MainForm\').submit()">
+                        <div id="postForm" class="navbar-btn-icon" title="Редактировать"><i class="fas fa-edit"></i></div>
                     </button>';
   }
   else if (isset($content) && $role == 'president') {
