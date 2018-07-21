@@ -406,7 +406,7 @@ ul ul a {
     display: block;
 }
 
-#inlineEditor {
+#inlineEditor, #ConfigEditor {
     width: 40px;
     height: 40px;
     background: whitesmoke;
@@ -418,6 +418,12 @@ ul ul a {
     background: orangered;
     color: whitesmoke;
     display: none;
+}
+
+#saveCfgIcon {
+    background: orangered;
+    color: whitesmoke;
+    display: block;
 }
 
 #editIcon {
@@ -744,4 +750,33 @@ ul ul a {
 	font-size: 1.2em;
 	line-height: 1;
 	width: 100%;
+}
+
+#season_settings ul li div {
+	display: inline-block;
+	width: 300px;
+}
+#season_settings ul li ul li div {
+	display: inline-block;
+	width: 260px;
+}
+#season_settings ul li ul li ul li div {
+	display: inline-block;
+	width: 220px;
+}
+#season_settings input {
+	width: 400px;
+}
+#season_settings select {
+	height: 30px;
+	width: 400px;
+}
+li h5, li h6 {
+	display: inline-block;
+	padding-top: 5px;
+}
+.add_tournament, .add_stage, .delete_stage {
+	display: inline-block;
+	cursor: pointer;
+	width: auto !important;
 }

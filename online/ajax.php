@@ -226,5 +226,63 @@ if (isset($data['cmd'])) {
     }
     echo '';
   }
+  // запись конфигурационных файлов
+  if ($data['cmd'] == 'save_config') {
+    include ('../' . $data['a'] . '/settings.inc.php');
+    if ($data['author'] == $president || $data['author'] == $vice || in_array($data['author'], $admin)) {
+      // settings.inc.php
+      $settings = '<?php
+$cca = \''.$cca.'\';
+$description = \''.$_POST['description'].'\';
+$title = \''.$_POST['title'].'\';
+$main_header = \''.$_POST['main_header'].'\';
+$cur_year = \''.$_POST['cur_year'].'\';
+$president = \''.$_POST['president'].'\';
+$vice = \''.$_POST['vice'].'\';
+$pressa = \''.$_POST['pressa'].'\';
+$club_edit = '.(isset($_POST['club_edit']) ? 'true' : 'false').';
+?>
+';
+      file_put_contents('../'.$data['a'].'/settings.inc.php', $settings);
+
+      if ($_POST['cur_year'] > $data['s']) { // создать структуру нового сезона
+        $old = $online_dir.$cca.'/'.$data['s'].'/';
+        $new = $online_dir.$cca.'/'.$_POST['cur_year'].'/';
+        mkdir($new.'bomb', 0755, true);
+        mkdir($new.'bombc', 0755, true);
+        mkdir($new.'bombs', 0755, true);
+        mkdir($new.'prognoz', 0755, true);
+        mkdir($new.'programs', 0755, true);
+        mkdir($new.'publish', 0755, true);
+        copy($old.'codes.tsv', $new.'codes.tsv');
+        copy($old.'headers',   $new.'headers');
+        copy($old.'p.tpl',     $new.'p.tpl');
+        copy($old.'it.tpl',    $new.'it.tpl');
+        copy($old.'pc.tpl',    $new.'pc.tpl');
+        copy($old.'itc.tpl',   $new.'itc.tpl');
+      }
+      // fp.cfg
+      $fpcfg = [];
+      for ($t = 0; $t < count($_POST['tournament']); $t++) {
+        if ($_POST['tournament'][$t]) $fpcfg[$t]['tournament'] = $_POST['tournament'][$t];
+        if ($_POST['type'][$t]) $fpcfg[$t]['type'] = $_POST['type'][$t];
+        if ($_POST['numeration'][$t]) $fpcfg[$t]['numeration'] = $_POST['numeration'][$t];
+        if ($_POST['prefix'][$t]) $fpcfg[$t]['prefix'] = $_POST['prefix'][$t];
+        for ($e = 0; $e < count($_POST['stage']); $e++)
+          if (isset($_POST['tourn'][$t][$e])) {
+            if ($_POST['stage'][$t][$e]) $fpcfg[$t]['format'][$e]['stage'] = $_POST['stage'][$t][$e];
+            if ($_POST['suffix'][$t][$e]) $fpcfg[$t]['format'][$e]['suffix'] = $_POST['suffix'][$t][$e];
+            if ($_POST['cal'][$t][$e]) $fpcfg[$t]['format'][$e]['cal'] = $_POST['cal'][$t][$e];
+            if ($_POST['groups'][$t][$e]) $fpcfg[$t]['format'][$e]['groups'] = $_POST['groups'][$t][$e];
+            if ($_POST['tourn'][$t][$e]) $fpcfg[$t]['format'][$e]['tourn'] = $_POST['tourn'][$t][$e];
+            if ($_POST['round'][$t][$e]) $fpcfg[$t]['format'][$e]['round'] = $_POST['round'][$t][$e];
+            if ($_POST['nprefix'][$t][$e]) $fpcfg[$t]['format'][$e]['nprefix'] = $_POST['nprefix'][$t][$e];
+          }
+
+      }
+      $json = "prognoz\ncodes.tsv\ncal\n0\n" . json_encode($fpcfg, JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE);
+      file_put_contents($data_dir.'online/'.$cca.'/'.$_POST['cur_year'].'/fp.cfg', $json);
+    }
+  }
 }
 ?>

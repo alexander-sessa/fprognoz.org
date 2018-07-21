@@ -1,6 +1,5 @@
 <?php
 /*
-- редактирование настроек сезона
 - генерирование календаря и "генераторов"
 - переписать files: у всех редактирующих скриптов должна работать кнопка saveIcon
 - у президентов в player кнопка редактирования, включающая codestsv
@@ -882,7 +881,7 @@ foreach ($access as $access_str) {
         $coach_name = $name; // выбираем самое длинное имя из указанных
 
     }
-    else if ($m == 'authentifying') {
+    else if (isset($m) && $m == 'authentifying') {
       if ($name_str == strtoupper($mail)) {
         $email_ok = true;
         break;
@@ -1000,7 +999,9 @@ else if (!in_array($m, ['main', 'news', 'cal', 'gen', 'set'])) { // провер
     $m = 'news'; // форма prognoz только для текущего сезона!
 
 }
-if ($m == 'main' || $m == 'news') {
+if ($m == 'set' && $role == 'president')
+  $config = season_config($online_dir . $cca . '/' . $cur_year . '/fp.cfg');
+else if ($m == 'main' || $m == 'news') {
   $fn = $online_dir . $cca . '/' . (isset($s) ? $s . '/' : '') . 'news';
   $content = file_get_contents(is_file($fn) ? $fn : $online_dir . $cca . '/news');
 }
@@ -1008,13 +1009,8 @@ else if ($m == 'cal' || $m == 'gen') {
   $content = file_get_contents($online_dir . $cca . '/' . $s . '/' . $m);
   $editable_class = ' class="monospace"';
 }
-else if ($m == 'set' && $role == 'president') {
-  $config = season_config($online_dir . $cca . '/' . $cur_year . '/fp.cfg');
-  $content = var_export($config, true);
-}
-else if (isset($content) && trim($content) && !strpos($content, '</p>') && !strpos($content, '<br'))
+if (isset($content) && trim($content) && !strpos($content, '</p>') && !strpos($content, '<br'))
   $editable_class = ' class="monospace"'; // text, но если всё удалить, должно разрешить ввести html
-
 
 ////////// построение левого меню
 
@@ -1424,14 +1420,14 @@ else {
 
     <!-- Bootstrap CSS CDN -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-    <link href="css/fp.css?ver=108" rel="stylesheet">
+    <link href="css/fp.css?ver=128" rel="stylesheet">
     <!--[if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script><![endif]-->
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
-    <script src="/js/fp.js?ver=4"></script>
+    <script src="/js/fp.js?ver=66"></script>
     <script src="/js/jquery/jquery.color.js"></script>
     <script src="/js/socket.io/socket.io.slim.js"></script>
 </head>
@@ -1553,7 +1549,7 @@ echo '
                 <li class="active">
                     <a href="#editSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Редактирование</a>
                     <ul class="collapse list-unstyled" id="editSubmenu">
-                        <li><a href="?a='.$a.'&amp;m=files&amp;file=settings">Основные настройки</a></li>
+                        <li><a href="?a='.$a.'&amp;m=set">Настройки сезона</a></li>
                         <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=codestsv">Игроки</a></li>
                         <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=files&amp;file=calchm">Календарь</a></li>
                         <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=files&amp;file=genchm">Генераторы</a></li>
@@ -1605,7 +1601,15 @@ echo '
                         <div id="rightbarIconUser" title="Показать личный кабинет"><i class="fas fa-user"></i></div>
                         <div id="rightbarIconUserX" title="Свернуть личный кабинет"><i class="fas fa-user-times"></i></div>
                     </button>';
-  if (isset($content) && $role == 'president') {
+  if ($m == 'set' && $role == 'president') {
+    $data_cfg = ['cmd' => 'save_config', 'author' => $_SESSION['Coach_name'], 'a' => $a, 's' => $s, 'm' => $m];
+    $scfg = base64_encode(mcrypt_encrypt( MCRYPT_BLOWFISH, $key, json_encode($data_cfg), MCRYPT_MODE_CBC, $iv ));
+    echo '
+                    <button type="button" id="ConfigEditor" class="navbar-btn" style="display:none">
+                        <div id="saveCfgIcon" class="navbar-btn-icon" data-tpl="' . $scfg . '" title="Сохранить изменения"><i class="fas fa-save"></i></div>
+                    </button>';
+  }
+  else if (isset($content) && $role == 'president') {
     $data_cfg = ['cmd' => 'save_file', 'author' => $_SESSION['Coach_name'], 'a' => $a, 's' => $s, 'm' => $m];
     $scfg = base64_encode(mcrypt_encrypt( MCRYPT_BLOWFISH, $key, json_encode($data_cfg), MCRYPT_MODE_CBC, $iv ));
     echo '
@@ -1645,7 +1649,53 @@ echo '
 
             <div class="main">
                 <div id="editable"' . $editable_class . '>';
-  if (isset($content))
+  if ($m == 'set' && $role == 'president') {
+    echo '
+                    <h3>Редактирование настроек сезона</h3>
+                    <form id="season_settings" method="POST">
+                        <ul>
+                            <li><div>Название ФП-ассоциации: </div><input type="text" name="description" value="'.$description.'" /></li>
+                            <li><div>html-заголовок ассоциации: </div><input type="text" name="title" value="'.$title.'" /></li>
+                            <li><div>Заголовок новостных страниц: </div><input type="text" name="main_header" value="'.$main_header.'" /></li>
+                            <li><div>Название текущего сезона: </div><input id="cur_year" type="text" name="cur_year" value="'.$cur_year.'" /></li>
+                            <li><div>Президент: </div><input id="president" type="text" name="president" value="'.$president.'" /></li>
+                            <li><div>Вице-президент(ы): </div><input id="vice" type="text" name="vice" value="'.$vice.'" placeholder="нет; можно несколько имен через запятую" /></li>
+                            <li><div>Пресс-атташе: </div><input id="pressa" type="text" name="pressa" value="'.$pressa.'" placeholder="нет; можно несколько имен через запятую" /></li>
+                            <li><div>Разрешено редактировать составы: </div><input id="club_edit" type="checkbox" name="club_edit"'.($club_edit ? ' checked="checked"' : '').' /></li>
+                            <li><h5>Турниры: <div class="add_tournament" data-id="tournament-'.(count($config) - 1).'"><button class="fas fa-plus-circle" title="добавить турнир" /></button></div></h5>';
+    if (isset($config[0]['format'])) foreach ($config as $n => $tournament) {
+      $stages = count($config[0]['format']);
+      echo '
+                                <ul id="tournament-'.$n.'">
+                                    <li><div>Название турнира: </div><input type="text" name="tournament['.$n.']" value="'.(isset($tournament['tournament']) ? $tournament['tournament'] : '').'" placeholder="не обязательно" /> <div class="delete_stage" data-id="tournament-'.$n.'"><button class="fas fa-trash" title="удалить турнир"></button></div></li>
+                                    <li><div>Префикс кода тура: </div><input type="text" name="prefix['.$n.']" value="'.(isset($tournament['prefix']) ? $tournament['prefix'] : '').'" placeholder="по умолчанию - код ассоциации" /></li>
+                                    <li><div>Схема розыгрыша: </div><select name="type['.$n.']"><option value="chm">чемпионат (круговой турнир)</option><option value="cup" '.(isset($tournament['type']) && $tournament['type'] == 'cup' ? ' selected="selected"' : '').'>кубок (турнир с выбыванием)</option><option value="com" '.(isset($tournament['type']) && $tournament['type'] == 'com' ? ' selected="selected"' : '').'>комбинированный (группы + плей-офф)</option></select></li>
+                                    <li><div>Нумерация туров: </div><select name="numeration['.$n.']"><option value="stage">поэтапная (каждый этап начинается туром 1)</option><option value="toend" '.(isset($tournament['nume']) && $tournament['nume'] == 'toend' ? ' selected="selected"' : '').'>сквозная (без сброса номера, как в еврокубках)</option></select></li>
+                                    <li><h6>Этапы: <div class="add_stage" data-id="trn-'.$n.'-st-'.($stages - 1).'"><button class="fas fa-plus-circle" title="добавить этап" /></button></div></h6>';
+      foreach ($tournament['format'] as $e => $stage) {
+        echo '
+                                        <ul id="trn-'.$n.'-st-'.$e.'">
+                                            <li><div>Название этапа: </div><input type="text" name="stage['.$n.']['.$e.']" value="'.(isset($stage['stage']) ? $stage['stage'] : '').'" placeholder="не обязательно" /> <div class="delete_stage" data-id="trn-'.$n.'-st-'.$e.'"><button class="fas fa-trash" title="удалить этап"></button></div></li>
+                                            <li><div>Суффикс кода тура: </div><input type="text" name="suffix['.$n.']['.$e.']" value="'.(isset($stage['suffix']) ? $stage['suffix'] : '').'" placeholder="по умолчанию нет" /></li>
+                                            <li><div>Файл календаря: </div><input type="text" name="cal['.$n.']['.$e.']" value="'.(isset($stage['cal']) ? $stage['cal'] : '').'" placeholder="по умолчанию cal" /></li>
+                                            <li><div>Количество групп (лиг): </div><input type="text" name="groups['.$n.']['.$e.']" value="'.(isset($stage['groups']) ? $stage['groups'] : '').'" placeholder="по умолчанию 1" /></li>
+                                            <li><div>Количество туров: </div><input type="text" name="tourn['.$n.']['.$e.']" value="'.(isset($stage['tourn']) ? $stage['tourn'] : 1 + $stage['tours'][1] - $stage['tours'][0]).'" /></li>
+                                            <li><div>Количество кругов: </div><input type="text" name="round['.$n.']['.$e.']" value="'.(isset($stage['round']) ? $stage['round'] : '').'" placeholder="по умолчанию 2" /></li>
+                                            <li><div>Префикс названия тура: </div><input type="text" name="nprefix['.$n.']['.$e.']" value="'.(isset($stage['nprefix']) ? $stage['nprefix'] : '').'" placeholder="по умолчанию Тур: " /></li>
+                                        </ul>
+                                        <div id="div-trn-'.$n.'-st-'.($stages - 1).'" class="stage-div"></div>';
+      }
+      echo '
+                                    </li>
+                                </ul>
+                                <div id="div-tournament-'.(count($config) - 1).'" class="tournament-div"></div>';
+    }
+    echo '
+                            </li>
+                        </ul>
+                    </form>';
+  }
+  else if (isset($content))
     echo $content;
   else
     include ($a . '/' . $m . '.inc.php');
