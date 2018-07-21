@@ -1,6 +1,5 @@
 <?php
 /*
-- генерирование календаря и "генераторов"
 - переписать files: у всех редактирующих скриптов должна работать кнопка saveIcon
 - у президентов в player кнопка редактирования, включающая codestsv
 - рассылки по кнопке "конверт"
@@ -1532,9 +1531,14 @@ echo '
                     <a class="dropdown-item" href="?logout=1">Выход</a>
                     <p></p>
                 </li>';
-    if ($role == 'president')
+    if ($role == 'president') {
+      if (is_file($data_dir.'online/'.$cca.'/'.$s.'/cal'))
+        echo '
+                <li><a href="/online/makeprogramm.php?cc='.$cca.'" target="MakeProgram">Создать новый тур</a></li>';
+      else
+        echo '
+                <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=newcal">Создать календарь</a></li>';
       echo '
-                <li><a href="/online/makeprogramm.php?cc='.$cca.'" target="MakeProgram">Создать новый тур</a></li>
                 <li class="active">
                     <a href="#mailSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Рассылка</a>
                     <ul class="collapse list-unstyled" id="mailSubmenu">
@@ -1569,6 +1573,7 @@ echo '
                         <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=files&amp;file=tplrev">Шапка обзора</a></li>
                     </ul>
                 </li>';
+    }
     else if ($role == 'pressa')
       echo '
                 <li class="active">
