@@ -284,9 +284,9 @@ if (isset($_POST['tour']) && $_POST['tour'] != ' код тура') {
 
     $out = '';
     foreach ($programme as $line) $out .= "$line\n";
-    $programm = str_replace("[Programme]\n", $out, $template);
+    $program = str_replace("[Programme]\n", $out, $template);
     if (isset($_POST['preview']))
-      echo "<pre>$programm</pre>";
+      echo "<pre>$program</pre>";
     else
     {
       if ($TourCode[4] == 'L')
@@ -297,8 +297,8 @@ if (isset($_POST['tour']) && $_POST['tour'] != ' код тура') {
       $pfname = $online_dir . "$ccode/$season/publish/p".mb_strtolower(mb_substr(str_replace('NEW', '', $TourCode), $cclen));
       if (is_file($pfname))
         rename($pfname, $pfname.'.'.time());
-      file_put_contents($pfname, $programm);
-      file_put_contents($online_dir . "$ccode/$season/programms/$TourCode", $programm);
+      file_put_contents($pfname, $program);
+      file_put_contents($online_dir . "$ccode/$season/programs/$TourCode", $program);
       // make records for scheduler
       $month = trim(mb_substr($Srok, mb_strpos($Srok, '.') + 1, 2));
       $year = date('Y', time());

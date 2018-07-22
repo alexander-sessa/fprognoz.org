@@ -9,20 +9,20 @@ $out = '';
 if (isset($_GET['tour']))
 {
   $tour = $_GET['tour'];
-  if (is_file($season_dir.'programms/'.$tour))
+  if (is_file($season_dir.'programs/'.$tour))
   {
     if (($tour[0] == 'C') || ($tour[strlen($country_code)] == 'C'))
       $calfname = 'calc';
     else
       $calfname = 'cal'; 
-    $programm = file_get_contents($season_dir.'programms/'.$tour);
-    $programm = str_replace(')-', ') - ', $programm);
-    $fr = strpos($programm, "$tour ");
-    $fr = strpos($programm, "\n", $fr) + 1;
-    $programm = substr($programm, $fr);
-    $fr = strpos($programm, "Последний с");
-    $matches = explode("\n", substr($programm, 0, $fr));
-    $programm = substr($programm, $fr);
+    $program = file_get_contents($season_dir.'programs/'.$tour);
+    $program = str_replace(')-', ') - ', $program);
+    $fr = strpos($program, "$tour ");
+    $fr = strpos($program, "\n", $fr) + 1;
+    $program = substr($program, $fr);
+    $fr = strpos($program, "Последний с");
+    $matches = explode("\n", substr($program, 0, $fr));
+    $program = substr($program, $fr);
     $months = array(
     ' января' => '.01',' янваpя' => '.01',
     ' февраля' => '.02', ' февpаля' => '.02',
@@ -38,12 +38,12 @@ if (isset($_GET['tour']))
     ' декабря' => '.12', ' декабpя' => '.12'
 );
     foreach ($months as $word => $digit)
-      $programm = str_replace($word, $digit, $programm);
+      $program = str_replace($word, $digit, $program);
 
-    $fr = strpos($programm, '.');
-    $lastdate = trim(substr($programm, $fr - 2, 5));
-    if (($fr1 = strpos($programm, ':', $fr)) && ($fr1 - $fr < 50))
-      $lasttm = trim(substr($programm, $fr1 - 2, 5));
+    $fr = strpos($program, '.');
+    $lastdate = trim(substr($program, $fr - 2, 5));
+    if (($fr1 = strpos($program, ':', $fr)) && ($fr1 - $fr < 50))
+      $lasttm = trim(substr($program, $fr1 - 2, 5));
     else
       $lasttm = '';
 
@@ -88,7 +88,7 @@ submit
 }
 else
 {
-  $tours = scandir($season_dir.'programms');
+  $tours = scandir($season_dir.'programs');
   if (sizeof($tours) > 2)
   {
     foreach ($tours as $t) if (($t[0] != '.') && ($t = trim($t)))

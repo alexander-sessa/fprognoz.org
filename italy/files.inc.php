@@ -21,9 +21,9 @@ if (isset($_POST['file_text']) && $_POST['file_text'])
   else if ($file == 'settings') $fname = "$a/settings.inc.php";
   else
   {
-    $programm = $_POST['file_text'];
-    $fr = strpos($programm, $cca, strripos($programm, 'FP_Prognoz'));
-    $tour_code = trim(substr($programm, $fr, strpos($programm, "\n", $fr) - $fr));
+    $program = $_POST['file_text'];
+    $fr = strpos($program, $cca, strripos($program, 'FP_Prognoz'));
+    $tour_code = trim(substr($program, $fr, strpos($program, "\n", $fr) - $fr));
     if ($cut = strpos($tour_code, ' '))
       $tour_code = substr($tour_code, 0, $cut);
     if ($tour_code[strlen($cca)] == 'C')
@@ -38,17 +38,17 @@ if (isset($_POST['file_text']) && $_POST['file_text'])
       $pfname = $online_dir."$cca/$s/publish/p".substr(str_replace('NEW', '', $tour_code), -2);
 
     if (is_file($pfname)) rename($pfname, $pfname.'.'.time());
-    file_put_contents($pfname, $programm);
-    $fname = $online_dir."$cca/$s/programms/$tour_code";
+    file_put_contents($pfname, $program);
+    $fname = $online_dir."$cca/$s/programs/$tour_code";
 
-    $programm = str_replace(')-', ') - ', $programm);
-    $fr = strpos($programm, "\n", strpos($programm, "$tour_code ")) + 1;
-    $programm = substr($programm, $fr);
-    $fr = strpos($programm, "Последний с");
-    $matches = explode("\n", substr($programm, 0, $fr));
+    $program = str_replace(')-', ') - ', $program);
+    $fr = strpos($program, "\n", strpos($program, "$tour_code ")) + 1;
+    $program = substr($program, $fr);
+    $fr = strpos($program, "Последний с");
+    $matches = explode("\n", substr($program, 0, $fr));
 
     // make records for scheduler
-    $programm = substr($programm, $fr);
+    $program = substr($program, $fr);
     $months = array(
     ' января' => '.01',' янваpя' => '.01',
     ' февраля' => '.02', ' февpаля' => '.02',
@@ -64,11 +64,11 @@ if (isset($_POST['file_text']) && $_POST['file_text'])
     ' декабря' => '.12', ' декабpя' => '.12'
     );
     foreach ($months as $word => $digit)
-      $programm = str_replace($word, $digit, $programm);
-    $fr = strpos($programm, '.');
-    $lastdate = trim(substr($programm, $fr - 2, 5));
-    if (($fr1 = strpos($programm, ':', $fr)) && ($fr1 - $fr < 50))
-      $lasttm = trim(substr($programm, $fr1 - 2, 5));
+      $program = str_replace($word, $digit, $program);
+    $fr = strpos($program, '.');
+    $lastdate = trim(substr($program, $fr - 2, 5));
+    if (($fr1 = strpos($program, ':', $fr)) && ($fr1 - $fr < 50))
+      $lasttm = trim(substr($program, $fr1 - 2, 5));
     else
       $lasttm = '23:59:59';
     $atemp = explode('.', $lastdate);
@@ -138,7 +138,7 @@ if (isset($_POST['file_text']) && $_POST['file_text'])
       mkdir($online_dir."$cca/$new/bomc", 0755, true);
       mkdir($online_dir."$cca/$new/boms", 0755, true);
       mkdir($online_dir."$cca/$new/prognoz", 0755, true);
-      mkdir($online_dir."$cca/$new/programms", 0755, true);
+      mkdir($online_dir."$cca/$new/programs", 0755, true);
       mkdir($online_dir."$cca/$new/publish", 0755, true);
       copy($online_dir."$cca/$s/codes.tsv", $online_dir."$cca/$new/codes.tsv");
       copy($online_dir."$cca/$s/fp.cfg", $online_dir."$cca/$new/fp.cfg");

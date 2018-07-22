@@ -87,7 +87,7 @@ foreach ($acodes as $scode) if ($scode[0] != '#') {
   }
 }
 
-list($program_matches, $lastdate, $lasttm, $program) = parse_program($season_dir . 'programms/' . $tour);
+list($program_matches, $lastdate, $lasttm, $program) = parse_program($season_dir . 'programs/' . $tour);
 list($cal, $gen) = parse_cal_and_gen($program);
 if (is_file($cal_file) && $calt = trim(GetTourFromCalendar(str_replace('NEW', '', $tour), file_get_contents($cal_file))))
   $cal = $calt; // если есть, используем календарь тура из файла календаря турнира

@@ -203,14 +203,24 @@ if (isset($data['cmd'])) {
 ');
 //С помощью этой ссылки Вы можете сменить пароль без необходимости указания действующего пароля.
 //Внимание: смена пароля возможна только со страницы, на которую ведёт временная ссылка.
-    echo ($ret[0] == r ? '0' : '1');
+    echo ($ret[0] == r ? 0 : 1);
   }
 
   // запись файла
   if ($data['cmd'] == 'save_file') {
     include ('../' . $data['a'] . '/settings.inc.php');
     if ($data['author'] == $president || $data['author'] == $vice || in_array($data['author'], $admin)) {
-      if ($data['m'] == 'main')
+      if ($data['m'] == 'text') {
+        switch ($data['ref']) {
+          case 'it'  : $f = isset($data['t']) ? 'publish/it'.$data['t'] : 'it.tpl'; break;
+          case 'itc' : $f = 'itc.tpl'; break;
+          case 'p'   : $f = isset($data['t']) ? 'publish/p'.$data['t']  : 'p.tpl'; break;
+          case 'pc'  : $f = 'pc.tpl'; break;
+          case 'r'   : $f = isset($data['t']) ? 'publish/r'.$data['t']  : 'header'; break;
+        }
+        $file = $data_dir . 'online/' . $cca . '/' . $data['s'] . '/' . $f;
+      }
+      else if ($data['m'] == 'main')
         $file = $data_dir . 'online/' . $cca . '/news';
       else
         $file = $data_dir . 'online/' . $cca . '/' . $data['s'] . '/' . $data['m'];
@@ -224,8 +234,9 @@ if (isset($data['cmd'])) {
       }
       file_put_contents($file, $text);
     }
-    echo '';
+    echo 1;
   }
+
   // запись конфигурационных файлов
   if ($data['cmd'] == 'save_config') {
     include ('../' . $data['a'] . '/settings.inc.php');
@@ -240,6 +251,7 @@ $cur_year = \''.$_POST['cur_year'].'\';
 $president = \''.$_POST['president'].'\';
 $vice = \''.$_POST['vice'].'\';
 $pressa = \''.$_POST['pressa'].'\';
+$coach = \''.$_POST['coach'].'\';
 $club_edit = '.(isset($_POST['club_edit']) ? 'true' : 'false').';
 ?>
 ';
@@ -283,6 +295,7 @@ $club_edit = '.(isset($_POST['club_edit']) ? 'true' : 'false').';
       $json = "prognoz\ncodes.tsv\ncal\n0\n" . json_encode($fpcfg, JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE);
       file_put_contents($data_dir.'online/'.$cca.'/'.$_POST['cur_year'].'/fp.cfg', $json);
     }
+    echo 1;
   }
 }
 ?>

@@ -196,13 +196,13 @@ function FillTemplate($template, $blockname, $tpltbl)
   return $template;
 }
 
-function MakeRealmatch($programm)
+function MakeRealmatch($program)
 {
   global $online_dir;
     // выборка данных по реальным матчам
-    $fr = strpos($programm, "Последний с");
-    $matches = explode("\n", substr($programm, 0, $fr));
-    $programm = substr($programm, $fr);
+    $fr = strpos($program, "Последний с");
+    $matches = explode("\n", substr($program, 0, $fr));
+    $program = substr($program, $fr);
     $months = array(
     ' января' => '.01',' янваpя' => '.01',
     ' февраля' => '.02', ' февpаля' => '.02',
@@ -218,12 +218,12 @@ function MakeRealmatch($programm)
     ' декабря' => '.12', ' декабpя' => '.12'
     );
     foreach ($months as $word => $digit)
-      $programm = str_replace($word, $digit, $programm);
+      $program = str_replace($word, $digit, $program);
 
-    $fr = strpos($programm, '.');
-    $lastdate = trim(substr($programm, $fr - 2, 5));
-    if (($fr1 = strpos($programm, ':', $fr)) && ($fr1 - $fr < 50))
-      $lasttm = trim(substr($programm, $fr1 - 2, 5));
+    $fr = strpos($program, '.');
+    $lastdate = trim(substr($program, $fr - 2, 5));
+    if (($fr1 = strpos($program, ':', $fr)) && ($fr1 - $fr < 50))
+      $lasttm = trim(substr($program, $fr1 - 2, 5));
     else
       $lasttm = '';
 
@@ -525,7 +525,7 @@ function build_itogi($country_code, $season, $tour)
     }
   }
   // формирование показа программки тура с реальными результатами
-  if (is_file($online_dir."$country_code/$season/programms/$tour"))
+  if (is_file($online_dir."$country_code/$season/programs/$tour"))
   {
     $tcode = '';
     if ($tour[strlen($country_code)] == 'L')
@@ -588,15 +588,15 @@ function build_itogi($country_code, $season, $tour)
       $bsfname = $online_dir."$country_code/$season/$tcode/BOMBSORT";
     }
     // парсинг программки
-    $programm = file_get_contents($online_dir."$country_code/$season/programms/$tour");
-    $programm = str_replace(')-', ') - ', $programm);
-    $fr = strpos($programm, "$tour ");
-    $fr = strpos($programm, "\n", $fr) + 1;
-    $programm = substr($programm, $fr);
-    $realmatch = MakeRealmatch($programm);
-    $fr = strpos($programm, "Последний с");
-    $programm = substr($programm, $fr);
-    list($cal, $gen) = parse_cal_and_gen($programm);
+    $program = file_get_contents($online_dir."$country_code/$season/programs/$tour");
+    $program = str_replace(')-', ') - ', $program);
+    $fr = strpos($program, "$tour ");
+    $fr = strpos($program, "\n", $fr) + 1;
+    $program = substr($program, $fr);
+    $realmatch = MakeRealmatch($program);
+    $fr = strpos($program, "Последний с");
+    $program = substr($program, $fr);
+    list($cal, $gen) = parse_cal_and_gen($program);
     if (!trim($gen))
       $gen = GetGen($country_code, $season, $genfname);
 
@@ -2818,12 +2818,12 @@ function build_prognozlist($country_code, $season, $tour)
   }
 
   // parse program
-  $programm = file_get_contents($online_dir."$country_code/$season/programms/$tour");
-  if (mb_detect_encoding($programm, 'UTF-8', true) === FALSE)
-    $programm = iconv('CP1251', 'UTF-8//IGNORE', $programm);
-  $fr = mb_strpos($programm, "Последний с");
-  $programm = mb_substr($programm, $fr);
-  list($cal, $gen) = parse_cal_and_gen($programm);
+  $program = file_get_contents($online_dir."$country_code/$season/programs/$tour");
+  if (mb_detect_encoding($program, 'UTF-8', true) === FALSE)
+    $program = iconv('CP1251', 'UTF-8//IGNORE', $program);
+  $fr = mb_strpos($program, "Последний с");
+  $program = mb_substr($program, $fr);
+  list($cal, $gen) = parse_cal_and_gen($program);
 //  if (is_file("$country_code/$season/$tcode/$calfname"))
 //    $calt = trim(GetTourFromCalendar(str_replace('NEW', '', $tour), file_get_contents("$country_code/$season/$tcode/$calfname")));
 //  if ($calt) $cal = $calt;

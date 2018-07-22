@@ -7,5 +7,6 @@ $cur_year = '2018-19';
 $president = 'Eugene (Joker) Plugin';
 $vice = 'Александр Сесса';
 $pressa = '';
-$club_edit = false;
+$coach = 'Eugene (Joker) Plugin';
+$club_edit = true;
 ?>

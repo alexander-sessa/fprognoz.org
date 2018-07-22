@@ -10,7 +10,7 @@ $season = $s;
 $country_code = 'SFP';
 $tour = $l.$t;
 $prognoz_dir = $online_dir.'SFP/'.$s.'/prognoz/'.$tour;
-$program_file = $online_dir.'SFP/'.$s.'/programms/'.$tour;
+$program_file = $online_dir.'SFP/'.$s.'/programs/'.$tour;
 $rules = $rprognoz = $protocol = $team_code = '';
 $hidden = 'прогноз не показан';
 $stat = false;
@@ -26,10 +26,10 @@ if (isset($_SESSION['Coach_name'])) foreach ($acodes as $scode) if ($scode[0] !=
 if (is_file($program_file)) {
 
   // парсинг программки
-  $programm = file_get_contents($program_file);
-  $programm = substr($programm, strpos($programm, "\n", strpos($programm, $tour.' ')) + 1);
-  $fr = strpos($programm, 'Последний с');
-  $program_matches = explode("\n", substr($programm, 0, $fr));
+  $program = file_get_contents($program_file);
+  $program = substr($program, strpos($program, "\n", strpos($program, $tour.' ')) + 1);
+  $fr = strpos($program, 'Последний с');
+  $program_matches = explode("\n", substr($program, 0, $fr));
   switch ($l) {
     case 'PRE':
     case 'SUP': $imax = 20; break;
@@ -38,13 +38,13 @@ if (is_file($program_file)) {
     default   : $imax = count($program_matches) - 3;
   }
   //$imax = ($l == 'PRE' || $l == 'SUP') ? 20 : ($l == 'PRO' ? 15 : count($program_matches) - 3);
-  $programm = substr($programm, $fr);
-  $fr = strpos($programm, '.');
-  $lastdate = trim(substr($programm, $fr - 2, 5));
-  $lasttm = ($fr1 = strpos($programm, ':', $fr)) && ($fr1 - $fr < 50) ? trim(substr($programm, $fr1 - 2, 5)) : '';
+  $program = substr($program, $fr);
+  $fr = strpos($program, '.');
+  $lastdate = trim(substr($program, $fr - 2, 5));
+  $lasttm = ($fr1 = strpos($program, ':', $fr)) && ($fr1 - $fr < 50) ? trim(substr($program, $fr1 - 2, 5)) : '';
 
   // парсинг матчей тура (для примитивного варианта)
-  $calfp = explode("\n", $programm);
+  $calfp = explode("\n", $program);
   $cal = '';
   foreach ($calfp as $line)
     if (strpos($line, ' - '))

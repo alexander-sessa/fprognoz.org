@@ -9,8 +9,7 @@ $tour = 'KONK35';
 $nm = 20;
 // формирование показа программки тура с реальными результатами
 // парсинг программки
-$programm = file_get_contents($online_dir . 'konkurs/programms/' . $tour);
-$matches = explode("\n", $programm);
+$matches = explode("\n", file_get_contents($online_dir . 'konkurs/programs/' . $tour));
 require_once ('online/tournament.inc.php');
 include ('online/realteam.inc.php');
 // формирование вывода и базы тура

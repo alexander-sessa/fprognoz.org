@@ -1,9 +1,13 @@
 <?php
 /*
-- переписать files: у всех редактирующих скриптов должна работать кнопка saveIcon
 - рассылки по кнопке "конверт"
-- добавить показ (и редактирование?) пресс-релизов
-- двойное редатирование (текст + html), где это возможно, и фоормирование сообщений с обеими частями
+- вместо files добавить заливку программки (возможно, в переписанный makeprogram)
+- там же создавать календарь и генератор кубка
+- переписать makeprogram
+- переписать maillist
+- бомбардиры
+- добавить показ (и редактирование?) пресс-релизов, может быть, там же и рассылка будет?
+- двойное редатирование (текст + html), где это возможно, и формирование сообщений с обеими частями
 - вставка вырезанной цитаты в комментариях
 - отправка токена с учетом смены пароля (закомментировано)
 - смена пароля по токену или сразу после входа
@@ -179,7 +183,7 @@ function build_personal_nav() {
             }
             // ФП совпала, итогов еще нет, надо проверить, есть ли команда в программке тура
             elseif (!isset($tudb[$team_str][$tourCode])) { // первое упоминание тура
-              $content = file_get_contents($online_dir.$countryCode.'/'.$currentSeason.'/programms/'.$tourCode);
+              $content = file_get_contents($online_dir.$countryCode.'/'.$currentSeason.'/programs/'.$tourCode);
               $content = substr($content, strpos($content, 'Последний с'));
               if (!strpos($content, $cmd_db[$countryCode][$code]['cmd'])) {
                 if ($tourCode[4] != 'L')
@@ -987,8 +991,8 @@ if (!isset($m)) { // если не запрошен контент, надо п�
 
   }
 }
-else if (!in_array($m, ['main', 'news', 'cal', 'gen', 'set'])) { // проверка на псевдо-скрипты -
-  if (!is_file($a . '/' . $m . '.inc.php')) {                    // им не требуется наличие файла
+else if (!in_array($m, ['main', 'news', 'text', 'cal', 'gen', 'set'])) { // проверка на псевдо-скрипты -
+  if (!is_file($a . '/' . $m . '.inc.php')) {                            // им не требуется наличие файла
     http_response_code(404);
     $a = 'fifa';
     $m = '404';
@@ -997,6 +1001,7 @@ else if (!in_array($m, ['main', 'news', 'cal', 'gen', 'set'])) { // провер
     $m = 'news'; // форма prognoz только для текущего сезона!
 
 }
+$season_dir = $online_dir . $cca . '/' . (isset($s) ? $s : $cur_year) . '/';
 if ($m == 'set' && $role == 'president')
   $config = season_config($online_dir . $cca . '/' . $cur_year . '/fp.cfg');
 else if ($m == 'main' || $m == 'news') {
@@ -1004,7 +1009,21 @@ else if ($m == 'main' || $m == 'news') {
   $content = file_get_contents(is_file($fn) ? $fn : $online_dir . $cca . '/news');
 }
 else if ($m == 'cal' || $m == 'gen') {
-  $content = file_get_contents($online_dir . $cca . '/' . $s . '/' . $m);
+  $content = file_get_contents($season_dir . $m);
+  $editable_class = ' class="monospace"';
+}
+else if ($m == 'text') {
+  switch ($ref) {
+    case 'itog':
+    case 'it'  : $f = isset($t) ? 'publish/it'.$t : 'it.tpl'; break;
+    case 'itc' : $f = isset($t) ? 'publish/it'.$t : 'itc.tpl'; break;
+    case 'prog':
+    case 'p'   : $f = isset($t) ? 'publish/p'.$t  : 'p.tpl'; break;
+    case 'pc'  : $f = isset($t) ? 'publish/p'.$t  : 'pc.tpl'; break;
+    case 'rev' :
+    case 'r'   : $f = isset($t) ? 'publish/r'.$t  : 'header'; break;
+  }
+  $content = file_get_contents($season_dir . $f);
   $editable_class = ' class="monospace"';
 }
 if (isset($content) && trim($content) && !strpos($content, '</p>') && !strpos($content, '<br'))
@@ -1029,24 +1048,12 @@ foreach ($dir as $subdir)
 
   }
 
-if ($cca == 'UNL') { // для показа в Лиге Наций подобрать еще и сезоны Мировой Лиги
-  $dir = scandir($online_dir.'WL', 1);
-  foreach ($dir as $subdir)
-    if (($subdir[0] == '2') || ($subdir[0] == '1'))
-      $seasons[] = $subdir;
-
-}
-if (!isset($t))
-  $t = '01';
-
 if (in_array($cca, $classic_fa)) { // сбор туров сезона для классических асоциаций
   $tournaments = ['R' => [], 'G' => [], 'P' => [], 'C' => [], 'S' => []];
   $tnames = ['R' => 'Чемпионат', 'G' => 'Золотой матч', 'P' => 'Плей-офф', 'C' => 'Кубок', 'S' => 'Суперкубок'];
   $cclen = strlen($cca);
-
-  $season_dir = $online_dir.$cca.'/'.$s.'/';
-  if (is_dir($season_dir.'programms')) {
-    $dir = scandir($season_dir.'programms');
+  if (is_dir($season_dir.'programs')) {
+    $dir = scandir($season_dir.'programs');
     unset($dir[1], $dir[0]);
     foreach ($dir as $prog) {
       $tour = substr($prog, $cclen);
@@ -1074,9 +1081,9 @@ if (in_array($cca, $classic_fa)) { // сбор туров сезона для к
           $sidebar .= '
                         <li>
                             <div class="tlinks">
-                            '.$prefix.'&amp;m=text&amp;ref=prog">тур&nbsp;<span>'.$tt.'</span></a>:&nbsp;';
+                            '.$prefix.'&amp;m=text&amp;ref=p">тур&nbsp;<span>'.$tt.'</span></a>:&nbsp;';
           if (is_file($season_dir . 'publish/it' . $to))
-            $sidebar .= $prefix.'&amp;m=text&amp;ref=itog">итоги,</a>&nbsp;'.$prefix.'&amp;m=text&amp;ref=rev">обзор</a>';
+            $sidebar .= $prefix.'&amp;m=text&amp;ref=it">итоги,</a>&nbsp;'.$prefix.'&amp;m=text&amp;ref=r">обзор</a>';
           else
             $sidebar .=  $prefix.'&amp;m=prognoz"> &nbsp; прогнозы</a>';
           $sidebar .= '
@@ -1126,7 +1133,6 @@ if (in_array($cca, $classic_fa)) { // сбор туров сезона для к
 }
 
 else if ($a == 'switzerland') { // сбор туров сезона Швейцарии
-  $season_dir = $online_dir.$cca.'/'.$s.'/';
   if (is_dir($season_dir.'programs')) {
     $ttours = [];
     $dir = scandir($season_dir.'programs');
@@ -1147,9 +1153,9 @@ else if ($a == 'switzerland') { // сбор туров сезона Швейца
         $sidebar .= '
                         <li>
                             <div class="tlinks">
-                            '.$prefix.'&amp;m=text&amp;ref=prog">тур&nbsp;<span>'.$tt.'</span></a>:&nbsp;';
+                            '.$prefix.'&amp;m=text&amp;ref=p">тур&nbsp;<span>'.$tt.'</span></a>:&nbsp;';
         if (is_file($season_dir . 'publish/it' . $to))
-          $sidebar .= $prefix.'&amp;m=text&amp;ref=itog">итоги,</a>&nbsp;'.$prefix.'&amp;m=text&amp;ref=rev">обзор</a>';
+          $sidebar .= $prefix.'&amp;m=text&amp;ref=it">итоги,</a>&nbsp;'.$prefix.'&amp;m=text&amp;ref=r">обзор</a>';
         else
           $sidebar .=  $prefix.'&amp;m=prognoz"> &nbsp; прогнозы</a>';
         $sidebar .= '
@@ -1195,9 +1201,8 @@ else if ($a == 'switzerland') { // сбор туров сезона Швейца
 else if ($a == 'uefa') { // сбор туров сезона для еврокубков
   $leagues = ['GOLDL' => 'Золотая Лига', 'CHAML' => 'Лига Чемпионов', 'CUPSL' => 'Кубковая Лига', 'UEFAL' => 'Лига Европы'];
   $tournaments = ['GOLDL' => [], 'CHAML' => [], 'CUPSL' => [], 'UEFAL' => []];
-  $season_dir = $online_dir.$cca.'/'.$s.'/';
-  if (substr($s, 0, 4) != '2008' && is_dir($season_dir.'programms')) { // в 2008-м была другая структура
-    $dir = scandir($season_dir.'programms');
+  if (substr($s, 0, 4) != '2008' && is_dir($season_dir.'programs')) { // в 2008-м была другая структура
+    $dir = scandir($season_dir.'programs');
     unset($dir[1], $dir[0]);
     foreach ($dir as $prog) {
       $tour = substr($prog, 5);
@@ -1218,9 +1223,9 @@ else if ($a == 'uefa') { // сбор туров сезона для евроку
           $sidebar .= '
                         <li>
                             <div class="tlinks">
-                            '.$prefix.'&amp;m=text&amp;ref=prog">тур&nbsp;<span>'.$tt.'</span></a>:&nbsp;';
+                            '.$prefix.'&amp;m=text&amp;ref=p">тур&nbsp;<span>'.$tt.'</span></a>:&nbsp;';
           if (is_file($season_dir . 'publish/' . $league . '/itc' . $to))
-            $sidebar .= $prefix.'&amp;m=text&amp;ref=itog">итоги,</a>&nbsp;'.$prefix.'&amp;m=text&amp;ref=rev">обзор</a>';
+            $sidebar .= $prefix.'&amp;m=text&amp;ref=it">итоги,</a>&nbsp;'.$prefix.'&amp;m=text&amp;ref=r">обзор</a>';
           else
             $sidebar .=  $prefix.'&amp;m=prognoz"> &nbsp; прогнозы</a>';
           $sidebar .= '
@@ -1256,7 +1261,6 @@ else if ($a == 'sfp-team') { // сбор туров сезона для SFP
 'FWD' => 'Эксперт-Лига'
 ];
   $tournaments = ['PRO' => [], 'FFP' => [], 'PRE' => [], 'TOR' => [], 'SPR' => [], 'FWD' => []];
-  $season_dir = $online_dir.$cca.'/'.$s.'/';
   foreach ($leagues as $league => $tname)
     if (is_dir($season_dir.$league)) {
       $sidebar .= '
@@ -1271,9 +1275,9 @@ else if ($a == 'sfp-team') { // сбор туров сезона для SFP
           $sidebar .= '
                         <li>
                             <div class="tlinks">
-                            '.$prefix.'&amp;m=text&amp;ref=prog">тур&nbsp;<span>'.$tt.'</span></a>:&nbsp;';
+                            '.$prefix.'&amp;m=text&amp;ref=p">тур&nbsp;<span>'.$tt.'</span></a>:&nbsp;';
           if (is_file($season_dir . 'publish/' . $league . '/it' . $to))
-            $sidebar .= $prefix.'&amp;m=text&amp;ref=itog">итоги</a>';
+            $sidebar .= $prefix.'&amp;m=text&amp;ref=it">итоги</a>';
           else
             $sidebar .=  $prefix.'&amp;m=prognoz">прогнозы</a>';
           $sidebar .= '
@@ -1295,9 +1299,9 @@ else if ($a == 'sfp-team') { // сбор туров сезона для SFP
 else if ($a == 'world' || $a == 'sfp-20') { // сбор туров Мировой Лиги и Лиги Наций + юбилейный турнир
   $tnames = ['ULN' => 'Лига Наций', 'WL' => 'Мировая Лига', 'IST' => 'Турнир SFP-20!'];
   foreach ($tnames as $code => $tname) {
-    $season_dir = $online_dir.$code.'/'.$s.'/';
+    $season_dir = $online_dir . $code . '/' . $s . '/';
     $aa = $code == 'IST' ? 'sfp-20' : 'world';
-    if (is_dir($season_dir.'programs')) { // хоть здесь каталог без ошибки назван :)
+    if (is_dir($season_dir.'programs')) {
       $sidebar .= '
                 <li class="active">
                     <a href="#'.$code.'Submenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">'.$tname.'</a>
@@ -1311,9 +1315,9 @@ else if ($a == 'world' || $a == 'sfp-20') { // сбор туров Мирово�
           $sidebar .= '
                         <li>
                             <div class="tlinks">
-                            '.$prefix.'&amp;m=text&amp;ref=prog">тур&nbsp;<span>'.$tt.'</span></a>:&nbsp;';
+                            '.$prefix.'&amp;m=text&amp;ref=p">тур&nbsp;<span>'.$tt.'</span></a>:&nbsp;';
           if (is_file($season_dir . 'publish/it' . $to))
-            $sidebar .= $prefix.'&amp;m=text&amp;ref=itog">итоги,</a>&nbsp;'.$prefix.'&amp;m=text&amp;ref=rev">обзор</a>';
+            $sidebar .= $prefix.'&amp;m=text&amp;ref=it">итоги,</a>&nbsp;'.$prefix.'&amp;m=text&amp;ref=r">обзор</a>';
           else
             $sidebar .=  $prefix.'&amp;m=prognoz"> &nbsp; прогнозы</a>';
           $sidebar .= '
@@ -1425,7 +1429,9 @@ else {
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
-    <script src="/js/fp.js?ver=67"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/10.1.0/inline/ckeditor.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/10.1.0/inline/translations/ru.js"></script>
+    <script src="/js/fp.js?ver=70"></script>
     <script src="/js/jquery/jquery.color.js"></script>
     <script src="/js/socket.io/socket.io.slim.js"></script>
 </head>
@@ -1533,7 +1539,7 @@ echo '
     if ($role == 'president') {
       if (is_file($data_dir.'online/'.$cca.'/'.$s.'/cal'))
         echo '
-                <li><a href="/online/makeprogramm.php?cc='.$cca.'" target="MakeProgram">Создать новый тур</a></li>';
+                <li><a href="/online/makeprogram.php?cc='.$cca.'" target="MakeProgram">Создать новый тур</a></li>';
       else
         echo '
                 <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=newcal">Создать календарь</a></li>';
@@ -1543,46 +1549,26 @@ echo '
                     <ul class="collapse list-unstyled" id="mailSubmenu">
                         <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=email">Выбранным игрокам</a></li>
                         <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=maillist">Пресс-релиз</a></li>
-                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;t='.$t.'&amp;m=maillist&amp;file=program">Программка</a></li>
-                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;t='.$t.'&amp;m=maillist&amp;file=prognoz">Прогнозы</a></li>
-                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;t='.$t.'&amp;m=maillist&amp;file=itogi">Итоги</a></li>
-                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;t='.$t.'&amp;m=maillist&amp;file=review">Обзор</a></li>
                     </ul>
                 </li>
                 <li class="active">
                     <a href="#editSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Редактирование</a>
                     <ul class="collapse list-unstyled" id="editSubmenu">
                         <li><a href="?a='.$a.'&amp;m=set">Настройки сезона</a></li>
-                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=codestsv">Игроки</a></li>
-                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=files&amp;file=calchm">Календарь</a></li>
-                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=files&amp;file=genchm">Генераторы</a></li>
-                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=files&amp;file=calcup">Календарь кубка</a></li>
-                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=files&amp;file=gencup">Генераторы кубка</a></li>
                         <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=files&amp;file=bombers">Бомбардиры</a></li>
-                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;t='.$t.'&amp;m=files&amp;file=program">Программка тура</a></li>
                     </ul>
                 </li>
                 <li class="active">
                     <a href="#tplSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Макеты</a>
                     <ul class="collapse list-unstyled" id="tplSubmenu">
-                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=files&amp;file=tplpchm">Программка</a></li>
-                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=files&amp;file=tplpcup">Программка кубка</a></li>
-                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=files&amp;file=tplichm">Итоги тура</a></li>
-                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=files&amp;file=tplicup">Итоги плей-офф тура</a></li>
-                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=files&amp;file=tplrev">Шапка обзора</a></li>
+                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=text&amp;ref=p">Программка</a></li>
+                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=text&amp;ref=pc">Программка кубка</a></li>
+                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=text&amp;ref=it">Итоги тура</a></li>
+                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=text&amp;ref=itc">Итоги плей-офф тура</a></li>
+                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=text&amp;ref=r">Шапка обзора</a></li>
                     </ul>
                 </li>';
     }
-    else if ($role == 'pressa')
-      echo '
-                <li class="active">
-                    <a href="#mailSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Рассылка</a>
-                    <ul class="collapse list-unstyled" id="mailSubmenu">
-                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=email";">Выбранным игрокам</a></li>
-                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=maillist">Пресс-релиз</a></li>
-                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;t='.$t.'&amp;m=maillist&amp;file=review">Обзор</a></li>
-                    </ul>
-                </li>';
     echo '
             </ul>';
   }
@@ -1627,17 +1613,17 @@ echo '
   }
   else if (isset($content) && $role == 'president') {
     $data_cfg = ['cmd' => 'save_file', 'author' => $_SESSION['Coach_name'], 'a' => $a, 's' => $s, 'm' => $m];
+    if (isset($ref)) $data_cfg['ref'] = $ref;
+    if (isset($t)) $data_cfg['t'] = $t;
     $scfg = base64_encode(mcrypt_encrypt( MCRYPT_BLOWFISH, $key, json_encode($data_cfg), MCRYPT_MODE_CBC, $iv ));
     echo '
-<script src="https://cdn.ckeditor.com/ckeditor5/10.1.0/inline/ckeditor.js"></script>
-<script src="https://cdn.ckeditor.com/ckeditor5/10.1.0/inline/translations/ru.js"></script>
                     <button type="button" id="inlineEditor" class="navbar-btn">
-                        <div id="editIcon" title="Редактировать"><i class="fas fa-edit"></i></div>
+                        <div id="editIcon" class="navbar-btn-icon" title="Редактировать"><i class="fas fa-edit"></i></div>
                         <div id="saveIcon" class="navbar-btn-icon" data-tpl="' . $scfg . '" title="Сохранить изменения"><i class="fas fa-save"></i></div>
                     </button>';
   }
-  if ($role == 'president' && in_array($m, ['cal', 'gen', 'main', 'news', 'prognoz', 'prog', 'itog', 'rev'])
-   || $role == 'pressa' && in_array($m, ['main', 'news', 'rev']))
+  if ($role == 'president' && in_array($m, ['cal', 'gen', 'main', 'news', 'prognoz', 'text'])
+   || $role == 'pressa' && (in_array($m, ['main', 'news']) || $m == 'text' && $ref == 'r'))
     echo '
                     <button type="button" id="sendMail" class="navbar-btn">
                         <div id="mailIcon" title="Подготовить текст к рассылке"><i class="fas fa-envelope-open"></i></div>
@@ -1677,6 +1663,7 @@ echo '
                             <li><div>Президент: </div><input id="president" type="text" name="president" value="'.$president.'" /></li>
                             <li><div>Вице-президент(ы): </div><input id="vice" type="text" name="vice" value="'.$vice.'" placeholder="нет; можно несколько имен через запятую" /></li>
                             <li><div>Пресс-атташе: </div><input id="pressa" type="text" name="pressa" value="'.$pressa.'" placeholder="нет; можно несколько имен через запятую" /></li>
+                            <li><div>Тренер(ы) сборной: </div><input id="coach" type="text" name="coach" value="'.$coach.'" placeholder="нет; можно несколько имен через запятую" /></li>
                             <li><div>Разрешено редактировать составы: </div><input id="club_edit" type="checkbox" name="club_edit"'.($club_edit ? ' checked="checked"' : '').' /></li>
                             <li><h5>Турниры: <div class="add_tournament" data-id="tournament-'.(count($config) - 1).'"><button class="fas fa-plus-circle" title="добавить турнир" /></button></div></h5>';
     if (isset($config[0]['format'])) foreach ($config as $n => $tournament) {

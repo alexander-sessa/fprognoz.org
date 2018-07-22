@@ -116,10 +116,10 @@ function get_absent_mails($country_code, $tour) {
 
     }
     // parse program
-    $programm = file_get_contents($season_dir . '/programms/' . $tour);
-    $programm = substr($programm, strpos($programm, "Последний с"));
+    $program = file_get_contents($season_dir . '/programs/' . $tour);
+    $program = substr($program, strpos($program, "Последний с"));
     $playteams = array();
-    $calfp = explode("\n", $programm);
+    $calfp = explode("\n", $program);
     foreach ($calfp as $line)
     if (strpos($line, ' - ') && !strpos($line, 'ГОСТИ') && !strpos($line, 'Гости')) {
       $line = trim($line);
@@ -513,12 +513,12 @@ function build_prognozlist($country_code, $season, $tour) {
   }
 
   // parse program
-  $programm = file_get_contents($online_dir . "$country_code/$season/programms/$tour");
-  if (mb_detect_encoding($programm, 'UTF-8', true) === FALSE)
-    $programm = iconv('CP1251', 'UTF-8//IGNORE', $programm);
-  $fr = mb_strpos($programm, "Последний с");
-  $programm = mb_substr($programm, $fr);
-  list($cal, $gen) = parse_cal_and_gen($programm);
+  $program = file_get_contents($online_dir . "$country_code/$season/programs/$tour");
+  if (mb_detect_encoding($program, 'UTF-8', true) === FALSE)
+    $program = iconv('CP1251', 'UTF-8//IGNORE', $program);
+  $fr = mb_strpos($program, "Последний с");
+  $program = mb_substr($program, $fr);
+  list($cal, $gen) = parse_cal_and_gen($program);
 //  if (is_file("$country_code/$season/$tcode/$calfname"))
 //    $calt = trim(GetTourFromCalendar(str_replace('NEW', '', $tour), file_get_contents("$country_code/$season/$tcode/$calfname")));
 //  if ($calt) $cal = $calt;

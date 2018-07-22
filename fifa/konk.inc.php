@@ -86,7 +86,7 @@ else if (isset($_POST['submitpredict']))
 /* UI */
 /******/
 
-$matches = file($online_dir . 'konkurs/programms/' . $tour);
+$matches = file($online_dir . 'konkurs/programs/' . $tour);
 $nm = count($matches);
 echo "<script type=\"text/javascript\">//<![CDATA[
 function newpredict()
