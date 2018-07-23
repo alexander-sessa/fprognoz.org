@@ -786,3 +786,15 @@ li h5, li h6 {
 	cursor: pointer;
 	width: auto !important;
 }
+.pressrelease {
+	white-space: pre-wrap;
+	font-family:monospace;
+	font-size: 1.2em;
+	line-height: 1;
+	border: 1px dashed grey;
+	padding: 0 5px;
+}
+.pressrelease-title {
+	font-weight: bold;
+	cursor: pointer;
+}

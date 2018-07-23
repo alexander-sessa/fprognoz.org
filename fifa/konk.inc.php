@@ -41,7 +41,7 @@ if (isset($_POST['submitpredict']))
 if (!isset($teamsin)) $teamsin = '';
 if (isset($_POST['submitpredict']) && $prognoz && $name && $pemail) { // отправка прогноза
   if ($pemail) {
-    send_email15('FPrognoz.org <fp@fprognoz.org>', $name, $pemail, "Konkurs", "FP_Prognoz\n$tour\n$name\n$prognoz\n- $teamsout\n+ $teamsin\n");
+    send_email15('FPrognoz.org <fp@fprognoz.org>', $name, $pemail, "Konkurs", "FP_Prognoz\n$name\n$tour\n$prognoz\n- $teamsout\n+ $teamsin\n");
     echo "<h3>Прогноз принят. Копия прогноза отправлена на адрес $pemail<br></h3>";
     $email = str_replace(',', ' ', $pemail);
     $amail = explode(' ', $email);
@@ -52,7 +52,7 @@ if (isset($_POST['submitpredict']) && $prognoz && $name && $pemail) { // отп�
   }
   $mlist = array('fp@fprognoz.org');
   foreach ($mlist as $email) {
-    @mail($email, 'Konkurs', "FP_Prognoz\n$tour\n$name\n$prognoz\n- $teamsout\n+ $teamsin\n$pemail\n",
+    @mail($email, 'Konkurs', "FP_Prognoz\n$name\n$tour\n$prognoz\n- $teamsout\n+ $teamsin\n$pemail\n",
 'From: '.$name.' <fp@fprognoz.org>
 MIME-Version: 1.0
 Content-Type: text/plain;

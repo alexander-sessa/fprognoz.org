@@ -1,17 +1,18 @@
 <?php
 /*
+- добавить показ (и редактирование?) пресс-релизов, может быть, там же и рассылка будет?
 - рассылки по кнопке "конверт"
 - вместо files добавить заливку программки (возможно, в переписанный makeprogram)
 - там же создавать календарь и генератор кубка
 - переписать makeprogram
 - переписать maillist
 - бомбардиры
-- добавить показ (и редактирование?) пресс-релизов, может быть, там же и рассылка будет?
 - двойное редатирование (текст + html), где это возможно, и формирование сообщений с обеими частями
 - вставка вырезанной цитаты в комментариях
 - отправка токена с учетом смены пароля (закомментировано)
 - смена пароля по токену или сразу после входа
 - забыл пароль
+- fp.cfg для старых сезонов, конвертирование в utf-8
 */
 $time_start = microtime(true);
 date_default_timezone_set('Europe/Berlin');
@@ -991,8 +992,8 @@ if (!isset($m)) { // если не запрошен контент, надо п�
 
   }
 }
-else if (!in_array($m, ['main', 'news', 'text', 'cal', 'gen', 'set'])) { // проверка на псевдо-скрипты -
-  if (!is_file($a . '/' . $m . '.inc.php')) {                            // им не требуется наличие файла
+else if (!in_array($m, ['main', 'news', 'pres', 'text', 'cal', 'gen', 'set'])) { // проверка на псевдо-скрипты -
+  if (!is_file($a . '/' . $m . '.inc.php')) {                                    // им не требуется наличие файла
     http_response_code(404);
     $a = 'fifa';
     $m = '404';
@@ -1013,15 +1014,20 @@ else if ($m == 'cal' || $m == 'gen') {
   $editable_class = ' class="monospace"';
 }
 else if ($m == 'text') {
+  $league = isset($l) ? $l.'/' : '';
+  if (isset($t))
+    $tt = $cca == 'UEFA' ? 'c'.$t : $t;
+
   switch ($ref) {
-    case 'itog':
-    case 'it'  : $f = isset($t) ? 'publish/it'.$t : 'it.tpl'; break;
-    case 'itc' : $f = isset($t) ? 'publish/it'.$t : 'itc.tpl'; break;
-    case 'prog':
-    case 'p'   : $f = isset($t) ? 'publish/p'.$t  : 'p.tpl'; break;
-    case 'pc'  : $f = isset($t) ? 'publish/p'.$t  : 'pc.tpl'; break;
-    case 'rev' :
-    case 'r'   : $f = isset($t) ? 'publish/r'.$t  : 'header'; break;
+    case 'news': $f = 'news'; break;
+    case 'itog': $t = lcfirst($t);
+    case 'it'  : $f = isset($t) ? 'publish/'.$league.'it'.$tt : 'it.tpl'; break;
+    case 'itc' : $f = isset($t) ? 'publish/'.$league.'it'.$tt : 'itc.tpl'; break;
+    case 'prog': $t = lcfirst($t);
+    case 'p'   : $f = isset($t) ? 'publish/p'.$tt  : 'p.tpl'; break;
+    case 'pc'  : $f = isset($t) ? 'publish/p'.$tt  : 'pc.tpl'; break;
+    case 'rev' : $t = lcfirst($t);
+    case 'r'   : $f = isset($t) ? 'publish/'.$league.'r'.$tt  : 'header'; break;
   }
   $content = file_get_contents($season_dir . $f);
   $editable_class = ' class="monospace"';
@@ -1095,6 +1101,9 @@ if (in_array($cca, $classic_fa)) { // сбор туров сезона для к
                 </li>';
       }
 
+    $sidebar .= '
+                <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=pres">Пресс-релизы</a></li>';
+
     if (is_file($season_dir.'cham.inc'))
       $sidebar .= '
                 <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=cham">Турнирная таблица</a></li>';
@@ -1167,6 +1176,9 @@ else if ($a == 'switzerland') { // сбор туров сезона Швейца
                 </li>';
     }
 
+    $sidebar .= '
+                <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=pres">Пресс-релизы</a></li>';
+
     if (is_file($season_dir.'cham.inc'))
       $sidebar .= '
                 <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=cham">Турнирная таблица</a></li>';
@@ -1237,6 +1249,9 @@ else if ($a == 'uefa') { // сбор туров сезона для евроку
                 </li>';
       }
 
+    $sidebar .= '
+                <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=pres">Пресс-релизы</a></li>';
+
     if (is_file($season_dir.'bombers'))
       $sidebar .= '
                 <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=club">Команды</a></li>';
@@ -1290,6 +1305,9 @@ else if ($a == 'sfp-team') { // сбор туров сезона для SFP
                 </li>';
     }
 
+  $sidebar .= '
+                <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=pres">Пресс-релизы</a></li>';
+
   if (is_file($season_dir.'codes.tsv'))
     $sidebar .= '
                 <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=player">Состав команды</a></li>';
@@ -1326,6 +1344,7 @@ else if ($a == 'world' || $a == 'sfp-20') { // сбор туров Мирово�
         }
 
       $sidebar .= '
+                <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=pres">Пресс-релизы</a></li>
                     </ul>
                 </li>';
       if (is_file($season_dir.'publish/table.cal'))
@@ -1352,9 +1371,10 @@ else if ($a == 'world' || $a == 'sfp-20') { // сбор туров Мирово�
                 <li><a href="?a='.$a.'&amp;m=hof">ЗАЛ СЛАВЫ</a></li>';
 }
 
-else if ($a == 'fifa')
+else if ($a == 'fifa') {
   $sidebar .= '
                 <li><a href="?m=news">Новости</a></li>
+                <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=pres">Пресс-релизы</a></li>
                 <li><a href="?m=reglament">Регламент</a></li>
                 <li><a href="?m=history">История SFP</a></li>
                 <li><a href="?m=help">Инструкция</a></li>
@@ -1367,7 +1387,7 @@ else if ($a == 'fifa')
                 <li><a href="?m=video">Видеотрансляции</a></li>
                 <li><a href="?m=live&amp;ls='.$fprognozls.'">Результаты</a></li>
                 <li><a href="?m=hof">ЗАЛ СЛАВЫ</a></li>';
-
+}
 
 ////////// rest-обработчик
 
@@ -1422,7 +1442,7 @@ else {
 
     <!-- Bootstrap CSS CDN -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-    <link href="css/fp.css?ver=130" rel="stylesheet">
+    <link href="css/fp.css?ver=135" rel="stylesheet">
     <!--[if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script><![endif]-->
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
@@ -1431,7 +1451,7 @@ else {
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/10.1.0/inline/ckeditor.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/10.1.0/inline/translations/ru.js"></script>
-    <script src="/js/fp.js?ver=70"></script>
+    <script src="/js/fp.js?ver=80"></script>
     <script src="/js/jquery/jquery.color.js"></script>
     <script src="/js/socket.io/socket.io.slim.js"></script>
 </head>
@@ -1578,7 +1598,7 @@ echo '
         <!-- Page Content Holder -->
         <content id="content">
             <header class="header">
-                <h3>'.$description.'</h3>
+                <h3>'.$description.'</3>
             </header>
             <nav class="navbar navbar-expand-lg navbar-lignt bg-light">
                 <div class="container-fluid">
@@ -1622,8 +1642,9 @@ echo '
                         <div id="saveIcon" class="navbar-btn-icon" data-tpl="' . $scfg . '" title="Сохранить изменения"><i class="fas fa-save"></i></div>
                     </button>';
   }
-  if ($role == 'president' && in_array($m, ['cal', 'gen', 'main', 'news', 'prognoz', 'text'])
-   || $role == 'pressa' && (in_array($m, ['main', 'news']) || $m == 'text' && $ref == 'r'))
+  if ($role == 'president' && in_array($m, ['cal', 'gen', 'main', 'news', 'codestsv', 'player', 'pres', 'prognoz', 'text'])
+   || $role == 'pressa' && (in_array($m, ['main', 'news', 'pres']) || $m == 'text' && $ref == 'r')
+   || $role == 'coach' && $m == 'player')
     echo '
                     <button type="button" id="sendMail" class="navbar-btn">
                         <div id="mailIcon" title="Подготовить текст к рассылке"><i class="fas fa-envelope-open"></i></div>
@@ -1651,9 +1672,31 @@ echo '
 
             <div class="main">
                 <div id="editable"' . $editable_class . '>';
-  if ($m == 'set' && $role == 'president') {
+  if ($m == 'pres') {
+    $pr = glob($season_dir.'publish/1*');
+    if (count($pr)) {
+      rsort($pr);
+      echo '
+                    <h4>Пресс-релиз'.(count($pr) > 1 ? 'ы' : '').'</h4>';
+      $collapsed = false;
+      foreach ($pr as $file) {
+        $ts = substr($file, -10);
+        echo '
+                    <div class="pressrelease-title">'.date('Y-m-d H:i', $ts).'</div>
+                    <div id="'.$ts.'" class="pressrelease"'.($collapsed ? ' style="display:none"' : '').'>
+'.file_get_contents($file).'
+                    </div>';
+        $collapsed = true;
+      }
+    }
+    else
+      echo '
+                    <h5>В этом сезоне пресс-релизов нет.</h5>';
+
+  }
+  else if ($m == 'set' && $role == 'president') {
     echo '
-                    <h3>Редактирование настроек сезона</h3>
+                    <h4>Редактирование настроек сезона</h4>
                     <form id="season_settings" method="POST">
                         <ul>
                             <li><div>Название ФП-ассоциации: </div><input type="text" name="description" value="'.$description.'" /></li>

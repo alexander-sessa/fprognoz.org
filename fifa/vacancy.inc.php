@@ -70,32 +70,20 @@ if (!isset($teamsout))
 
 if (isset($_POST['name_str']) && $human && $name && $pemail) { // отправка вакансии
   if ($pemail) {
-    send_email('FPrognoz.org <fp@fprognoz.org>', $name, $pemail, "Vacancy", "FP_Prognoz\nVACANCY\n$name\n- $teamsout\n+ $teamsin\n");
-    echo "<h1>Заявка принята. Копия заявки отправлена на адрес $pemail<br /></h1>";
+    send_email('FPrognoz.org <fp@fprognoz.org>', $name, $pemail, "Vacancy", "FP_Prognoz\n$name\nVACANCY\n- $teamsout\n+ $teamsin\n");
+    echo "<h5>Заявка принята. Копия заявки отправлена на адрес $pemail<br /></h5>";
     $email = str_replace(',', ' ', $pemail);
     $amail = explode(' ', $email);
     $replyto = '';
-//    foreach ($amail as $email) if (!$replyto && ($email = trim($email)))
-    foreach ($amail as $email) if ($email = trim($email)) {
-      if (strpos($email, '@'))
-        $replyto = "$name <$email>";
-      else {
-        if ($cz = strpos($email, ':')) $zone = substr($email, 0, $cz);
-        else $zone = 2;
-        $cn = strpos($email, '/');
-        $net = substr($email, $cz + 1, $cn - $cz - 1);
-        if ($cf = strpos($email, '.')) { $node = substr($email, $cn + 1, $cf - $cn - 1); $point = substr($email, $cf + 1); }
-        else { $node = substr($email, $cn + 1); $point = 0; }
-          $replyto = str_replace(' ', '.', $name)."@";
-        if ($point) $email .= "p$point.";
-          $replyto .= "f$node.n$net.z$zone.fidonet.org";
-      }
-    }
-  }
+    foreach ($amail as $email)
+      if ($email = trim($email))
+        if (strpos($email, '@'))
+          $replyto = "$name <$email>";
 
+  }
   $mlist = array('fp@fprognoz.org');
   foreach ($mlist as $email) {
-    @mail($email, 'Vacancy', "FP_Prognoz\nVACANCY\n$name\n- $teamsout\n+ $teamsin\n$pemail\n",
+    @mail($email, 'Vacancy', "FP_Prognoz\n$name\nVACANCY\n- $teamsout\n+ $teamsin\n$pemail\n",
 'From: '.$name.' <fp@fprognoz.org>
 Reply-To: '.$name.' <'.$pemail.'>
 MIME-Version: 1.0
