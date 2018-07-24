@@ -445,6 +445,8 @@ ul ul a {
 }
 
 #sendIcon {
+    background: orangered;
+    color: whitesmoke;
     display: none;
 }
 
@@ -797,4 +799,7 @@ li h5, li h6 {
 .pressrelease-title {
 	font-weight: bold;
 	cursor: pointer;
+}
+.mailSubject {
+	width: 100%
 }

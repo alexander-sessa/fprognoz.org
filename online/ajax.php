@@ -7,26 +7,26 @@ $data = json_decode(trim(mcrypt_decrypt( MCRYPT_BLOWFISH, $key, base64_decode($_
 $this_site = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'];
 
 $ccn = array(
-'SFP' => 'SFP-team',
-'ENG' => 'England',
-'BLR' => 'Belarus',
-'GER' => 'Germany',
-'NLD' => 'Netherlands',
-'ESP' => 'Spain',
-'ITA' => 'Italy',
-'PRT' => 'Portugal',
-'RUS' => 'Russia',
-'UKR' => 'Ukraine',
-'FRA' => 'France',
-'SCO' => 'Scotland',
-'UEFA'=> 'UEFA',
-'FIN' => 'Finland',
-'SBN' => 'SBN',
-'FIFA'=> 'FIFA',
+'SFP' => 'sfp-team',
+'ENG' => 'england',
+'BLR' => 'belarus',
+'GER' => 'germany',
+'NLD' => 'netherlands',
+'ESP' => 'spain',
+'ITA' => 'italy',
+'PRT' => 'portugal',
+'RUS' => 'russia',
+'UKR' => 'ukraine',
+'FRA' => 'france',
+'SCO' => 'scotland',
+'UEFA'=> 'uefa',
+'FIN' => 'finland',
+'CHE' => 'switzerland',
+'FIFA'=> 'fifa',
 'FCL' => 'Friendly',
-'UNL' => 'World',
+'UNL' => 'world',
 'WL'  => 'World',
-'IST' => 'SFP-20',
+'IST' => 'sfp-20',
 );
 
 function build_search_map($file) {
@@ -296,6 +296,44 @@ $club_edit = '.(isset($_POST['club_edit']) ? 'true' : 'false').';
       file_put_contents($data_dir.'online/'.$cca.'/'.$_POST['cur_year'].'/fp.cfg', $json);
     }
     echo 1;
+  }
+
+  // рассылка
+  if ($data['cmd'] == 'send_mail') {
+    $ret = 0;
+    include ('../' . $data['a'] . '/settings.inc.php');
+    if ($data['author'] == $president || $data['author'] == $vice || $data['author'] == $pressa || in_array($data['author'], $admin)) {
+      $cca = array_search($data['a'], $ccn);
+      $email = '';
+      if ($cca == 'fifa') {
+        $emails = [];
+        $map = explode(';', file_get_contents($online_dir . '/data/.map'));
+        foreach ($map as $mail)
+          if (strpos($mail, '@') && strpos($mail, '.')) {
+            $emails = explode(',', strtolower($mail));
+            foreach ($emails as $mail)
+              $amail[$mail] = 1;
+          }
+
+        foreach ($emails as $mail => $tt)
+          $email .= ($email ? ',' : '') . trim($mail);
+      }
+      else {
+        $codes = file($online_dir . $cca . '/' . $data['s'] . '/codes.tsv');
+        $i = 0;
+        foreach ($codes as $line) if (trim($line)) {
+          list($code, $cmd, $name, $mail, $long) = explode("\t", $line);
+          if (!isset($_POST['p']) || isset($_POST['p'][$i++])) {
+            $emails = explode(',', $mail);
+            foreach ($emails as $mail)
+              $email .= ($email ? ',' : '') . $name . ' <' . trim($mail) . '>';
+
+          }
+        }
+      }
+      $ret = send_email(strtolower($cca).'@'.$_SERVER['HTTP_HOST'], $data['author'], $email, $_POST['subj'], $_POST['text']);
+    }
+    echo $ret;
   }
 }
 ?>

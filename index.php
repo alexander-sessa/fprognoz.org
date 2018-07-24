@@ -1,7 +1,5 @@
 <?php
 /*
-- добавить показ (и редактирование?) пресс-релизов, может быть, там же и рассылка будет?
-- рассылки по кнопке "конверт"
 - вместо files добавить заливку программки (возможно, в переписанный makeprogram)
 - там же создавать календарь и генератор кубка
 - переписать makeprogram
@@ -1024,8 +1022,8 @@ else if ($m == 'text') {
     case 'it'  : $f = isset($t) ? 'publish/'.$league.'it'.$tt : 'it.tpl'; break;
     case 'itc' : $f = isset($t) ? 'publish/'.$league.'it'.$tt : 'itc.tpl'; break;
     case 'prog': $t = lcfirst($t);
-    case 'p'   : $f = isset($t) ? 'publish/p'.$tt  : 'p.tpl'; break;
-    case 'pc'  : $f = isset($t) ? 'publish/p'.$tt  : 'pc.tpl'; break;
+    case 'p'   : $f = isset($t) ? 'publish/p'.$t  : 'p.tpl'; break;
+    case 'pc'  : $f = isset($t) ? 'publish/p'.$t  : 'pc.tpl'; break;
     case 'rev' : $t = lcfirst($t);
     case 'r'   : $f = isset($t) ? 'publish/'.$league.'r'.$tt  : 'header'; break;
   }
@@ -1442,7 +1440,7 @@ else {
 
     <!-- Bootstrap CSS CDN -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-    <link href="css/fp.css?ver=135" rel="stylesheet">
+    <link href="css/fp.css?ver=137" rel="stylesheet">
     <!--[if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script><![endif]-->
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
@@ -1451,12 +1449,14 @@ else {
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/10.1.0/inline/ckeditor.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/10.1.0/inline/translations/ru.js"></script>
-    <script src="/js/fp.js?ver=80"></script>
+    <script src="/js/fp.js?ver=111"></script>
     <script src="/js/jquery/jquery.color.js"></script>
     <script src="/js/socket.io/socket.io.slim.js"></script>
 </head>
 
 <body>
+
+    <div class="overlay"></div>
 
     <a href="#" class="scrollToTop"><i class="fas fa-arrow-circle-up"></i></a>
 
@@ -1565,13 +1565,6 @@ echo '
                 <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=newcal">Создать календарь</a></li>';
       echo '
                 <li class="active">
-                    <a href="#mailSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Рассылка</a>
-                    <ul class="collapse list-unstyled" id="mailSubmenu">
-                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=email">Выбранным игрокам</a></li>
-                        <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=maillist">Пресс-релиз</a></li>
-                    </ul>
-                </li>
-                <li class="active">
                     <a href="#editSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Редактирование</a>
                     <ul class="collapse list-unstyled" id="editSubmenu">
                         <li><a href="?a='.$a.'&amp;m=set">Настройки сезона</a></li>
@@ -1642,15 +1635,44 @@ echo '
                         <div id="saveIcon" class="navbar-btn-icon" data-tpl="' . $scfg . '" title="Сохранить изменения"><i class="fas fa-save"></i></div>
                     </button>';
   }
-  if ($role == 'president' && in_array($m, ['cal', 'gen', 'main', 'news', 'codestsv', 'player', 'pres', 'prognoz', 'text'])
-   || $role == 'pressa' && (in_array($m, ['main', 'news', 'pres']) || $m == 'text' && $ref == 'r')
-   || $role == 'coach' && $m == 'player')
+  if ($role == 'president' && in_array($m, ['cal', 'gen', 'news', 'codestsv', 'player', 'pres', 'prognoz', 'text'])
+   || $role == 'pressa' && (in_array($m, ['news', 'pres']) || $m == 'text' && $ref == 'r')
+   || $role == 'coach' && $m == 'player') {
+    $data_cfg = ['cmd' => 'send_mail', 'author' => $_SESSION['Coach_name'], 'a' => $a, 's' => $s, 'm' => $m];
+    if (isset($ref)) $data_cfg['ref'] = $ref;
+    if (isset($t)) {
+      $data_cfg['t'] = $t;
+      switch ($t[0]) {
+        case 'c': $tname = ' кубка'; break;
+        case 's': $tname = ' Суперкубка'; break;
+        case 'p': $tname = ' плей-офф'; break;
+        default : $tname = '';
+      }
+      $tt = $tname ? substr($t, 1) : ltrim($t, '0');
+    }
+    $subject = 'ФП. ' . $fa[$a] . '. ';
+    switch ($m) {
+      case 'cal': $subject .= 'Календарь чемпионата ' . $s; break;
+      case 'gen': $subject .= 'Генераторы чемпионата ' . $s; break;
+      case 'text':
+        switch ($ref) {
+          case 'p'  : $subject .= 'Программка ' . $tt . ' тура' . $tname; break 2;
+          case 'pc' : $subject .= 'Программка ' . $tt . ' тура кубка'; break 2;
+          case 'it' : $subject .= 'Итоги ' . $tt . ' тура' . $tname; break 2;
+          case 'itc': $subject .= 'Итоги ' . $tt . ' тура кубка'; break 2;
+          case 'r'  : $subject .= 'Обзор ' . $tt . ' тура' . $tname; break 2;
+          case 'rc' : $subject .= 'Обзор ' . $tt . ' тура кубка'; break 2;
+        }
+      case 'news':
+      case 'pres': $subject .= 'Пресс-релиз. '; break;
+    }
+    $mcfg = base64_encode(mcrypt_encrypt( MCRYPT_BLOWFISH, $key, json_encode($data_cfg), MCRYPT_MODE_CBC, $iv ));
     echo '
                     <button type="button" id="sendMail" class="navbar-btn">
-                        <div id="mailIcon" title="Подготовить текст к рассылке"><i class="fas fa-envelope-open"></i></div>
-                        <div id="sendIcon" title="Рассылка текста" style="display:none"><i class="fas fa-envelope"></i></div>
+                        <div id="mailIcon" class="navbar-btn-icon" data-mode="'.(isset($content) ? 'text' : $m).'" data-subj="'.$subject.'" title="Подготовить текст к рассылке"><i class="fas fa-envelope-open"></i></div>
+                        <div id="sendIcon" class="navbar-btn-icon" data-tpl="' . $mcfg . '" title="Рассылка текста"><i class="fas fa-envelope"></i></div>
                     </button>';
-
+  }
   echo '
                     <button type="button" id="navbarFlag" class="navbar-flag" style="background: url(images/63x42/'.$a.'.png) no-repeat; background-size: 100%; display:none" onClick="location.href=\'?a='.$a.'\'"></button>
                     <button class="btn btn-light d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarMyTours" aria-controls="navbarMyTours" aria-expanded="false" aria-label="Toggle navigation">
