@@ -40,15 +40,20 @@ pre {
     font-weight: bold;
 }
 
+/*
 .main TABLE	{ table-border: 0;	border-bottom: 1px solid #7c82a4; }
 .main TD	{ border-top: 1px solid #7c82a4;	vertical-align: top; }
 .main TH	{ border: #7c82a4; }
+*/
 .main A:link	{ color: #0031ce; }
 .main A:visited	{ color: #0031ce; }
 .main A:hover	{ color: white; }
 .title		{ color: #ff4500; }
-
 h4		{ color: #ff4500; }
+.tdl		{padding:0 25px}
+.tdn		{text-align:right; padding-right:20px}
+.td1		{text-align:right; padding-right:10px}
+.tdr		{text-align:right; padding-right:35px}
 
 .pr_str {
     font-size: 1em;
@@ -116,12 +121,18 @@ h4		{ color: #ff4500; }
 .magenta { color: magenta;	font-weight: bold; }
 .red { color: red;	font-weight: bold; }
 
+mark { font-weight: bold;	background-color: yellow;	padding: 0; }
+
 .navbar {
-    padding: 15px 10px;
-    background: midnightblue !important;
+    padding: 15px 0;
+    background: midnightblue;
+    background-image: url(/images/navb3.jpg);
+    background-repeat: repeat-x;
+    background-position-x: left;
+    background-position-y: top;
     border: none;
     border-radius: 0;
-    margin-bottom: 40px;
+    margin-bottom: 10px;
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
 }
 
@@ -153,6 +164,29 @@ h4		{ color: #ff4500; }
     cursor: pointer;
     margin-left: 15px;
     display: none !important;
+}
+
+.tour-tabs {
+    margin-bottom: 20px;
+}
+.nav-tabs {
+    border-bottom: 1px solid darkgrey;
+}
+.nav-tabs .nav-link {
+    border: 1px solid darkgrey;
+    background: aliceblue;
+}
+.nav-tabs .nav-link.active {
+    border-color: darkgrey;
+}
+.nav-tabs .nav-link.disabled {
+    border-color: grey;
+}
+
+#navbarMyTours.show {
+    margin-top: 14px;
+    padding-bottom: 10px;
+    background: #1e2a64;
 }
 
 .line {
@@ -190,19 +224,22 @@ h4		{ color: #ff4500; }
     min-width: 250px;
     max-width: 250px;
     background: #1e2a64;
+    background-image: url(/images/left1.jpg);
+    background-repeat: no-repeat;
+    background-position: top;
     color: gold;
     transition: all 0.6s cubic-bezier(0.945, 0.020, 0.270, 0.665);
     transform-origin: bottom left;
 }
 
-#sidebar.collapsed {
+#sidebar.active {
     margin-left: -250px;
     transform: rotateY(100deg);
 }
 
 #sidebar .sidebar-header {
     padding: 20px;
-    background: #1e2a64;
+    //background: #1e2a64;
 }
 
 #sidebar ul.components {
@@ -227,7 +264,7 @@ h4		{ color: #ff4500; }
 
 #sidebar ul li.active > a, a[aria-expanded="true"] {
     color: gold;
-    background: #1e2a64;
+    //background: #1e2a64;
 }
 
 .flag {
@@ -257,19 +294,24 @@ h4		{ color: #ff4500; }
     min-width: 250px;
     max-width: 250px;
     background: #1e2a64;
+    background-image: url(/images/right1.jpg);
+    background-repeat: no-repeat;
+    background-position: top;
     color: gold;
     transition: all 0.6s cubic-bezier(0.945, 0.020, 0.270, 0.665);
-    transform-origin: bottom right;
+    //transform-origin: bottom right;
+    transform-origin: top left;
 }
 
 #rightbar.active {
     margin-right: -250px;
-    transform: rotateY(-116deg);
+    transform: scaleX(0);
+    //transform: rotateY(-116deg);
 }
 
 #rightbar .rightbar-header {
     padding: 20px;
-    background: #1e2a64;
+    //background: #1e2a64;
 }
 
 #rightbar ul.components {
@@ -294,7 +336,7 @@ h4		{ color: #ff4500; }
 
 #rightbar ul li.active > a, a[aria-expanded="true"] {
     color: gold;
-    background: #1e2a64;
+    //background: #1e2a64;
 }
 
 
@@ -313,7 +355,7 @@ a[data-toggle="collapse"] {
 ul ul a {
     font-size: 1em !important;
     padding-left: 30px !important;
-    background: #1e2a64;
+    //background: #1e2a64;
 }
 
 /* ---------------------------------------------------
@@ -327,8 +369,12 @@ ul ul a {
 }
 
 .header {
+    height: 62px;
     color: gold;
     background: #1e2a64;
+    background-image: url(/images/head1.jpg);
+    background-repeat: repeat-x;
+    background-position: left;
     text-align: center;
     padding: 20px 0 1px 0;
 }
@@ -355,6 +401,7 @@ ul ul a {
     height: 40px;
     background: whitesmoke;
     cursor: pointer;
+    margin-left: 15px;
 }
 
 #sidebarCollapse span {
@@ -381,6 +428,10 @@ ul ul a {
     transform: none;
     opacity: 1;
     margin: 5px auto;
+}
+
+#btnMyTours {
+    margin-right: 15px;
 }
 
 #rightbarCollapse {
@@ -474,7 +525,7 @@ ul ul a {
 /* ---------------------------------------------------
     MEDIAQUERIES
 ----------------------------------------------------- */
-@media (max-width: 991px) {
+@media (max-width: 992px) {
     .header {
         display: none;
     }
@@ -509,10 +560,11 @@ ul ul a {
         display: inline-block !important;
     }
 }
-@media (max-width: 1279px) {
+@media (max-width: 1200px) {
     #rightbar {
         margin-right: -250px;
-        transform: rotateY(-116deg);
+        transform: scaleX(0);
+        //transform: rotateY(-116deg);
     }
     #rightbar.active {
         margin-right: 0;
@@ -692,17 +744,15 @@ ul ul a {
 .b-cyan	{ background-color: cyan;	font-weight: bold;}
 .b-lime	{ background-color: lime;	font-weight: bold;}
 .b-yell	{ background-color: yellow;	font-weight: bold;}
-.p-head	{ font-size: 1.2em;	font-weight: bold;	text-align:center; }
-.p-hint	{ text-align:center; }
-.p-left	{ position: relative;	float: left; }
-.p-table{ font-size: 1.1em;	margin: 20px; }
 .s-hname{ text-align: left;	font-weight: bold;	padding-left: 12px; }
 .s-name	{ text-align: left;		font-size: 0.9em;	padding-left: 12px; }
 .s-num	{ text-align: right;		font-size: 0.9em;	padding-right: 12px; }
 .s-spacer{ min-width: 60px; }
 .s-table{ margin: 20px; }
-#mt	{ padding-top: 1px;		font-weight: normal;	margin-right: 20px }
-#mt A	{ display: inline-block;	margin-top: 5px }
+#mt	{
+	white-space:pre;
+	width:33%;
+}
 
 /* ---------------------------------------------------
     LIVESCORE.BZ

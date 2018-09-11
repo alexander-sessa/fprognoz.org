@@ -5,6 +5,6 @@ $description  = 'Федерация игровых футбол-прогнозн
 $main_header  = 'Приветствуем Вас на сайте Футбол-прогноза';
 $cur_year     = '2018-19';
 $president    = 'Eugeny Gladyr';
-$vice         = 'Eugene (Joker) Plugin';
+$vice         = 'Eugene (Joker) Plugin, Александр Сесса';
 $pressa       = '';
 ?>

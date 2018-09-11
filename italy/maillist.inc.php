@@ -200,7 +200,7 @@ function MakeRealmatch($program)
 {
   global $online_dir;
     // выборка данных по реальным матчам
-    $fr = strpos($program, "Последний с");
+    $fr = strpos($program, "Контрольный с");
     $matches = explode("\n", substr($program, 0, $fr));
     $program = substr($program, $fr);
     $months = array(
@@ -594,7 +594,7 @@ function build_itogi($country_code, $season, $tour)
     $fr = strpos($program, "\n", $fr) + 1;
     $program = substr($program, $fr);
     $realmatch = MakeRealmatch($program);
-    $fr = strpos($program, "Последний с");
+    $fr = strpos($program, "Контрольный с");
     $program = substr($program, $fr);
     list($cal, $gen) = parse_cal_and_gen($program);
     if (!trim($gen))
@@ -2821,7 +2821,7 @@ function build_prognozlist($country_code, $season, $tour)
   $program = file_get_contents($online_dir."$country_code/$season/programs/$tour");
   if (mb_detect_encoding($program, 'UTF-8', true) === FALSE)
     $program = iconv('CP1251', 'UTF-8//IGNORE', $program);
-  $fr = mb_strpos($program, "Последний с");
+  $fr = mb_strpos($program, "Контрольный с");
   $program = mb_substr($program, $fr);
   list($cal, $gen) = parse_cal_and_gen($program);
 //  if (is_file("$country_code/$season/$tcode/$calfname"))

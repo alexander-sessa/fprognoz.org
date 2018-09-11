@@ -15,7 +15,7 @@ else {
   $groups = $tournament['format'][0]['groups'];
   $teams = (isset($tournament['format'][0]['tourn']) ? $tournament['format'][0]['tourn'] : $tournament['format'][0]['tours'][1]) / 2 + 1;
   $codes = file($season_dir.'codes.tsv');
-  for ($i = count($codes); $i > 0; $i--)
+  for ($i = count($codes) - 1; $i >= 0; $i--)
     if ($codes[$i][0] == '-' || $codes[$i][0] == '#')
       unset($codes[$i]);
 
@@ -23,10 +23,13 @@ else {
     $teams = count($codes);
 
   if (!isset($_POST['basket']))
-    for ($j = 0; $j < $groups; $j++)
+    for ($j = 0; $j < $groups; $j++) {
+      $basket[$j] = '';
       for ($i = 0; $i < $teams ; $i++)
         if (isset($codes[$i + $j * $teams]))
           $basket[$j] .= explode('	', $codes[$i + $j * $teams])[1]."\n";
+
+    }
 
   $hint = ['высшая лига', 'первый дивизион', 'второй дивизион'];
   echo '
@@ -68,11 +71,12 @@ else {
     $tours = (count($comm[0]) - 1) * 2;
     $mt = count($comm[0]) / 2;
     $cal = $caltpl[count($comm[0])];
+    $out = '';
     for ($t = 0; $t < $tours; $t++) {
       $out .= ' Тур '.($t + 1).'        '.$cca.sprintf('%02d', $t + 1)."\n";
       for ($j = 0; $j < $groups; $j++)
         for ($i = 0; $i < $mt; $i++)
-          $out .= trim($comm[$j][--$cal[$i + $t * $mt][0]]).' - '.trim($comm[$j][--$cal[$i + $t * $mt][1]])."\n";
+          $out .= trim($comm[$j][$cal[$i + $t * $mt][0] - 1]).' - '.trim($comm[$j][$cal[$i + $t * $mt][1] - 1])."\n";
 
       $out .= "\n";
     }
@@ -87,7 +91,7 @@ else {
   <textarea style="font-family:monospace;height:30em;line-height:1em;width:30%">'.$out.'</textarea>';
     $league = count($comm);
     $genpt = 10 * $league;
-    $factor = $_POST['angry'] ? 1 : 0;
+    $factor = isset($_POST['angry']) ? 1 : 0;
     $spacer = '      ';
     $out = "\n";
     for ($t = 1; $t <= $tours; $t++) {

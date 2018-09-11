@@ -81,10 +81,10 @@
 </tr>
 <tr>
 <td>2009-2010</td>
-<td>БАТЭ (Борисов)<br />Белоруссия<br />Vitya Baranovsky</td>
+<td>БАТЭ (Борисов)<br />Беларусь<br />Vitya Baranovsky</td>
 <td>Schalke 04 (Gelsenkirchen)<br />Германия<br />Andrey Vishinski</td>
 <td>Lecce<br />Италия<br />Roman Anpilogov</td>
-<td>Витебск<br />Белоруссия<br />Alexandr Dashkevich</td>
+<td>Витебск<br />Беларусь<br />Alexandr Dashkevich</td>
 </tr>
 <tr>
 <td>2010-2011</td>
@@ -102,7 +102,7 @@
 </tr>
 <tr>
 <td>2012-2013</td>
-<td>Динамо (Брест)<br />Белоруссия<br />Nick Gahovich</td>
+<td>Динамо (Брест)<br />Беларусь<br />Nick Gahovich</td>
 <td>West Ham United (London)<br />Англия<br />Lesha Nilov</td>
 <td>Estrela (Amadora)<br />Португалия<br />Andrey Teslin</td>
 <td>Wolfsburg<br />Германия<br />Vladislav Yezhergin</td>
@@ -111,7 +111,7 @@
 <td>2013-2014</td>
 <td>Stranraer<br />Шотландия<br />Alex Tarasov</td>
 <td>Benfica (Lisboa)<br />Португалия<br />Lesha Nilov</td>
-<td>ФК Гомель<br />Белоруссия<br />Vitya Baranovsky</td>
+<td>ФК Гомель<br />Беларусь<br />Vitya Baranovsky</td>
 <td>Dundee United<br />Шотландия<br />Vitya Baranovsky</td>
 </tr>
 <tr>
@@ -132,7 +132,7 @@
 <td>2016-2017</td>
 <td>Malaga<br />Испания<br />Vitya Baranovsky</td>
 <td>Металлист (Харьков)<br />Украина<br />Kirill Goloschekov</td>
-<td>ФК Минск<br />Белоруссия<br />Alex Tarasov</td>
+<td>ФК Минск<br />Беларусь<br />Alex Tarasov</td>
 <td>Hellas Verona<br />Италия<br />Taras Lobko</td>
 </tr>
 <tr>
@@ -148,8 +148,8 @@
 <tr><td>Vano Opulsky</td><td>Рапид (Вена)<br />Олимпиакос (Пирей)<br />Динамо (Киев)<br />Real Sociedad<br />Foggia</td><td>Австрия<br />Греция<br />Украина<br />Испания<br />Италия</td><td>ЛЧ-2001<br />КЛ-2001, ЗЛ-2003<br />ЛЕ-2007, ЛЕ-2008<br />ЛЧ-2009<br />ЛЕ-2009</td></tr>
 <tr><td>Andrey Vishinski</td><td>Cannes<br />Schalke 04 (Gelsenkirchen)</td><td>Франция<br />Германия</td><td>ЛЧ-2003, КЛ-2008, ЛЕ-2015, ЛЧ-2018<br />ЗЛ-2010</td></tr>
 <tr><td>Alexander Sessa</td><td>Lecce<br />Арсенал (Киев)<br />Athletic (Bilbao)<br />Tottenham Hotspur</td><td>Италия<br />Украина<br />Испания<br />Англия</td><td>ЗЛ-2005<br />ЗЛ-2006, ЗЛ-2007<br />КЛ-2011<br />КЛ-2018</td></tr>
-<tr><td>Vitya Baranovsky</td><td>БАТЭ (Борисов)<br />ФК Гомель<br />Dundee United<br />Malaga</td><td>Белоруссия<br />Белоруссия<br />Шотландия<br />Испания</td><td>ЛЧ-2010<br />КЛ-2014<br />ЛЕ-2014<br />ЛЧ-2017</td></tr>
-<tr><td>Alex Tarasov</td><td>Stranraer<br />Олимпик (Донецк)<br />ФК Минск</td><td>Шотландия<br />Украина<br />Белоруссия</td><td>ЛЧ-2014<br />ЛЧ-2016<br />КЛ-2017</td></tr>
+<tr><td>Vitya Baranovsky</td><td>БАТЭ (Борисов)<br />ФК Гомель<br />Dundee United<br />Malaga</td><td>Беларусь<br />Беларусь<br />Шотландия<br />Испания</td><td>ЛЧ-2010<br />КЛ-2014<br />ЛЕ-2014<br />ЛЧ-2017</td></tr>
+<tr><td>Alex Tarasov</td><td>Stranraer<br />Олимпик (Донецк)<br />ФК Минск</td><td>Шотландия<br />Украина<br />Беларусь</td><td>ЛЧ-2014<br />ЛЧ-2016<br />КЛ-2017</td></tr>
 <tr><td>Eugene Plugin</td><td>Eintracht (Frankfurt)<br />Rangers (Glasgow)</td><td>Германия<br />Шотландия</td><td>ЛЕ-2003<br />ЛЧ-2006, ЛЧ-2007</td></tr>
 <tr><td>Nikita Segal</td><td>Valencia<br />1860 Munchen<br /></td><td>Испания<br />Германия</td><td>ЛЧ-2008<br />ЗЛ-2011, 2015</td></tr>
 <tr><td>Lesha Nilov</td><td>West Ham United (London)<br />Benfica (Lisboa)<br />AZ Alkmaar</td><td>Англия<br />Португалия<br />Голландия</td><td>ЗЛ-2013<br />ЗЛ-2014<br />КЛ-2015</td></tr>
@@ -184,7 +184,7 @@
 <tr><td>4</td><td>Германия</td><td align=center>8</td><td align=center>-</td><td align=center>4</td><td align=center>1</td><td align=center>3</td></tr>
 <tr><td>5</td><td>Италия</td><td align=center>7</td><td align=center>1</td><td align=center>1</td><td align=center>1</td><td align=center>4</td></tr>
 <tr><td>6</td><td>Испания</td><td align=center>6</td><td align=center>4</td><td align=center>1</td><td align=center>1</td><td align=center>-</td></tr>
-<tr><td>7</td><td>Белоруссия</td><td align=center>5</td><td align=center>2</td><td align=center>-</td><td align=center>2</td><td align=center>1</td></tr>
+<tr><td>7</td><td>Беларусь</td><td align=center>5</td><td align=center>2</td><td align=center>-</td><td align=center>2</td><td align=center>1</td></tr>
 <tr><td>8</td><td>Португалия</td><td align=center>4</td><td align=center>-</td><td align=center>1</td><td align=center>1</td><td align=center>2</td></tr>
 <tr><td>9</td><td>Россия</td><td align=center>3</td><td align=center>1</td><td align=center>1</td><td align=center>1</td><td align=center>-</td></tr>
 <tr><td>10</td><td>Голландия</td><td align=center>3</td><td align=center>1</td><td align=center>-</td><td align=center>2</td><td align=center>-</td></tr>

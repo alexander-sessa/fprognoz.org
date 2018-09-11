@@ -5,6 +5,7 @@
 <script src="/js/croppic/croppic-3.0.min.js"></script>
 <script>//<![CDATA[
 var isEnabled=[],contentHTML=[],cke=[],cke_config={language:"ru"}
+/*
 function getSelectionText() {
            var text = "";
            if (window.getSelection) {
@@ -28,7 +29,8 @@ x.Selector.getSelected=function(){
 
     return t;
 }
-//$(document).bind("mouseup",function(){selected=x.Selector.getSelected();if(mytext.length==0)mytext=selected})
+$(document).bind("mouseup",function(){selected=x.Selector.getSelected();if(mytext.length==0)mytext=selected})
+*/
 function c_quote(cid,inf){
 com=$('[commentid="'+cid+'"]');c_text=$("main",com).html();var begin=1+c_text.indexOf('>'),end=c_text.lastIndexOf('<');c_text=c_text.substr(begin,end-begin);var c_date=$(".c-comment-date",com).html(),sStr="<blockquote><p><sub>"+$(".c-comment-author",com).html()+" <em>писал" + inf + ' '+c_date.split(' ').join(" в ")+"</em></sub></p><p>&bdquo;"+c_text+"&ldquo;</p></blockquote><p></p>";$("#cke"+cid).html($("#cke"+cid).html()+sStr)}
 function changeRating(id,rate_yes,rate_no,vote){$("#r_yes"+id).html(rate_yes?rate_yes:"");$("#r_no"+id).html(rate_no?rate_no:"");$.get("comments/vote.php",{user:"<?=$coach_name?>",id:id,vote:vote,hash:"<?=crypt($coach_name,$salt)?>"})}

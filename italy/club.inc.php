@@ -66,7 +66,7 @@ foreach ($clubs as $club) {
     }
     $out .= '
   <tr>
-    <td><br /><img src="images/' . $image . '" alt="' . $name . '" height="150" /></td>
+    <td><br /><img src="images/' . $image . '" alt="' . $name . '" style="max-height:280;max-width:150;object-fit: cover;" /></td>
     <td>
       <br />
       <b>' . $name . '</b><br /><br />
@@ -97,7 +97,7 @@ foreach ($clubs as $club) {
 }
 echo '
 <form action="" method="post">
-<table width="100%">
+<table class="table-condenced table-striped w-100 mx-auto">
   <tr><td>' . $msg . '</td><td></td><td></td><td width="23%"><b>основной состав</b></td><td></td><td width="23%"><b>второй состав</b></td></tr>
 ' . $out . '
 </table></form>

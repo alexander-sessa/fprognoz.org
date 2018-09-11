@@ -11,6 +11,7 @@ $ccs = array(
 'NLD' => 'Голландия',
 'PRT' => 'Португалия',
 'SCO' => 'Шотландия',
+'SUI' => 'Швейцария',
 'UCL' => 'Лига Чемп.',
 'UEL' => 'Лига Европы',
 'INT' => 'Сборные',
@@ -38,6 +39,7 @@ $ccn = array(
 'NLD' => 'Netherlands',
 'PRT' => 'Portugal',
 'SCO' => 'Scotland',
+'SUI' => 'Switzerland',
 'UEFA'=> 'UEFA',
 );
 

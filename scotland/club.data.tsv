@@ -1,20 +1,21 @@
 #код	файл с эмблемой клуба	название	город	год	стадион	мест	сайт
-ABERDEEN	scotlandABERDEEN.png	Aberdeen FC	Aberdeen	1903	Pittodrie Stadium	22199	http://www.afc.co.uk
-AYR	scotlandAYR.png	Ayr United FC	Ayr	1910	Somerset Park	10128	http://www.ayrunitedfc.co.uk
-CELTIC	scotlandCELTIC.png	Celtic FC	Glasgow	1888	Celtic Park	60832	http://www.celticfc.co.uk
-DUNDEE	scotlandDUNDEE.png	Dundee FC	Dundee	1893	Dens Park	12085	http://www.thedees.co.uk
-DUN_UTD	scotlandDUN_UTD.png	Dundee United FC	Dundee	1909	Tannadice Park	14209	http://www.dundeeunitedfc.co.uk
-ELGIN	scotlandELGIN.png	Elgin City FC	Elgin	1893	Borough Briggs	3927	http://www.elgincity.com
-FALKIRK	scotlandFALKIRK.png	Falkirk FC	Falkirk	1876	Falkirk Community Stadium	9008	http://www.falkirkfc.co.uk
-HAMILTON	scotlandHAMILTON.png	Hamilton Academical FC	Hamilton	1874	New Douglas Park	5396	http://www.acciesfc.co.uk
-HEARTS	scotlandHEARTS.png	Heart of Midlothian FC	Edinburgh	1874	Tynecastle Stadium	17420	http://www.heartsfc.co.uk
-HIBER	scotlandHIBER.png	Hibernian FC (Edinburgh)	Edinburgh	1875	Easter Road Stadium	20421	http://www.hibernianfc.co.uk
-INVER	scotlandINVER.png	Inverness Caledonian Thistle FC	Inverness	1994	Tulloch Caledonian Stadium	7918	http://www.caleythistleonline.com
-KILMAR	scotlandKILMAR.png	Kilmarnock FC	Kilmarnock	1869	Rugby Park	18128	http://www.kilmarnockfc.co.uk
-MOTHER	scotlandMOTHER.png	Motherwell FC	Motherwell	1886	Fir Park	13742	http://www.motherwellfc.co.uk
-PARTICK	scotlandPARTICK.png	Partick Thistle FC	Glasgow	1876	Firhill stadium	13079	http://www.ptfc.co.uk
-RANGERS	scotlandRANGERS.png	Rangers FC	Glasgow	1873	Ibrox Stadium	51082	http://www.rangers.co.uk
-ROSS	scotlandROSS.png	Ross County FC	Dingwall	1929	Global Energy Stadium	6310	http://www.rosscountyfootballclub.co.uk
-STJOHN	scotlandSTJOHN.png	Saint Johnstone FC	Perth	1885	McDiarmid Park	10673	http://www.perthstjohnstonefc.co.uk
-STMIRREN	scotlandSTMIRREN.png	Saint Mirren FC	Paisley	1877	St. Mirren Park (Greenhill Road)	8016	http://www.saintmirren.net
-STRAN	scotlandSTRAN.png	Stranraer FC	Stranraer	1870	Stair Park	6250	http://www.stranraerfc.org
+ABERDEEN	scotland/ABERDEEN.png	Aberdeen FC	Aberdeen	1903	Pittodrie Stadium	22199	http://www.afc.co.uk
+AYR	scotland/AYR.png	Ayr United FC	Ayr	1910	Somerset Park	10128	http://www.ayrunitedfc.co.uk
+CELTIC	scotland/CELTIC.png	Celtic FC	Glasgow	1888	Celtic Park	60832	http://www.celticfc.co.uk
+DUNDEE	scotland/DUNDEE.png	Dundee FC	Dundee	1893	Dens Park	12085	http://www.thedees.co.uk
+DUN_UTD	scotland/DUN_UTD.png	Dundee United FC	Dundee	1909	Tannadice Park	14209	http://www.dundeeunitedfc.co.uk
+ELGIN	scotland/ELGIN.png	Elgin City FC	Elgin	1893	Borough Briggs	3927	http://www.elgincity.com
+FALKIRK	scotland/FALKIRK.png	Falkirk FC	Falkirk	1876	Falkirk Community Stadium	9008	http://www.falkirkfc.co.uk
+HAMILTON	scotland/HAMILTON.png	Hamilton Academical FC	Hamilton	1874	New Douglas Park	5396	http://www.acciesfc.co.uk
+HEARTS	scotland/HEARTS.png	Heart of Midlothian FC	Edinburgh	1874	Tynecastle Stadium	17420	http://www.heartsfc.co.uk
+HIBER	scotland/HIBER.png	Hibernian FC (Edinburgh)	Edinburgh	1875	Easter Road Stadium	20421	http://www.hibernianfc.co.uk
+INVER	scotland/INVER.png	Inverness Caledonian Thistle FC	Inverness	1994	Tulloch Caledonian Stadium	7918	http://www.caleythistleonline.com
+KILMAR	scotland/KILMAR.png	Kilmarnock FC	Kilmarnock	1869	Rugby Park	18128	http://www.kilmarnockfc.co.uk
+LIVING	scotland/LIVING.png	Livingston FC	Livingston	1943	Tony Macaroni Arena	9521	http://www.livingstonfc.co.uk
+MOTHER	scotland/MOTHER.png	Motherwell FC	Motherwell	1886	Fir Park	13742	http://www.motherwellfc.co.uk
+PARTICK	scotland/PARTICK.png	Partick Thistle FC	Glasgow	1876	Firhill stadium	13079	http://www.ptfc.co.uk
+RANGERS	scotland/RANGERS.png	Rangers FC	Glasgow	1873	Ibrox Stadium	51082	http://www.rangers.co.uk
+ROSS	scotland/ROSS.png	Ross County FC	Dingwall	1929	Global Energy Stadium	6310	http://www.rosscountyfootballclub.co.uk
+STJOHN	scotland/STJOHN.png	Saint Johnstone FC	Perth	1885	McDiarmid Park	10673	http://www.perthstjohnstonefc.co.uk
+STMIRREN	scotland/STMIRREN.png	Saint Mirren FC	Paisley	1877	St. Mirren Park (Greenhill Road)	8016	http://www.saintmirren.net
+STRAN	scotland/STRAN.png	Stranraer FC	Stranraer	1870	Stair Park	6250	http://www.stranraerfc.org

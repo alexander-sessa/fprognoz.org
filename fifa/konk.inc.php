@@ -1,7 +1,6 @@
 <?php
-$tour = (isset($t) && $t) ? 'KONK' . $t : 'KONK35';
-echo '    <p class="title text15b">&nbsp;&nbsp;&nbsp;Форма отправки заявок на конкурс ' . $tour . '</p>
-    <center>
+$tour = (isset($t) && $t) ? 'KONK' . $t : 'KONK36';
+echo '    <h4 class="text-center">&nbsp;&nbsp;&nbsp;Форма отправки заявок на конкурс ' . $tour . '</h4>
 ';
 
 /************************************************/
@@ -41,7 +40,7 @@ if (isset($_POST['submitpredict']))
 if (!isset($teamsin)) $teamsin = '';
 if (isset($_POST['submitpredict']) && $prognoz && $name && $pemail) { // отправка прогноза
   if ($pemail) {
-    send_email15('FPrognoz.org <fp@fprognoz.org>', $name, $pemail, "Konkurs", "FP_Prognoz\n$name\n$tour\n$prognoz\n- $teamsout\n+ $teamsin\n");
+    send_email('FPrognoz.org <fp@fprognoz.org>', $name, $pemail, "Konkurs", "FP_Prognoz\n$name\n$tour\n$prognoz\n- $teamsout\n+ $teamsin\n");
     echo "<h3>Прогноз принят. Копия прогноза отправлена на адрес $pemail<br></h3>";
     $email = str_replace(',', ' ', $pemail);
     $amail = explode(' ', $email);
@@ -107,21 +106,22 @@ function predict(id,dice)
 //]]></script>
 ";
 echo '<form name="tform" action="/?m=konk&t=' . $t . '" enctype="multipart/form-data" method="post">
-<table align="center" width="98%">
-<tr><td align="right">укажите ваше имя и фамилию латинскими буквами: </td><td><input type="text" name="name_str" value="'.(isset($name)?$name:'').'" size="50" /></td></tr>
+<table class="mx-auto">
+<tr><td align="right">укажите ваше имя и фамилию: </td><td><input type="text" name="name_str" value="'.(isset($name)?$name:'').'" size="50" /></td></tr>
 <tr><td align="right">e-mail, на который отправлять информацию сервера: </td><td><input type="text" name="email_str" value="'.(isset($pemail)?$pemail:'').'" size="50" /></td></tr>
 <tr><td align="right">команды, от которых откажетесь: </td><td><input type="text" name="teams_out" value="'.(isset($teamsout)?$teamsout:'').'" size="50" /></td></tr>
 <tr><td align="right">команды, которые хотите получить: </td><td><input type="text" name="teams_in" value="'.(isset($teamsin)?$teamsin:'').'" size="50" /></td></tr>
 <tr><td align="right">прогноз на конкурс: </td><td><input type="text" id="prognoz_str" name="prognoz_str" value="'.(isset($prognoz)?$prognoz:'').'" size="50" /></td></tr>
 </table>
-<p><input type="submit" name="submitpredict" value=" отправить прогноз " /></p>
-<p class="text9">прогноз можно набрать как непосредственно в строке ввода, так и кликая на варианты исходов матчей (1 X 2) в таблице:</p>
+<p class="text-center"><input type="submit" name="submitpredict" value=" отправить прогноз " /></p>
+<p class="small text-center">прогноз можно набрать как непосредственно в строке ввода, так и кликая на варианты исходов матчей (1 X 2) в таблице:</p>
 ';
 
     echo '<br />
-<table align="center" width="65%">
+<table class="table-condensed table-striped mx-auto">
 ';
-    echo '<tr><th>№</th><th width="65%">матч</th><th>страна</th><th>дата</th><th width="15%">прогноз</th></tr>
+    echo '<thead class="text-center"><tr><th>№</th><th width="65%">матч</th><th>страна</th><th>дата</th><th width="15%">прогноз</th></tr></thead>
+<tbody>
 ';
     foreach ($matches as $line) if ($line = trim($line)) {
       if ($line[0] == '|') {
@@ -139,7 +139,7 @@ echo '<form name="tform" action="/?m=konk&t=' . $t . '" enctype="multipart/form-
 	  else
 	    $t = '&nbsp;';
 
-	  echo '<tr><td align="right">'.$n.'</td><td align="left" width="288">'.$ho.' - '.$aw.'</td><td align="center">'.$t.'</td><td align="center">'.$d.'</td>';
+	  echo '<tr><td class="tdn">'.$n.'</td><td align="left" width="288">'.$ho.' - '.$aw.'</td><td align="center">'.$t.'</td><td align="center">'.$d.'</td>';
 	  echo '
     <td align="center">
       <a href="#" onclick="predict('."'dice$n','1'".'); return false;">1</a>
@@ -152,7 +152,8 @@ echo '<form name="tform" action="/?m=konk&t=' . $t . '" enctype="multipart/form-
         }
       }
     }
-    echo '</table>
+    echo '</tbody>
+</table>
 ';
 echo '</form></center>
 ';

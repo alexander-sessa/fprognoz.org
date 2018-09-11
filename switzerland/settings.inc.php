@@ -1,5 +1,5 @@
 <?php
-$cca          = 'CHE';
+$cca          = 'SUI';
 $charset      = 'UTF-8';
 $title        = 'ФП Швейцарии';
 $description  = 'Футбол-Прогнозная ассоциация Швейцарии';
@@ -26,8 +26,8 @@ $rght_ftcolor = 'ffd700';
 $left_image   = 'images/premiership-emblema2.jpg';
 $rght_image   = 'images/the-fa-cup.png';
 $cur_year     = '2018-1';
-$president    = 'Alexander Sessa';
-$vice         = '';
+$president    = 'Александр Сесса';
+$vice         = 'Andrey Vityuk';
 $pressa       = '';
-$club_edit    = false;
+$club_edit    = true;
 ?>

@@ -20,7 +20,7 @@ if (isset($_GET['tour']))
     $fr = strpos($program, "$tour ");
     $fr = strpos($program, "\n", $fr) + 1;
     $program = substr($program, $fr);
-    $fr = strpos($program, "Последний с");
+    $fr = strpos($program, "Контрольный с");
     $matches = explode("\n", substr($program, 0, $fr));
     $program = substr($program, $fr);
     $months = array(

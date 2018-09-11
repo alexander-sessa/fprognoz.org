@@ -12,7 +12,7 @@ function fp_auth($cc, $name, $password) {
 
 $ccs = array(
 'ENG' => array('Англия', 'England'),
-'BLR' => array('Белоруссия', 'Belarus'),
+'BLR' => array('Беларусь', 'Belarus'),
 'GER' => array('Германия', 'Germany'),
 'NLD' => array('Голландия', 'Netherlands'),
 'ESP' => array('Испания', 'Spain'),

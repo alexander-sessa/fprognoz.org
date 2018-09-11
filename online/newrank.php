@@ -25,7 +25,7 @@ function write_year_ranking($year) {
   foreach ($xl as $line) if (strlen($line) > 16) {
     $line = str_replace('	NED	', '	NLD	', $line);
     $a = explode('	', $line);
-    $nc = is_numeric($a[2]) ? 3 : 2;
+    $nc = $a[2] == '' || is_numeric($a[2]) ? 3 : 2;
     $team = trim($a[$nc++], ' "');
     $cc = trim($a[$nc++], '"');
     $score = isset($a[$nc]) ? $a[$nc] : 0;

@@ -44,7 +44,7 @@ if (isset($_POST['file_text']) && $_POST['file_text'])
     $program = str_replace(')-', ') - ', $program);
     $fr = strpos($program, "\n", strpos($program, "$tour_code ")) + 1;
     $program = substr($program, $fr);
-    $fr = strpos($program, "Последний с");
+    $fr = strpos($program, "Контрольный с");
     $matches = explode("\n", substr($program, 0, $fr));
 
     // make records for scheduler

@@ -20,7 +20,7 @@ foreach ($codes as $line)
 
 }
 $err = false;
-if (isset($_POST['_reg']))
+if (isset($_POST['reg']))
 {
   if (!isset($_SESSION['Coach_name']))
   {

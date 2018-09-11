@@ -3,11 +3,9 @@ $country = "netherlands";
 
 $teams = array(
 "1514" => "DENHAAG",
-"1515" => "AJAX",
 "1516" => "AZALK",
 "1547" => "CAMBUUR",
 "1549" => "EINDH",
-"1518" => "FEYEN",
 "1519" => "HEEREN",
 "1536" => "HERACL",
 "1537" => "GRAAF",
@@ -15,17 +13,18 @@ $teams = array(
 "1524" => "BREDA",
 "1517" => "PSV",
 "1520" => "RODA",
+"1544" => "TELSTAR",
+"1522" => "TWENTE",
 "1523" => "UTRECT",
 "1530" => "VITESSE",
-"1538" => "VVV",
 "1521" => "WILLEM",
 "1529" => "ZWOLLE",
 );
 /*
+"1515" => "AJAX",
+"1518" => "FEYEN",
 "1540" => "GAE",
 "1528" => "NEC",
-"1544" => "TELSTAR",
-"1522" => "TWENTE",
 */
 $names = array(
 "1514" => "ADO Den Haag",

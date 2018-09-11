@@ -1,0 +1,44 @@
+.interval-table { width: 100%; max-width: 720px }
+.interval-table th { font-size: 0.9em }
+.interval-table td { text-align: right; padding: 0 5px; font-size: 0.9em }
+.flag-15  { height: 15px; width: 23px; border: 1px black solid }
+.i-tiny   { height: 15px; width: 28px; font-size: 0.8em }
+.i-small  { height: 20px; width: 84px }
+.i-small::placeholder { color: red }
+.ta-mkpgm { height: 100px; width: 96%; max-width: 720px }
+#changek  { line-height: 10px; font-size: 0.9em }
+#sortable { list-style-type: none; margin: 0; padding: 0; max-width: 720px; }
+#sortable li { margin: 0 1px 1px 1px; padding-bottom: 0.2em; font-size: 1em; height: 18px; }
+.sortable_module {
+	display: block;
+	height: 18px;
+	width: 96%;
+	margin: 1px 0;
+	padding: 0 10px;
+	cursor: move;
+	border: 1px solid #ccc;
+	background-color: whitesmoke;
+	position: relative;
+	line-height: 16px;
+}
+.sortable_module div{
+	margin: 0;
+	display: inline;
+	position: absolute;
+	overflow: hidden;
+	padding: 0 1px;
+}
+.ccode {
+	width: 80px;
+	right: 86px;
+}
+.mdate {
+	width: 44px;
+	right: 42px;
+}
+.mrate {
+	width: 40px;
+	top: 2px;
+	right: 0px;
+	font-size: 0.7em;
+}

@@ -4,10 +4,8 @@
     CRON - развитие и объединение скрипта автоматизации рассылок и управления приемом прогнозов (SCHEDULER)
     с другими периодическими скриптами.
 
-    Сканирование мейл-бокса и парсинг свежих результатов выполняются безусловно каждую минуту перед обработкой событий.
+    Парсинг свежих результатов выполняется каждую минуту перед обработкой событий.
     Функция парсера возвращает массив базы матчей, который впоследствии используется шедулером.
-    Парсинг долговременных календарей и расписаний матчей на ближайший месяц выполняются дополнительными скриптами
-    раз в сутки в ночное время, причем в разные часы, поскольку оба процесса длительны.
 
     структура каталогов: год (4 цифры) / месяц (2) / день (2)
     событие = файл с именем <timestamp>.<cca>.<tour>.<event>, в файле могут быть данные
@@ -24,15 +22,14 @@ monitor проверка начала реальных матчей     с ут�
         публикация прогнозов                факт начала первого матча из программки (monitor)
         закрытие формы приема прогнозов     факт начала 4-го матча из основной части программки* (monitor)
 
-        формат файла monitor-а:
-число   - количество начавшихся матчей, для обычных ассоциаций при значении больше 3 закрываем форму приема прогнозов и прекращаем мониторить
-15 строк с информацией о матчах, взятых из results, в виде: "хозяева,гости,минута".
-*Формат подлежит проверке в момент уточнения: при нарушении рапортовать емейлом.
+        формат файла monitor-а:             строки с информацией о матчах, взятых из results, в виде: "хозяева,гости,минута"
+                                            *Формат подлежит проверке в момент уточнения: при нарушении рапортовать емейлом.
 
 -       специальные действия монитора:      фиксировать окончание матчей для перестройки файлов результатов турниров Мастер-серии;
                                             фиксировать начало начало первого матча для парсинга туров на других сайтах МС;
                                             фиксировать начало второго тайма для ФП Финляндии;
-*                                            фиксировать окончание тура и построение итогов (без рассылки);
+                                            фиксировать окончание тура и построение итогов (без рассылки);
+
 -       функция монитора:                   выполнить функцию при заданном событии (см. выше). выполняется вторым скриптом
 */
 
@@ -51,11 +48,12 @@ $subjects = array(
 'NLD' => 'ФП. Голландия.',
 'RUS' => 'ФП. Россия.',
 'PRT' => 'ФП. Португалия.',
-'SBN' => 'ФП. SBNet.',
 'SCO' => 'ФП. Шотландия.',
 'UKR' => 'ФП. Украина.',
+'SUI' => 'ФП. Швейцария.',
 'UEFA' => 'ФП. Лиги УЕФА.',
 'SFP' => 'ФП. Сборная SFP.',
+'ULN' => 'ФП. Лига Наций.',
 'WL' => 'ФП. Мировая Лига.',
 'IST' => 'ФП. Турнир "SFP - 20 ЛЕТ!"',
 );
@@ -73,7 +71,7 @@ $ccn = array(
 'FRA' => 'france',
 'SCO' => 'scotland',
 'FIN' => 'finland',
-'SBN' => 'sbn',
+'SUI' => 'switzerland',
 'UEFA' => 'uefa',
 'CHA' => 'uefa',
 'CUP' => 'uefa',
@@ -87,13 +85,13 @@ $ccn = array(
 'SPR' => 'sfp-team',
 'SUP' => 'sfp-team',
 'TOR' => 'sfp-team',
-'FCL' => 'friendly',
+'ULN' => 'world',
 'WL' => 'world',
 'WLS' => 'world',
 'IST' => 'sfp-20',
 );
 
-$classic_fa = ['BLR', 'ENG', 'ESP', 'FRA', 'GER', 'ITA', 'NLD', 'PRT', 'RUS', 'SCO', 'UKR'];
+$classic_fa = ['BLR', 'ENG', 'ESP', 'FRA', 'GER', 'ITA', 'NLD', 'PRT', 'RUS', 'SCO', 'UKR', 'SUI'];
 
 function get_absent_mails($country_code, $tour) {
   global $online_dir;
@@ -117,7 +115,7 @@ function get_absent_mails($country_code, $tour) {
     }
     // parse program
     $program = file_get_contents($season_dir . '/programs/' . $tour);
-    $program = substr($program, strpos($program, "Последний с"));
+    $program = substr($program, strpos($program, "Контрольный с"));
     $playteams = array();
     $calfp = explode("\n", $program);
     foreach ($calfp as $line)
@@ -166,9 +164,9 @@ function send_email($from, $name, $email, $subj, $body) {
 function send_to_all($country_code, $subj, $body) {
   global $online_dir;
   $senders = array(
-'BLR' => '"PFL of Belarus" <blr@fprognoz.org>',
-'ENG' => '"FPL of England" <eng@fprognoz.org>',
-'ESP' => '"FPL of Spain" <esp@fprognoz.org>',
+'BLR' => '"Беларуская ФФП" <blr@fprognoz.org>',
+'ENG' => '"The FPA" <eng@fprognoz.org>',
+'ESP' => '"FPF de España" <esp@fprognoz.org>',
 'FRA' => '"PFL of France" <fra@fprognoz.org>',
 'GER' => '"PFL of Germany" <ger@fprognoz.org>',
 'ITA' => '"PFL of Italy" <itl@fprognoz.org>',
@@ -179,9 +177,10 @@ function send_to_all($country_code, $subj, $body) {
 'SCO' => '"PFL of Scotland" <sco@fprognoz.org>',
 'UKR' => '"PFL of Ukraine" <ukr@fprognoz.org>',
 'UEFA' => 'UEFA <uefa@fprognoz.org>',
-'SBN' => '"AFL of SBNet" <sbn@fprognoz.org>',
+'SUI' => '"Swiss FPA" <sui@fprognoz.org>',
 'FIN' => '"AFL of Finland" <fin@fprognoz.org>',
 'SFP' => '"SFP-Team" <sfp@fprognoz.org>',
+'ULN' => '"Nations League" <uln@fprognoz.org>',
 'WL' => '"World League" <wl@fprognoz.org>',
 'IST' => '"SFP - 20!" <sfp@fprognoz.org>',
 );
@@ -276,6 +275,53 @@ function pr_validate($pr) {
     }
 
   return $valid;
+}
+
+function SwissStanding($cal_file) {
+  $cal = file($cal_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+  $games = $teams = [];
+  foreach ($cal as $line) {
+    if ($cut = strpos($line, '(')) {
+      $h = $a = [];
+      list($ho, $rest) = explode(' - ', substr($line, 0, $cut));
+      list($rest, $a['g']) = explode(':', trim($rest));
+      list($aw, $h['g']) = explode('  ', $rest);
+      $games[$ho][$aw] = $h['g'].':'.$a['g'];
+      $games[$aw][$ho] = $a['g'].':'.$h['g'];
+      list($h['c'], $h['h'], $a['c'], $a['h']) = explode(':', rtrim(substr($line, $cut + 1), ')'));
+      $h['r'] = $h['g'] - $a['g'];
+      $a['r'] = -$h['r'];
+      if ($h['r'] == 0)
+        $h['s'] = $a['s'] = 1;
+      else {
+        $h['s'] = $h['r'] > 0 ? 3 : 0;
+        $a['s'] = $h['r'] > 0 ? 0 : 3;
+      }
+      $h['t'] = $a['t'] = 1;
+      foreach (['s', 'r', 'g', 'h', 't'] as $v) {
+        if (!isset($teams[$ho][$v])) $teams[$ho][$v] = 0;
+        $teams[$ho][$v] += $h[$v];
+        if (!isset($teams[$aw][$v])) $teams[$aw][$v] = 0;
+        $teams[$aw][$v] += $a[$v];
+      }
+    }
+  }
+  $b = array();
+  foreach ($teams as $name => $c)
+    if ($name != 'Old Boys') {
+      $b['n'][] = $name;
+      foreach ($c as $var => $val)
+        $b[$var][] = $val;
+
+    }
+
+  // очки, разность, голы, исходы, матчи
+  array_multisort($b['s'], SORT_NUMERIC, SORT_DESC, $b['r'], SORT_NUMERIC, SORT_DESC, $b['g'], SORT_NUMERIC, SORT_DESC, $b['h'], SORT_NUMERIC, SORT_DESC, $b['t'], SORT_NUMERIC, SORT_ASC, $b['n']);
+  $teams = [];
+  foreach ($b['n'] as $name)
+    $teams[] = $name;
+
+  return [$games, $teams];
 }
 
 function build_prognozlist($country_code, $season, $tour) {
@@ -439,7 +485,7 @@ function build_prognozlist($country_code, $season, $tour) {
     if ($penalties = trim($ta[3])) $prognozlist .= '                     '.mb_strtolower($penalties)."\n";
     if (!isset($aprognoz[$team]['time']) || ($ta[2] > $aprognoz[$team]['time']))
     {
-      $aprognoz[$team]['prog'] = $ta[1];
+      $aprognoz[$team]['prog'] = strtr($ta[1], ['x' => 'X', 'х' => 'X', 'Х' => 'X', '0' => 'X']);
       $aprognoz[$team]['time'] = $ta[2];
       $aprognoz[$team]['pena'] = $ta[3];
       $aprognoz[$team]['warn'] = $warn;
@@ -516,7 +562,7 @@ function build_prognozlist($country_code, $season, $tour) {
   $program = file_get_contents($online_dir . "$country_code/$season/programs/$tour");
   if (mb_detect_encoding($program, 'UTF-8', true) === FALSE)
     $program = iconv('CP1251', 'UTF-8//IGNORE', $program);
-  $fr = mb_strpos($program, "Последний с");
+  $fr = mb_strpos($program, "Контрольный с");
   $program = mb_substr($program, $fr);
   list($cal, $gen) = parse_cal_and_gen($program);
 //  if (is_file("$country_code/$season/$tcode/$calfname"))
@@ -590,10 +636,44 @@ function build_prognozlist($country_code, $season, $tour) {
     }
   }
 
+  if ($country_code == 'SUI') {
+    // составление виртуальных матчей на основе швейцарской жеребьёвки
+    $cal_file = $online_dir . "$country_code/$season/cal";
+    list($games, $allteams) = SwissStanding($cal_file);
+    $teams = [];
+    foreach ($allteams as $team)
+      if (isset($aprognoz[$team]))
+        $teams[] = $team;
+
+    foreach ($aprognoz as $team => $data)
+      if (!in_array($team, $teams))
+        $teams[] = $team;
+
+    include ('swiss.inc.php');
+    $res = SwissDraw($games, $teams, false);
+    $virtmatch = $res[1];
+    if (count($teams) % 2) {
+      // включение Old Boys гостем в последнюю пару
+      $last = count($virtmatch) - 1;
+      list($home, $away) = explode(' - ', $virtmatch[$last]);
+      $virtmatch[$last] = $home.' - Old Boys';
+    }
+    // добавление календаря тура в общий календарь и программку
+    $tour_cal = ' Тур '.$tour[4].'        '.$tour.'
+';
+    foreach ($virtmatch as $line)
+      $tour_cal .= $line."\n";
+
+    $tour_cal .= "\n";
+    $program_file = $online_dir . "$country_code/$season/programs/$tour";
+    file_put_contents($program_file, file_get_contents($program_file) . $tour_cal);
+    file_put_contents($cal_file, file_get_contents($cal_file) . $tour_cal);
+  }
+
   // формирование таблиц виртуальных матчей
   $n = $g = 0;
   $s = 1;
-  $z = sizeof($virtmatch) / $gensets;
+  $z = count($virtmatch) / $gensets;
   foreach ($virtmatch as $line) {
     $atemp = explode(' - ', $line);
 
@@ -615,7 +695,7 @@ function build_prognozlist($country_code, $season, $tour) {
       $addfile .= $addline;
 
     $a = trim($atemp[1]);
-    if ($aprognoz[$a]['time'])
+    if (isset($aprognoz[$a]) && $aprognoz[$a]['time'])
       $date = date('d M y  H:i:s', $aprognoz[$a]['time']);
     else
       $date = '';
@@ -765,7 +845,8 @@ function Today($year, $m, $d, $dayofweek, $minute) {
     }
   }
   else {
-    $url = 'http://2admin.xscores.com:5002/stream?s=1&seq=' . $old_seq;
+//    $url = 'http://2admin.xscores.com:5002/stream?s=1&seq=' . $old_seq;
+    $url = 'https://newnetty2.xscores.com/stream?s=1&seq=' . $old_seq;
     $content = file_get_contents($url, 0, $ctx);
     if ($seq = substr($content, 0, 8)) {
       $matches = explode('#', $content);

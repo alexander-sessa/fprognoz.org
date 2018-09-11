@@ -21,7 +21,7 @@ $ccn = array(
 'SCO' => 'scotland',
 'UEFA'=> 'uefa',
 'FIN' => 'finland',
-'CHE' => 'switzerland',
+'SUI' => 'switzerland',
 'FIFA'=> 'fifa',
 'FCL' => 'Friendly',
 'UNL' => 'world',
@@ -305,9 +305,9 @@ $club_edit = '.(isset($_POST['club_edit']) ? 'true' : 'false').';
     if ($data['author'] == $president || $data['author'] == $vice || $data['author'] == $pressa || in_array($data['author'], $admin)) {
       $cca = array_search($data['a'], $ccn);
       $email = '';
-      if ($cca == 'fifa') {
-        $emails = [];
-        $map = explode(';', file_get_contents($online_dir . '/data/.map'));
+      if ($cca == 'FIFA') {
+        $amail = [];
+        $map = explode(';', file_get_contents($data_dir . 'auth/.map'));
         foreach ($map as $mail)
           if (strpos($mail, '@') && strpos($mail, '.')) {
             $emails = explode(',', strtolower($mail));
@@ -315,7 +315,7 @@ $club_edit = '.(isset($_POST['club_edit']) ? 'true' : 'false').';
               $amail[$mail] = 1;
           }
 
-        foreach ($emails as $mail => $tt)
+        foreach ($amail as $mail => $tt)
           $email .= ($email ? ',' : '') . trim($mail);
       }
       else {
@@ -326,12 +326,16 @@ $club_edit = '.(isset($_POST['club_edit']) ? 'true' : 'false').';
           if (!isset($_POST['p']) || isset($_POST['p'][$i++])) {
             $emails = explode(',', $mail);
             foreach ($emails as $mail)
-              $email .= ($email ? ',' : '') . $name . ' <' . trim($mail) . '>';
+              if (trim($mail))
+                $email .= ($email ? ',' : '') . $name . ' <' . trim($mail) . '>';
 
           }
         }
       }
-      $ret = send_email(strtolower($cca).'@'.$_SERVER['HTTP_HOST'], $data['author'], $email, $_POST['subj'], $_POST['text']);
+      if (!isset($data['t']))
+        file_put_contents($online_dir . $cca . '/' . $data['s'] . '/publish/'.time(), $_POST['text']);
+
+      $ret = send_email($data['a'].' <'.strtolower($cca).'@'.$_SERVER['HTTP_HOST'].'>', $data['author'], $email, $_POST['subj'], $_POST['text']);
     }
     echo $ret;
   }

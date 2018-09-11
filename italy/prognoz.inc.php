@@ -6,7 +6,7 @@ function parse_program($program_file) {
   $fr = strpos($program, ' 1.') - strlen($program);
   $fr = strrpos($program, "\n", $fr) + 1;
   $program = substr($program, $fr);
-  $fr = strpos($program, 'Последний с');
+  $fr = strpos($program, 'Контрольный с');
   $matches = explode("\n", substr($program, 0, $fr));
   $program = substr($program, $fr);
   $fr = strpos($program, '.');
@@ -57,7 +57,7 @@ elseif ($tour[3] == 'S') {
 elseif ($tour[3] == 'P') {
   $cal_file = $season_dir . '/calp';
   $gen_file = $season_dir . '/genp';
-  if ($tour[4] == 2 || $tour == 'ITAP1') $show_pen_col = true;
+  if ($tour[4] == 2) $show_pen_col = true;
 }
 elseif ($tour[3] == 'G') {
   $cal_file = $season_dir . '/cal';
@@ -106,7 +106,7 @@ $teamCodes = array();
 if (isset($_SESSION['Coach_name'])) {
   // составление списка своих команд в этом туре
   foreach ($cmd_db[$cca] as $code => $team)
-    if ($team['usr'] == $_SESSION['Coach_name'] && strpos($cal, $team['cmd']) !== false)
+    if ($team['usr'] == $_SESSION['Coach_name'] && ($cca == 'SUI' || strpos($cal, $team['cmd']) !== false))
       $teamCodes[] = $code;
 
   // отправка прогноза за несколько или за одну команду
@@ -115,7 +115,7 @@ if (isset($_SESSION['Coach_name'])) {
       foreach ($teamCodes as $tc)
         send_predict($cca, $s, $tc, $tour, $prognoz, $_POST['enemy_str'], $ip);
     else {
-      if (trim($_POST['team_code'])) $team_code = $_POST['team_code'];
+      if (trim($_POST['team_code'])) $team_code = strtr($_POST['team_code'], ['<mark>' => '', '</mark>' => '']);
       elseif (!$team_code) $team_code = $teamCodes[0];
       send_predict($cca, $s, $team_code, $tour, $prognoz, $_POST['enemy_str'], $ip);
     }
@@ -143,7 +143,7 @@ if ($role == 'president') $hint .= '<a href="" onClick="$(\'#addsform\').toggle(
 ';
 $publish = is_file($tour_dir . 'published');
 if ($publish || $role == 'president') $hint .= '<a href="" onClick="$(\'#chronology\').toggle(); return false;">показать/скрыть хронологию поступления прогнозов</a>';
-$hint .= '<p id="chronology" class="hidden" style="white-space:pre; font-family: monospace; text-align: left;">';
+$hint .= '<p id="chronology" class="hidden monospace">';
 
 // выборка прогнозов из мейлбокса. $tour_dir,$publish,$teamCodes,$role,$teams[] -> $aprognoz[],$closed,$hint
 $hidden = 'прогноз не показан';
@@ -152,6 +152,7 @@ $have = array(); $aprognoz = array();
 foreach ($mbox as $msg) {
   if (mb_detect_encoding($msg, 'UTF-8', true) === FALSE) $msg = iconv('CP1251', 'UTF-8//IGNORE', $msg);
   list($team, $prog, $time, $pena) = explode(';', $msg);
+  $prog = strtr($prog, ['x' => 'X', 'х' => 'X', 'Х' => 'X', '0' => 'X']);
   if ($publish && in_array($team, $teamCodes)) $closed = true;
   if (!$publish && !in_array($team, $teamCodes)) $prog = $hidden;
   if (!isset($teams[$team])) $warn = 'oЖ';
@@ -210,7 +211,7 @@ $hint .= '</p>
 // заголовок страницы с формой отправки прогноза. $closed,$teamCodes,$tour -> $head
 $head = '';
 if (!$closed && sizeof($teamCodes))
-  $head .= '<form action="" name="tform" enctype="multipart/form-data" method="post" class="text15" onSubmit="return show_alert(this);">';
+  $head .= '<form action="" name="tform" enctype="multipart/form-data" method="POST" onSubmit="return show_alert(this);">';
 
 $head .= 'Код тура: <b>' . $tour . '</b>';
 if (!$closed && sizeof($teamCodes)) {
@@ -226,10 +227,10 @@ if (!$closed && sizeof($teamCodes)) {
     }
     $head .= '<option value="один прогноз всем">один прогноз всем</option></select><br />';
   }
-  $head .= 'прогноз на тур: <input type="text" id="prognoz_str" name="prognoz_str" value="" size="50" />
+  $head .= '<span class="small">прогноз на тур: <input type="text" id="prognoz_str" name="prognoz_str" value="" size="50" />
 <input type="hidden" name="enemy_str" value="" />
-<input type="submit" name="submitpredict" value=" отправить прогноз " /></form>
-<a href="?m=help" target="_blank">как пользоваться формой отправки прогноза</a>
+<input type="submit" name="submitpredict" value=" отправить " /></span></form>
+<a href="?m=help" class="small" target="_blank">как пользоваться формой отправки прогноза</a>
 ';
 }
 
@@ -240,10 +241,13 @@ list($last_day, $last_month) = explode('.', $lastdate);
 if (!isset($updates)) $updates = NULL;
 $base = get_results_by_date($last_month, $last_day, $updates);
 $mdp = array();
-$program_table = '<table>
-<tr><th>№</th><th align="left" width="288">матч для прогнозирования</th><th>турнир</th><th>дата время</th><th>счёт</th><th>исход</th><th colspan="3">прогноз</th>';
+$program_table = '<table class="p-table">
+<thead>
+<tr><th>№</th><th>матч для прогнозирования</th><th>турнир</th><th>дата время</th><th>счёт</th><th>исход</th><th colspan="3">прогноз</th>';
 if ($closed && $publish) $program_table .= '<th>угадано прогнозов</th>';
 $program_table .= '</tr>
+</thead>
+<tbody>
 ';
 $id_arr = $id_json = '';
 $today_matches = 0;
@@ -335,11 +339,11 @@ foreach ($program_matches as $line) if ($line = trim($line)) { // rows
         if ($closed) $colspan = 7;
         elseif ($role != 'badlogin') $colspan = 9;
         else $colspan = 6;
-        $program_table .= '<tr><td colspan="' . $colspan . '"></td></tr>
+        $program_table .= '<tr><td colspan="' . $colspan . '" style="border: 1px solid darkgrey"></td></tr>
 ';
         $rprognoz .= ' ';
       }
-      $program_table .= '<tr' . $tr_id . '><td align="right">'.$nm.'</td><td style="text-align:left;width:288px' . ($tr_id != '' ? ';cursor:pointer" onClick="details($(this).closest(\'tr\'))' : '') . '">'.$home.' - '.$away.'</td><td align="left">'.$tournament.'</td><td align="right">&nbsp;'.$dm.' '.$tn.'&nbsp;</td><td align="middle">&nbsp;'.$mt.'&nbsp;</td><td align="middle">&nbsp;'.$rt.'&nbsp;</td>';
+      $program_table .= '<tr' . $tr_id . '><td class="tdn">'.$nm.'</td><td style="text-align:left;width:288px' . ($tr_id != '' ? ';cursor:pointer" onClick="details($(this).closest(\'tr\'))' : '') . '">'.$home.' - '.$away.'</td><td align="left">'.$tournament.'</td><td align="right">&nbsp;'.$dm.' '.$tn.'&nbsp;</td><td align="middle">&nbsp;'.$mt.'&nbsp;</td><td align="middle">&nbsp;'.$rt.'&nbsp;</td>';
 //      if (!$closed && ($role != 'badlogin')) {
 //        (($publish && $nm == 1) || $rt != '?') ? $onchange = 'disabled="disabled"' :  $onchange = 'onchange="newpredict(); return false;"';
       if ($rt == '1' || $rt == 'X' || $rt == '2') {
@@ -358,7 +362,7 @@ foreach ($program_matches as $line) if ($line = trim($line)) { // rows
       <input type="text" name="dice' . $nm . '" value="'.$val.'" id="dice' . $nm . '" class="pr_str" '.$onchange.' />
     </td>
     <td>';
-      if (!$closed && $role != 'badlogin') {
+      if (!$closed && $role != 'badlogin' && $cca != 'SUI') {
         if ($nm < 11) $program_table .= '
       <a href="#" onclick="securedice('."'ddice$nm','1'".'); return false;">1</a>
       <a href="#" onclick="securedice('."'ddice$nm','X'".'); return false;">X</a>
@@ -384,11 +388,12 @@ foreach ($program_matches as $line) if ($line = trim($line)) { // rows
 ';
       if ($closed && $nm == 1) $program_table .= '
 <td rowspan="' . (count($program_matches) + 1) . '">
-<div style="-webkit-writing-mode: vertical-rl; writing-mode: tb-rl; height: 260px;">
+<div style="-webkit-writing-mode: vertical-rl; writing-mode: tb-rl; height: 17em;">
 &nbsp;для&nbsp;расчёта&nbsp;вариантов&nbsp;завершения<br />
 &nbsp;матчей&nbsp;укажите&nbsp;в&nbsp;колонке&nbsp;"прогноз"<br />
 &nbsp;возможные&nbsp;исходы&nbsp;и&nbsp;нажмите&nbsp;кнопку:<br />
 </div>
+<br /><br />
 <form action="" name="tform" method="get">
 <input type="hidden" name="a" value="'.$a.'" />
 <input type="hidden" name="m" value="prognoz" />
@@ -409,7 +414,8 @@ foreach ($program_matches as $line) if ($line = trim($line)) { // rows
     }
   }
 }
-$program_table .= '</table>
+$program_table .= '</tbody>
+</table>
 ';
 if (!$closed) $hint = '<p class="red">Контрольный срок отправки прогнозов: '.$lastdate.' '.$lasttm.'</p>' . $hint;
 
@@ -763,13 +769,13 @@ foreach ($teamCodes as $code) {
   $cal = str_replace('- ' . $myteam . "\n", '- <span class="magenta">' . $myteam . "</span>\n", $cal);
   $prognozlist = str_replace("\n" . $myteam . ' ', "\n" . '<span class="magenta">' . $myteam . '</span> ', $prognozlist);
 }
+//<link href="css/prognoz.css?ver=625" rel="stylesheet">
 if (isset($matches))
   echo '[' . $id_json . ']'; // REST responce on event 'matches'
 else if (isset($updates))
   echo $prognozlist; // REST responce on event 'FT'
 else
-  echo '<link href="css/prognoz.css?ver=625" rel="stylesheet">
-<script>//<![CDATA[
+  echo '<script>
 function newpredict(){
 	var i,dd,p="",ps="",min=0,max=0;
 	for(i=1;i<=10;i++){
@@ -853,12 +859,10 @@ function show_alert(){
 	}
 	return false;
 }
-var '.date('\h\o\u\r\s=G,\m\i\n\u\t\e\s=i,\s\e\c\o\n\d\s=s',time()).',sendfp='.(date('G',time())>2&&$today_matches>2*$today_bz?'true':'false').',base=[]
+var '.date('\h\o\u\r\s=G,\m\i\n\u\t\e\s=i,\\s\e\c\o\n\d\s=s',time()).',sendfp='.(date('G',time())>2&&$today_matches>2*$today_bz?'true':'false').',base=[]
 ' . $id_arr . '
-function getDate(){if(seconds<59)seconds++;else{seconds=0;if(minutes<59)minutes++;else{minutes=0;hours=hours<23?hours+1:0}}var s=seconds+"",m=minutes+"";if(s.length<2)s="0"+s;if(m.length<2)m="0"+m;$("#timedisplay").html("время сервера: "+hours+":"+m+":"+s)}
-setInterval(getDate, 1000)
 mom=[]
-momup=function(i){clearInterval(mom[i]);mom[i]=setInterval(function(){if(!isNaN(base[i][3])){tm=+base[i][3];base[i][3]=(tm==45||tm==90)?tm+"+":++tm;row=$("#"+i)[0];row.cells[5].innerHTML="<span class=\"blink\">"+base[i][3]+"’</span>"}},60000);}
+momup=function(i){clearInterval(mom[i]);mom[i]=setInterval(function(){if(!isNaN(base[i][3])){tm=+base[i][3];base[i][3]=(tm==45||tm==90)?tm+"+":++tm;row=$("#"+i)[0];row.cells[5].innerHTML="<span class=\"blink\">"+base[i][3]+"’</span>"}},60000)}
 scorefix=function(d){
 	i=d.idx
 	m=+d.dk
@@ -918,25 +922,19 @@ socket.on("hellobz",function(){socket.emit("getscores","football(soccer)","today
 socket.on("scoredatas",function(d){if(sendfp){$.post("'.$this_site.'",{matches:JSON.stringify(d.data.matches),a:"'.$a.'"'.($l?',l:"'.$l.'"':'').',m:"prognoz",s:"'.$s.'",t:"'.$t.'"},function(json){$.each(JSON.parse(json),function(idx,obj){base.push(obj.id);base[obj.id]=obj.d})})}$("#statusline").css("display","none")})
 socket.on("footdetails",function(data){data=data[0];if ($(".p-table").find("tr[did="+data.id+"]").length)mdetails(data.mdetay,data.id,data.pos1,data.pos2)})
 socket.on("guncelleme",function(d){var json="";$.each(d.updates,function(index,ux){if(base[ux.idx]!==undefined){if(ux.s==4&&base[ux.idx][3]!="FT")json+=(json.length?",":"")+JSON.stringify(ux);scorefix(ux)}});if(json.length)$.post("'.$this_site.'",{updates:"["+json+"]",a:"'.$a.'"'.($l?',l:"'.$l.'"':'').',m:"prognoz",s:"'.$s.'",t:"'.$t.'"'.(isset($c)?',c:"'.$c.'"':'').'},function(html){$("#pl").html(html)})})
-//]]></script>
-<div style="position:relative;width:100%;margin:0 0 20px 0">
-  <div id="statusline" style="position:relative;float:left;text-align:left;display:block">получение результатов с <a href="https://www.livescore.bz" sport="football(soccer)" data-1="today" lang="en">www.livescore.bz</a></div>
-  <div id="timedisplay" style="position:relative;float:right;text-align:right"></div>
+</script>
+<div class="d-flex">
+	<div id="statusline" class="w-100 text-left">получение результатов с <a href="https://www.livescore.bz" sport="football(soccer)" data-1="today" lang="en">www.livescore.bz</a></div>
+	<div id="timedisplay" class="w-100 text-right">&nbsp;</div>
 </div>
-
-<div style="float:top;width:100%">
-	<div class="p-head">' . $head . '</div>
-	<div class="p-table">' . $program_table . '</div>
-	<div class="p-hint">' . $hint . '</div>
+<div class="h4 text-center">' . $head . '</div>
+<div class="d-flex">
+	<div class="table-condensed table-striped mx-auto">' . $program_table . '</div>
 </div>
-<div style="text-align:left;width:100%;margin-left:20px">
-	<br />
-	<div id="pl" style="margin-right:0px;white-space:pre;font-family:monospace;font-size:14px;float:left;">' . $prognozlist . '</div>
-	<div id="mt" class="text14" style="white-space:pre;float:right;width:33%">Матчи тура:
-	' . $cal . '
-	</div>
-</div>
-<div style="clear:both"></div>
+<div class="h6 text-center">' . $hint . '</div>
+<div class="d-flex">
+	<div id="pl" class="monospace">' . $prognozlist . '</div>
+	<div id="mt">Матчи тура:' . $cal . '</div>
 </div>
 ';
 ?>

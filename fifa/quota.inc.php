@@ -96,7 +96,7 @@ foreach ($coach as $c => $ac) if ($c = trim($c)) {
   $qc = (isset($ac['qc'])) ? 2 + $ac['qc'] : 2;
   $table[] = array('c' => $c, 'rn' => $r0 + $rN, 'rl' => $r0 + $rL, 'qc' => $qc);
 }
-echo '<table width="100%">
+echo '<table class="table w100">
   <tr>
     <th><a href="?m=quota">игрок</a></th>
     <th>команды игрока</th>

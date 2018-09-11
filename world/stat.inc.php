@@ -5,10 +5,6 @@
 .playerstable	{}
 .statthead	{font-size:85%;line-height:8px}
 .stattable	{width:100%}
-.tdl	{padding:0 25px}
-.tdn	{text-align:right;padding-right:20px}
-.td1	{text-align:right;padding-right:10px}
-.tdr	{text-align:right;padding-right:35px}
 .teamstable	{}
 </style>
 <script>

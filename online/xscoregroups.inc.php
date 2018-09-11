@@ -82,7 +82,7 @@
 '825453' => 'Russia: 1. Division Promotion Playoff',
 '825454' => 'Russia: 1. Division Relegation Playoff',
 
-'BELARUS#D1' => 'Belarus: Premier Division',
+'BELARUS#PR' => 'Belarus: Premier Division',
 'BELARUS#QF' => 'Belarus: Cup',
 'BELARUS#SF' => 'Belarus: Cup',
 'BELARUS#R8' => 'Belarus: Cup',
@@ -103,6 +103,10 @@
 'GREECE#SL' => 'Greece: Super League',
 'SWITZERLAND#SL' => 'Switzerland: Super League',
 
+'EUROPE (UEFA)#A' => 'International: UEFA Nations League',
+'EUROPE (UEFA)#B' => 'International: UEFA Nations League',
+'EUROPE (UEFA)#C' => 'International: UEFA Nations League',
+'EUROPE (UEFA)#D' => 'International: UEFA Nations League',
 'EUROPE (UEFA)#1QR' => 'International: Europa League',
 'EUROPE (UEFA)#2QR' => 'International: Europa League',
 'EUROPE (UEFA)#3QR' => 'International: Europa League',

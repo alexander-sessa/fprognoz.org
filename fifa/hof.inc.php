@@ -320,7 +320,7 @@
 <td>Vladislav Yezhergin<br />ФК Ростов</td>
 <td>Балтика (Калининград)<br />Lesha Nilov</td>
 </tr>
-<tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;Белоруссия</td></tr>
+<tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;Беларусь</td></tr>
 <tr>
 <td>1998-1999</td>
 <td>Гомель<br />Valery Prikhodko</td>
@@ -1860,10 +1860,10 @@
 </tr>
 <tr>
 <td>2009-2010</td>
-<td>БАТЭ (Борисов)<br />Белоруссия<br />Vitya Baranovsky</td>
+<td>БАТЭ (Борисов)<br />Беларусь<br />Vitya Baranovsky</td>
 <td>Schalke 04 (Gelsenkirchen)<br />Германия<br />Andrey Vishinski</td>
 <td>Lecce<br />Италия<br />Roman Anpilogov</td>
-<td>Витебск<br />Белоруссия<br />Alexandr Dashkevich</td>
+<td>Витебск<br />Беларусь<br />Alexandr Dashkevich</td>
 </tr>
 <tr>
 <td>2010-2011</td>
@@ -1881,7 +1881,7 @@
 </tr>
 <tr>
 <td>2012-2013</td>
-<td>Динамо (Брест)<br />Белоруссия<br />Nick Gahovich</td>
+<td>Динамо (Брест)<br />Беларусь<br />Nick Gahovich</td>
 <td>West Ham United (London)<br />Англия<br />Lesha Nilov</td>
 <td>Estrela (Amadora)<br />Португалия<br />Andrey Teslin</td>
 <td>Wolfsburg<br />Германия<br />Vladislav Yezhergin</td>
@@ -1890,7 +1890,7 @@
 <td>2013-2014</td>
 <td>Stranraer<br />Шотландия<br />Alex Tarasov</td>
 <td>West Ham United (London)<br />Англия<br />Lesha Nilov</td>
-<td>ФК Гомель<br />Белоруссия<br />Vitya Baranovsky</td>
+<td>ФК Гомель<br />Беларусь<br />Vitya Baranovsky</td>
 <td>Dundee United<br />Шотландия<br />Vitya Baranovsky</td>
 </tr>
 <tr>
@@ -1911,7 +1911,7 @@
 <td>2016-2017</td>
 <td>Malaga<br />Испания<br />Vitya Baranovsky</td>
 <td>Металлист (Харьков)<br />Украина<br />Kirill Goloschekov</td>
-<td>ФК Минск<br />Белоруссия<br />Alex Tarasov</td>
+<td>ФК Минск<br />Беларусь<br />Alex Tarasov</td>
 <td>Hellas Verona<br />Италия<br />Taras Lobko</td>
 </tr>
 <tr>
