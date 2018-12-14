@@ -66,11 +66,67 @@ if (is_file($program_file)) {
   $publish = is_file($prognoz_dir.'/published');
   $closed = is_file($prognoz_dir.'/closed');
 
-  // выборка матчей тура (расширенный вариант)
-  $pro = false;
+
+
+  $virtmatch = array();
+  $pro = is_file($prognoz_dir.'/cal');
+  if (!$pro)
+  if ($cal != 'календарь не найден') {
+    $atemp = explode("\n", $cal);
+
+
+    if (($name == 'Михаил Сирота' || $name == 'Александр Сесса')) {
+      $cal = '
+<link rel="stylesheet" href="css/m.css?ver=5.3" type="text/css">
+<b>команда:</b>
+<form action="" name="squad" method="POST">
+  <ul id="sortable">';
+      if (is_file($online_dir.'SFP/'.$s.'/squad.'.$l)) {
+        $players = file($online_dir.'SFP/'.$s.'/squad.'.$l, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+      }
+      else {
+        $players = [];
+        foreach ($atemp as $line) if (($line = trim($line)) && $cut = strpos($line, ' - ?'))
+          $players[] = substr($line, 0, $cut);
+
+      }
+      foreach ($players as $player)
+        $cal .= '
+    <li class="sortable_module">'.$player.'<input type="hidden" name="player[]" value="'.$player.'"></li>';
+
+      $cal .= '
+  </ul>
+  <button id="save_squad">сохранить</button>
+</form>
+<script>
+$("#sortable").sortable()
+//$("#save_squad").click(function(){return false})
+</script>
+';
+    }
+
+
+    else {
+      $cal = '';
+      foreach ($atemp as $line) if (($line = trim($line)) && strpos($line, ' - ')) {
+        if ($cut = strpos($line, '  ')) $line = trim(substr($line, 0, $cut));
+        $virtmatch[] = $line;
+        $cal .= $line.'<br>
+';
+      }
+    }
+  }
+
+
+
+
   $match_title = '';
   $aprognoz = array();
-  if ($pro = is_file($prognoz_dir.'/cal')) {
+
+
+//// перенести ниже
+  // выборка матчей тура (расширенный вариант)
+  if ($pro) {
     $cal_pro = file($prognoz_dir.'/cal');
     $cal = '';
     $i = 1;
@@ -78,15 +134,15 @@ if (is_file($program_file)) {
       if (!strpos($cal_line, ';')) $cal_line .= ';;;';
       list($line, $link1, $group, $score) = explode(';', $cal_line);
       if (trim($group)) {
-        if ($cal) $cal .= '<br>';
-        $cal .= '<b>'.$group.'</b><br>
+        if ($cal) $cal .= '<br />';
+        $cal .= '<b>'.$group.'</b><br />
 ';
       }
       $cal .= '<a href="/?a=sfp-team&amp;m=prognoz&amp;s='.$season.'&amp;l='.$l.'&amp;t='.$t.'&amp;n='.$i;
       if (isset($prognoz_str) && $prognoz_str)
         $cal .='&amp;prognoz_str='.$prognoz_str;
 
-      $cal .= '" class="text14">'.$line.'</a> '.$score.'
+      $cal .= '" class="text14">'.$line.'</a> '.$score.'<br />
 ';
       if (!isset($n) && !(strpos($line, 'SFP') === false)) $n = $i;
       if (isset($n) && $n == $i) {
@@ -129,48 +185,8 @@ if (is_file($program_file)) {
       if ($home != '?' || $away != '?') $virtmatch[] = $home.' - '.$away;
     }
   }
-  elseif ($cal != 'календарь не найден') {
-    $virtmatch = array();
-    $atemp = explode("\n", $cal);
-    if (($name == 'Михаил Сирота' || $name == 'Александр Сесса')) {
-      $cal = '
-<link rel="stylesheet" href="css/m.css?ver=5.3" type="text/css">
-<b>команда:</b>
-<form action="" name="squad" method="POST">
-  <ul id="sortable">';
-      if (is_file($online_dir.'SFP/'.$s.'/squad.'.$l)) {
-        $players = file($online_dir.'SFP/'.$s.'/squad.'.$l, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-      }
-      else {
-        $players = [];
-        foreach ($atemp as $line) if (($line = trim($line)) && $cut = strpos($line, ' - ?'))
-          $players[] = substr($line, 0, $cut);
+////
 
-      }
-      foreach ($players as $player)
-        $cal .= '
-    <li class="sortable_module">'.$player.'<input type="hidden" name="player[]" value="'.$player.'"></li>';
-
-      $cal .= '
-  </ul>
-  <button id="save_squad">сохранить</button>
-</form>
-<script>
-$("#sortable").sortable()
-//$("#save_squad").click(function(){return false})
-</script>
-';
-    }
-    else {
-      $cal = '';
-      foreach ($atemp as $line) if (($line = trim($line)) && strpos($line, ' - ')) {
-        if ($cut = strpos($line, '  ')) $line = trim(substr($line, 0, $cut));
-        $virtmatch[] = $line;
-        $cal .= $line.'<br>
-';
-      }
-    }
-  }
 
   // таблица программки тура
   require_once('online/tournament.inc.php');
@@ -468,6 +484,12 @@ $("#sortable").sortable()
   $program_table .= '</tbody>
 </table>
 ';
+  // use simulated results if any
+  if (isset($prognoz_str) && $prognoz_str) {
+    for ($i=0; $i<strlen($prognoz_str); $i++) if ($prognoz_str[$i] != '*')
+      $rprognoz[$i] = $prognoz_str[$i];
+
+  }
 
   $prognozlist = '';
   if (!$pro) {
@@ -484,13 +506,6 @@ $("#sortable").sortable()
         $aprognoz[$team]['time'] = $time;
       }
     }
-  }
-
-  // use simulated results if any
-  if (isset($prognoz_str) && $prognoz_str) {
-    for ($i=0; $i<strlen($prognoz_str); $i++) if ($prognoz_str[$i] != '*')
-      $rprognoz[$i] = $prognoz_str[$i];
-
   }
 
   if ($publish) switch ($l) {
@@ -524,6 +539,11 @@ $("#sortable").sortable()
 ';
       break;
   }
+
+//// сюда
+
+//// начало цикла перебора матчей тура
+
   // теперь список прогнозов по парам виртуальных матчей в формате stat
   $teamh = 0;
   $teama = 0;
@@ -744,7 +764,7 @@ $("#sortable").sortable()
           if (!$thith) $teama = min(3, $teama);
           if (!$thita) $teamh = min(3, $teamh);
           $match_title .= '  '.$teamh.':'.$teama.' ('.$thith.'-'.$thita.')</b>';
-          if (isset($link) && trim($link)) $match_title .= ' &nbsp; <a href="http://kfp.ru/fest/ffp2018/matchcenter.php?'.$link.'" target="_blank">Матч-центр на KFP.RU</a>';
+          if (isset($link) && trim($link)) $match_title .= ' &nbsp; <a href="http://kfp.ru/fest/ffp2017/matchcenter.php?'.$link.'" target="_blank">Матч-центр на KFP.RU</a>';
           if (isset($renew))
             rewrite_cal($prognoz_dir, $line0, $score0, $teamh.':'.$teama.' ('.$thith.'-'.$thita.')'."\n");
 
@@ -775,6 +795,8 @@ $("#sortable").sortable()
 ';
         if ($nm++ == 7) {
           $match_title .= '  '.$teamh.':'.$teama.' ('.$thith.'-'.$thita.')</b>';
+
+//// переделать
           if (isset($link) && trim($link)) $match_title .= ' &nbsp; <a href="http://sportgiant.net/games/'.$link.'" target="_blank">Матч-центр на SportGiant</a>';
           if (isset($renew))
             rewrite_cal($prognoz_dir, $line0, $score0, $teamh.':'.$teama.' ('.$thith.'-'.$thita.')'."\n");
@@ -800,6 +822,8 @@ $("#sortable").sortable()
 ';
         if ($nm++ == 5) {
           $match_title .= '  '.$teamh.':'.$teama.' ('.$thith.'-'.$thita.')</b>';
+
+//// переделать
           if (isset($link) && trim($link)) $match_title .= ' &nbsp; <a href="http://www.torpedoru.com/match.php?id='.$link.'" target="_blank">Стадион матча на КСП "Торпедо"</a>';
           if (isset($renew))
             rewrite_cal($prognoz_dir, $line0, $score0, $teamh.':'.$teama.' ('.$thith.'-'.$thita.')'."\n");
@@ -1184,11 +1208,15 @@ $("#sortable").sortable()
 ' . $awaylist . '</div>
 <div>';
     $match_title .= '  '.$goalh.':'.$goala.' ('.$hometotal.'-'.$awaytotal.')</b>';
+
+//// переделать
     if (isset($link) && trim($link)) $match_title .= ' &nbsp; <a href="http://pred.su/predm.php/'.$link.'" target="_blank">Матч-центр на PRED.SU</a>';
     if (isset($renew))
       rewrite_cal($prognoz_dir, $line0, $score0, $goalh.':'.$goala.' ('.$hometotal.'-'.$awaytotal.')'."\n");
 
   }
+
+//// конец цикла матчей тура
 
   // заголовок страницы с формой отправки прогноза
   if ($team_code && !$closed) $head = '
@@ -1249,7 +1277,7 @@ $("#sortable").sortable()
       $tour = ltrim($t, '0');
       $stor = str_replace('-', '/', $season);
       if ($tour <= 7) $head = '<b>Групповой этап Лиги КСП «Торпедо»" - ' . $stor . '. Тур №' . $tour . '</b><br />';
-      elseif ($tour <= 20) $head = '<b>Лига КСП «Торпедо»" - 2018/19. 1 стадия финального этапа. ' . ($tour - 7) . ' тур</b><br />';
+      elseif ($tour <= 20) $head = '<b>Лига КСП «Торпедо»" - 2017/18. 1 стадия финального этапа. ' . ($tour - 7) . ' тур</b><br />';
       break;
     }
   }
@@ -1320,6 +1348,8 @@ else
 <script>//<![CDATA[
 var '.date('\h\o\u\r\s=G,\m\i\n\u\t\e\s=i,\s\e\c\o\n\d\s=s',time()).',sendfp=false,base=[],mom=[]
 ' . $id_arr . '
+function getDate(){if(seconds<59)seconds++;else{seconds=0;if(minutes<59)minutes++;else{minutes=0;hours=hours<23?hours+1:0}};var s=seconds+"",m=minutes+"";if(s.length<2)s="0"+s;if(m.length<2)m="0"+m;$("#timedisplay").html("время сервера: "+hours+":"+m+":"+s)}
+setInterval(getDate, 1000);
 function newpredict(){
 	var p="";
 	for(i=1;i<='.$imax.';i++){
@@ -1420,8 +1450,8 @@ socket.on("guncelleme",function(d){var json="";$.each(d.updates,function(index,u
 <div class="h6 text-center">' . $hint . '</div>
 <h5>' . $match_title . '</h5>
 <div class="d-flex">
-	<div id="pl" class="monospace w-100">' . $prognozlist . '</div>
-	<div'.($closed ? ' id="mt"' : ' style="width: 700px;"').'>Матчи тура:<br><br>' . $cal . '</div>
+	<div id="pl" class="monospace">' . $prognozlist . '</div>
+	<div'.($closed ? ' id="mt"' : ' style="width: 200px"').'>Матчи тура:<br><br>' . $cal . '</div>
 </div>
 ';
 }

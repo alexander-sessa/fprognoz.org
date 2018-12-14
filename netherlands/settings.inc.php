@@ -8,5 +8,5 @@ $president = 'Кирилл Голощёков';
 $vice = 'Serge Vasiliev';
 $pressa = '';
 $coach = 'Олег Крупич, Serge Vasiliev';
-$club_edit = true;
+$club_edit = false;
 ?>

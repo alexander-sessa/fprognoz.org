@@ -1,7 +1,5 @@
 <link href="css/comments.css?ver=2" rel="stylesheet">
 <link href="js/croppic/croppic.css" rel="stylesheet">
-<script src="https://cdn.ckeditor.com/ckeditor5/10.1.0/inline/ckeditor.js"></script>
-<script src="https://cdn.ckeditor.com/ckeditor5/10.1.0/inline/translations/ru.js"></script>
 <script src="/js/croppic/croppic-3.0.min.js"></script>
 <script>//<![CDATA[
 var isEnabled=[],contentHTML=[],cke=[],cke_config={language:"ru"}

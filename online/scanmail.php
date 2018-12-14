@@ -129,7 +129,7 @@ else {
       fwrite($mail, $new);
       fclose($mail);
       // потом удалить эту проверку
-      if ($cca == 'SFP' && !is_file($tour_dir . '/closed')) touch('schedule/task/post.' . $tour);
+      if ($cca == 'SFP' && !is_file($tour_dir . '/closed')) touch($online_dir . 'schedule/task/post.' . $tour);
     }
     else $log .= ' no association dir ' . $cca;
   }

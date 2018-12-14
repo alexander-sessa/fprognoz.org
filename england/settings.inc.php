@@ -8,5 +8,5 @@ $president = 'Eugene (Joker) Plugin';
 $vice = 'Александр Сесса';
 $pressa = '';
 $coach = 'Eugene (Joker) Plugin';
-$club_edit = true;
+$club_edit = false;
 ?>

@@ -8,5 +8,5 @@ $president = 'Serge Shibaev';
 $vice = 'Александр Сесса';
 $pressa = 'Vladislav Ezhergin';
 $coach = 'Serge Shibaev';
-$club_edit = true;
+$club_edit = false;
 ?>

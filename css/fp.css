@@ -1,5 +1,4 @@
-@import "https://fonts.googleapis.com/css?family=Roboto:300,400,500,600,700";
-
+@import "https://fonts.googleapis.com/css?family=Knewave|Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&amp;subset=cyrillic,cyrillic-ext";
 body {
     font-family: 'Roboto', sans-serif;
     background: #fafafa;
@@ -59,6 +58,7 @@ h4		{ color: #ff4500; }
     font-size: 1em;
     width: 0.9em;
     height: 1.1em;
+    box-sizing: content-box;
 }
 
 .blink { color: red;
@@ -124,7 +124,7 @@ h4		{ color: #ff4500; }
 mark { font-weight: bold;	background-color: yellow;	padding: 0; }
 
 .navbar {
-    padding: 15px 0;
+    padding: 0 0;
     background: midnightblue;
     background-image: url(/images/navb3.jpg);
     background-repeat: repeat-x;
@@ -136,7 +136,13 @@ mark { font-weight: bold;	background-color: yellow;	padding: 0; }
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
 }
 
+.navbar .container-fluid {
+    padding: 0 0;
+}
+
 .navbar-btn {
+    margin: 10px 0;
+    min-width: 40px;
     box-shadow: none;
     outline: none !important;
     border: none;
@@ -151,9 +157,12 @@ mark { font-weight: bold;	background-color: yellow;	padding: 0; }
     border-radius: 0.9rem;
 }
 
+/*
 .navbar-nav {
     padding-top: 10px;
+
 }
+*/
 
 #navbarFlag {
     width: 63px;
@@ -184,8 +193,10 @@ mark { font-weight: bold;	background-color: yellow;	padding: 0; }
 }
 
 #navbarMyTours.show {
-    margin-top: 14px;
+/*
+    margin-top: 4px;
     padding-bottom: 10px;
+*/
     background: #1e2a64;
 }
 
@@ -397,7 +408,7 @@ ul ul a {
 }
 
 #sidebarCollapse {
-    width: 40px;
+    min-width: 40px;
     height: 40px;
     background: whitesmoke;
     cursor: pointer;
@@ -429,13 +440,12 @@ ul ul a {
     opacity: 1;
     margin: 5px auto;
 }
-
 #btnMyTours {
     margin-right: 15px;
 }
 
 #rightbarCollapse {
-    width: 40px;
+    min-width: 40px;
     height: 40px;
     background: whitesmoke;
     cursor: pointer;
@@ -807,7 +817,6 @@ ul ul a {
 	font-family: monospace;
 	font-size: 1.2em;
 	line-height: 1;
-	width: 100%;
 }
 
 #season_settings ul li div {

@@ -5,8 +5,8 @@ $title = 'ФП Шотландии';
 $main_header = 'Новости ФП Шотландии';
 $cur_year = '2018-19';
 $president = 'Вячеслав Ковалевский';
-$vice = 'Vitya Baranovsky';
+$vice = 'Витя Барановский';
 $pressa = 'Andrey Razarenov';
 $coach = 'Вячеслав Ковалевский';
-$club_edit = true;
+$club_edit = false;
 ?>

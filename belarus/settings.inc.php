@@ -4,9 +4,9 @@ $description = 'Футбол-Прогнозная ассоциация Бела�
 $title = 'ФП Беларуси';
 $main_header = 'Новости ФП Беларуси';
 $cur_year = '2018-19';
-$president = 'Vitya Baranovsky';
+$president = 'Витя Барановский';
 $vice = 'Вячеслав Ковалевский';
-$pressa = '';
-$coach = 'Vitya Baranovsky';
+$pressa = 'Alex Tarasov';
+$coach = 'Витя Барановский';
 $club_edit = true;
 ?>

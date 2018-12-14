@@ -146,6 +146,9 @@ if (isset($data['cmd'])) {
     foreach ($access as $access_str) {
       list($code, $as_code, $team, $name, $mail, $pwd, $rol) = explode(';', $access_str);
       if ($hash == $pwd && ($name_up == mb_strtoupper($code) || $name_up == mb_strtoupper($name) || $name_up == strtoupper($mail))) {
+        $logfile = fopen($online_dir . 'log/auth.log', 'a');
+        fwrite($logfile, date('Y-m-d H:i:s').' '.$name_str."\n");
+        fclose($logfile);
         echo 1; // комбинация совпала
         exit;
       }
@@ -209,10 +212,10 @@ if (isset($data['cmd'])) {
   // запись файла
   if ($data['cmd'] == 'save_file') {
     include ('../' . $data['a'] . '/settings.inc.php');
-    if ($data['author'] == $president || $data['author'] == $vice || in_array($data['author'], $admin)) {
+    if ($data['author'] == $president || $data['author'] == $vice || $data['author'] == $pressa || in_array($data['author'], $admin)) {
       if ($data['m'] == 'text') {
         switch ($data['ref']) {
-          case 'it'  : $f = isset($data['t']) ? 'publish/it'.$data['t'] : 'it.tpl'; break;
+          case 'it'  : $f = isset($data['t']) ? (isset($data['l']) ? 'publish/'.$data['l'].'/itc'.$data['t'] : 'publish/it'.$data['t']) : 'it.tpl'; break;
           case 'itc' : $f = 'itc.tpl'; break;
           case 'p'   : $f = isset($data['t']) ? 'publish/p'.$data['t']  : 'p.tpl'; break;
           case 'pc'  : $f = 'pc.tpl'; break;
@@ -232,6 +235,7 @@ if (isset($data['cmd'])) {
         $tidy->cleanRepair();
         $text = $tidy->value;
       }
+      $text = rtrim($text)."\n\n";
       file_put_contents($file, $text);
     }
     echo 1;

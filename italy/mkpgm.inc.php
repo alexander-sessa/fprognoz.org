@@ -89,16 +89,17 @@ function IntervalsTable() {
       <th colspan="3">игровые дни</th>
       <th>всего</th>';
   foreach ($ccs as $cc => $country)
-    $out .= '
+    if ($cc != 'SUI')
+      $out .= '
       <th>'.$cc.'</th>';
 
   $out .= '
     </tr>
   </thead>
   <tbody>';
-  $time = strtotime('tue +-1 week');
-  for ($w = -1; $w <= 6; $w++) {
-    $time += 604800;
+  $time = strtotime('tue +-2 week');
+  for ($w = -2; $w <= 6; $w++) {
+    $time += 604800 + 3600;
     $week = date('W', $time);
     $year = date('Y', $time);
     $day1 = date('m-d', $time);
@@ -108,7 +109,7 @@ function IntervalsTable() {
     $day5 = date('m-d', $time + 604800);
     $s1 = $s2 = '';
     $t1 = $t2 = 0;
-    foreach ($ccs as $cc => $country) {
+    foreach ($ccs as $cc => $country) if ($cc != 'SUI') {
       foreach ($suffix as $tournament)
         if (is_file($online_dir . "fixtures/$year/$week/$cc$tournament")) {
           $ac = file($online_dir . "fixtures/$year/$week/$cc$tournament", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
@@ -384,7 +385,7 @@ if (isset($_POST['tour'])) {
     $cfg = file($season_dir . 'fp.cfg');
     $decoded = json_decode($cfg[4], true);
     foreach ($decoded as $tournament)
-      if ($tournament['type'] == 'chm')
+      if ($tournament['type'] == 'chm' || $tournament['type'] == 'com')
         break;
 
     $groups = $tournament['format'][0]['groups'];

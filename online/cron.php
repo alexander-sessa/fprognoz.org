@@ -180,7 +180,7 @@ function send_to_all($country_code, $subj, $body) {
 'SUI' => '"Swiss FPA" <sui@fprognoz.org>',
 'FIN' => '"AFL of Finland" <fin@fprognoz.org>',
 'SFP' => '"SFP-Team" <sfp@fprognoz.org>',
-'ULN' => '"Nations League" <uln@fprognoz.org>',
+'UNL' => '"Nations League" <uln@fprognoz.org>',
 'WL' => '"World League" <wl@fprognoz.org>',
 'IST' => '"SFP - 20!" <sfp@fprognoz.org>',
 );
@@ -1022,21 +1022,21 @@ https://fprognoz.org/?a=' . $ccn[$cca] . ($tour[4] == 'L' ? '&l='.substr($tour, 
 
         else {                                      // ни один матч не начат, значит, надо создать новое событие для
           if ($e1 == 2147483647)                    // начала первого матча
-            $events[] = strtotime('tomorrow 8:00');  // если не известно начало, дежурное событие на завтра, 8:00
+            $events[] = strtotime('tomorrow 8:00'); // если не известно начало, дежурное событие на завтра, 8:00
           else if ($e1 < time())                    // первый матч уже должен начаться:
-            $events[] = $time + 60;                  // ожидание его начала с проверкой каждую минуту
+            $events[] = $time + 60;                 // ожидание его начала с проверкой каждую минуту
           else
-            $events[] = $e1;                         // начало первого матча из программки
+            $events[] = $e1;                        // начало первого матча из программки
         }
 
 
         if ($unfinished && !count($events))         // остались несыгранные матчи, но нет событий:
-          $events[] = strtotime('tomorrow 8:00');    // следующая проверка завтра утром
+          $events[] = strtotime('tomorrow 8:00');   // следующая проверка завтра утром
 
 
         if (count($events)) {
 
-          if ($cca == 'SFP') {                      // для SFP надо парсить данные с других сайтов
+          if ($s && $cca == 'SFP') {                // для SFP надо парсить данные с других сайтов
             if (!is_file($tour_dir . 'closed')) {
               touch($online_dir . 'schedule/task/parse.' . $tour);
               if (substr($tour, 0, 3) == 'PRE')     // назначить парсинг замен для PRED.SU

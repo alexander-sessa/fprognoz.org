@@ -34,6 +34,12 @@ function HighlightedScanLine($team, $prognoz, $rprognoz, $warn) {
   return mb_sprintf('%-21s' . $highlighted . '  %-3s', $team, $warn);
 }
 
+if (count($_POST)) {
+  $logfile = fopen($online_dir . 'log/post-raw.log', 'a');
+  fwrite($logfile, date('Y-m-d H:i:s') . ' ' . var_export($_POST, true) . "\n");
+  fclose($logfile);
+}
+
 if (!isset($l)) $l = '';
 ($cca == 'UEFA') ? $tour = $l . strtoupper($t) : $tour = $cca . strtoupper($t);
 $season_dir = $online_dir . $cca . '/' . $s . '/';
@@ -127,17 +133,22 @@ if (isset($_SESSION['Coach_name'])) {
 if (isset($_POST['addprognoz'])) {
   file_put_contents($tour_dir . 'adds', $_POST['addprognoz']);
   time_nanosleep(0, 5000);
-  $hint = '<span class="red">дополнения сохранены</span><br />
+  $new_itog = '';
+  if (is_file($season_dir.'publish/'.($cca == 'UEFA' ? $l.'/itc' : 'it').strtolower($t))) {
+    `/home/fp/fprognoz.org/online/build_results.php "$cca" "$s" "$t"`;
+    $new_itog = ', итоги тура перестроены';
+  }
+  $hint = '<span class="red">дополнения сохранены'.$new_itog.'</span><br>
 ';
 }
 else $hint = '';
 is_file($tour_dir . 'adds') ? $addfile = file_get_contents($tour_dir . 'adds') : $addfile = '';
-if ($role == 'president') $hint .= '<a href="" onClick="$(\'#addsform\').toggle();return false;">дополнения и поправки прогнозов (команды, карточки/флаги, время)</a><br />
+if ($role == 'president') $hint .= '<a href="" onClick="$(\'#addsform\').toggle();return false;">дополнения и поправки прогнозов (команды, карточки/флаги, время)</a><br>
 <form id="addsform" class="hidden" method="POST">
-формат дополнений и поправок прогнозов (размер названия, отступы) такой же, как при публикации прогнозов;<br />
-пропуск первого матча из-за красной карточки не помечайте - это делается автоматически при расчете итогов;<br />
-указывайте время сервера - это поможет определить прогнозы, отосланные после начала реальных матчей<br />
-<textarea name=addprognoz rows=' . max(6, substr_count($addfile, "\n") + 1) . ' cols=66>'.htmlspecialchars($addfile).'</textarea><br />
+формат дополнений и поправок прогнозов (размер названия, отступы) такой же, как при публикации прогнозов;<br>
+пропуск первого матча из-за красной карточки не помечайте - это делается автоматически при расчете итогов;<br>
+указывайте время сервера - это поможет определить прогнозы, отосланные после начала реальных матчей<br>
+<textarea name=addprognoz class="monospace" rows="' . max(6, substr_count($addfile, "\n") + 1) . '" cols="67">'.htmlspecialchars($addfile).'</textarea><br>
 <input type=submit name=submit value="сохранить">
 </form>
 ';
@@ -216,7 +227,7 @@ if (!$closed && sizeof($teamCodes))
 $head .= 'Код тура: <b>' . $tour . '</b>';
 if (!$closed && sizeof($teamCodes)) {
   $head .= ', код команды: ';
-  if (sizeof($teamCodes) == 1) $head .= '<input type="hidden" name="team_code" value="'.$teamCodes[0].'" /><b>'.$teamCodes[0].'</b><br />';
+  if (sizeof($teamCodes) == 1) $head .= '<input type="hidden" name="team_code" value="'.$teamCodes[0].'"><b>'.$teamCodes[0].'</b><br>';
   else {
     $head .= '<select name="team_code">';
     foreach ($teamCodes as $tc) {
@@ -225,11 +236,11 @@ if (!$closed && sizeof($teamCodes)) {
       (isset($c) && $c == $tc) ? $selected = ' selected="selected"' : $c = $tc;
       $head .= $selected.'>'.$tc.'</option>';
     }
-    $head .= '<option value="один прогноз всем">один прогноз всем</option></select><br />';
+    $head .= '<option value="один прогноз всем">один прогноз всем</option></select><br>';
   }
-  $head .= '<span class="small">прогноз на тур: <input type="text" id="prognoz_str" name="prognoz_str" value="" size="50" />
-<input type="hidden" name="enemy_str" value="" />
-<input type="submit" name="submitpredict" value=" отправить " /></span></form>
+  $head .= '<span class="small">прогноз на тур: <input type="text" id="prognoz_str" name="prognoz_str" value="" size="50">
+<input type="hidden" name="enemy_str" value="">
+<input type="submit" name="submitpredict" value=" отправить "></span></form>
 <a href="?m=help" class="small" target="_blank">как пользоваться формой отправки прогноза</a>
 ';
 }
@@ -241,7 +252,7 @@ list($last_day, $last_month) = explode('.', $lastdate);
 if (!isset($updates)) $updates = NULL;
 $base = get_results_by_date($last_month, $last_day, $updates);
 $mdp = array();
-$program_table = '<table class="p-table">
+$program_table = '<table class="table-condensed table-striped p-table">
 <thead>
 <tr><th>№</th><th>матч для прогнозирования</th><th>турнир</th><th>дата время</th><th>счёт</th><th>исход</th><th colspan="3">прогноз</th>';
 if ($closed && $publish) $program_table .= '<th>угадано прогнозов</th>';
@@ -343,7 +354,7 @@ foreach ($program_matches as $line) if ($line = trim($line)) { // rows
 ';
         $rprognoz .= ' ';
       }
-      $program_table .= '<tr' . $tr_id . '><td class="tdn">'.$nm.'</td><td style="text-align:left;width:288px' . ($tr_id != '' ? ';cursor:pointer" onClick="details($(this).closest(\'tr\'))' : '') . '">'.$home.' - '.$away.'</td><td align="left">'.$tournament.'</td><td align="right">&nbsp;'.$dm.' '.$tn.'&nbsp;</td><td align="middle">&nbsp;'.$mt.'&nbsp;</td><td align="middle">&nbsp;'.$rt.'&nbsp;</td>';
+      $program_table .= '<tr'.$tr_id.'><td class="tdn">'.$nm.'</td><td style="min-width:288px;'.($tr_id != '' ? 'cursor:pointer" onClick="details($(this).closest(\'tr\'))' : '').'">'.$home.' - '.$away.'</td><td>'.$tournament.'</td><td class="td1">&nbsp;'.$dm.' '.$tn.'&nbsp;</td><td align="center">&nbsp;'.$mt.'&nbsp;</td><td align="center">&nbsp;'.$rt.'&nbsp;</td>';
 //      if (!$closed && ($role != 'badlogin')) {
 //        (($publish && $nm == 1) || $rt != '?') ? $onchange = 'disabled="disabled"' :  $onchange = 'onchange="newpredict(); return false;"';
       if ($rt == '1' || $rt == 'X' || $rt == '2') {
@@ -359,7 +370,7 @@ foreach ($program_matches as $line) if ($line = trim($line)) { // rows
       <a href="#" onclick="predict('."'dice$nm','1'".'); return false;">1</a>
       <a href="#" onclick="predict('."'dice$nm','X'".'); return false;">X</a>
       <a href="#" onclick="predict('."'dice$nm','2'".'); return false;">2</a>
-      <input type="text" name="dice' . $nm . '" value="'.$val.'" id="dice' . $nm . '" class="pr_str" '.$onchange.' />
+      <input type="text" name="dice' . $nm . '" value="'.$val.'" id="dice' . $nm . '" class="pr_str" '.$onchange.'>
     </td>
     <td>';
       if (!$closed && $role != 'badlogin' && $cca != 'SUI') {
@@ -370,38 +381,38 @@ foreach ($program_matches as $line) if ($line = trim($line)) { // rows
         else $program_table .= '
       <a href="#" onclick="securehome('."'ddice$nm'".'); return false;">&lt;</a>';
         $program_table .= '
-      <input type="text" name="ddice' . $nm . '" value="" id="ddice' . $nm . '" class="pr_str" '.$onchange.' />
+      <input type="text" name="ddice' . $nm . '" value="" id="ddice' . $nm . '" class="pr_str" '.$onchange.'>
     </td>
     <td>
 ';
       }
-      else $program_table .= '      <input type="hidden" name="ddice' . $nm . '" value="" id="ddice' . $nm . '" />
+      else $program_table .= '      <input type="hidden" name="ddice' . $nm . '" value="" id="ddice' . $nm . '">
     </td>
 ';
       if ($show_pen_col && !$closed && $role != 'badlogin')
           $program_table .= '      <a href="#" onclick="penalty('."'pen$nm','0'".'); return false;">&laquo;</a>п<a href="#" onclick="penalty('."'pen$nm','1'".'); return false;">&raquo;</a>
-      <input type="text" name="pen' . $nm . '" value="" id="pen' . $nm . '" class="pr_str" '.$onchange.' />
+      <input type="text" name="pen' . $nm . '" value="" id="pen' . $nm . '" class="pr_str" '.$onchange.'>
     </td>
 ';
-      else $program_table .= '      <input type="hidden" name="pen' . $nm . '" value="" id="pen' . $nm . '" />
+      else $program_table .= '      <input type="hidden" name="pen' . $nm . '" value="" id="pen' . $nm . '">
     </td>
 ';
       if ($closed && $nm == 1) $program_table .= '
 <td rowspan="' . (count($program_matches) + 1) . '">
 <div style="-webkit-writing-mode: vertical-rl; writing-mode: tb-rl; height: 17em;">
-&nbsp;для&nbsp;расчёта&nbsp;вариантов&nbsp;завершения<br />
-&nbsp;матчей&nbsp;укажите&nbsp;в&nbsp;колонке&nbsp;"прогноз"<br />
-&nbsp;возможные&nbsp;исходы&nbsp;и&nbsp;нажмите&nbsp;кнопку:<br />
+&nbsp;для&nbsp;расчёта&nbsp;вариантов&nbsp;завершения<br>
+&nbsp;матчей&nbsp;укажите&nbsp;в&nbsp;колонке&nbsp;"прогноз"<br>
+&nbsp;возможные&nbsp;исходы&nbsp;и&nbsp;нажмите&nbsp;кнопку:<br>
 </div>
-<br /><br />
+<br><br>
 <form action="" name="tform" method="get">
-<input type="hidden" name="a" value="'.$a.'" />
-<input type="hidden" name="m" value="prognoz" />
-<input type="hidden" name="l" value="'.$l.'" />
-<input type="hidden" name="s" value="'.$s.'" />
-<input type="hidden" name="t" value="'.$t.'" />
-<input type="hidden" id="prognoz_str" name="prognoz_str" value="" size="50" />
-<input type="submit" value="если?" />
+<input type="hidden" name="a" value="'.$a.'">
+<input type="hidden" name="m" value="prognoz">
+<input type="hidden" name="l" value="'.$l.'">
+<input type="hidden" name="s" value="'.$s.'">
+<input type="hidden" name="t" value="'.$t.'">
+<input type="hidden" id="prognoz_str" name="prognoz_str" value="" size="50">
+<input type="submit" value="если?">
 </form>
 </td>
 ';
@@ -896,8 +907,8 @@ function detrow(t,tmpz){
 		else if(t==6)out+="<div class=\"min right\">"+tmps[0]+"\"</div><div class=\"right\">"+tmps[2]+"<br><em>"+tmps[1]+"</em></div>";
 		out+="</td><td class=\"center\">";
 		if(t<2)out+="&#9917;";
-		else if(t<6)out+="<img src=\"https://www.livescore.bz/img/N"+(t<4?"k":"s")+"kart.gif\" height=\"12\" />";
-		else out+="<img src=\"https://www.livescore.bz/img/sub.gif\" height=\"12\" />";
+		else if(t<6)out+="<img src=\"https://www.livescore.bz/img/N"+(t<4?"k":"s")+"kart.gif\" height=\"12\">";
+		else out+="<img src=\"https://www.livescore.bz/img/sub.gif\" height=\"12\">";
 		out+="</td><td class=\"side\">";
 		if(t==1||t==3||t==5)out+="<div class=\"min left\">"+tmps[0]+"\"</div><div class=\"left\">"+tmps[1]+"</div>";
 		else if(t==7)out+="<div class=\"min left\">"+tmps[0]+"\"</div><div class=\"left\">"+tmps[2]+"<br><em>"+tmps[1]+"</em></div>";
@@ -929,11 +940,11 @@ socket.on("guncelleme",function(d){var json="";$.each(d.updates,function(index,u
 </div>
 <div class="h4 text-center">' . $head . '</div>
 <div class="d-flex">
-	<div class="table-condensed table-striped mx-auto">' . $program_table . '</div>
+	<div class="mx-auto">' . $program_table . '</div>
 </div>
 <div class="h6 text-center">' . $hint . '</div>
 <div class="d-flex">
-	<div id="pl" class="monospace">' . $prognozlist . '</div>
+	<div id="pl" class="monospace w-100">' . $prognozlist . '</div>
 	<div id="mt">Матчи тура:' . $cal . '</div>
 </div>
 ';

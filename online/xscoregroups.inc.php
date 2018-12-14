@@ -40,6 +40,7 @@
 
 'SPAIN#PD' => 'Spain: LIGA BBVA',
 'SPAIN#POSF' => 'Spain: Segunda Play-Offs',
+'SPAIN#R32' => 'Spain: Copa del Rey',
 'SPAIN#R16' => 'Spain: Copa del Rey',
 'SPAIN#QF' => 'Spain: Copa del Rey',
 'SPAIN#SF' => 'Spain: Copa del Rey',
@@ -63,6 +64,7 @@
 'PORTUGAL#PL' => 'Portugal: Liga ZON Sagres',
 'PORTUGAL#3R' => 'Portugal: Cup',
 'PORTUGAL#4R' => 'Portugal: Cup',
+'PORTUGAL#R16' => 'Portugal: Cup',
 'PORTUGAL#QF' => 'Portugal: Cup',
 'PORTUGAL#SF' => 'Portugal: Cup',
 'PORTUGAL#FINAL' => 'Portugal: Cup',
@@ -72,6 +74,7 @@
 'RUSSIA#PR' => 'Russia: Premier League',
 'RUSSIA#RFPL' => 'Russia: Premier League',
 'RUSSIA#FNL' => 'Russia: FNL',
+'RUSSIA#R32' => 'Russia: Cup',
 'RUSSIA#R16' => 'Russia: Cup',
 'RUSSIA#QF' => 'Russia: Cup',
 'RUSSIA#SF' => 'Russia: Cup',

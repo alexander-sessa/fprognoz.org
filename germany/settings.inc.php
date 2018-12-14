@@ -8,5 +8,5 @@ $president = 'Vano Opulsky';
 $vice = 'Александр Сесса';
 $pressa = '';
 $coach = 'Gleb Arsatov';
-$club_edit = true;
+$club_edit = false;
 ?>

@@ -1,21 +1,22 @@
 #код	файл с эмблемой клуба	название	город	год	стадион	мест	сайт
-ACADE	portugalACADE.png	Associação Académica de Coimbra OAF	Coimbra	1887	Estádio EFAPEL	30075	http://www.academica-oaf.pt
-AROUC	portugalAROUC.png	FC Arouca	Arouca	1951	Estádio Municipal de Arouca	7000	http://fcarouca.eu
-ATLET	portugalATLET.png	Atlético Clube de Portugal	Lisboa	1942	Estádio Da Tapadinha	10000	http://www.atleticocp.pt
-BELEN	portugalBELEN.png	CF Os Belenenses	Lisboa	1919	Estádio do Restelo	25000	http://www.osbelenenses.com
-BENFI	portugalBENFI.png	SL Benfica	Lisboa	1904	Estádio do Sport Lisboa e Benfica (da Luz)	65647	http://www.slbenfica.pt
-BOAVI	portugalBOAVI.png	Boavista FC	Porto	1903	Estádio do Bessa Século XXI	28263	http://www.boavistafc.pt
-CAMPO	portugalCAMPO.png	Campomaiorense	Campo Maior	1926	Estádio Capitão Cesar Correia	7500	http://campomaiorense.pt
-CHAVE	portugalCHAVE.png	GD Chaves	Chaves	1949	Estádio Municipal Eng. Manuel Branco Teixeira	12000	http://www.gdchaves.pt
-ESTOR	portugalESTOR.png	GD Estoril Praia	Estoril	1939	Estádio António Coimbra da Mota	5500	http://www.estorilpraia.pt/
-IMORT	portugalIMORT.png	Imortal DC Albufeira	Albufeira	1920	Municipal de Albufeira	3500	http://www.imortaldc.com
-MARIT	portugalMARIT.png	CS Marítimo Funchal	Funchal (Ilha da Madeira)	1910	Estádio dos Barreiros	8992	http://www.csmaritimo.pt
-NACIO	portugalNACIO.png	CD Nacional Funchal	Funchal (Ilha da Madeira)	1910	Estádio da Madeira	8589	http://www.cdnacional.pt
-PACOS	portugalPACOS.png	FC Paços de Ferreira	Paços de Ferreira	1950	Estádio da Capital do Móvel	6452	http://www.fcpf.pt
-PORTO	portugalPORTO.png	FC Porto	Porto	1893	Estádio Do Dragão	50399	http://www.fcporto.pt
-RIOAV	portugalRIOAV.png	FC Rio Ave FC	Vila do Conde	1939	Estádio do Rio Ave Futebol Clube	12815	http://www.rioave-fc.pt/
-BRAGA	portugalBRAGA.png	Sporting Braga	Braga	1921	Estádio AXA	30286	http://www.scbraga.pt
-SPCOV	portugalSPCOV.png	SC Covilhã	Covilhã	1923	Complexo Desportivo da Covilhã	6125	http://www.sportingdacovilha.com
-SPORT	portugalSPORT.png	Sporting Clube de Portugal	Lisboa	1906	Estádio José Alvalade	50466	http://www.sporting.pt
-GUIMA	portugalGUIMA.png	Vitória Guimarães SC	Guimarães	1922	Estádio Dom Afonso Henriques	30165	http://www.vitoriasc.pt
-SETUB	portugalSETUB.png	Vitória Setúbal FC	Setúbal	1910	Estádio do Bonfim	18694	http://www.vfc.pt
+ACADE	portugal/ACADE.png	Associação Académica de Coimbra OAF	Coimbra	1887	Estádio EFAPEL	30075	http://www.academica-oaf.pt
+AROUC	portugal/AROUC.png	FC Arouca	Arouca	1951	Estádio Municipal de Arouca	7000	http://fcarouca.eu
+ATLET	portugal/ATLET.png	Atlético Clube de Portugal	Lisboa	1942	Estádio Da Tapadinha	10000	http://www.atleticocp.pt
+BELEN	portugal/BELEN.png	CF Os Belenenses	Lisboa	1919	Estádio do Restelo	25000	http://www.osbelenenses.com
+BENFI	portugal/BENFI.png	SL Benfica	Lisboa	1904	Estádio do Sport Lisboa e Benfica (da Luz)	65647	http://www.slbenfica.pt
+BOAVI	portugal/BOAVI.png	Boavista FC	Porto	1903	Estádio do Bessa Século XXI	28263	http://www.boavistafc.pt
+CAMPO	portugal/CAMPO.png	Campomaiorense	Campo Maior	1926	Estádio Capitão Cesar Correia	7500	http://campomaiorense.pt
+CHAVE	portugal/CHAVE.png	GD Chaves	Chaves	1949	Estádio Municipal Eng. Manuel Branco Teixeira	12000	http://www.gdchaves.pt
+ESTOR	portugal/ESTOR.png	GD Estoril Praia	Estoril	1939	Estádio António Coimbra da Mota	5500	http://www.estorilpraia.pt
+FEIRE	portugal/FEIRE.png	CD Feirense	Santa Maria da Feira	1918	Estádio Marcolino de Castro	5449	http://www.cdfeirense.pt
+IMORT	portugal/IMORT.png	Imortal DC Albufeira	Albufeira	1920	Municipal de Albufeira	3500	http://www.imortaldc.com
+MARIT	portugal/MARIT.png	CS Marítimo Funchal	Funchal (Ilha da Madeira)	1910	Estádio dos Barreiros	8992	http://www.csmaritimo.pt
+NACIO	portugal/NACIO.png	CD Nacional Funchal	Funchal (Ilha da Madeira)	1910	Estádio da Madeira	8589	http://www.cdnacional.pt
+PACOS	portugal/PACOS.png	FC Paços de Ferreira	Paços de Ferreira	1950	Estádio da Capital do Móvel	6452	http://www.fcpf.pt
+PORTO	portugal/PORTO.png	FC Porto	Porto	1893	Estádio Do Dragão	50399	http://www.fcporto.pt
+RIOAV	portugal/RIOAV.png	FC Rio Ave FC	Vila do Conde	1939	Estádio do Rio Ave Futebol Clube	12815	http://www.rioave-fc.pt
+BRAGA	portugal/BRAGA.png	Sporting Braga	Braga	1921	Estádio AXA	30286	http://www.scbraga.pt
+SPCOV	portugal/SPCOV.png	SC Covilhã	Covilhã	1923	Complexo Desportivo da Covilhã	6125	http://www.sportingdacovilha.com
+SPORT	portugal/SPORT.png	Sporting Clube de Portugal	Lisboa	1906	Estádio José Alvalade	50466	http://www.sporting.pt
+GUIMA	portugal/GUIMA.png	Vitória Guimarães SC	Guimarães	1922	Estádio Dom Afonso Henriques	30165	http://www.vitoriasc.pt
+SETUB	portugal/SETUB.png	Vitória Setúbal FC	Setúbal	1910	Estádio do Bonfim	18694	http://www.vfc.pt
