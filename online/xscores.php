@@ -20,7 +20,7 @@ $teamerr = '';
 $time_start1 = microtime(true);
 $ret = lock($online_dir . 'log/results.lock', 20000);
 if ($ret === false) $log .= '!!! LOCK !!! '.(microtime(true) - $time_start1).' '; // ignore lock
-for ($day=-3; $day<=13; $day++) {
+for ($day=-1; $day<=13; $day++) {
 //  $offset = 3600 + $day * 86400;
   $offset = $day * 86400;
   $year = date('Y', time() + $offset);
@@ -47,12 +47,13 @@ for ($day=-3; $day<=13; $day++) {
   $url = "http://www.xscores.com/soccer/livescores/$d-$m";
   $ctx = stream_context_create(['http' => [
     'method'  => 'GET',
-    'timeout' => 25, // таймаут поолучения результатов, сек
+    'timeout' => 25, // таймаут получения результатов, сек
     'header'  => "Accept-language: en\r\nCookie: regionName=Europe/Amsterdam;countryLocation=NL\r\n"
   ]]);
   $content = file_get_contents($url, 0, $ctx);
   $out = strpos($content, 'seq = ') ? substr($content, 6 + strpos($content, 'seq = '), 8) . "\n" : $seq; // seq
-  $content = substr($content, strpos($content, '<div class="score_pen score_cell">PN</div>'));
+  //$content = substr($content, strpos($content, '<div class="score_pen score_cell">PN</div>'));
+  $content = substr($content, strpos($content, '<div class="country_header_txt">GAMES</div>'));
   $content = substr($content, 0, strpos($content, "<div class='ad-line-hide gameList_ad_bottom'>"));
   $content = str_replace('&nbsp;', ' ', $content);
   $content = str_replace("\r", '', $content);
@@ -64,6 +65,7 @@ for ($day=-3; $day<=13; $day++) {
 
   $matches = explode('<div id="1', $data);
   foreach($matches as $match) if (strpos($match, ' data-') && !strpos($match, '(W)') && !strpos($match, '(U17)') && !strpos($match, '(U19)') && !strpos($match, '(U21)')) {
+    $match = strtr($match, array('<b>' => '', '</b>' => ''));
     $i = '1'.substr($match, 0, 6);
     $ev = substr($match, strpos($match, ' data-') + 6);
     $ev = substr($ev, 0, strpos($ev, '>')).';';
@@ -79,12 +81,23 @@ for ($day=-3; $day<=13; $day++) {
       list($match_year, $date) = explode('_', $matchday, 2);
       $date = strtr($date, '_', '-');
       $d = "$date $koh:$kom";
+      if (!isset($home_team)) {
+        $home_team = substr($match, strpos($match, 'score_home_txt'));
+        $home_team = substr($home_team, strpos($home_team, '>') + 1);
+        $home_team = trim(substr($home_team, 0, strpos($home_team, '</div>')));
+      }
       $home_team = strtr($home_team, '_', '-');
       if (isset($realteam1[$home_team]))
         $h = $realteam1[$home_team];
       else {
         $h = $home_team;
         $teamerr .= "$h\n";
+      }
+      unset($home_team);
+      if (!isset($away_team)) {
+        $away_team = substr($match, strpos($match, 'score_away_txt'));
+        $away_team = substr($away_team, strpos($away_team, '>') + 1);
+        $away_team = trim(substr($away_team, 0, strpos($away_team, '</div>')));
       }
       $away_team = strtr($away_team, '_', '-');
       if (isset($realteam1[$away_team]))
@@ -93,6 +106,7 @@ for ($day=-3; $day<=13; $day++) {
         $a = $away_team;
         $teamerr .= "$a\n";
       }
+      unset($away_team);
       $minute = substr($match, strpos($match, '<div id="match_status" '));
       $minute = substr($minute, strpos($minute, '>') + 1);
       $minute = rtrim(substr($minute, 0, strpos($minute, '<')), "'");

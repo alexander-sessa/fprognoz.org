@@ -1722,7 +1722,7 @@ echo '
   echo '
                     <button type="button" id="navbarFlag" class="navbar-flag" style="background: url(images/63x42/'.$a.'.png) no-repeat; background-size: 100%; display:none" onClick="location.href=\'?a='.$a.'\'"></button>
                     <button id="btnMyTours" class="btn btn-light d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarMyTours" aria-controls="navbarMyTours" aria-expanded="false" aria-label="Toggle navigation">
-                        <i class="fas fa-align-justify"></i>
+                        <i class="fas fa-futbol"></i>
                     </button>
                     <div id="navbarMyTours" class="collapse navbar-collapse">
                         <ul class="nav navbar-nav ml-auto">';

@@ -390,10 +390,15 @@ foreach ($program_matches as $line) if ($line = trim($line)) { // rows
     </td>
 ';
       if ($show_pen_col && !$closed && $role != 'badlogin')
-          $program_table .= '      <a href="#" onclick="penalty('."'pen$nm','0'".'); return false;">&laquo;</a>п<a href="#" onclick="penalty('."'pen$nm','1'".'); return false;">&raquo;</a>
+      {
+        if ($cca == 'SUI')
+          $program_table .= '<td>';
+
+        $program_table .= '      <a href="#" onclick="penalty('."'pen$nm','0'".'); return false;">&laquo;</a>п<a href="#" onclick="penalty('."'pen$nm','1'".'); return false;">&raquo;</a>
       <input type="text" name="pen' . $nm . '" value="" id="pen' . $nm . '" class="pr_str" '.$onchange.'>
     </td>
 ';
+      }
       else $program_table .= '      <input type="hidden" name="pen' . $nm . '" value="" id="pen' . $nm . '">
     </td>
 ';
