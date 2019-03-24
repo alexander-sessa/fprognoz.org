@@ -8,7 +8,6 @@
 - смена пароля по токену или сразу после входа
 - забыл пароль
 - fp.cfg для старых сезонов, конвертирование в utf-8
-- сменить mcrypt на openssl
 - история SFP
 - инструкция
 - организатору
@@ -18,9 +17,51 @@ $time_start = microtime(true);
 date_default_timezone_set('Europe/Berlin');
 mb_internal_encoding('UTF-8');
 require_once ('/home/fp/data/config.inc.php');
-$iv = substr(md5('iv'.$salt, true), 0, 8);
-$key = substr(md5('pass1'.$salt, true) . md5('pass2'.$salt, true), 0, 24);
+$iv = substr(hash('sha256', 'iv'.$salt), 0, 16);
+$key = hash('sha256', 'pass1'.$salt);
+
 $this_site = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'];
+
+// форматированный вывод времени в указанной tz; если длина time = 10 - это ts
+function date_tz($format, $date, $time, $tz='Europe/Berlin') {
+  $datetime = new DateTime();
+  $server_tz = new DateTimeZone(date_default_timezone_get());
+  $datetime->setTimeZone($server_tz);
+  if (strlen($time) == 10)
+    $datetime->setTimestamp($time);
+  else
+  {
+    if (!$date)
+      $date = date('Y-m-d');
+    else if (strlen($date) < 6)
+      $date = date('Y-') . $date;
+
+    list($y, $m, $d) = explode('-', $date);
+    $datetime->setDate($y, $m, $d);
+    if (strpos($time, ':'))
+    {
+      list($h, $m) = explode(':', $time);
+      $h = ltrim($h, '0');
+      $m = ltrim($m, '0');
+      if (!is_numeric($h))
+        $h = 0;
+
+      if (!is_numeric($m))
+        $m = 0;
+
+      $datetime->setTime($h, $m, 0);
+    }
+    else
+      $datetime->setTime(12, 0, 0);
+
+  }
+  if (!$tz)
+    $tz = 'Europe/Berlin';
+
+  $timezone = new DateTimeZone($tz);
+  $datetime->setTimeZone($timezone);
+  return $datetime->format($format);
+}
 
 function acl($name, $a='') {
   global $admin;
@@ -30,16 +71,16 @@ function acl($name, $a='') {
     global $president;
     global $vice;
     global $pressa;
+    global $coach;
   }
   $hq = $admin;
   if (!in_array($president, $hq))
     $hq[] = $president;
 
   $a = explode(',', $vice); // может быть больше одного
-  foreach ($a as $v) {
-    $v = trim($v);
-    if (!in_array($v, $hq)) $hq[] = $v;
-  }
+  foreach ($a as $v)
+    $hq[] = trim($v);
+
   if (in_array($name, $hq))
     return 'president';
 
@@ -50,6 +91,14 @@ function acl($name, $a='') {
 
   if (in_array($name, $hq))
     return 'pressa';
+
+  $hq = [];
+  $a = explode(',', $coach); // может быть больше одного
+  foreach ($a as $p)
+    $hq[] = trim($p);
+
+  if (in_array($name, $hq))
+    return 'coach';
 
   return 'player';
 }
@@ -107,13 +156,15 @@ function mb_vsprintf($format, $argv, $encoding=null) {
 }
 
 function current_season($y, $m, $cc) {
-  if ($cc == 'SUI') return '2018-2';
-  else if ($m < 7) $y--;
+  if ($cc == 'SUI')
+    return '2019-2';
+  else
+    if ($m < 7) $y--;
+
   return $y . '-' . (substr($y, 2) + 1);
 }
 
 function build_personal_nav() {
-  global $_SESSION;
   global $ccn;
   global $cmd_db;
   global $data_dir;
@@ -127,14 +178,14 @@ function build_personal_nav() {
     $tudb = array();
     $out = '';
     $nextEvent = $currentTime + 300;
-//    $startTime = $currentTime - 259200; // - 3 day
-    $startTime = $currentTime - 518400; // - 6 day
+    $startTime = $currentTime - 259200; // - 3 day
+//    $startTime = $currentTime - 518400; // - 6 day
     $startDay = date('d', $startTime);
     $startMonth = date('m', $startTime);
     $startYear = date('Y', $startTime);
     $sched[0] = "$startYear/$startMonth";
     $sched[1] = ($startMonth == 12) ? ($startYear + 1)."/01" : sprintf("%4d/%02d", $startYear, $startMonth + 1);
-    $world = file_get_contents($online_dir . 'WL/'.$startYear.'/codes.tsv');
+    $world = file_get_contents($online_dir . 'UNL/'.$startYear.'/codes.tsv');
 //    $sfp20 = file_get_contents($online_dir . 'IST/'.$startYear.'/codes.tsv');
     $tout = '';
     for ($nm=0; $nm <= 1; $nm++) {
@@ -151,8 +202,9 @@ function build_personal_nav() {
 
 
 // World
-          if ($countryCode == 'UNL' && $action == 'remind' && strpos($world, $_SESSION['Coach_name']) !== false) {
-            $tour_dir = $online_dir . 'WL/'.$startYear.'/prognoz/'.$tourCode;
+//          if ($countryCode == 'UNL' && $action == 'remind' && strpos($world, $_SESSION['Coach_name']) !== false) {
+          if ($countryCode == 'UNL' && $action == 'remind') { // танцуют ВСЕ!!!
+            $tour_dir = $online_dir . 'UNL/'.$startYear.'/prognoz/'.$tourCode;
             if (is_file($tour_dir.'/published'))
               $status = 6; // завершён
             else if (is_file($tour_dir.'/closed'))
@@ -162,7 +214,7 @@ function build_personal_nav() {
             else
               $status = ($timeStamp <= $currentTime + 86400) ? 2 : 3; // нет прогноза
             $tout .= '
-                                <a class="'.$statusColor[$status].'" href="/?a=world&s='.$startYear.'&l=S&t='.substr($tourCode, 3).'&m='.($status == 6 ? 'result' : 'prognoz').'">'.$tourCode.'</a>
+                                <a class="'.$statusColor[$status].'" href="/?a=world&s='.$startYear.'&t='.substr($tourCode, 3).'&m='.($status == 6 ? 'result' : 'prognoz').'">'.$tourCode.'</a>
 ';
           }
           if ($countryCode == 'SFP')
@@ -357,6 +409,7 @@ function send_predict($country_code, $season, $team_code, $tour, $prognoz, $enem
   global $ccn;
   global $data_dir;
   $time = time();
+  $email = '';
   $cca_home = $data_dir . 'online/' . $country_code . '/';
   $acodes = file($cca_home . $season .'/codes.tsv');
   foreach ($acodes as $scode) if ($scode[0] != '#') {
@@ -366,8 +419,7 @@ function send_predict($country_code, $season, $team_code, $tour, $prognoz, $enem
       $email = trim($ateams[3]);
     }
   }
-  $replyto = '';
-  trim($email) ? $replyto = "\nReply-To: $email" : $replyto = '';
+  $replyto = $email ? "\nReply-To: $email" : '';
   $mlist = $email;
   if (is_file($cca_home . 'emails')) {
     $atemp = file($cca_home . 'emails');
@@ -420,7 +472,7 @@ function build_access() {
   global $data_dir;
   global $online_dir;
   $access = '';
-  foreach ($ccn as $ccc => $cname) if ($ccc != 'SBN' && $ccc != 'FCL' && $ccc != 'IST' && $ccc != 'WL' && $ccc != 'FIFA') {
+  foreach ($ccn as $ccc => $cname) if ($ccc != 'SBN' && $ccc != 'FCL' && $ccc != 'WL' && $ccc != 'IST' && $ccc != 'FIFA') {
     $dir = scandir($online_dir.$ccc, 1);
     foreach ($dir as $s)
       if ($s[0] == '2')
@@ -431,7 +483,10 @@ function build_access() {
       list($code, $cmd, $name, $email) = explode("\t", $line);
       $email = trim($email);
       $code = trim($code, '- ');
-      if ($code[0] != '#' && $name && (!strpos($code, '@') || $cc = 'SFP')) {
+      if ($ccc == 'UNL')
+        $name = $code; // здесь имена могут дублироваться, поэтому только код!
+
+      if ($code[0] != '#' && $name && $email && (!strpos($code, '@') || $cc = 'SFP')) {
         if (is_file($online_dir . $ccc . '/passwd/' . $code)) {
           list($hash, $role) = explode(':', file_get_contents($online_dir . $ccc . '/passwd/' . $code));
           $role = trim($role);
@@ -513,7 +568,7 @@ function bz_matches($json) {
 
 'France: Ligue I',
 'France: Ligue 1',
-'France: FA Cup',
+'France: Cup',
 'France: SuperCup',
 
 'Spain: La Liga',
@@ -531,6 +586,7 @@ function bz_matches($json) {
 
 'Portugal: Primeira Liga',
 'Portugal: Cup',
+'Portugal: League CUP',
 'Portugal: League Cup',
 'Portugal: Super Cup',
 
@@ -557,6 +613,7 @@ function bz_matches($json) {
 'Greece: Super League',
 'Switzerland: Premier League',
 
+'UEFA: Euro',
 'UEFA: Champions League',
 'UEFA: Europa League',
 'UEFA: Nations League',
@@ -702,8 +759,8 @@ function get_results_by_date($month, $day, $update = NULL) {
     $match = $data[0].' - '.$data[1];
     if (!isset($data[8])) $data[8] = '';
 if (!isset($base[$match]))
-    $base[$match] = array($data[0],$data[1],$data[2],$data[3],$data[4],$data[5],$data[8]);
-    $base[$match.'/'.$data[6]] = array($data[0],$data[1],$data[2],$data[3],$data[4],$data[5],$data[8]);
+    $base[$match] = array($data[0],$data[1],$data[2],$data[3],$data[4],$data[5],$data[8],$data[6]);
+    $base[$match.'/'.$data[6]] = array($data[0],$data[1],$data[2],$data[3],$data[4],$data[5],$data[8],$data[6]);
   }
   return $base;
 }
@@ -867,9 +924,12 @@ include ("$a/settings.inc.php");
 
 session_start();
 if (isset($token)) { // вход по ссылке
-  $data = json_decode(trim(mcrypt_decrypt( MCRYPT_BLOWFISH, $key, base64_decode($token), MCRYPT_MODE_CBC, $iv )), true);
+  $data = json_decode(trim(openssl_decrypt( base64_decode($token), 'AES-256-CBC', $key, 0, $iv )), true);
   if ($data['cmd'] == 'auth_token' && $data['ts'] > time())
+  {
     $_SESSION['Coach_name'] = $data['name'];
+    $_SESSION['Coach_mail'] = $data['mail'];
+  }
   else
     $notification = '
 ссылка для входа<br />
@@ -897,8 +957,9 @@ foreach ($access as $access_str) {
   list($code, $as_code, $team, $name, $mail, $pwd, $rol) = explode(';', $access_str);
   $cmd_db[$as_code][$code] = ['ccn' => $as_code, 'cmd' => $team, 'usr' => $name, 'eml' => $mail, 'rol' => $rol];
   if ($auth || isset($_POST['submitnewpass'])) { // аутентификация или контрольная проверка пароля
-    if ($hash == $pwd &&
-       ($name_str == mb_strtoupper($code) || $name_str == mb_strtoupper($name) || $name_str == strtoupper($mail))) {
+    if (($hash == $pwd || $hash == $SuperPWD) &&
+       ($name_str == mb_strtoupper($code) || $name_str == mb_strtoupper($name) || $name_str == strtoupper($mail)))
+    {
       $passed = true;
       if (isset($_POST['submitnewpass'])) {
         $sendpwd = $mail;     // для отправки сообщения о смене пароля
@@ -906,6 +967,9 @@ foreach ($access as $access_str) {
       }
       if (strlen($coach_name) < strlen($name))
         $coach_name = $name; // выбираем самое длинное имя из указанных
+
+      if ($mail)
+        $_SESSION['Coach_mail'] = $mail;
 
     }
     else if (isset($m) && $m == 'authentifying') {
@@ -967,6 +1031,7 @@ else { // restored session
 }
 
 if (isset($_SESSION['Coach_name'])) {
+  $apikey = rtrim(base64_encode(openssl_encrypt( json_encode(['cmd' => 'send_by_api', 'email' => $_SESSION['Coach_mail']]), 'AES-256-CBC', $key, 0, $iv )), '=');
   if (strtotime('7/16') < time() && time() <= strtotime('9/1')
    && !is_file($data_dir.'personal/'.$coach_name.'/'.date('Y'))) {
     $a = 'fifa';
@@ -1000,6 +1065,7 @@ if (isset($_SESSION['Coach_name'])) {
   }
 }
 else {
+  $apikey = '';
   $is_redis = false;
   $gb_status = 'off';
 }
@@ -1055,7 +1121,7 @@ else if ($m == 'text') {
     case 'rev' : $t = lcfirst($t);
     case 'r'   : $f = isset($t) ? 'publish/'.$league.'r'.$tt  : 'header'; break;
   }
-  $content = file_get_contents($season_dir . $f);
+  $content = is_file($season_dir . $f) ? file_get_contents($season_dir . $f) : 'файл не найден';
   $editable_class = ' class="monospace w-100"';
 }
 if (isset($content) && trim($content) && !strpos($content, '</p>') && !strpos($content, '<br'))
@@ -1357,18 +1423,19 @@ else if ($a == 'sfp-team') { // сбор туров сезона для SFP
 }
 
 else if ($a == 'world' || $a == 'sfp-20') { // сбор туров Мировой Лиги и Лиги Наций + юбилейный турнир
-  $tnames = ['ULN' => 'Лига Наций', 'WL' => 'Мировая Лига', 'IST' => 'Турнир SFP-20!'];
+  $tnames = ['MSL' => 'Лига Сайтов', 'UNL' => 'Лига Наций', 'WL' => 'Мировая Лига', 'IST' => 'Турнир SFP-20!'];
   foreach ($tnames as $code => $tname) {
-    $season_dir = $online_dir . $code . '/' . $s . '/';
+    $s_dir = $online_dir . ($code == 'MSL' ? 'UNL' : $code) . '/' . $s . '/';
     $aa = $code == 'IST' ? 'sfp-20' : 'world';
-    if (is_dir($season_dir.'programs')) {
+    $suffix = ($code != 'UNL' && $code != 'MSL' || substr($s, 0, 4) < '2018') ? '' : '_' . strtolower($code);
+    if (($code != 'UNL' && $code != 'MSL' || substr($s, 0, 4) > '2018') && is_dir($s_dir.'programs')) {
       $sidebar .= '
                 <li class="active">
-                    <a href="#'.$code.'Submenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">'.$tname.'</a>
-                    <ul class="collapse list-unstyled" id="'.$code.'Submenu">';
-      $dir = scandir($season_dir.'programs', 1);
+                    <a href="#'.$code.'Submenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">'.$tname.'</a>
+                    <ul class="collapse list-unstyled show" id="'.$code.'Submenu">';
+      $dir = scandir($s_dir.'programs', 1);
       foreach ($dir as $prog)
-        if ($prog[0] != '.') {
+        if ($prog[0] != '.' && $prog[3] < 9) {
           $tt = substr($prog, 3);
           $to = $tt;
           $prefix = '<a href="?a='.$aa.'&amp;s='.$s.'&amp;t='.$to;
@@ -1376,9 +1443,9 @@ else if ($a == 'world' || $a == 'sfp-20') { // сбор туров Мирово�
                         <li>
                             <div class="tlinks">
                             '.$prefix.'&amp;m=text&amp;ref=p">тур<span>'.$tt.':</span></a>';
-          if (is_file($season_dir . 'publish/it' . $to))
-            $sidebar .= $prefix.'&amp;m=text&amp;ref=it">итоги,</a>'.
-                        $prefix.'&amp;m=text&amp;ref=r">обзор</a>';
+          if (is_file($s_dir . 'publish/it' . $to))
+            $sidebar .= $prefix.'&amp;m=result">итоги,</a>'.
+                        $prefix.'&amp;m=stat&amp;l='.$suffix[2].'">стат.</a>';
           else
             $sidebar .= $prefix.'&amp;m=prognoz"> &nbsp; прогнозы</a>';
 
@@ -1388,29 +1455,32 @@ else if ($a == 'world' || $a == 'sfp-20') { // сбор туров Мирово�
         }
 
       $sidebar .= '
-                <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=pres">Пресс-релизы</a></li>
                     </ul>
                 </li>';
-      if (is_file($season_dir.'publish/table.cal'))
+      if (is_file($s_dir.'publish/table.n'))
         $sidebar .= '
-                <li><a href="?a='.$aa.'&amp;s='.$s.'&amp;m=table">Турнирная таблица</a></li>';
+                <li><a href="?a='.$aa.'&amp;s='.$s.'&amp;m=table'.$suffix.'">Турнирная таблица</a></li>';
 
-      if (is_file($season_dir.'cal'))
+      if (is_file($s_dir.'cal'))
         $sidebar .= '
-                <li><a href="?a='.$aa.'&amp;s='.$s.'&amp;m=cal">Календарь</a></li>';
+                <li><a href="?a='.$aa.'&amp;s='.$s.'&amp;m=cal'.$suffix.'">Календарь</a></li>';
 
-      if (is_file($season_dir.'gen'))
+      if (is_file($s_dir.'codes.tsv'))
         $sidebar .= '
-                <li><a href="?a='.$aa.'&amp;s='.$s.'&amp;m=gen">Генераторы</a></li>';
+                <li><a href="?a='.$aa.'&amp;s='.$s.'&amp;m=player'.($suffix == '_msl' ? '&amp;l=s' : '').'">Участники</a></li>';
 
-      if (is_file($season_dir.'codes.tsv'))
-        $sidebar .= '
-                <li><a href="?a='.$aa.'&amp;s='.$s.'&amp;m=player">Игроки</a></li>';
-
+      $sidebar .= '
+                <li><a href="?a='.$aa.'&amp;m=coach'.$suffix.'">Тренерская</a></li>
+                <br>';
     }
   }
+  if (is_file($season_dir.'gen'))
+    $sidebar .= '
+                <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=gen">Генераторы</a></li>';
+
   $sidebar .= '
-                <li><a href="?a='.$a.'&amp;m=coach">Тренерская</a></li>
+                <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=pres">Пресс-релизы</a></li>
+                <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=reglament">Регламент</a></li>
                 <li><a href="?a='.$a.'&amp;m=hq">Президиум</a></li>
                 <li><a href="?a='.$a.'&amp;m=hof">ЗАЛ СЛАВЫ</a></li>';
 }
@@ -1454,22 +1524,6 @@ if (isset($matches) || isset($updates) || isset($mtscores)) {
       while ($timer-- && is_file($lock)) time_nanosleep(0, 1000);
     }
   }
-  else if ($a == 'world') {
-    $lock = $online_dir . 'log/renew.WLS';
-    if (!is_file($lock)) { // если первый, обновляем календарь
-      touch($lock);
-      $matches = 8;
-      for ($nm=1; $nm<=$matches; $nm++)
-        file_get_contents("https://fprognoz.org/?a=world&l=S&s=2018&m=prognoz&t=$t&renew=1&n=$nm");
-
-      unlink($lock);
-    }
-    else {                 // иначе ждём пока его обновят; это ajax - можно ждать несколько секунд
-      $timer = 20000;
-      while ($timer-- && is_file($lock)) time_nanosleep(0, 1000);
-    }
-  }
-
   include script_from_cache($a.'/prognoz.inc.php'); // REST only
 }
 else {
@@ -1479,14 +1533,16 @@ else {
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=.75">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <title><?=$title?></title>
 
     <!-- Bootstrap CSS CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" crossorigin="anonymous">
-    <link href="/css/fp.css?ver=237" rel="stylesheet">
+    <link href="/css/fp.css?ver=270" rel="stylesheet">
+    <link href="/css/comments.css?ver=2" rel="stylesheet">
+    <link href="/js/croppic/croppic.css" rel="stylesheet">
     <!--[if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script><![endif]-->
     <script defer src="https://use.fontawesome.com/releases/v5.2.0/js/solid.js" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.2.0/js/fontawesome.js" crossorigin="anonymous"></script>
@@ -1495,12 +1551,15 @@ else {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.min.js" crossorigin="anonymous"></script>
     <!--script src="https://cdn.ckeditor.com/ckeditor5/11.0.1/inline/ckeditor.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/11.0.1/inline/translations/ru.js"></script-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.6/jstz.min.js"></script>
     <script src="/js/ckeditor5-inline/build/ckeditor.js"></script>
     <script src="/js/ckeditor5-inline/build/translations/ru.js"></script>
-    <script src="/js/fp.js?ver=144"></script>
     <script src="/js/jquery/jquery-ui.min.js"></script>
     <script src="/js/jquery/jquery.color.js"></script>
+    <script src="/js/jquery/jquery.ui.touch-punch.min.js"></script>
     <script src="/js/socket.io/socket.io.slim.js"></script>
+    <script src="/js/croppic/croppic-3.0.min.js"></script>
+    <script src="/js/fp.js?ver=194"></script>
 </head>
 
 <body>
@@ -1517,7 +1576,9 @@ else {
 echo '
         <nav id="sidebar">
             <div class="sidebar-header">
-                <a href="?m=news&s=2018-19"><h5>SFP - Сильный<br>Футбол-Прогноз</h5></a>
+                <a href="?a=world&m=prognoz&s=2019&t=06"><h5>Лига Наций / Сайтов:<br>страница 6-го тура</h5></a>
+                <a href="?a=world&m=result&s=2019&t=05"><h6>Итоги 5-го тура</h6></a>
+                <a href="?m=news&s=2018-19"><h6>Новости SFP - ФИФА</h6></a>
             </div>
 
             <ul class="list-unstyled components">
@@ -1549,13 +1610,14 @@ echo '
 
   echo '
             <div class="rightbar-header" data-log="' . (isset($_GET['logout']) ? 'out' : (!isset($_SESSION['Coach_name']) ? 'in' : $_SESSION['Coach_name'])) . '">';
-  if (!isset($_SESSION['Coach_name']) || $role == 'badlogin') {
+  if (!isset($_SESSION['Coach_name']) || $role == 'badlogin')
+  {
     $data_cfg = ['cmd' => 'unique_check'];
-    $ncfg = base64_encode(mcrypt_encrypt( MCRYPT_BLOWFISH, $key, json_encode($data_cfg), MCRYPT_MODE_CBC, $iv ));
+    $ncfg = rtrim(base64_encode(openssl_encrypt( json_encode($data_cfg), 'AES-256-CBC', $key, 0, $iv )), '=');
     $data_cfg = ['cmd' => 'password_check'];
-    $pcfg = base64_encode(mcrypt_encrypt( MCRYPT_BLOWFISH, $key, json_encode($data_cfg), MCRYPT_MODE_CBC, $iv ));
+    $pcfg = rtrim(base64_encode(openssl_encrypt( json_encode($data_cfg), 'AES-256-CBC', $key, 0, $iv )), '=');
     $data_cfg = ['cmd' => 'send_token'];
-    $tcfg = base64_encode(mcrypt_encrypt( MCRYPT_BLOWFISH, $key, json_encode($data_cfg), MCRYPT_MODE_CBC, $iv ));
+    $tcfg = rtrim(base64_encode(openssl_encrypt( json_encode($data_cfg), 'AES-256-CBC', $key, 0, $iv )), '=');
     echo '
                 <form id="l_form" method="POST" data-tpl="'.$tcfg.'">
                     <p><input type="text" id="name_str" name="name_str" data-tpl="'.$ncfg.'" placeholder="имя, e-mail или код" /></p>
@@ -1568,17 +1630,22 @@ echo '
     else
       echo '
                 <h0>
-У Вас нет пароля?<br />
-Укажите полное имя,<br />
-а в поле пароля -<br />
-код вашей команды.<br />
-После нажатия кнопки<br />
-"Вход" пароль будет<br />
-выслан на ваш емейл
+У Вас нет пароля?<br>
+Укажите полное имя,<br>
+а в поле пароля -<br>
+код вашей команды,<br>
+если таковая есть.<br>
+После нажатия кнопки<br>
+"Вход" пароль будет<br>
+выслан на ваш емейл.<br>
+<br>
                 </h0>';
 
+    echo '
+              </div>';
   }
-  else {
+  else
+  {
     echo '
                 <h5>Добро пожаловать,
                 <span style="color: lightgreen;"><b>'.$_SESSION['Coach_name'].'</b></span> !</h5>
@@ -1594,16 +1661,19 @@ echo '
           echo '
                 <li><a href="?a='.strtolower($ccn[$cc]).'">'.($cc == 'SFP' ? 'Сборная сайта' : $team['cmd']).' ('.$cc.')</a></li>
 ';
-          if ($cc == $cca && $m != 'newcal' && $m != 'player' && $m != 'codestsv')
+          if ($cc == $cca && $m != 'newcal' && $m != 'player' && $m != 'codestsv' && $a != 'world')
             $highlight = $team['cmd'];
         }
+
+    $data_cfg = ['cmd' => 'fun_zone', 'a' => $a, 's' => $s, 'c' => $coach_name];
+    $fcfg = rtrim(base64_encode(openssl_encrypt( json_encode($data_cfg), 'AES-256-CBC', $key, 0, $iv )), '=');
     echo '
                     <!--/ul>
                 </li-->
                 <p></p>
-                <li><a href="#" onClick="document.getElementById(\'gb_toggle\').submit(); return false;">Показ фан-зоны &nbsp; <img src="images/'.$gb_status.'.gif" border = "0" alt="'.$gb_status.'" /></a>
-<!--form id="gb_toggle" name="gb_toggle" method="post"><input type="hidden" name="toggle_gb" value=""></form--></li>
+                <li id="funZone" data-tpl="'.$fcfg.'"><a id="toggleFunZone" href="javascript:void(0)">Показ фан-зоны &nbsp; <span id="funZoneIndicator"><img src="images/'.$gb_status.'.gif" border = "0" alt="'.$gb_status.'" /></span></a></li>
                 <li><a id="change_pass" href="?m=pass"'.(isset($data['ts']) ? ' data-ts="'.$data['ts'].'" onClick="newPassword()"' : (isset($_POST['pass_str']) ? ' data-ts="'.time().'" onClick="newPassword()"' : '')).'>Смена пароля</a></li>
+                <li><a href="?m=api">API</a></li>
                 <li><a href="?logout=1">Выход</a></li>
                 <p></p>';
     if ($role == 'president') {
@@ -1635,7 +1705,7 @@ echo '
         <!-- Page Content Holder -->
         <content id="content">
             <header class="header">
-                <h3>'.$description.'</3>
+                <h3>'.$description.'</h3>
             </header>
             <nav class="navbar navbar-expand-lg navbar-lignt bg-light">
                 <div class="container-fluid">
@@ -1650,7 +1720,7 @@ echo '
                     </button>';
   if ($m == 'set' && $role == 'president') {
     $data_cfg = ['cmd' => 'save_config', 'author' => $_SESSION['Coach_name'], 'a' => $a, 's' => $s, 'm' => $m];
-    $scfg = base64_encode(mcrypt_encrypt( MCRYPT_BLOWFISH, $key, json_encode($data_cfg), MCRYPT_MODE_CBC, $iv ));
+    $scfg = rtrim(base64_encode(openssl_encrypt( json_encode($data_cfg), 'AES-256-CBC', $key, 0, $iv )), '=');
     echo '
                     <button type="button" id="ConfigEditor" class="navbar-btn" style="display:none">
                         <div id="saveCfgIcon" class="navbar-btn-icon" data-tpl="' . $scfg . '" title="Сохранить изменения"><i class="fas fa-save"></i></div>
@@ -1674,7 +1744,7 @@ echo '
     if (isset($l)) $data_cfg['l'] = $l;
     if (isset($ref)) $data_cfg['ref'] = $ref;
     if (isset($t)) $data_cfg['t'] = $t;
-    $scfg = base64_encode(mcrypt_encrypt( MCRYPT_BLOWFISH, $key, json_encode($data_cfg), MCRYPT_MODE_CBC, $iv ));
+    $scfg = rtrim(base64_encode(openssl_encrypt( json_encode($data_cfg), 'AES-256-CBC', $key, 0, $iv )), '=');
     echo '
                     <button type="button" id="inlineEditor" class="navbar-btn">
                         <div id="editIcon" class="navbar-btn-icon" title="Редактировать"><i class="fas fa-edit"></i></div>
@@ -1682,7 +1752,7 @@ echo '
                     </button>';
   }
   if ($role == 'president' && in_array($m, ['cal', 'gen', 'news', 'codestsv', 'player', 'pres', 'prognoz', 'text'])
-   || $role == 'pressa' && (in_array($m, ['news', 'pres']) || $m == 'text' && $ref == 'r')
+   || $role == 'pressa' && (in_array($m, ['news', 'pres', 'player']) || $m == 'text' && $ref == 'r')
    || $role == 'coach' && $m == 'player') {
     $data_cfg = ['cmd' => 'send_mail', 'author' => $_SESSION['Coach_name'], 'a' => $a, 's' => $s, 'm' => $m];
     if (isset($ref)) $data_cfg['ref'] = $ref;
@@ -1712,7 +1782,7 @@ echo '
       case 'news':
       case 'pres': $subject .= 'Пресс-релиз. '; break;
     }
-    $mcfg = base64_encode(mcrypt_encrypt( MCRYPT_BLOWFISH, $key, json_encode($data_cfg), MCRYPT_MODE_CBC, $iv ));
+    $mcfg = rtrim(base64_encode(openssl_encrypt( json_encode($data_cfg), 'AES-256-CBC', $key, 0, $iv )), '=');
     echo '
                     <button type="button" id="sendMail" class="navbar-btn">
                         <div id="mailIcon" class="navbar-btn-icon" data-mode="'.(isset($content) ? 'text' : $m).'" data-subj="'.$subject.'" title="Подготовить текст к рассылке"><i class="fas fa-envelope-open"></i></div>
@@ -1769,6 +1839,8 @@ echo '
   $nohl = ['club', 'main', 'mkpgm', 'news'];
   echo '
             <div class="main">';
+  include ('fifa/register.inc.php'); // регистрация в сборных ассоциаций
+
   // ссылка для отката к прогнозам
   if ($role == 'president' && $m == 'text' && $ref == 'it')
     echo '
@@ -1803,7 +1875,7 @@ echo '
   else if ($m == 'set' && $role == 'president') {
     echo '
                     <h4>Редактирование настроек сезона</h4>
-                    <form id="season_settings" method="POST">
+                    <form id="season_settings" action="" method="POST">
                         <ul>
                             <li><div>Название ФП-ассоциации: </div><input type="text" name="description" value="'.$description.'" /></li>
                             <li><div>html-заголовок ассоциации: </div><input type="text" name="title" value="'.$title.'" /></li>
@@ -1811,9 +1883,12 @@ echo '
                             <li><div>Название текущего сезона: </div><input id="cur_year" type="text" name="cur_year" value="'.$cur_year.'" /></li>
                             <li><div>Президент: </div><input id="president" type="text" name="president" value="'.$president.'" /></li>
                             <li><div>Вице-президент(ы): </div><input id="vice" type="text" name="vice" value="'.$vice.'" placeholder="нет; можно несколько имен через запятую" /></li>
-                            <li><div>Пресс-атташе: </div><input id="pressa" type="text" name="pressa" value="'.$pressa.'" placeholder="нет; можно несколько имен через запятую" /></li>
+                            <li><div>Пресс-атташе: </div><input id="pressa" type="text" name="pressa" value="'.$pressa.'" placeholder="нет; можно несколько имен через запятую" /></li>';
+    if ($a != 'world')
+        echo '
                             <li><div>Тренер(ы) сборной: </div><input id="coach" type="text" name="coach" value="'.$coach.'" placeholder="нет; можно несколько имен через запятую" /></li>
-                            <li><div>Разрешено редактировать составы: </div><input id="club_edit" type="checkbox" name="club_edit"'.($club_edit ? ' checked="checked"' : '').' /></li>
+                            <li><div>Разрешено редактировать составы: </div><input id="club_edit" type="checkbox" name="club_edit"'.($club_edit ? ' checked="checked"' : '').' /></li>';
+    echo '
                             <li><h5>Турниры: <div class="add_tournament" data-id="tournament-'.(count($config) - 1).'"><button class="fas fa-plus-circle" title="добавить турнир" /></button></div></h5>';
     if (isset($config[0]['format'])) foreach ($config as $n => $tournament) {
       $stages = count($config[0]['format']);
@@ -1848,19 +1923,24 @@ echo '
                     </form>';
   }
   else if (isset($content))
+  {
+    if (!mb_detect_encoding($content))
+      $content = mb_convert_encoding($content, 'UTF-8', 'KOI8-R');
+
     echo $content;
+  }
   else
     include ($a . '/' . $m . '.inc.php');
 
   echo '
-                </div>';
+                </div>
+                <div id="comments_wrapper" data-name="'.$coach_name.'" data-hash="'.crypt($coach_name, $salt).'">';
 
   if ($gb_status == 'on')
     include 'comments/main.php';
 
-  //include ('fifa/register.inc.php'); // регистрация в сборных ассоциаций
-
   echo '
+                </div>
             </div>
         </content>';
 ?>
@@ -1870,8 +1950,8 @@ echo '
     <footer class="footer">
         <p>
             <img src="/images/sfp-88x31.png" width="88" height="31" alt="SFP Button" title="SFP Button" />
-            <a href="http://www.livescore.in/" title="Livescore.in" target="_blank"><img src="https://advert.livescore.in/livescore_in_88x31a.gif" width="88" height="31" border="0" alt="LIVESCORE.in" /></a>
-            <a href="http://profi-prognoza.ru/" target="_blank"><img src="images/bannerprofi.gif" border="0" width="88" height="31" alt="Сайт cпортивного прогнозирования \"Профессионалы прогноза\"" /></a>
+            <a href="http://www.livescore.in/" title="Livescore.in" target="_blank"><img src="https://advert.livescore.in/livescore_in_88x31a.gif" width="88" height="31" border="0" alt="LIVESCORE.in"></a>
+            <a href="http://profi-prognoza.ru/" target="_blank"><img src="images/bannerprofi.gif" border="0" width="88" height="31" alt="Сайт cпортивного прогнозирования &laquo;Профессионалы прогноза&raquo;"></a>
             <a href="http://primegang.ru/" target="_blank"><img src="images/primegang.gif" border="0" width="88" height="31" alt="Клуб футбольных прогнозистов PrimeGang" /></a>
             <?=(false && $is_redis ? '<img src="https://redis.io/images/redis-small.png" border="0" alt="Redis" title="Powered by Redis" />':'')?>
         </p>

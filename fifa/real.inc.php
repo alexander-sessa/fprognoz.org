@@ -1,6 +1,6 @@
     <p class="title text15b">&nbsp;&nbsp;&nbsp;По этим адресам вы сможете найти море информации о реальном футболе:</p>
     <hr size="1" width="98%" />
-<p><a href="http://www.fifa.com" target="_blank">FIFA home page</a></p>
+<p><a href="http://www.fifa.com" target="_blank">FIFA home page - такой же ужасный и бесполезный, как и их рейтинг сборных</a></p>
 <p><a href="http://ru.uefa.com" target="_blank">Официальный сайт УЕФА</a></p>
 <p><a href="http://www.bff.by/" target="_blank">Официальный сайт Белорусской Федерации Футбола</a></p>
 <p><a href="http://www.football.by/" target="_blank">Белорусский футбольный портал</a></p>

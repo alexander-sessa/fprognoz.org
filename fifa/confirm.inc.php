@@ -3,7 +3,7 @@
 $placeholder = 'имя';
 $mininput = 2; // минимальное количество символов для поиска
 $data_cfg = ['cmd' => 'unique_check'];
-$cfg = base64_encode(mcrypt_encrypt( MCRYPT_BLOWFISH, $key, json_encode($data_cfg), MCRYPT_MODE_CBC, $iv ));
+$cfg = rtrim(base64_encode(openssl_encrypt( json_encode($data_cfg), 'AES-256-CBC', $key, 0, $iv )), '=');
 // =============================================================================
 $out = '';
 $cfm = array('?' => '', 'да' => '', 'нет' => '');

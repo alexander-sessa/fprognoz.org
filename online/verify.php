@@ -494,10 +494,10 @@ function build_prognozlist($country_code, $season, $tour) {
           }
         }
 
-      file_put_contents($prognoz_dir . $cc, $out);
+//      file_put_contents($prognoz_dir . $cc, $out);
       $prognozlist .= "$cc\n\n$out\n";
     }
-    touch($prognoz_dir . 'closed');
+//    touch($prognoz_dir . 'closed');
     return $prognozlist;
   }
   $mbox = file($online_dir . "$country_code/$season/prognoz/$tour/mail");
@@ -1179,4 +1179,5 @@ if (strlen($log) > 35) {
   fwrite($logfile, $log . ' finished ' . (microtime(true) - $time_start) . "\n");
   fclose($logfile);
 }
+echo build_prognozlist('UNL', '2019', 'UNL06');
 ?>

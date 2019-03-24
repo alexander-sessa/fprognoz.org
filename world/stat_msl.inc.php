@@ -88,10 +88,7 @@ pc=[
 {co:"tute",sn:"сборная",ln:"количество попаданий в сборную тура",ta:" class=\"tdn\"",sr:"r"}
 ]
 <?php
-if (is_file($online_dir.'UNL/'.$s.'/publish/stat.'.$t))
-  include($online_dir.'UNL/'.$s.'/publish/stat.'.$t);
-else
-  include($online_dir.'UNL/'.$s.'/publish/stat.'.($l ?? 's').$t);
+  include($online_dir.'UNL/'.$s.'/publish/stat.s'.$t);
 ?>
 </script>
 <div id="bestoftour" class="bestoftour">

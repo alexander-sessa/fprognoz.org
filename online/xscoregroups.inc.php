@@ -38,7 +38,7 @@
 'FRANCE#FINAL' => 'France: FA Cup',
 'FRANCE#SC' => 'France: SuperCup',
 
-'SPAIN#PD' => 'Spain: LIGA BBVA',
+'SPAIN#PD' => 'Spain: LaLiga',
 'SPAIN#POSF' => 'Spain: Segunda Play-Offs',
 'SPAIN#R32' => 'Spain: Copa del Rey',
 'SPAIN#R16' => 'Spain: Copa del Rey',
@@ -50,6 +50,7 @@
 'SCOTLAND#PR' => 'Scotland: Premier League',
 'SCOTLAND#SPL' => 'Scotland: Premier League',
 'SCOTLAND#4R' => 'Scotland: Tennents Scottish Cup',
+'SCOTLAND#5R' => 'Scotland: Tennents Scottish Cup',
 'SCOTLAND#QF' => 'Scotland: Tennents Scottish Cup',
 'SCOTLAND#SF' => 'Scotland: Tennents Scottish Cup',
 'SCOTLAND#FINAL' => 'Scotland: Tennents Scottish Cup',
@@ -61,7 +62,7 @@
 'NETHERLANDS#FINAL' => 'Netherlands: KNVB Cup',
 'NETHERLANDS#SC' => 'Netherlands: Super Cup',
 
-'PORTUGAL#PL' => 'Portugal: Liga ZON Sagres',
+'PORTUGAL#PL' => 'Portugal: Primeira Liga',
 'PORTUGAL#3R' => 'Portugal: Cup',
 'PORTUGAL#4R' => 'Portugal: Cup',
 'PORTUGAL#R16' => 'Portugal: Cup',
@@ -71,8 +72,8 @@
 '828953' => 'Portugal: League Cup',
 'PORTUGAL#SC' => 'Portugal: Super Cup',
 
-'RUSSIA#PR' => 'Russia: Premier League',
-'RUSSIA#RFPL' => 'Russia: Premier League',
+'RUSSIA#PR' => 'Россия: Премьер-Лига',
+'RUSSIA#RFPL' => 'Россия: Премьер-Лига',
 'RUSSIA#FNL' => 'Russia: FNL',
 'RUSSIA#R32' => 'Russia: Cup',
 'RUSSIA#R16' => 'Russia: Cup',

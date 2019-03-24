@@ -24,6 +24,15 @@ $suffix = array(
 '.GR',
 '.FIN',
 '.SC',
+'.FRI',
+'.ECQ',
+'.WCQ',
+'.CA',
+'.CCC',
+'.UNL',
+'.CNL',
+'.ACN',
+'.CLU',
 ''
 );
 

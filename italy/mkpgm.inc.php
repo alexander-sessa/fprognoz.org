@@ -121,7 +121,9 @@ function IntervalsTable() {
             }
             else if ($cc == 'UCL' || $cc == 'UEL')
               $tnmt = '';
-            else if ($cc == 'INT') {
+/*
+            else if ($cc == 'INT')
+            {
               if ($tnmt == 'Friendly')
                 $tnmt = 'FR';
               else {
@@ -134,15 +136,20 @@ function IntervalsTable() {
                 $tnmt = $to;
               }
             }
-            if ($date < $day1 && $date > '01-00') {
-              if (isset($day3p))
-                $matches[$day3p][$cc][$home.' - '.$away] = [trim($home),trim($away),$date,$kick,$tnmt];
-            }
-            else if ($date < $day3)
-              $matches[$day1][$cc][$home.' - '.$away] = [trim($home),trim($away),$date,$kick,$tnmt];
-            else
-              $matches[$day3][$cc][$home.' - '.$away] = [trim($home),trim($away),$date,$kick,$tnmt];
+*/
+            if ($date > date('m-d'))
+            {
+              if ($date < $day1 && $date > '01-00')
+              {
+                if (isset($day3p))
+                  $matches[$day3p][$cc][$home.' - '.$away] = [trim($home),trim($away),$date,$kick,$tnmt];
+              }
+              else if ($date < $day3)
+                $matches[$day1][$cc][$home.' - '.$away] = [trim($home),trim($away),$date,$kick,$tnmt];
+              else
+                $matches[$day3][$cc][$home.' - '.$away] = [trim($home),trim($away),$date,$kick,$tnmt];
 
+            }
           }
         }
 
@@ -525,8 +532,8 @@ if (isset($_POST['tour'])) {
       file_put_contents($season_dir . 'programs/' . $TourCode, $program);
       // make records for scheduler
       $month = trim(mb_substr($Srok, mb_strpos($Srok, '.') + 1, 2));
-      $year = date('Y', time());
-      if (date('m', time()) > $month)
+      $year = date('Y');
+      if (date('m') > $month)
         $year++;
 
       if (mb_strpos($Srok, ' '))
@@ -538,10 +545,10 @@ if (isset($_POST['tour'])) {
       Schedule($timestamp - 345600, $ccode, $TourCode, 'resend', $pfname);
       Schedule($timestamp + 36000, $ccode, $TourCode, 'remind', $pfname);
       Schedule($timestamp + 43200, $ccode, $TourCode, 'monitor', $progsched);
-      mkPrognozDir($timestamp, $ccode, $season, $TourCode);
+      mkPrognozDir($timestamp, $ccode, $cur_year, $TourCode);
       if ($ccode == 'UEFA')
         foreach (['CHAM', 'GOLD', 'CUPS'] as $l)
-          mkPrognozDir($timestamp, $ccode, $season, str_replace('UEFA', $l, $TourCode));
+          mkPrognozDir($timestamp, $ccode, $cur_year, str_replace('UEFA', $l, $TourCode));
 
     }
   }
@@ -567,7 +574,7 @@ foreach ($file as $line) {
 <div>
   <p>
     <a name="tour"><input type="text" id="tour" class="i-small" name="tour" value="" placeholder=" код тура">
-    контрольный срок: <input type="text" id="srok" class="i-small" name="srok" value="<?=isset($d) ? date('d.m', mktime(0, 0, 0, substr($d,0,2), substr($d,3), $year) - 86400) : ''?>">
+    контрольный срок: <input type="text" id="srok" class="i-small" name="srok" value="<?=isset($d) ? date('d.m', mktime(0, 0, 0, substr($d,0,2), substr($d,3), date('Y')) - 86400) : ''?>">
     <a href="online/draw.php?cc=<?=$cca?>" target="_BLANK"> &gt;&gt; Скрипт жеребьевки кубкового тура</a>
   </p>
   <textarea id="cal" class="ta-mkpgm" name="cal" placeholder="календарь (для 2х лиг - в 2 колонки, для 3х - в 3)

@@ -7,6 +7,6 @@ $cur_year = '2018-19';
 $president = 'Eugene (Joker) Plugin';
 $vice = 'Александр Сесса';
 $pressa = '';
-$coach = 'Eugene (Joker) Plugin';
+$coach = 'Semion Vasserman, Konstantin Nadelin';
 $club_edit = false;
 ?>

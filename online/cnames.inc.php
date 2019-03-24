@@ -1,6 +1,7 @@
 <?php $cnames = array(
+'Bosnia and Herzegovina' => 'Bosnia-Herzegovina',
+'USA' => 'United States',
 'Czechia' => 'Czech Republic',
-'United States' => 'USA',
 'Ireland' => 'Republic of Ireland',
 'Macedonia' => 'FYR Macedonia',
 'South Korea' => 'Korea Republic',
@@ -21,5 +22,6 @@
 "Cote d'Ivoire" => "Côte d'Ivoire",
 'Eastern Samoa' => 'American Samoa',
 );
+//'United States' => 'USA',
 //'Bosnia and Herzegovina' => 'Bosnia-Herzegovina',
 ?>

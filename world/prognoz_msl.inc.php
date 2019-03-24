@@ -1,4 +1,49 @@
 <?php
+define('MAIN_SIZE', '6');
+
+function team_ccode($team) {
+  return strtr($team, [
+    'Англия' => 'ENG',
+    'Беларусь' => 'BLR',
+    'Испания' => 'ESP',
+    'Франция' => 'FRA',
+    'Германия' => 'GER',
+    'Италия' => 'ITA',
+    'Голландия' => 'NLD',
+    'Португалия' => 'PRT',
+    'Россия' => 'RUS',
+    'Шотландия' => 'SCO',
+    'Швейцария' => 'SUI',
+    'Украина' => 'UKR',
+    'КСП Торпедо' => 'КСП Торпедо',
+    'Kings Forecasts' => 'Kings Forecasts',
+    'Onedivision' => 'Onedivision',
+    'PrimeGang' => 'PrimeGang',
+    'КЛФП Харьков' => 'КЛФП Харьков',
+  ]);
+}
+
+function ccode_team($ccode) {
+  return strtr($ccode, [
+    'ENG' => 'Англия',
+    'BLR' => 'Беларусь',
+    'ESP' => 'Испания',
+    'FRA' => 'Франция',
+    'GER' => 'Германия',
+    'ITA' => 'Италия',
+    'NLD' => 'Голландия',
+    'PRT' => 'Португалия',
+    'RUS' => 'Россия',
+    'SCO' => 'Шотландия',
+    'SUI' => 'Швейцария',
+    'UKR' => 'Украина',
+    'КСП Торпедо' => 'КСП Торпедо',
+    'Kings Forecasts' => 'Kings Forecasts',
+    'Onedivision' => 'Onedivision',
+    'PrimeGang' => 'PrimeGang',
+    'КЛФП Харьков' => 'КЛФП Харьков',
+  ]);
+}
 
 // добавление результатов тура
 function rewrite_cal($prognoz_dir, $line0, $score0, $score) {
@@ -35,7 +80,7 @@ function players_table($array, $side, $coach, $rprognoz, $half2) {
     if ($prog) {
       $players[$side][$p]['name'] = $name;
       $players[$side][$p]['goal'] = $players[$side][$p]['pass'] = 0;
-      if ($p < 6) {
+      if ($p < MAIN_SIZE) {
         if (trim($repl))
           $players[$side][$p]['repl'] = 4; // для подсчёта таймов
         else
@@ -62,22 +107,22 @@ function players_table($array, $side, $coach, $rprognoz, $half2) {
         }
         $point = $players[$side][$p]['maxpts'][$i] = 0;
         for ($j=0; $j<3; $j++) if (isset($prog[$i * 3 + $j])) {
-          if ($p < 6 ) {
+          if ($p < MAIN_SIZE ) {
             if (!$i && !$j) {
-              $prognozColored .= '<u>';
+              $prognozColored .= '<mark>';
               $main = true;
             }
             else if (($coach || $half2) && $repl && $i == 3 && !$j) {
-              $prognozColored .= '<u>';
+              $prognozColored .= '<mark>';
               $main = true;
             }
             else if (!$coach && !$half2 && $i == 3 && !$j) {
-              $prognozColored .= '<u>';
+              $prognozColored .= '<mark>';
               $main = true;
             }
           }
           else if (($coach || $half2) && $repl && $i == 3 && !$j) {
-            $prognozColored .= '<u>';
+            $prognozColored .= '<mark>';
             $main = true;
           }
           if ($rprognoz[$i] != '?' && $rprognoz[$i] != '-' && $rprognoz[$i] != '=' && $j == $index) {
@@ -89,8 +134,8 @@ function players_table($array, $side, $coach, $rprognoz, $half2) {
             $prognozColored .= $prog[$i * 3 + $j];
             $players[$side][$p]['maxpts'][$i] = max($players[$side][$p]['maxpts'][$i], $prog[$i * 3 + $j]);
           }
-          if (($i == 2 && $j == 2 && $p < 6) || ($i == 5 && $j == 2 && $main))
-            $prognozColored .= '</u>';
+          if (($i == 2 && $j == 2 && $p < MAIN_SIZE) || ($i == 5 && $j == 2 && $main))
+            $prognozColored .= '</mark>';
 
         }
         else $prognozColored .= ' ';
@@ -108,16 +153,17 @@ function players_table($array, $side, $coach, $rprognoz, $half2) {
         if ($i == 2) {
           if ($main) $main = false;
           if ($half2)
-            $prognozColored .= ' <input type="checkbox" disabled="disabled" '.($repl ? 'checked="checked"' : '').' />  ';
+            $prognozColored .= '&nbsp; <input type="checkbox" disabled="disabled" '.($repl ? 'checked="checked"' : '').' /> &nbsp; ';
           else if ($coach)
-            $prognozColored .= ' <input type="checkbox" name="'.strtr($name, ' ', '_').'" '.($repl ? 'checked="checked"' : '').' />  ';
+// здесь для товарищеских матчей надо не включать класс bench
+            $prognozColored .= '&nbsp; <input type="checkbox" '.($p >= MAIN_SIZE ? 'class="bench" ' : '').'name="'.rawurlencode($name).'" '.($repl ? 'checked="checked"' : '').' /> &nbsp; ';
           else
-            $prognozColored .= ' <input type="checkbox" disabled="disabled" '.($p < 6 ? 'checked="checked"' : '').' />  ';
+            $prognozColored .= '&nbsp; <input type="checkbox" disabled="disabled" '.($p < MAIN_SIZE ? 'checked="checked"' : '').' /> &nbsp; ';
         }
       }
-      if ($main) $prognozColored .= '</u>';
+      if ($main) $prognozColored .= '</mark>';
       $list .= $name . str_repeat(' ', 21 - mb_strlen($name)) . $prognozColored . sprintf('%5s', $points) . ' (' . $pointm . ")\n";
-      if ($p < 6) $worepl += $points;
+      if ($p < MAIN_SIZE) $worepl += $points;
     }
   }
   return [$allpoints, $list, $worepl];
@@ -243,21 +289,19 @@ function auto_comment($position, $newposition, $min, $home, $away) {
   if ($min % 3) {
     if (strpos($comment, 'озяев'))
       $comment = strtr($comment, [
-'Хозяева' => 'Игроки ' . $teams['home']['team'],
-'хозяева' => 'игроки ' . $teams['home']['team'],
-'хозяев' => $teams['home']['team'],
+'Хозяева' => 'Игроки сборной ' . $teams['home']['team'],
+'хозяева' => 'игроки сборной ' . $teams['home']['team'],
+'хозяев' => 'сборной ' . $teams['home']['team'],
       ]);
     else
       $comment = strtr($comment, [
-'Гости' => 'Игроки ' . $teams['away']['team'],
-'гости' => 'игроки ' . $teams['away']['team'],
-'гостей' => $teams['away']['team'],
+'Гости' => 'Игроки сборной ' . $teams['away']['team'],
+'гости' => 'игроки сборной ' . $teams['away']['team'],
+'гостей' => 'сборной ' . $teams['away']['team'],
       ]);
     $comment = strtr($comment, [
-'Сборная' => 'Сборной',
-'Жемчужина' => 'Жемчужины',
-'Мегаспорт' => 'Мегаспорта',
-'Эксперты' => 'Экспертов',
+'ия' => 'ии',
+'Украина' => 'Украины',
     ]);
   }
   return $comment;
@@ -269,9 +313,9 @@ function goal($side, $i) {
   global $replaces;
   $arr = array();
   foreach($players[$side] as $p => $pdata)
-    if (($i < 3 || !isset($replaces[4][$side])) && $p < 6) // 1 тайм или не было замен: играют первые 6
+    if (($i < 3 || !isset($replaces[4][$side])) && $p < MAIN_SIZE) // 1 тайм или не было замен: играют первые MAIN_SIZE
       $arr[12 - $p + 100 * ($pdata['psumm'][$i] - 5 * $pdata['goal'] - 2 * $pdata['pass']) + 10000 * $pdata['points'][$i]] = $p;
-    else if ($i > 2 && isset($replaces[4][$side]) && ((in_array($p, $replaces[4][$side]) && $p >= 6) || (!in_array($p, $replaces[4][$side]) && $p < 6))) // на поле во 2 тайме
+    else if ($i > 2 && isset($replaces[4][$side]) && ((in_array($p, $replaces[4][$side]) && $p >= MAIN_SIZE) || (!in_array($p, $replaces[4][$side]) && $p < MAIN_SIZE))) // на поле во 2 тайме
       $arr[12 - $p + 100 * ($pdata['psumm'][$i] - 5 * $pdata['goal'] - 2 * $pdata['pass']) + 10000 * $pdata['points'][$i]] = $p;
 
   krsort($arr, SORT_NUMERIC);
@@ -291,9 +335,9 @@ function ball($side, $i) {
   global $replaces;
   $arr = array();
   foreach($players[$side] as $p => $pdata)
-    if (($i < 3 || !isset($replaces[4][$side])) && $p < 6) // 1 тайм или не было замен: играют первые 6
+    if (($i < 3 || !isset($replaces[4][$side])) && $p < MAIN_SIZE) // 1 тайм или не было замен: играют первые MAIN_SIZE
       $arr[12 - $p + 100 * $pdata['psumm'][$i] + 10000 * $pdata['points'][$i]] = $p;
-    else if ($i > 2 && isset($replaces[4][$side]) && ((in_array($p, $replaces[4][$side]) && $p >= 6) || (!in_array($p, $replaces[4][$side]) && $p < 6))) // на поле во 2 тайме
+    else if ($i > 2 && isset($replaces[4][$side]) && ((in_array($p, $replaces[4][$side]) && $p >= MAIN_SIZE) || (!in_array($p, $replaces[4][$side]) && $p < MAIN_SIZE))) // на поле во 2 тайме
       $arr[12 - $p + 100 * $pdata['psumm'][$i] + 10000 * $pdata['points'][$i]] = $p;
 
   krsort($arr, SORT_NUMERIC);
@@ -304,12 +348,80 @@ function ball($side, $i) {
   return array($goaleador, $assistant); // на самом деле игроки с мячом
 }
 
+function li_ball($i) {
+  return ($i == '=') ? '' : '
+        <li id="ball-'.$i.'" class="stage">
+          <div class="sortable ball' . $i . '"><span class="shadow"></span><span class="digit' . $i . '"></span></div>
+        </li>';
+}
+
+// форма подачи прогноза с шарами
+function ball_form($nm, $prognoz_half, $prognoz_array, $match, $home, $away) {
+  global $bn;
+  $out = '';
+  $half = $nm < 4 ? 1 : 2;
+  if ($nm == 1) // начало 1 тайма
+    $out .= '
+  <div class="time">
+    <div class="header_b">Первый тайм</div>';
+
+  if ($nm == 4)
+  {
+    $out .= '
+    <div class="small">неиспользованные ставки первого тайма</div>
+    <ul id="time1-unused" class="sortable-list-1 container">
+';
+    for ($i = 1; $i <= 9; ++$i)
+      if (strpos($prognoz_half[0], (string)$i) === false)
+        $out .= li_ball($i);
+
+    $out .= '
+    </ul>
+    <div style="clear: both"></div>
+  </div>
+  <div class="time">
+    <div class="header_b"><br>Второй тайм</div>
+    <div class="small">неиспользованные ставки второго тайма</div>
+    <ul id="time2-unused" class="sortable-list-2 container">
+';
+    for ($i = 1; $i <= 9; ++$i)
+      if (strpos($prognoz_half[1], (string)$i) === false)
+        $out .= li_ball($i);
+
+    $out .= '
+    </ul>
+    <div style="clear: both"></div>
+';
+  }
+  list($date, $time) = explode(' ', $match[2]);
+  $out .= '
+    <div>
+      <div style="width:430px; text-align:center; font-weight:bold">'.$home.' - '.$away.'</div>
+      <ul id="bet-'.$bn++.'" class="sortable-list-' . $half . ' home">'.
+        li_ball($prognoz_array[$bn - 2]).'
+      </ul>
+      <div class="team small" style="text-align:right">'.strtr($match[7], [': ' => '<br>']).'</div>
+      <ul id="bet-'.$bn++.'" class="sortable-list-' . $half . ' home">'.
+        li_ball($prognoz_array[$bn - 2]).'
+      </ul>
+      <div class="team small">'.date_tz('Y-m-d<\b\r>H:i', $date, $time, $_COOKIE['TZ']).'</div>
+      <ul id="bet-'.$bn++.'" class="sortable-list-' . $half . ' home">'.
+        li_ball($prognoz_array[$bn - 2]).'
+      </ul>
+    </div>
+    <div style="clear: both"></div>
+';
+  if ($nm == 6) // конец 2 тайма
+    $out .= '
+  </div>';
+
+  return $out;
+}
+
 // main
 
-//if (isset($_GET['t'])) while(list($k,$v) = each($_GET)) $$k=$v;
-//if (substr(getcwd(), -6) == 'online') chdir('..');
-$season_dir = $online_dir.'IST/' . $s;
-$tour = 'IST' . $t;
+$season_dir = $online_dir . 'UNL/' . $s;
+$tour = 'UNL' . $t;
 $prognoz_dir = $season_dir. '/prognoz/' . $tour;
 $program_file = $season_dir . '/programs/' . $tour;
 $closed = is_file($prognoz_dir.'/closed');
@@ -320,26 +432,59 @@ if ($cut = strpos($_SERVER['QUERY_STRING'], '&n=')) $query_string = substr($quer
 if ($published) $query_string = strtr($query_string, ['prognoz' => 'result', '&renew=1' => '']);
 //$team_code = isset($_SESSION['Coach_name']) ? $_SESSION['Coach_name'] : '';
 $team_code = '';
-if (isset($_SESSION['Coach_name']))
-  foreach ($cmd_db['IST'] as $code => $team)
+// надо отправлять прогнозы с обоими кодами, по образу UEFA!!!
+if (isset($_SESSION['Coach_mail'])) { // код только для Лиги Сайтов
+  if (MAIN_SIZE == 5)
+    $team_code = $_SESSION['Coach_name'];
+  else
+    foreach ($cmd_db['UNL'] as $code => $team)
+      if ($team['eml'] == $_SESSION['Coach_mail'])
+        $team_code = $code;
+
+}
+if (!$team_code && isset($_SESSION['Coach_name'])) {
+  foreach ($cmd_db['UNL'] as $code => $team)
     if ($team['usr'] == $_SESSION['Coach_name'])
       $team_code = $code;
 
-if (!isset($renew)) $renew = false;
-if (isset($updates)) $renew = true;
-else $updates = NULL;
+  $team_code = $team_code ? $team_code : $_SESSION['Coach_name'];
+}
+if (!isset($renew))
+  $renew = false;
+
+if (isset($updates))
+  $renew = true;
+else
+  $updates = NULL;
+
 $half2 = $pr_saved = false;
 $prognozlist = $rprognoz = $protocol = $cc = $role = $log = '';
 
 if (is_file($program_file)) {
+
   if ($team_code) {
-    $codes = file($season_dir.'/codes.tsv');
-    foreach ($codes as $cline) {
-      $arr = explode('	', $cline);
-      if ($arr[0] == $team_code) {
-        $cc = $arr[1];
-        $role = $arr[4];
-        break;
+    if (MAIN_SIZE == 5)
+    {
+      $cc = trim(file_get_contents($data_dir . 'personal/'.$_SESSION['Coach_name'].'/team.'.date('Y')));
+      $codes = file($season_dir.'/'.$cc.'.csv');
+      foreach ($codes as $cline) {
+        $arr = explode(';', $cline);
+        if ($arr[0] == $team_code) {
+          $role = $arr[2];
+          break;
+        }
+      }
+    }
+    else
+    {
+      $codes = file($season_dir.'/codes.tsv');
+      foreach ($codes as $cline) {
+        $arr = explode('	', $cline);
+        if ($arr[0] == $team_code) {
+          $cc = $arr[1];
+          $role = $arr[4];
+          break;
+        }
       }
     }
     $history = []; // история событий (только для тренера)
@@ -348,14 +493,17 @@ if (is_file($program_file)) {
       $arr = explode('	', $cline);
       if ($arr[1] == $cc) $myteam[] = $arr[0];
     }
-    // отправка прогноза
-    if (isset($_POST['submitpredict']) && ($prognoz_post = trim($_POST['prognoz_str'])))
-      send_predict('IST', $s, strtr($team_code, ' ', '_'), $tour, $prognoz_post, '', $ip);
 
+    // отправка прогноза НЕ ОТПРАВЛЯТЬ ПОСЛЕ ДЕДЛАЙНА !!!!!
+
+    if (isset($_POST['submitpredict']) && ($prognoz_post = trim($_POST['prognoz_str'])))
+    {
+      $prognoz_post = rtrim($prognoz_post, '=');
+      send_predict('UNL', $s, $team_code, $tour, $prognoz_post, '', $ip);
+    }
     $predicts = file($prognoz_dir.'/mail');
     foreach ($predicts as $predict) {
       list($name, $predict, $timestamp) = explode(';', $predict);
-      //$name = strtr($name, '_', ' ');
       $all_predicts[$name] = $predict;
       if ($team_code == $name)
         $prognoz_post = $predict;
@@ -373,15 +521,15 @@ if (is_file($program_file)) {
         break;
       }
     }
-    // замены на второй тайм
+    // замены на второй тайм НЕ ПРИНИМАТЬ ПОСЛЕ НАЧАЛА 2 ТАЙМА !!!!!
     if (isset($_POST['replace'])) {
       $out = '';
       $log = 'состав второго тайма:<br />';
       $lines = file($prognoz_dir.'/'.$cc);
       foreach ($lines as $line) if (trim($line)) {
         list($name, $predict, $ts, $rest) = explode(';', trim($line));
-        $log .= (strlen($log) > 45 ? ', ' : ' ') . (isset($_POST[$name]) ? '<b>' : '') . $name . (isset($_POST[$name]) ? '</b>' : '');
-        $out .= $name.';'.$predict.';'.trim($ts).';'.(isset($_POST[strtr($name, ' ', '_')]) ? '4' : '').'
+        $log .= (strlen($log) > 45 ? ', ' : ' ') . (isset($_POST[strtr(rawurlencode($name), ['.' => '_'])]) ? '<mark>' : '') . $name . (isset($_POST[rawurlencode($name)]) ? '</mark>' : '');
+        $out .= $name.';'.$predict.';'.trim($ts).';'.(isset($_POST[strtr(rawurlencode($name), ['.' => '_'])]) ? '4' : '').'
 ';
       }
       $cc_pr = explode("\n", $out);
@@ -390,29 +538,47 @@ if (is_file($program_file)) {
       fwrite($hisfile, "$team_code;$log;" . time() . "\n");
       fclose($hisfile);
     }
-    // состав на первый тайм
-    if (!$closed && isset($_POST['playersorder'])) {
+    // состав на первый тайм НЕ ПРИНИМАТЬ ПОСЛЕ ДЕДЛАЙНА !!!!!
+    if (!$closed && isset($_POST['save_squad'])) {
       $out = '';
-      $log = 'состав первого тайма:<br />';
-      $lines = file($prognoz_dir.'/'.$cc);
-      foreach ($lines as $line) if (trim($line)) {
-        list($name, $predict, $ts, $rest) = explode(';', trim($line));
-        $all_predicts[$name] = $predict;
+      $log = 'состав первого тайма:<br>';
+      if (is_file($prognoz_dir.'/'.$cc)) {
+        $lines =  file($prognoz_dir.'/'.$cc);
+        foreach ($lines as $line) if (trim($line)) {
+          list($name, $predict, $ts, $rest) = explode(';', trim($line));
+          $all_predicts[$name] = $predict;
+        }
+      }
+      $playersorder = $predicts = [];
+      foreach ($_POST as $var => $val)
+      {
+        if ($var[1] == 'l')
+          $playersorder[] = $val;
+        else if ($var[1] == 'r')
+          $predicts[] = $val;
+
       }
       $added = [];
       $i = 0;
-      $playersorder = explode('&', str_replace('players[]=' , '', $_POST['playersorder']));
-      foreach ($playersorder as $pos) {
-        $name = $_POST['name-'.$pos];
-        $predict = strtr($_POST['playerId-'.$pos], ['‎' => '', ' ' => '']);
+      $bopen = true;
+      foreach ($playersorder as $pos => $name) {
+        $predict = strtr($predicts[$pos], ['‎' => '', ' ' => '']);
         if ($predict && (!isset($all_predicts[$name]) || $all_predicts[$name] != $predict))
           $added[$name] = $predict;
 
-        $log .= (strlen($log) > 45 ? ', ' : ' ') . ($i == 0 ? '<b>' : '') . $name . ($i++ == 5 ? '</b>' : '');
-        $out .= "$name;$predict;\n";
+        $out .= "$name;$predict;;\n";
+        $log .= (strlen($log) > 45 ? ', ' : ' ') . ($i == 0 ? '<mark>' : '') . $name;
+        if ($i++ == MAIN_SIZE - 1)
+        {
+          $log .= '</mark>'; //MAIN_SIZE-1
+          $bopen = false;
+        }
       }
+      if ($bopen)
+        $log .= '</mark>';
+
       if (count($added)) {
-        $log .= '<br /> и при этом внёс прогноз' . (count($added) > 1 ? 'ы' : '');
+        $log .= '<br> и при этом внёс прогноз' . (count($added) > 1 ? 'ы' : '');
         foreach ($added as $name => $predict) $log .= " $name:$predict";
       }
       $cc_pr = explode("\n", $out);
@@ -421,16 +587,20 @@ if (is_file($program_file)) {
       $hisfile = fopen($prognoz_dir.'/.'.$cc, 'a');
       fwrite($hisfile, "$team_code;$log;" . time() . "\n");
       fclose($hisfile);
+      echo '<i class="fas fa-check text-success"></i> Состав команды записан.<br>';
     }
   }
+
+// блок парсинга 
   list($program_matches, $lastdate, $lasttm, $program) = parse_program($program_file);
   // выборка матчей тура
   $match_title = '';
   $aprognoz = array();
-  $teams = array(); 
+  $teams = array();
+  $tour_cal = array();
+  $cal = '';
   if (is_file($prognoz_dir.'/cal')) {
     $tour_cal = file($prognoz_dir.'/cal');
-    $cal = '';
     $i = 1;
     foreach ($tour_cal as $cal_line) if ($cal_line = trim($cal_line)) {
       if (!strpos($cal_line, ';')) $cal_line .= ';;;';
@@ -445,10 +615,14 @@ if (is_file($program_file)) {
       $cal .= '">'.$line.'</a> '.$score.'<br />
 ';
       list($home, $away) = explode(' - ', $line);
-      if (!isset($n) && ($home == $cc || $away == $cc)) $n = $i;
+// Швейцария: заплата
+      if ($home == $away)
+        $away = 'Швейцария';
+
+      if (!isset($n) && (team_ccode($home) == $cc || team_ccode($away) == $cc)) $n = $i;
       if (isset($n) && $n == $i) {
-        $teams['home']['cc'] = $home;
-        $teams['away']['cc'] = $away;
+        $teams['home']['team'] = $home;
+        $teams['away']['team'] = $away;
         $match_title = '<b>' . $line;
         if (trim($link1)) $link = $link1;
         $line0 = $cal_line."\n";
@@ -467,27 +641,41 @@ if (is_file($program_file)) {
       $score0 = $score;
 */
       list($line0, $link, $group, $score0) = explode(';', trim($tour_cal[0]));
-      list($teams['home']['cc'], $teams['away']['cc']) = explode(' - ', $line0);
+      list($teams['home']['team'], $teams['away']['team']) = explode(' - ', $line0);
       $match_title = '<b>' . $line0;
+// Швейцария: заплата
+      if ($teams['home']['team'] == $teams['away']['team']) {
+        $teams['away']['team'] = 'Швейцария';
+        $match_title = str_replace(' - '.$teams['home']['team'], ' - Швейцария', $match_title);
+      }
     }
-    if ($teams['home']['cc'] == 'КСП "Торпедо" имени Эдуарда Стрельцова')
-      $teams['home']['team'] = 'КСП «Торпедо»';
-    else if ($teams['home']['cc'] == '"Эксперты IBUprog"')
-      $teams['home']['team'] = 'Эксперты IBUprog';
-    else
-      $teams['home']['team'] = $teams['home']['cc'];
-
-    if ($teams['away']['cc'] == 'КСП "Торпедо" имени Эдуарда Стрельцова')
-      $teams['away']['team'] = 'КСП «Торпедо»';
-    else if ($teams['away']['cc'] == '"Эксперты IBUprog"')
-      $teams['away']['team'] = 'Эксперты IBUprog';
-    else
-      $teams['away']['team'] = $teams['away']['cc'];
+    $teams['home']['cc'] = team_ccode($teams['home']['team']);
+    $teams['away']['cc'] = team_ccode($teams['away']['team']);
 
     $virtmatch = array();
     if ($closed) {
       $home_arr = is_file($prognoz_dir.'/'.$teams['home']['cc']) ? file($prognoz_dir.'/'.$teams['home']['cc']) : array();
-      $away_arr = is_file($prognoz_dir.'/'.$teams['away']['cc']) ? file($prognoz_dir.'/'.$teams['away']['cc']) : array();
+      if ($teams['away']['cc'] == 'Швейцария') {
+        // parse generators
+        $gen = file_get_contents($season_dir . '/gen');
+        $fr = strpos($gen, $tour);
+        $fr = strpos($gen, "\n", $fr) + 1;
+        if ($to = strpos($gen, 'UNL', $fr))
+          $gen = trim(substr($gen, $fr, $to - $fr));
+        else
+          $gen = trim(substr($gen, $fr));
+
+        $gen = str_replace('*', '', $gen);
+        $generator = array_slice(explode("\n", $gen), -5, 5);
+        $swiss = ['Haris Seferović', 'Xherdan Shaqiri', 'Valon Behrami', 'Johan Djourou', 'Stephan Lichtsteiner'];
+        $away_arr = [];
+        for ($i = 0; $i < 5; $i++)
+          $away_arr[] = $swiss[$i] . '*;' . $generator[$i] . ';;1';
+
+      }
+      else
+        $away_arr = is_file($prognoz_dir.'/'.$teams['away']['cc']) ? file($prognoz_dir.'/'.$teams['away']['cc']) : array();
+
       $home_players = $away_players = 0;
       $pairs = max(count($home_arr), count($away_arr));
       for ($i=0; $i<$pairs; $i++) {
@@ -513,12 +701,18 @@ if (is_file($program_file)) {
   include ('online/tournament.inc.php');
   list($last_day, $last_month) = explode('.', $lastdate);
   $dm = $last_day . '.' . $last_month;
+  $day_before = strtotime('-1 day '.$last_month.'/'.$last_day);
+  $last_day = date('d', $day_before);
+  $last_month = date('m', $day_before);
   $base = get_results_by_date($last_month, $last_day, $updates);
+/*
   if ($renew)
-    touch($online_dir.'schedule/task/renew.IST'.$t);
-
+    touch($online_dir.'schedule/task/renew.UNL'.$t);
+*/
   $mdp = array();
-  $program_table = '<table style="margin:auto">
+  $program_table = '';
+  if ($closed)
+    $program_table = '<table class="p-table">
 <tr><th>№</th><th align="left">матч для прогнозирования</th><th>турнир</th><th>дата время</th><th>счёт</th><th>исход</th>' .
 (!$published ? '<th>прогноз</th>' : '') .
 (!$published && $closed ? '
@@ -532,8 +726,8 @@ if (is_file($program_file)) {
 возможный исход<br />
 и нажмите кнопку<br />
 <form action="" name="tform" method="get">
-<input type="hidden" name="a" value="sfp-20" />
-<input type="hidden" name="m" value="prognoz" />
+<input type="hidden" name="a" value="world" />
+<input type="hidden" name="m" value="prognoz'.(MAIN_SIZE == 5 ? '_unl' : '_msl').'" />
 <input type="hidden" name="s" value="'.$s.'" />
 <input type="hidden" name="t" value="'.$t.'" />
 <input type="hidden" id="prognoz_str" name="prognoz_str" value="" />
@@ -543,8 +737,16 @@ if (is_file($program_file)) {
 </td>
 ' : '') . '</tr>
 ';
+
   $id_arr = $id_json = '';
   $today_matches = $today_bz = $finished = 0;
+  $bn = 1; // номер ставки - места для шара
+  $prognoz_half = str_split($prognoz_post, 9);
+  $prognoz_array = str_split($prognoz_post);
+  $js_bets = '';
+  foreach ($prognoz_array as $bet)
+    $js_bets .= ($js_bets ? ',' : '') . ($bet == '=' ? '0' : $bet);
+
   foreach ($program_matches as $line)
     if ($line = trim($line)) { // rows
       if (strpos($line, ' - ')) {
@@ -554,7 +756,7 @@ if (is_file($program_file)) {
         list($match, $tournament) = explode('  ', $match, 2);
         $tournament = trim($tournament);
         list($home, $away) = explode(' - ', trim($match));
-        $match = $realteam[$home].' - '.$realteam[$away].'/'.$tourname[$tournament];;
+        $match = $realteam[$home].' - '.$realteam[$away].'/'.$tourname[$tournament];
         if (!$tournament || !isset($base[$match]))
           $match = $realteam[$home].' - '.$realteam[$away];
 
@@ -610,11 +812,16 @@ if (is_file($program_file)) {
         }
         else $tr_id = '';
         $mdp[$nm] = array('home' => $home, 'away' => $away, 'date' => $dm, 'rslt' => $mt, 'case' => $rt);
-        if ($nm == 4) // для судоку важно показать разделение таймов
-          $program_table .= '<tr><td colspan="'.($published ? 6 : 7).'"></td></tr>';
 
-        $program_table .= '<tr' . $tr_id . '><td align="right">'.$nm.'</td><td style="text-align:left;width:288px' . ($tr_id != '' ? ';cursor:pointer" onClick="details($(this).closest(\'tr\'))' : '') . '">'.$home.' - '.$away.'</td><td align="left">'.$tournament.'</td><td align="right">&nbsp;'.$dm.' '.$tn.'&nbsp;</td><td align="center">&nbsp;'.$mt.'&nbsp;</td><td align="middle">&nbsp;'.$rt.'&nbsp;</td>';
+        if (!$closed)
+          $program_table .= ball_form($nm, $prognoz_half, $prognoz_array, $base[$match], $home, $away);
+        else
+        {
+          if ($nm == 4) // для судоку важно показать разделение таймов
+            $program_table .= '<tr><td colspan="'.($published ? 6 : 7).'"></td></tr>';
 
+          $program_table .= '<tr' . $tr_id . '><td class="tdn">'.$nm.'</td><td style="text-align:left;width:288px' . ($tr_id != '' ? ';cursor:pointer" onClick="details($(this).closest(\'tr\'))' : '') . '">'.$home.' - '.$away.'</td><td align="left">'.$tournament.'</td><td align="right">&nbsp;'.date_tz('d.m H:i', $match_date, $tn, $_COOKIE['TZ']).'&nbsp;</td><td align="center">&nbsp;'.$mt.'&nbsp;</td><td align="middle">&nbsp;'.$rt.'&nbsp;</td>';
+        }
         if ($rt == '1' || $rt == 'X' || $rt == '2') {
             $onchange = 'disabled="disabled" ';
             $dis = 'dis';
@@ -631,26 +838,29 @@ if (is_file($program_file)) {
         }
         if (!$closed) {
             if (!isset($prognoz_post)) $prognoz_post = '==================';
+/*
             $program_table .= '
     <td> 1
-      <select class="dice" name="'.'dice'.($nm*3-2).'" id="'.'dice'.($nm*3-2).'"><option>=</option>';
+      <select class="dice" name="'.'dice'.($nm*3-2).'" id="'.'dice'.($nm*3-2).'"><option value="=">=</option>';
             for ($option=1; $option<10; $option++)
-              $program_table .= '<option' . ($option == $prognoz_post[$nm*3-3] ? ' selected="selected"' : '') . '>'.$option.'</option>';
+              $program_table .= '<option value="' . $option . '"' . ($option == $prognoz_post[$nm*3-3] ? ' selected="selected"' : '') . '>'.$option.'</option>';
 
             $program_table .= '</select> X
-      <select class="dice" name="'.'dice'.($nm*3-1).'" id="'.'dice'.($nm*3-1).'"><option>=</option>';
+      <select class="dice" name="'.'dice'.($nm*3-1).'" id="'.'dice'.($nm*3-1).'"><option value="=">=</option>';
             for ($option=1; $option<10; $option++)
-              $program_table .= '<option' . ($option == $prognoz_post[$nm*3-2] ? ' selected="selected"' : '') . '>'.$option.'</option>';
+              $program_table .= '<option value="' . $option . '"' . ($option == $prognoz_post[$nm*3-2] ? ' selected="selected"' : '') . '>'.$option.'</option>';
 
             $program_table .= '</select> 2
-      <select class="dice" name="'.'dice'.($nm * 3).'" id="'.'dice'.($nm * 3).'"><option>=</option>';
+      <select class="dice" name="'.'dice'.($nm * 3).'" id="'.'dice'.($nm * 3).'"><option value="=">=</option>';
             for ($option=1; $option<10; $option++)
-              $program_table .= '<option' . ($option == $prognoz_post[$nm*3-1] ? ' selected="selected"' : '') . '>'.$option.'</option>';
+              $program_table .= '<option value="' . $option . '"' . ($option == $prognoz_post[$nm*3-1] ? ' selected="selected"' : '') . '>'.$option.'</option>';
 
             $program_table .= '</select>
     </td>
 ';
+*/
         }
+
         else if ($closed && !$published)
           $program_table .= '
     <td>
@@ -661,13 +871,16 @@ if (is_file($program_file)) {
     </td>
 ';
 
-        $program_table .= '</tr>
+        if ($closed)
+          $program_table .= '</tr>
 ';
+
         if (strlen($rt) > 1) $rt = '?';
         $rprognoz .= $rt;
     }
   }
-  $program_table .= '</table>
+  if ($closed)
+    $program_table .= '</table>
 ';
 
   // use simulated results if any
@@ -738,9 +951,9 @@ if (is_file($program_file)) {
 
       if ($i == 2) {
         if ($homecoach && !$half2)
-          $homeline .= '   <input type="hidden" name="replace" value="replace" /><button type="submit" id="replace" style="padding:0" title="установите 6 галочек тем, кто будет
+          $homeline .= '   <input type="hidden" name="replace" value="replace" /><button type="submit" id="replace" style="padding:0px 0px; width:26px; height:24px; font-size:80%" title="установите '.MAIN_SIZE.' галочек тем, кто будет
 играть во 2 тайме, и нажмите кнопку.
-Максимальное количество замен = 3." disabled="disabled"> <i class="fas fa-refresh"></i> </button>';
+Максимальное количество замен = 3." disabled="disabled"> <i class="fas fa-sync"></i> </button>';
         else
           $homeline .= '      ';
       }
@@ -774,9 +987,9 @@ if (is_file($program_file)) {
 
       if ($i == 2)
         if ($awaycoach && !$half2)
-          $awayline .= '   <input type="hidden" name="replace" value="replace" /><button type="submit" id="replace" style="padding:0" title="установите 6 галочек тем, кто будет
+          $awayline .= '   <input type="hidden" name="replace" value="replace" /><button type="submit" id="replace" style="padding:0px 0px; width:26px; height:24px; font-size:80%" title="установите '.MAIN_SIZE.' галочек тем, кто будет
 играть во 2 тайме, и нажмите кнопку.
-Максимальное количество замен = 3." disabled="disabled"> <i class="fas fa-refresh"></i> </button>';
+Максимальное количество замен = 3." disabled="disabled"> <i class="fas fa-sync"></i> </button>';
         else
           $awayline .= '      ';
     }
@@ -847,7 +1060,7 @@ auto_comment($position, $newposition, $min_diff, ball('home', $i), ball('away', 
           $out = '';
           $in = '';
           foreach ($replaces[4]['home'] as $p) {
-            if ($p < 6) $out .= ', ' . $players['home'][$p]['name'];
+            if ($p < MAIN_SIZE) $out .= ', ' . $players['home'][$p]['name'];
             else $in .= ', ' . $players['home'][$p]['name'];
           }
           $protocol .= 'ы обеих команд внесли изменения в составы:<br />- у хозяев вместо<b>' . ltrim($out, ',') . '</b> на поле ';
@@ -856,7 +1069,7 @@ auto_comment($position, $newposition, $min_diff, ball('home', $i), ball('away', 
           $out = '';
           $in = '';
           foreach ($replaces[4]['away'] as $p) {
-            if ($p < 6) $out .= ', ' . $players['away'][$p]['name'];
+            if ($p < MAIN_SIZE) $out .= ', ' . $players['away'][$p]['name'];
             else $in .= ', ' . $players['away'][$p]['name'];
           }
           $protocol .= '- у гостей вместо<b>' . ltrim($out, ',') . '</b> на поле ';
@@ -867,7 +1080,7 @@ auto_comment($position, $newposition, $min_diff, ball('home', $i), ball('away', 
           $out = '';
           $in = '';
           foreach ($replaces[4]['home'] as $p) {
-            if ($p < 6) $out .= ', ' . $players['home'][$p]['name'];
+            if ($p < MAIN_SIZE) $out .= ', ' . $players['home'][$p]['name'];
             else $in .= ', ' . $players['home'][$p]['name'];
           }
           $protocol .= ' хозяев внёс изменение в состав: вместо<b>' . ltrim($out, ',') . '</b> на поле ';
@@ -878,7 +1091,7 @@ auto_comment($position, $newposition, $min_diff, ball('home', $i), ball('away', 
           $out = '';
           $in = '';
           foreach ($replaces[4]['away'] as $p) {
-            if ($p < 6) $out .= ', ' . $players['away'][$p]['name'];
+            if ($p < MAIN_SIZE) $out .= ', ' . $players['away'][$p]['name'];
             else $in .= ', ' . $players['away'][$p]['name'];
           }
           $protocol .= ' гостей внёс изменение в состав: вместо<b>' . ltrim($out, ',') . '</b> на поле ';
@@ -900,6 +1113,20 @@ auto_comment($position, $newposition, $min_diff, ball('home', $i), ball('away', 
         $c['summ'][] = $pl['psumm'][5];
       }
       array_multisort($c['summ'], SORT_NUMERIC, SORT_DESC, $c['goal'], SORT_NUMERIC, SORT_DESC, $c['pass'], SORT_NUMERIC, SORT_DESC, $c['pnum'], SORT_NUMERIC, SORT_ASC, $c['name'], $c['team']);
+/*
+      if ($teams['home']['cc'] == $teams['home']['cc']) {
+        $teams['home']['goal'] = $teams['away']['goal'] = 1;
+        $players['home'][$c['pnum'][0]]['goal']++;
+        $players['home'][$c['pnum'][2]]['pass']++;
+        unset($players['away']);
+        $protocol .= '<br />
+В добавленные минуты хозяева пошли в атаку, заработали пенальти и проявили чудеса, не пробив, а разыграв его.<br />
+Гол забил <b>'.$c['name'][0].'</b>, исполнитель голевого паса с 11-метровой отметки - <b>'.$c['name'][2].'</b><br />
+Пока игроки, судьи и зрители находились в шоке от увиденного, мяч каким-то образом попал в сетку хозяев.<br />
+Кто и как забил ответный гол, неизвестно - спишем на сильный порыв ветра.<br />
+';
+      }
+*/
       $protocol .= '
 <br />
 <b>Финальный свисток - матч завершился со счётом ' . $teams['home']['goal'] . '-' . $teams['away']['goal'] . '.</b><br />
@@ -912,10 +1139,10 @@ auto_comment($position, $newposition, $min_diff, ball('home', $i), ball('away', 
 ';
     eval('$sites = '.file_get_contents($season_dir.'/sites.inc'));
     $prognozlist .= '
-' . $homelist . $sites[$teams['home']['cc']] . '
+' . $homelist . $sites[$teams['home']['team']] . '
 <b>' . $homeline . '</b>
 <b>' . $awayline . '</b>
-' . $sites[$teams['away']['cc']] . '<br />' . $awaylist;
+' . $sites[$teams['away']['team']] . '<br />' . $awaylist;
 
 $match_title .= '  '.$teams['home']['goal'].':'.$teams['away']['goal'].' ('.$teams['home']['total'].'-'.$teams['away']['total'].')</b>';
     if ($lastplayed && $rprognoz[0] != '?') $match_title .= '
@@ -935,18 +1162,20 @@ $match_title .= '  '.$teams['home']['goal'].':'.$teams['away']['goal'].' ('.$tea
       break;
 
   }
+/*
   $head = $config[0]['турнир'] . ' ' . $s . '. ' .
     $etap['название'] . '. ' .
     (isset($etap['префикс']) ? $etap['префикс'] : '') .
     ((isset($config[0]['нумерация']) && $config[0]['нумерация'] == 'поэтапная') ? $t - $pre_etaps_tours : $t) .
     (isset($etap['постфикс']) ? $etap['постфикс'] : '');
-  if ($team_code && !$closed) $head .= '<br />
-<br />
-Код тура: <b>IST'.$t.'</b>, игрок: <b>'.$team_code.'</b><br />
+*/
+  $head = 'Лига ' . (MAIN_SIZE == 5 ? 'Наций' : 'Сайтов') . ' 2019. '.($t < 90 ? 'Тур '.ltrim($t, '0') : 'Пробный тур '.($t - 96)).'<br>';
+  if ($team_code && !$closed) $head .= '
+код тура: <b>UNL'.$t.'</b>, игрок: <b>'.$team_code.'</b><br>
 <form action="" name="tform" enctype="multipart/form-data" method="post" class="text15" onsubmit="return show_alert(this);">
-прогноз на тур: <input type="text" id="prognoz_str" name="prognoz_str" value="'.(isset($prognoz_post) ? $prognoz_post : '').'" size="50" />
-<input type="hidden" name="team_code" value="'.$team_code.'" />
-<input type="submit" name="submitpredict" value=" отправить прогноз " />
+<span class="small">прогноз: <input type="text" id="prognoz_str" name="prognoz_str" value="'.(isset($prognoz_post) ? $prognoz_post : '').'" size="17">
+<input type="hidden" name="team_code" value="'.$team_code.'">
+<input type="submit" name="submitpredict" value=" отправить "></span>
 </form>
 ';
 
@@ -966,7 +1195,9 @@ $coach_form = false;
 <span style="background-color: pink; font-weight: bold;">18 и более</span> баллов - 4 позиционных изменения.<br />
 Для того, чтобы забить гол из положения "атака" достаточно 1-го позиционного изменения, из положения "защита - необходимо<br />
 3 изменения. 3 или 4 позиционных изменения могут привести к 2-м забитым голам на одном МдП, если команда находилась в<br />
-атаке или в центре/атаке соответственно.';
+атаке или в центре/атаке соответственно.<br />
+<hr>
+* - использован прогноз-генератор.';
  if ($role == 'coach') {
   if (is_file($prognoz_dir.'/.'.$cc)) {
     $his = file($prognoz_dir.'/.'.$cc);
@@ -978,27 +1209,31 @@ $coach_form = false;
   $hint .= '<a href="" onClick="$(\'#chronology\').toggle(); return false;">показать/скрыть историю поступления прогнозов и управления составом</a>';
   $hint .= '<p id="chronology" class="hidden" style="text-align: left;">';
   foreach ($history as $timestamp => $events) foreach ($events as $event)
-    $hint .= date('Y-m-d H:i:s ', $timestamp) . $event['name'] . ($event['event'] == 'predict' ? ' прислал прогноз ' : ' внес изменения в ') . $event['what'] . "<br />\n";
+    $hint .= date_tz('Y-m-d H:i:s ', '', $timestamp, $_COOKIE['TZ']) . $event['name'] . ($event['event'] == 'predict' ? ' прислал прогноз ' : ' внес изменения в ') . $event['what'] . "<br />\n";
 
   $hint .= '</p>
 ';
  }
   }
   else {
-    $hint = '<p class="red">Срок отправки прогнозов '.$lastdate.' '.$lasttm.' по времени сервера<br /></p>';
+    $hint = '<p class="red">Срок отправки прогнозов '.date_tz('d.m H:i', substr($lastdate, 3, 2).'-'.substr($lastdate, 0, 2), $lasttm, $_COOKIE['TZ']).'<br></p>';
     $rules = '
 <br />
-В каждом тайме 3 реальных матча, каждый матч имеет 3 возможных исхода - получаем всего 9 возможных исходов в тайме.<br />
-На все возможные исходы надо расставить цифры от 1 до 9 так, чтобы каждая цифра использовалась в тайме ровно один раз,<br />
-и так, чтобы постараться на угаданных событиях набрать максимальную сумму.<br />
-<br />
+В каждом тайме 3 реальных матча, каждый матч имеет 3 возможных исхода - получаем всего 9 возможных исходов в тайме:
+победа хозяев (слева), ничья (в центре), победа гостей (справа).<br>
+На все возможные исходы надо расставить цифры от 1 до 9 так, чтобы каждая цифра использовалась в тайме ровно один раз,
+и при этом постараться на угаданных событиях набрать максимальную сумму.<br>
+После расстановки всех 18-ти ставок в верхней части экрана сформируется ваш прогноз - теперь нажмите кнопку "отправить".<br>
+Если на вашем устройстве не получается двигать шары, пожалуйста, заполните строку "прогноз:" сами - порядок указания ставок:<br>
+победа хозяев, ничья, победа гостей в 1-м матче, победа хозяев, ничья, победа гостей во 2-м матче и т.д.
+<br>
 ';
     $match_title = '';
  if ($role == 'coach') {
   if (is_file($prognoz_dir.'/.'.$cc)) {
     $his = file($prognoz_dir.'/.'.$cc);
     foreach ($his as $his_line) {
-      list($name, $what, $timestamp) = explode(';', $his_line);
+      list($name, $what, $timestamp) = explode(';', trim($his_line));
       $history[$timestamp][] = ['event' => 'coach', 'name' => $name, 'what' => $what];
     }
   }
@@ -1016,10 +1251,9 @@ $coach_form = false;
   $cc_predicts = [];
   $new = false;
 
-  if (isset($cc_pr)) {
+  if (isset($cc_pr)) { // уже есть файл с прогнозами
     foreach ($cc_pr as $pr_line) if (trim($pr_line)) {
       list($name, $predict) = explode(';', $pr_line);
-      //$name = strtr($name, '_', ' ');
       if (isset($all_predicts[$name]) && trim($all_predicts[$name]) && $all_predicts[$name] != $predict) {
         $new = true; // получен обновлённый прогноз
         $cc_predicts[$name] = $all_predicts[$name];
@@ -1032,7 +1266,6 @@ $coach_form = false;
     $cc_pr = file($prognoz_dir.'/'.$cc);
     foreach ($cc_pr as $pr_line) if (trim($pr_line)) {
       list($name, $predict) = explode(';', $pr_line);
-      //$name = strtr($name, '_', ' ');
       if (isset($all_predicts[$name]) && trim($all_predicts[$name]) && $all_predicts[$name] != $predict) {
         $new = true; // получен обновлённый прогноз
         $cc_predicts[$name] = $all_predicts[$name];
@@ -1041,265 +1274,104 @@ $coach_form = false;
         $cc_predicts[$name] = $predict;
     }
   }
-  else {
+//  else {
     $cc_pr = file($season_dir.'/'.$cc.'.csv');
     foreach ($cc_pr as $pr_line) if (trim($pr_line)) {
       list($name, $email) = explode(';', $pr_line);
-      //$name = strtr($name, '_', ' ');
-      if (isset($all_predicts[$name])) {
-        $new = true; // получен обновлённый прогноз
-        $cc_predicts[$name] = $all_predicts[$name];
-      }
-      else
-        $cc_predicts[$name] = '';
+      if (!isset($cc_predicts[$name]))
+        if (isset($all_predicts[$name])) {
+          $new = true; // получен обновлённый прогноз
+          $cc_predicts[$name] = $all_predicts[$name];
+        }
+        else
+          $cc_predicts[$name] = '';
 
     }
-  }
+//  }
   if ($new) { // перенос новых прогнозов в прогнозы команды
     $out = '';
     foreach ($cc_predicts as $name => $predict)
-      $out .= $name.';'.$predict.';
+      $out .= $name.';'.$predict.';;
 ';
     if (!$pr_saved)
       file_put_contents($prognoz_dir.'/'.$cc, $out);
 
   }
-  $minheight = count($cc_predicts) * 22 + 10;
   $prognozlist = '
-<style type="text/css">* html { overflow-x: hidden; }</style>
-<script type="text/javascript" src="js/iutil.js"></script>
-<script type="text/javascript" src="js/jquery.mobile.vmouse.min.js"></script>
-<script type="text/javascript" src="js/idrag.vmouse.js"></script>
-<script type="text/javascript" src="js/idrop.js"></script>
-<script type="text/javascript" src="js/isortables.1.2.2.js"></script>
+<link rel="stylesheet" href="css/m.css?ver=5.3" type="text/css">
+<h6>Управление составом на первый тайм</h6>
+<p>Сформируйте состав, перемещая планки с именами в левой колонке.<br>
+Первые '.MAIN_SIZE.' игроков с прогнозом начнут матч в основном составе.<br>
+В правой колонке можно ввести прогнозы других участников команды.<br>
+Пробелы в прогнозе не учитываются и используются для наглядности.<br>
+Строка прогноза с ошибкой, подсвечивается светло-красным.<br>
+<form id="teamedit" method="post" action="">
 <style>
-.dropzone {
-	border: 1px solid #bbb;
-	float: left;
-	margin-right: 1px;
-	padding: 5px 5px 5px 5px;
-	//background-color: #f0f8ff;
-	background-color: #fff;
-	touch-action: none;
-}
-.dropzone ul {
-	float: left;
-	list-style-type: none;
-	width: 180px;
-	margin: 0;
-	min-height: '.$minheight.'px;
-	padding: 0;
-	display: block;
-}
-.progzone {
-	border: 1px solid #bbb;
-	float: left;
-	margin-right: 100px;
-	padding: 5px;
-	//background-color: #f0f8ff;
-	background-color: #fff;
-}
-.progzone ul {
-	float: left;
-	list-style-type: none;
-	width: 180px;
-	margin: 0;
-	min-height: '.$minheight.'px;
-	padding: 0;
-	display: block;
-}
-.hline {
-	width: 178px;
-	padding: 0;
-	margin: 1px 0;
-	display: block;
-	border: 1px solid #ccc;
-	background-color: #fbfbfb;
-	position: relative;
-	text-align: left;
-	line-height: 5px;
-}
-.module {
-	font-family: sans-serif;
-	font-size: 15px;
-	width: 178px;
-	height: 20px;
-	padding: 0;
-	margin: 1px 0;
-	cursor: move;
-	display: block;
-	border: 1px solid #ccc;
-	background-color: #fbfbfb;
-	position: relative;
-	text-align: left;
-	line-height: 20px;
-}
-.modul2 {
-	font-family: sans-serif;
-	width: 178px;
-	padding: 0;
-	margin: 2px 0;
+#sort_players li {
+	width: 192px;
+	height: 1.5rem;
+	padding: 3px;
+	margin: 2px;
 	display: block;
 	position: relative;
-	text-align: left;
-	line-height: 15px;
 }
-.player {
-	width: 175px;
-	margin: 0;
-	display: inline;
-	position: absolute;
-	left: 0px;
-	overflow: hidden;
-	text-align: left;
-	padding: 0 1px;
-}
-.prognoz2 {
+.input_module {
+	width: 200px;
+	height: 1.5rem;
+	padding: 3px;
+	margin: 0 0 2px 0;
 	display: block;
-	width: 175px;
-	height: 18px;
-	padding: 0 0 3px 0;
 	position: relative;
+	line-height: 1rem;
 }
-.prognoz2 input {
-	width: 172px;
-	height: 17px;
-	font-size: 15px;
-	margin: 0;
-	display: inline;
-	position: absolute;
-	left: 0px;
-	overflow: hidden;
-	background-color: #fbfbfb;
-	text-align: left;
-	padding: 0 1px;
-}
-.prognoz {
-	margin-left:192px
-}
-.prognoz input {
-	width: 172px;
-	height: 15px;
-	font-size: 15px;
-	display: inline;
-	overflow: hidden;
-	background-color: #fbfbfb;
-	text-align: left;
-	padding-left:1px;
-}
-#teamedit p.submit {
-	padding-right: 10px;
-	clear: left;
-}
-.placemat {
-	cursor: default;
-	margin: 0;
-	padding: 0;
-	position: relative;
-}
-.placemat span {
-	background-color: #ffe;
-	border: 1px solid #ccc;
-	padding: 0 10px 10px;
-	position: absolute;
-	text-align: justify;
-	font-family: sans-serif;
-	font-size: 15px;
-}
-* html #zones, * html .dropzone {
-	height: 1%;
+.input_module input {
+	width: 196px;
+	height: 1.4rem;
+	padding: 3px;
 }
 </style>
-<div id="zones" style="">
-<form id="teamedit" method="post" action="" onsubmit="serializeAll();">
-  <input type="hidden" id="playersorder" name="playersorder" value="" />
-<p>Сформируйте состав команды, перемещая планки с именами игроков в левой<br />
-колонке. Первые шесть игроков с прогнозом начнут матч в основном составе.<br />
-В правой колонке можно ввести прогнозы других участников команды.<br />
-Пробелы в прогнозе не учитываются и используются только для наглядности.<br />
-Если введён прогноз с ошибкой, его строка подсвечивается светло-красным.<br />
-<br />
-<input id="saveroster" type="submit" value="сохранить состав и прогнозы команды"></p>
+<form id="squad" action="" name="squad" method="POST">
+<div style="display:flex">
   <div class="dropzone">
-    <ul id="players">
-';
+    <ul id="sort_players">';
   $i = 1;
   foreach ($cc_predicts as $name => $predict)
     $prognozlist .= '
-<li class="module" id="playerId-'.$i.'"><span class="handle"><div class="player">'.$name.'<input type="hidden" name="name-'.$i.'" value="'.$name.'" /></div></span><div class="prognoz"><input type="text" name="playerId-'.($i++).'" value="'.preg_replace('/(\d{1,3})(?=((\d{3})*([^\d]|$)))/i', "$1 ", $predict).'" /><br /></div></li>';
+      <li class="sortable_module">'.$name.'<input type="hidden" name="player-'.($i++).'" value="'.$name.'"></li>';
 
   $prognozlist .= '
     </ul>
   </div>
   <div class="progzone">
-    <ul id="predicts">
-';
+    <ul id="predicts">';
   $i = 1;
   foreach ($cc_predicts as $name => $predict)
     $prognozlist .= '
-<li class="modul2" id="prognozId-'.$i.'"><div class="prognoz2"><input type="text" name="playerId-'.($i++).'" value="'.preg_replace('/(\d{1,3})(?=((\d{3})*([^\d]|$)))/i', "$1 ", $predict).'" /><br /></div></li>';
+      <li class="input_module"><input type="text" name="predict-'.($i++).'" value="'.trim(preg_replace('/(\d{1,3})(?=((\d{3})*([^\d]|$)))/i', "$1 ", $predict)).'"></li>';
+
   $prognozlist .= '
     </ul>
+    <input type="submit" class="btn btn-primary" id="save_squad" name="save_squad" value="сохранить">
   </div>
-</form>
 </div>
+</form>
 <script>
-//<![CDATA[
-var numbers = ["1","2","3","4","5","6","7","8","9","10","11","12"];
-function initPlayers() {
-	for (i=1; i<='.count($cc_predicts).'; i++) {o="#playerId-"+i; $(o).css("position","relative")}
-	//$(numbers).each(function(o) {o="#playerId-"+o; $(o).css("position","relative");} );
-}
-function resetDroppableHeights() {
-	max = 6;
-	c = $("#players li").length;
-	if ( c > max ) max = c;
-	var maxheight = 20 * max + 5;
-	height = 0 == $("#players li").length ? maxheight - $("#playersplacemat").height() : maxheight;
-	$("#players").height(height);
-	$("#predicts").height(height);
-}
-function dragChange(o) {
-	screenWidth = self.innerWidth;
-	screenHeight = self.innerHeight;
-	elWidth = parseInt( $(o).css("width") );
-	elHeight = parseInt( $(o).css("height") );
-	elLeft = parseInt( $(o).css("left") );
-	elTop = parseInt( $(o).css("top") );
-	if ( screenWidth < ( parseInt(elLeft) + parseInt(elWidth) ) )
-		$(o).css("left", ( screenWidth - elWidth ) + "px" );
-	if ( screenHeight < ( parseInt(elTop) + parseInt(elHeight) ) )
-		$(o).css("top", ( screenHeight - elHeight ) + "px" );
-	if ( elLeft < 1 )
-		$(o).css("left", "1px");
-	if ( elTop < 1 )
-		$(o).css("top", "1px");
-}
-function serializeAll() {
-	serial1 = $.SortSerialize("players");
-	$("#playersorder").attr("value",serial1.hash.replace(/playerId-/g, ""));
-}
-function updateAll() {
-	if ( $("#players li").length )
-		$("#playersplacemat span.handle").hide();
-	else
-		$("#playersplacemat span.handle").show();
-	resetDroppableHeights();
-
-	serial1 = $.SortSerialize("players");
-	players = serial1.o["players"]
-	$(players).each(function(i){
-		predict = $(".prognoz input[name="+players[i]+"]").val()
-		$("#prognozId-"+(i+1)+" div input").prop("name", players[i])
-		$("#prognozId-"+(i+1)+" div input").val(predict)
-	})
-	$(".modul2").show()
-}
-function startDrag() {
-	$(".modul2").hide()
+//$("#sort_players").sortable()
+function updateAll(event) {
+  list=""
+  $("#sort_players input").each(function(){
+    name="predict"+this.name.substring(6)
+    val=$("input[name="+name+"]").val()
+    str=$("input[name="+name+"]").get(0).outerHTML
+    iof=str.indexOf(" style=")
+    list+="\n<li class=\"input_module\"><input type=\"text\" name=\""+name+"\" value=\""+val+"\""+(iof?str.substring(iof):">")+"</li>"
+  })
+	$("#predicts").html(list)
+	$(".input_module input").change(function(){validate($(this).prop("name"),$(this).val())})
+	$(".input_module input").on("input",function(){validate($(this).prop("name"),$(this).val())})
 }
 function validate(n,v) {
-	$(".prognoz input[name="+n+"]").val(v)
+	//$(".prognoz input[name="+n+"]").val(v)
 	v=v.replace(/[^1-9]/g, "")
 	var a=[],i=0,r=true;
 	v.split("").map(function(e){
@@ -1311,18 +1383,15 @@ function validate(n,v) {
 				r=false
 		}
 	})
-	$(".prognoz2 input[name="+n+"]").css("background-color",(r==true?"#fbfbfb":"#fbe0e0"))
-	$("#saveroster").prop("disabled",(r==true?false:true))
+	$(".input_module input[name="+n+"]").css("background-color",(r==true?"#fbfbfb":"#fbe0e0"))
+	$("#save_squad").prop("disabled",(r==true?false:true))
 	return r
 }
 $(document).ready( function() {
-	updateAll()
-	initPlayers()
-	$("ul#players").Sortable({accept:"module",activeclass:"activeDraggable",opacity:0.8,revert:true,onStart:startDrag,onStop:updateAll})
-	$(".prognoz2 input").change(function(){validate($(this).prop("name"),$(this).val())})
-	$(".prognoz2 input").on("input",function(){validate($(this).prop("name"),$(this).val())})
+	$(".input_module input").change(function(){validate($(this).prop("name"),$(this).val())})
+	$(".input_module input").on("input",function(){validate($(this).prop("name"),$(this).val())})
+	$("#sort_players").sortable({update: function(event){updateAll(event)}})
 })
-// ]]>
 </script>
 ';
  } //coach
@@ -1330,37 +1399,70 @@ $(document).ready( function() {
 
   }
 
-  if (isset($matches))      // REST responce on event 'matches'
-    echo '[' . $id_json . ']';
-  else if (isset($updates)) // REST responce on event 'FT'
-/////    echo '[{"id":"div3","html":"html 3"},{"id":"div4","html":"html 4"}]';
-    echo '[{"id":"#pl","html":"' . rawurlencode('<h2 style="text-align:right">' . $match_title . '</h2>' .
-    $prognozlist) . '"},{"id":"#pr","html":"' . rawurlencode($protocol) . '"}]';
-  else if (isset($mtscores)) // REST responce on delayed event after 'FT'
+  if (isset($mtscores)) // REST responce on delayed event after 'FT'
     echo '
     <h2>Матчи тура:</h2>
       <br />
       <br />
       ' . $cal;
+  else if (isset($matches))       // REST responce on event 'matches'
+    echo '[' . $id_json . ']';
+  else if ($updates != NULL)         // REST responce on event 'FT'
+/////    echo '[{"id":"div3","html":"html 3"},{"id":"div4","html":"html 4"}]';
+    echo '[{"id":"#pl","html":"' . rawurlencode('<h2 style="text-align:right">' . $match_title . '</h2>' .
+    $prognozlist) . '"},{"id":"#pr","html":"' . rawurlencode($protocol) . '"}]';
   else {
+//<link href="css/prognoz.css?ver=625" rel="stylesheet">
     $html = '
-<link href="css/prognoz.css" rel="stylesheet">
+<link rel="stylesheet" href="/css/balls.css?ver=11">
 ' . ($published ? '<div style="height:20px"></div>' : '<script>//<![CDATA[
-var '.date('\h\o\u\r\s=G,\m\i\n\u\t\e\s=i,\s\e\c\o\n\d\s=s').',sendfp='.(date('G')>2&&$today_matches>2*$today_bz?'true':'false').',base=[],mom=[]
+var '.date_tz('\h\o\u\r\s=G,\m\i\n\u\t\e\s=i,\s\e\c\o\n\d\s=s', '', time(), $_COOKIE['TZ']).',sendfp='.(date('G')>2&&$today_matches>2*$today_bz?'true':'false').',base=[],mom=[]
 ' . $id_arr . '
-function getDate(){if(seconds<59)seconds++;else{seconds=0;if(minutes<59)minutes++;else{minutes=0;hours=hours<23?hours+1:0}};var s=seconds+"",m=minutes+"";if(s.length<2)s="0"+s;if(m.length<2)m="0"+m;$("#timedisplay").html("время сервера: "+hours+":"+m+":"+s)}
-setInterval(getDate, 1000);
 function newpredict(){var p="";m=$("#pl").data("view")?6:18;for(i=1;i<=m;i++)p+=(ps=$("#dice"+i).val())?ps:"=";$("#prognoz_str").val(p);}
 function predict(id,dice){$("#"+id).val(dice);newpredict()}
 function show_alert(){str=$("#prognoz_str").val();t=[];t[0]=str.substring(0,9);t[1]=str.substring(9);e="";for(i=0;i<2;i++)for(j=1;j<=9;j++)if(t[i].split(j).length!=2)e+="в"+(i?"о":"")+" "+(i+1)+"-м тайме кол-во ставок \""+j+"\" не равно 1\n";if(e==""){document.forms[0].submit();return true;}else{var r=confirm("Ошибка:\n"+e+"Вы действительно хотите отправить прогноз в таком виде?");if(r==true){document.forms[0].submit();return true;}}return false;}
 $(function(){$(".dice").change(function(){newpredict()});})
+var bets=['.$js_bets.']
+function drawball(num){return `	<li id="ball-`+num+`" class="stage"><div class="sortable ball`+num+`"><span class="shadow"></span><span class="digit`+num+`"></span></div></li>\n`}
+function drawpredict(t){var pr=ou="",uu=[1,2,3,4,5,6,7,8,9];for(i=0;i<9;i++){if(bets[i+t*9]){pr+=bets[i+t*9];delete uu[bets[i+t*9]-1]}else pr+="="}for(i=0;i<9;i++)if(uu[i])ou+=drawball(uu[i]);$("#time"+(t+1)+"-unused").html(ou);return pr}
+function fillpredict(){$("#prognoz_str").val(drawpredict(0)+drawpredict(1))}
+function makebet(event){
+//console.log(event)
+    var num=event.originalEvent.target.innerHTML.charAt(46)
+    if (num<0||num>9)
+      num=event.originalEvent.target.classList.value.charAt(13)
+
+    var pos=event.target.id.substring(4)
+    $("#bet-"+pos).html(drawball(num))
+    bets[pos-1]=num
+    fillpredict()
+}
+function unbet(event){var pos=event.target.id.substring(4);bets[pos-1]=0;fillpredict()}
 $(document).ready(function(){
-cb=0;re=0;$("input[type=checkbox]").change(function(){cb+=(this.checked?1:-1);if($(this).hasClass("bench"))re+=(this.checked?1:-1);$("#replace").prop("disabled",cb==0?false:true);$("#replace").css("color",cb==0&&re<4?"green":"red")})
+  $(".sortable-list-1").sortable({
+    connectWith:".sortable-list-1"
+  })
+  $(".sortable-list-2").sortable({
+    connectWith:".sortable-list-2"
+  })
+  $(".home").sortable({
+    receive: function(event){makebet(event)},
+    remove: function(event){unbet(event)},
+  })
+  $("input[type=checkbox]").change(function(){
+    if($("input[type=checkbox]:enabled:checked").length=='.MAIN_SIZE.'&&$("input.bench[type=checkbox]:enabled:checked").length<4){
+      $("#replace").prop("disabled",false);
+      $("#replace").css("color","green")
+    }
+    else {
+      $("#replace").prop("disabled",true);
+      $("#replace").css("color","red")}
+    })
 })
 '
 .($today_matches || true ? '
 function mtscore(){$.post("'.$this_site.'",{a:"'.$a.'",m:"'.$m.'",s:"'.$s.'",t:"'.$t.'",mtscores:"1"},function(html){$("#mt").html(html)})}
-momup=function(i){clearInterval(mom[i]);mom[i]=setInterval(function(){if(!isNaN(base[i][3])){tm=+base[i][3];base[i][3]=(tm==45||tm==90)?tm+"+":++tm;row=$("#"+i)[0];row.cells[5].innerHTML="<span class=\"blink\">"+base[i][3]+"’</span>"}},60000);}
+momup=function(i){clearInterval(mom[i]);mom[i]=setInterval(function(){if(!isNaN(base[i][3])){tm=+base[i][3];base[i][3]=(tm==45||tm==90)?tm+"+":++tm;row=$("#"+i)[0];row.cells[5].innerHTML="<span class=\"blink\">"+base[i][3]+"’</span>"}},60000)}
 for(i=1;i<=6;i++){if($.isArray(base[i])&&!isNaN(base[i][3]))momup(i)}
 scorefix=function(d){
 	i=d.idx;m=+d.dk;if(m<1)m=1;else if(m>59)m=base[i][3];h=d.evs;a=d.deps
@@ -1392,8 +1494,8 @@ function detrow(t,tmpz){
 		else if(t==6)out+="<div class=\"min right\">"+tmps[0]+"\"</div><div class=\"right\">"+tmps[2]+"<br><em>"+tmps[1]+"</em></div>";
 		out+="</td><td class=\"center\">";
 		if(t<2)out+="&#9917;";
-		else if(t<6)out+="<i class=\"text-"+(t<4?"danger":"warning")+"\">▮</i>";
-		else out+="<h5 class=\"green-red\">⮁</h3>";
+		else if(t<6)out+="<img src=\"https://www.livescore.bz/img/N"+(t<4?"k":"s")+"kart.gif\" height=\"12\">";
+		else out+="<img src=\"https://www.livescore.bz/img/sub.gif\" height=\"12\">";
 		out+="</td><td class=\"side\">";
 		if(t==1||t==3||t==5)out+="<div class=\"min left\">"+tmps[0]+"\"</div><div class=\"left\">"+tmps[1]+"</div>";
 		else if(t==7)out+="<div class=\"min left\">"+tmps[0]+"\"</div><div class=\"left\">"+tmps[2]+"<br><em>"+tmps[1]+"</em></div>";
@@ -1412,7 +1514,7 @@ mdetails=function(tmpd,id,pos1,pos2){
 		$wrapper=$("tr[did="+id+"]").find(".tablex");$wrapper.find(".sortable").sort(function(a,b){one=a.dataset.min;two=b.dataset.min;ones=one.split("+");one=ones[0];twos=two.split("+");two=twos[0];return +one - +two}).appendTo($wrapper);
 	}else $("tr[did="+id+"] td.det").html("<table class=\"tablex\"><tr><td><div align=center style=\"padding:4px;\">информация о матче пока не поступила</div></td></tr></table>")
 }
-socket=io.connect("https://score2live.net:1998",{"reconnect":true,"reconnection delay":500,"max reconnection attempts":20,"secure":true})
+socket=io.connect("//score2live.net:1998",{"reconnect":true,"reconnection delay":500,"max reconnection attempts":20,"secure":true})
 socket.on("connect",function(){socket.emit("hellothere")})
 socket.on("hellobz",function(){socket.emit("getscores","football(soccer)","today")})
 socket.on("scoredatas",function(d){if(sendfp){$.post("'.$this_site.'",{a:"'.$a.'",m:"'.$m.'",s:"'.$s.'",t:"'.$t.'",matches:JSON.stringify(d.data.matches)},function(json){$.each(JSON.parse(json),function(idx,obj){base.push(obj.id);base[obj.id]=obj.d})})}$("#statusline").css("display","none")})
@@ -1420,32 +1522,24 @@ socket.on("footdetails",function(data){data=data[0];if ($(".p-table").find("tr[d
 socket.on("guncelleme",function(d){var json="";$.each(d.updates,function(index,ux){if(base[ux.idx]!==undefined){if(ux.s==4&&base[ux.idx][3]!="FT")json+=(json.length?",":"")+JSON.stringify(ux);scorefix(ux)}});if(json.length)$.post("'.$this_site.'",{a:"'.$a.'",m:"'.$m.'",s:"'.$s.'",t:"'.$t.'"'.(isset($n)?',n:"'.$n.'"':'').',updates:"["+json+"]"},function(res){JSON.parse(res,function(k,v){if(k=="id")id=v;else if(k=="html")$(id).html(decodeURIComponent(v))});setInterval(mtscore,50000);})})
 ' : '
 ') . '//]]></script>
-<div style="height:20px">
-	<div id="statusline" style="text-align:left;display:' . ($today_matches ? 'block' : 'none') . '">получение результатов с <a href="https://www.livescore.bz" sport="football(soccer)" data-1="today" lang="en">www.livescore.bz</a>. Если Вы долго видите эту фразу, перегрузите страницу.</div>
-	<div id="timedisplay" style="position:relative;float:right;text-align:right"></div>
+<div class="d-flex">
+	<div id="statusline" class="w-100 text-left">получение результатов с <a href="https://www.livescore.bz" sport="football(soccer)" data-1="today" lang="en">www.livescore.bz</a></div>
+	<div id="timedisplay" class="w-100 text-right">&nbsp;</div>
 </div>') . '
-<div style="float:top;width:100%">
-<div class="p-head">' . $head . '</div>
-<div class="p-table">' . $program_table . '</div>
-<div class="p-hint">' . $hint . '</div>
+<div class="h4 text-center">' . $head . '</div>
+<div class="d-flex">
+	<div class="table-condensed table-striped mx-auto">' . $program_table . '</div>
 </div>
-<div style="text-align:left;width:100%;margin-left:20px">
-  <div id="pl" data-view="'.($closed?1:0).'" class="p-left" style='.($coach_form ? '"width:59%"' : '"margin-right:0px;white-space:pre;font-family:monospace;font-size:14px"').'><h2 style="text-align:right">' . $match_title . '</h2>' .
-    $prognozlist . '
-  </div>
-  <div id="mt" class="text14" style="float:right;width:38%">
-    <h2>Матчи тура:</h2>
-      <br />
-      <br />
-      ' . $cal . '
-  </div>
+<div class="h6 text-center">' . $hint . '</div>
+<h5>' . $match_title . '</h5>
+<div class="d-flex">
+	<div id="pl" class="' . ($closed ? 'monospace ' : '') . 'w-100">' . $prognozlist . '</div>
+	<div'.($closed ? ' id="mt"' : ' style="width: 700px;"').'>Матчи тура:<br><br>' . $cal . '</div>
 </div>
-<div style="clear:both"></div>
 <div id="pr" class="p-left">' . $protocol . '</div>
 <div class="p-left">' . $rules . '</div>
-<div style="clear:both;"></div>
 ';
-
+/*
     if ($published && !is_file($season_dir.'/publish/it'.$t.'.'.$n)) {
       file_put_contents($season_dir.'/publish/it'.$t.'.'.$n, $html);
       $statfile = fopen($season_dir.'/publish/plst'.$t, 'a');
@@ -1456,6 +1550,7 @@ socket.on("guncelleme",function(d){var json="";$.each(d.updates,function(index,u
       fclose($statfile);
     }
     else
+*/
       print($html);
 
   }

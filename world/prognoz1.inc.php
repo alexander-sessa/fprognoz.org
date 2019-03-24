@@ -239,7 +239,7 @@ $(document).ready(function(){
     $i = 1;
     foreach ($cc_predicts[$league] as $name => $predict)
       $out .= '
-      <li class="input_module"><input type="text" id="predict-'.$league.($i++).'" name="predict[]" value="'.trim(preg_replace('/(\d{1,3})(?=((\d{3})*([^\d]|$)))/i', "$1 ", strtr($predict, [' ' => '']))).'"></li>';
+      <li class="input_module"><input type="text" id="predict-'.$league.($i++).'" name="predict[]" value="'.trim(preg_replace('/(\d{1,3})(?=((\d{3})*([^\d]|$)))/i', "$1 ", $predict)).'"></li>';
 
     $out .= '
     </ul>
@@ -349,7 +349,8 @@ function players_table($array, $side, $coach, $rprognoz, $half1, $half2, $size) 
 //      if ($main)
 //        $prognozColored .= '</mark>';
 
-      $list .= $name . str_repeat(' ', 22 - mb_strlen($name)) . $prognozColored . sprintf('%5s', $points) . ' (' . $pointm . ")\n";
+//      $list .= $name . str_repeat(' ', 22 - mb_strlen($name)) . $prognozColored . sprintf('%5s', $points) . ' (' . $pointm . ")\n";
+      $list .= '<div><div style="display:inline-block;width:175px'.(mb_strlen($name) > 19 ? ';font-stretch:condensed' : '').'">'.$name.'</div>' . $prognozColored . sprintf('%5s', $points) . ' (' . $pointm . ")</div>\n";
       if ($p < $size)
         $worepl += $points;
 
@@ -695,15 +696,15 @@ function ball_form($nm, $match, $home, $away, $prognoz_half, $prognoz_array) {
   list($date, $time) = explode(' ', $match[2]);
   $out .= '
     <div>
-      <div style="width:450px; text-align:center; font-weight:bold">'.$home.' - '.$away.'</div>
+      <div style="width:430px; text-align:center; font-weight:bold">'.$home.' - '.$away.'</div>
       <ul id="bet-'.$bn++.'" class="sortable-list-' . $half . ' home">'.
         (isset($prognoz_array[$bn - 2]) ? li_ball($prognoz_array[$bn - 2]) : '').'
       </ul>
-      <div class="team" style="text-align:right">'.strtr($match[7], [': ' => '<br>']).'</div>
+      <div class="team small" style="text-align:right">'.strtr($match[7], [': ' => '<br>']).'</div>
       <ul id="bet-'.$bn++.'" class="sortable-list-' . $half . ' home">'.
         (isset($prognoz_array[$bn - 2]) ? li_ball($prognoz_array[$bn - 2]) : '').'
       </ul>
-      <div class="team">'.date_tz('Y-m-d<\b\r>H:i', $date, $time, $_COOKIE['TZ'] ?? 'Europe/Berlin').'</div>
+      <div class="team small">'.date_tz('Y-m-d<\b\r>H:i', $date, $time, $_COOKIE['TZ'] ?? 'Europe/Berlin').'</div>
       <ul id="bet-'.$bn++.'" class="sortable-list-' . $half . ' home">'.
         (isset($prognoz_array[$bn - 2]) ? li_ball($prognoz_array[$bn - 2]) : '').'
       </ul>
@@ -779,7 +780,7 @@ if (isset($_SESSION['Coach_name'])) {
     {
       // определение роли
       $cc['n'] = trim(file_get_contents($team_select));
-      $codes = file($season_dir.'/'.$cc['n'].'.csv', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+      $codes = file($season_dir.'/'.$cc['n'].'.csv');
       foreach ($codes as $cline) {
         $arr = explode(';', $cline);
         if ($arr[0] == $teamCodes['n']) {
@@ -798,7 +799,7 @@ if (isset($_SESSION['Coach_name'])) {
     if (isset($teamCodes['s']))
     {
       // определение роли
-      $codes = file($season_dir.'/codes.tsv', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+      $codes = file($season_dir.'/codes.tsv');
       foreach ($codes as $cline) {
         $arr = explode('	', $cline);
         if ($arr[0] == $teamCodes['s']) {
@@ -818,12 +819,9 @@ if (isset($_SESSION['Coach_name'])) {
 
     }
     // выборка своих прогнозов и историй получения прогнозов для тренеров
-    $predicts = file($prognoz_dir.'/mail', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    $predicts = file($prognoz_dir.'/mail');
     foreach ($predicts as $predict) {
-      list($name, $predict, $timestamp, $pena) = explode(';', $predict);
-      if ($pena)
-        $predict = $predict . ' ' . $pena; // для почты с пробелами между тройками
-
+      list($name, $predict, $timestamp) = explode(';', $predict);
       $all_predicts[$name] = $predict;
       if (isset($teamCodes['n']) && $teamCodes['n'] == $name)
         $my_predicts['n'] = $predict;
@@ -888,11 +886,11 @@ $base = get_results_by_date(date('m', $day_before), date('d', $day_before), $upd
     (isset($etap['постфикс']) ? $etap['постфикс'] : '');
 */
 $tt = $t - 1;
-$head = '<a href="/?a=world&s=2019&t='.($tt < 10 ? '0' : '').$tt.'&m=prognoz" title="предыдущий тур"><i class="fas fa-arrow-circle-left"></i></a> Лиги Сайтов и Наций 2019. '.($t < 90 ? 'Тур '.ltrim($t, '0') : 'Пробный тур '.($t - 96)).' <a href="/?a=world&s=2019&t='.($tt < 8 ? '0' : '').($tt+2).'&m=prognoz" title="следующий тур"><i class="fas fa-arrow-circle-right"></i></a><br>';
+$head = '<a href="/?a=world&s=2019&t='.($tt < 10 ? '0' : '').$tt.'&m=result" title="предыдущий тур"><i class="fas fa-arrow-circle-left"></i></a> Лига Сайтов и Лига Наций 2019. '.($t < 90 ? 'Тур '.ltrim($t, '0') : 'Пробный тур '.($t - 96)).'<br>';
 if (count($teamCodes) && !$closed)
 {
   $head .= '
-<span class="small">код тура: <b>'.$cca.$t.'</b> ';
+код тура: <b>'.$cca.$t.'</b> ';
   if (count($teamCodes) == 1 || $teamCodes['n'] == $teamCodes['s'])
     $head .= '<input type="hidden" id="single_code" name="team_code" value="'.current($teamCodes).'"><b>'.current($teamCodes).'</b><br>';
   else
@@ -908,10 +906,9 @@ if (count($teamCodes) && !$closed)
     }
     $head .= '<option value="'.$oba.'">один прогноз в оба турнира</option>'.$options.'</select><br>';
   }
-  $prognoz_post = strtr($prognoz_post, [' ' => '']);
-  $head .= '</span>
-<span class="small">прогноз: </span><input type="text" id="prognoz_str" name="prognoz_str" value="'.(isset($prognoz_post) ? $prognoz_post : '').'" style="width:16rem">
-<button id="send_predict" class="btn btn-primary" onClick="post_predicts()"> отправить </button>
+  $head .= '
+<span>прогноз: <input type="text" id="prognoz_str" name="prognoz_str" value="'.(isset($prognoz_post) ? $prognoz_post : '').'" size="18">
+<button id="send_predict" class="btn btn-primary" onClick="post_predicts()"> отправить </button></span>
 ';
   // подготовка переменных для работы с шарами
   $bn = 1; // номер ставки - места для шара
@@ -1040,7 +1037,8 @@ if (is_file($prognoz_dir.'/cal'))
       if ($homecoach || $awaycoach)
         $awaylist .= '</form>';
 
-      $homeline = $teams['home']['team'] . str_repeat(' ', 22 - mb_strlen($teams['home']['team']));
+//      $homeline = $teams['home']['team'] . str_repeat(' ', 22 - mb_strlen($teams['home']['team']));
+      $homeline = '<div style="display:inline-block;width:175px'.(mb_strlen($teams['home']['team']) > 19 ? ';font-family:Helvetica;font-stretch:condensed' : '').'">'.$teams['home']['team'].'</div>';
       $teams['home']['total'] = 0;
       for ($i=0; $i<6; $i++) {
         $changes[$i] = $homepoints[$i] - $awaypoints[$i];
@@ -1072,16 +1070,17 @@ if (is_file($prognoz_dir.'/cal'))
 
         if ($i == 2) {
           if ($homecoach && !$half2)
-            $homeline .= '  <input type="hidden" name="replace" value="replace"><button type="submit" id="replace-'.$matchn.'" style="padding:0px 0px; width:26px; height:24px; font-weight:bolder; text-align:center" title="установите '.$size.' галочек тем, кто будет
+            $homeline .= '  <input type="hidden" name="replace" value="replace"><button type="submit" id="replace-'.$matchn.'" style="padding:0px 0px; width:26px; height:24px; font-size:80%; text-align:center" title="установите '.$size.' галочек тем, кто будет
 играть во 2 тайме, и нажмите кнопку.
-Максимальное количество замен = 3." disabled="disabled">&#x21c5;</button> ';
+Максимальное количество замен = 3." disabled="disabled"><i class="fas fa-sync"></i></button> ';
           else
             $homeline .= '      ';
 
         }
       }
       $homeline .= sprintf('%7s', $teams['home']['total']) . ' (' . ($teams['home']['total'] - $teams['home']['worepl']) . ')';
-      $awayline = $teams['away']['team'] . str_repeat(' ', 22 - mb_strlen($teams['away']['team']));
+//      $awayline = $teams['away']['team'] . str_repeat(' ', 22 - mb_strlen($teams['away']['team']));
+      $awayline = '<div style="display:inline-block;width:175px'.(mb_strlen($teams['away']['team']) > 19 ? ';font-family:Helvetica;font-stretch:condensed' : '').'">'.$teams['away']['team'].'</div>';
 
 
 
@@ -1110,9 +1109,9 @@ if (is_file($prognoz_dir.'/cal'))
 
       if ($i == 2)
         if ($awaycoach && !$half2)
-          $awayline .= '  <input type="hidden" name="replace" value="replace"><button type="submit" id="replace-'.$matchn.'" style="padding:0px 0px; width:26px; height:24px; font-weight:bolder; text-align:center" title="установите '.$size.' галочек тем, кто будет
+          $awayline .= '  <input type="hidden" name="replace" value="replace"><button type="submit" id="replace-'.$matchn.'" style="padding:0px 0px; width:26px; height:24px; font-size:80%; text-align:center" title="установите '.$size.' галочек тем, кто будет
 играть во 2 тайме, и нажмите кнопку.
-Максимальное количество замен = 3." disabled="disabled">&#x21c5;</button> ';
+Максимальное количество замен = 3." disabled="disabled"><i class="fas fa-sync"></i></button> ';
         else
           $awayline .= '      ';
     }
@@ -1251,8 +1250,8 @@ auto_comment($position, $newposition, $min_diff, ball('home', $i, $size), ball('
     eval('$sites = '.file_get_contents($season_dir.'/sites.inc'));
     $prognozlist .= '
 ' . $homelist . $sites[$teams['home']['team']] . '
-<b>' . $homeline . '</b>
-<b>' . $awayline . '</b>
+<div class="font-weight-bold">' . $homeline . '</div>
+<div class="font-weight-bold">' . $awayline . '</div>
 ' . $sites[$teams['away']['team']] . '<br>' . $awaylist;
 
       // определяем, изменился ли счёт в матчеe
@@ -1285,7 +1284,7 @@ auto_comment($position, $newposition, $min_diff, ball('home', $i, $size), ball('
 
       $prognozlists[] = '<div id="tab-'.$matchn.'" class="multitabs"'.(isset($n) && $matchn == $n ? '' : ' style="display:none"').'>
 '.$match_title.'
-  <div class="monospace">
+  <div>
 '.$prognozlist_head . $prognozlist.'
   </div>
   <div class="p-left">
@@ -1401,7 +1400,7 @@ else if (isset($updates)) // REST responce on event 'FT'
 else
 {
   $html = '
-<link rel="stylesheet" href="/css/balls.css?ver=17">
+<link rel="stylesheet" href="/css/balls.css?ver=13">
 ' . ($published ? '<div style="height:20px"></div>' : '<script>//<![CDATA[
 var '.date_tz('\h\o\u\r\s=G,\m\i\n\u\t\e\s=i,\s\e\c\o\n\d\s=s', '', time(), $_COOKIE['TZ'] ?? 'Europe/Berlin').',sendfp='.(date('G')>2&&$today_matches>2*$today_bz?'true':'false').',base=[],mom=[]
 ' . $id_arr . '
@@ -1493,8 +1492,8 @@ function detrow(t,tmpz){
 		else if(t==6)out+="<div class=\"min right\">"+tmps[0]+"\"</div><div class=\"right\">"+tmps[2]+"<br><em>"+tmps[1]+"</em></div>";
 		out+="</td><td class=\"center\">";
 		if(t<2)out+="&#9917;";
-		else if(t<6)out+="<i class=\"text-"+(t<4?"danger":"warning")+"\">&#x25AE;</i>";
-		else out+="<h5 class=\"green-red\">&#x21c5;</h3>";
+		else if(t<6)out+="<img src=\"https://www.livescore.bz/img/N"+(t<4?"k":"s")+"kart.gif\" height=\"12\">";
+		else out+="<img src=\"https://www.livescore.bz/img/sub.gif\" height=\"12\">";
 		out+="</td><td class=\"side\">";
 		if(t==1||t==3||t==5)out+="<div class=\"min left\">"+tmps[0]+"\"</div><div class=\"left\">"+tmps[1]+"</div>";
 		else if(t==7)out+="<div class=\"min left\">"+tmps[0]+"\"</div><div class=\"left\">"+tmps[2]+"<br><em>"+tmps[1]+"</em></div>";

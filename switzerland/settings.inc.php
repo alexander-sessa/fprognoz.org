@@ -25,9 +25,10 @@ $foot_ftcolor = '7c82a4';
 $rght_ftcolor = 'ffd700';
 $left_image   = 'images/premiership-emblema2.jpg';
 $rght_image   = 'images/the-fa-cup.png';
-$cur_year     = '2018-2';
+$cur_year     = '2019-2';
 $president    = 'Александр Сесса';
 $vice         = 'Andrey Vityuk';
 $pressa       = '';
+$coach        = 'Andrey Donec';
 $club_edit    = false;
 ?>

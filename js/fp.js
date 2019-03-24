@@ -1,6 +1,34 @@
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');ga('create', 'UA-92920347-1', 'auto');ga('send', 'pageview');
 $.browser={};$.browser.mozilla=/mozilla/.test(navigator.userAgent.toLowerCase())&&!/webkit/.test(navigator.userAgent.toLowerCase());$.browser.webkit=/webkit/.test(navigator.userAgent.toLowerCase());$.browser.opera=/opera/.test(navigator.userAgent.toLowerCase());$.browser.msie=/msie/.test(navigator.userAgent.toLowerCase())
-var fg=0,ti=[],si=[],cke_config={language:"ru"},editable=null
+var fg=0,ti=[],si=[],tz=jstz.determine();document.cookie="TZ="+tz.name()+";path=/"
+var cke_config={language:"ru"},editable=null,isEnabled=[],contentHTML=[],cke=[]
+function c_quote(cid,inf){com=$("[commentid=\""+cid+"\"]");c_text=$("main",com).html();var begin=1+c_text.indexOf(">"),end=c_text.lastIndexOf("<");c_text=c_text.substr(begin,end-begin);var c_date=$(".c-comment-date",com).html(),sStr="<blockquote><p><sub>"+$(".c-comment-author",com).html()+" <em>писал"+inf+" "+c_date.split(" ").join(" в ")+"</em></sub></p><p>&bdquo;"+c_text+"&ldquo;</p></blockquote><p></p>";$("#cke"+cid).html($("#cke"+cid).html()+sStr)}
+function changeRating(id,rate_yes,rate_no,vote){$("#r_yes"+id).html(rate_yes?rate_yes:"");$("#r_no"+id).html(rate_no?rate_no:"");$.get("comments/vote.php",{user:$("#comments_wrapper").data("name"),id:id,vote:vote,hash:$("#comments_wrapper").data("hash")})}
+function saveContent(id,c_text){$.get("comments/save.php",{user:$("#comments_wrapper").data("name"),id:id,c_text:c_text,hash:$("#comments_wrapper").data("hash")})}
+function modComment(id,man,status){$.get("comments/mod.php",{key:"content:"+id,man:man,status:status});$("#"+(status>0?"approve":"c_block")+id).hide()}
+function isEditorEnabled(id){if(cke[id])return true;else cke[id]=1;return false}
+function toggleEditor(id) {
+	var reset=document.getElementById("reset"+id),toggle=document.getElementById("toggle"+id),content=document.getElementById("content"+id)
+	if(isEnabled[id]==undefined)isEnabled[id]=null
+	if(isEnabled[id]){
+		editor=isEnabled[id]
+		if(editor.model.document.differ)reset.style.display="inline"
+		toggle.innerHTML="<i class=\"fas fa-edit\" aria-hidden=\"true\"></i> Исправить"
+		editor.destroy()
+		isEnabled[id]=null
+		saveContent(id,content.innerHTML)
+	}
+	else{
+		toggle.innerHTML="<i class=\"fas fa-save c-save\" aria-hidden=\"true\"></i> <span class=\"c-save\">Записать<span>"
+		InlineEditor
+			.create(document.querySelector("#content"+id),cke_config)
+			.then(function(editor){
+				isEnabled[id]=editor;
+				$("#content"+id).click().focus()
+			})
+	}
+}
+function moreComments(c,a,s,f){$.post("/online/ajax.php",{a:a,s:s,c_from:f,coach:c},function(r){$("#more_comments").replaceWith(r)})}
 function validateEmail(email){var re=/\S+@\S+\.\S+/;return re.test(email)}
 function passwordCheck(str){
   $.post("/online/ajax.php",{data:$("#pass_str").data("tpl"),nick:$("#name_str").val(),pswd:str},function(r){
@@ -16,6 +44,9 @@ function passwordCheck(str){
     }
   })
 }
+function showTab(i){
+var uri=window.location.search,pos=uri.lastIndexOf("&n=");if(pos>0)uri=uri.substring(0,pos);window.history.pushState(null, null, uri+"&n="+i);$(".multitabs").hide();$("#tab-"+i).show();$("#whatsifn").val(i);$("#dynamic").attr("data-tab",i);$("#pl").attr("tabindex",-1).focus();return false}
+function sendPredicts(apikey,tour,codes,predicts){$.post("/online/ajax.php",{data:apikey,tour:tour,team_codes:codes,predicts:predicts},function(r){$("#statusline").html(r);$("#send_predict").removeClass("btn-primary");$("#send_predict").addClass(r.indexOf("success")>0?"btn-success":"btn-danger")})}
 function emailCheck(str){$.post("/online/ajax.php",{data:$("#name_str").data("tpl"),nick:str,email:str},function(r){if(r=='0')$("#valid_name").html('<span style="color:lightsalmon"><i class="fas fa-times" /> такой e-mail не найден</span>');else{str=$("#pass_str").val();if(str.length)passwordCheck(str);else $("#valid_name").html('<span style="color:lightblue;cursor:pointer" onClick="tokenSend(); return false" title="Вам будет выслана ссылка для входа"><i class="fas fa-check" /> войти без пароля?</span>')}})}
 function nicknameCheck(str){$.post("/online/ajax.php",{data:$("#name_str").data("tpl"),nick:str,email:""},function(r){if(r=='0')$("#valid_name").html('<span style="color:lightsalmon"><i class="fas fa-times" /> имя/e-mail не найдены</span>');else{str=$("#pass_str").val();if(str.length)passwordCheck(str);else $("#valid_name").html('<span style="color:lightgreen"><i class="fas fa-check" /> теперь введите пароль</span>')}})}
 function tokenSend(){$.post("/online/ajax.php",{data:$("#l_form").data("tpl"),nick:$("#name_str").val()},function(r){if(r=='1')$("#valid_name").html('<span style="color:lightgreen"><i class="fas fa-check" /> проверьте вашу почту</span>');else $("#valid_name").html('<span style="color:lightsalmon"><i class="fas fa-times" /> не удалось отправить</span>')})}
@@ -27,15 +58,19 @@ if($("#editable").data("hl")){var t=$("#editable").data("hl");$("#editable").htm
 if(m=="pres")$("#editable").replaceWith('<form id="theMail" method="POST"><p><input id="subject" type="text" name="subj" class="mailSubject" placeholder=" Заголовок пресс-релиза" /></p><textarea id="editable" name="text" class="monospace" style="width:100%;height:30em" placeholder=" Место для нового пресс-релиза"></textarea></form>')
 else if(m=="text"){if($("#editable").hasClass("monospace"))$("#editable").replaceWith('<form id="theMail" method="POST"><p><input id="subject" type="text" name="subj" class="mailSubject" value="'+$("#mailIcon").data("subj")+'" /></p><textarea id="editable" name="text" class="monospace" style="width:100%;height:'+Math.max(20,$("#editable").html().split("\n").length)+'em">'+$("#editable").html()+"</textarea></form>");else InlineEditor.create(document.querySelector("#editable"),cke_config).then(function(editor){editable=editor;$("#editable").click().focus()})}
 else if(m=="edit"){if($("#editable").hasClass("monospace"))$("#editable").replaceWith('<textarea id="editable" class="monospace" style="width:100%;height:'+Math.max(20,$("#editable").html().split("\n").length)+'em">'+$("#editable").html()+"</textarea>");else InlineEditor.create(document.querySelector("#editable"),cke_config).then(function(editor){editable=editor;$("#editable").click().focus()})}
-else{html='<form id="theMail" method="POST"><div id="editable" style="display: flex; width: 100%; align-items: stretch;perspective: 900px;"><div style="min-width: 13em; max-width: 13em; line-height: 1em">';i=0;$('table tbody tr td:nth-child(3)').each(function(){name=$(this).html();if(name.indexOf("value=")>0)name=name.split('"')[5];if(name)html+='<label><input type="checkbox" name="p['+(i++)+']"/> '+name+'</label>'});html+='</div><div style="width: 100%; min-height: '+(i*1.5)+'em"><input type="text" name="subj" style="width: 100%" placeholder=" Заголовок сообщения" /><textarea name="text" style="width: 100%; margin-top: 10px; height:'+((i-2)*1.5)+'em" placeholder=" Текст сообщения"></textarea></div></div></form>';$("#editable").replaceWith(html)}
+else{html='<form id="theMail" method="POST"><div id="editable" style="display: flex; width: 100%; align-items: stretch;perspective: 900px;"><div style="min-width: 13em; max-width: 13em; line-height: 1em">';i=0;$('.player_name').each(function(){name=$(this).html();if(name.indexOf("value=")>0)name=name.split('"')[5];if(name)html+='<br><label><input type="checkbox" name="p['+(i++)+']"> '+name+"</label>"});html+='</div><div style="width: 100%; min-height: '+(i*1.5)+'em"><input type="text" name="subj" style="width: 100%" placeholder=" Заголовок сообщения" /><textarea name="text" style="width: 100%; margin-top: 10px; height:'+((i-2)*1.5)+'em" placeholder=" Текст сообщения"></textarea></div></div></form>';$("#editable").replaceWith(html)}
+}
+function bindCroppic(){
+  if($("#funZoneIndicator").html()){
+    var croppicContainerModalOptions={uploadUrl:"comments/img_save_to_file.php",cropUrl:"comments/img_crop_to_file.php?userId="+$("#comments_wrapper").data("name"),modal:true,doubleZoomControls:false,imgEyecandyOpacity:0.4,loaderHtml:"<div class=\"loader bubblingG\"><span id=\"bubblingG_1\"></span><span id=\"bubblingG_2\"></span><span id=\"bubblingG_3\"></span></div> ",}
+    var cropContainerModal=new Croppic("cropContainerModal",croppicContainerModalOptions)
+  }
 }
 $(document).ready(function(){
 if($(".rightbar-header").data("log")=="out")history.pushState(null,"", "/")
 else if($(".rightbar-header").data("log")=="in"){var x=window.matchMedia("(max-width:1200px)");if(x.matches){$("#rightbar").addClass("active");$("#rightbarCollapse").addClass("active");$("#rightbarIconUser").hide();$("#rightbarIconUserX").show()}};
 $("#sidebarCollapse").click(function(){$("#sidebar").toggleClass("active");$(this).toggleClass("active")});
 $("#rightbarCollapse").click(function(){$("#rightbar").toggleClass("active");$(this).toggleClass("active");if($("#rightbarIconUser").is(":hidden")){$("#rightbarIconUser").show();$("#rightbarIconUserX").hide()}else if($("#rightbarIconUserX").is(":hidden")){$("#rightbarIconUser").hide();$("#rightbarIconUserX").show()}});
-$("a[name=modal]").click(function(e){e.preventDefault();$(".overlay").fadeTo("fast",0.65);$("#mwin").adClass("popup-show")});
-$(".popup .close,.overlay").click(function(e){e.preventDefault();$(".overlay").hide();$("#mwin").removeClass("popup-show")});
 $("#name_str").blur(function(){if(!$("#name_str").is(":hover")){var str=$(this).val();if(str.length<2)$("#valid_name").html('<span style="color:pink"><i class="fas fa-times"></i> введите хотя бы 2 буквы</span>');else if(validateEmail(str)) emailCheck(str);else nicknameCheck(str)}})
 $("#pass_str").keyup(function(k){
   if($("#pass_str").is(":focus")&&k.key!="Shift"){
@@ -56,14 +91,16 @@ $("#saveIcon").click(function(){$("#editIcon").show();$("#editIcon").css("backgr
 $(".add_tournament").click(function(){addTournament(this);$(".add_stage").of("click").click(function(){addStage(this)});$(".delete_stage").off("click").click(function(){$("#"+$(this).data("id")).remove();$("#div-"+$(this).data("id")).remove()})})
 $(".add_stage").click(function(){addStage(this);$(".delete_stage").off("click").click(function(){$("#"+$(this).data("id")).remove();$("#div-"+$(this).data("id")).remove()})})
 $(".delete_stage").click(function(){$("#"+$(this).data("id")).remove();$("#div-"+$(this).data("id")).remove();$("#div-"+$(this).data("id")).remove()})
-$("#season_settings").click(function(){$("#ConfigEditor").show();$("#saveCfgIcon").css("background","orangered")})
+$("#season_settings").change(function(){console.log('y');$("#ConfigEditor").show();$("#saveCfgIcon").css("background","orangered")})
 $("#ConfigEditor").click(function(){$.ajax({type:"POST",url:"/online/ajax.php",data:"data="+encodeURIComponent($("#saveCfgIcon").data("tpl"))+'&'+$("#season_settings").serialize(),success:function(r){$("#saveCfgIcon").css("background","green")}})})
 $("#MainForm").change(function(){$("#SubmitForm").show()})
 $(".pressrelease-title").click(function(){$(".pressrelease").hide();$(this).next(".pressrelease").show();$("html,body").scrollTop(0)})
 $("#mailIcon").click(function(){$("#sendIcon").show();$("#mailIcon").hide();replaceEditable($(this).data("mode"))})
-$("#sendIcon").click(function(){$(".overlay").fadeTo("slow",0.65);$(".overlay").html('<div class="loaderP"><div class="loader">');$.ajax({type:"POST",url:"/online/ajax.php",data:"data="+encodeURIComponent($("#sendIcon").data("tpl"))+'&'+$("#theMail").serialize(),success:function(r){$("#editable").html(r);$("#mailIcon").show().css("background","green").css("color","whitesmoke");$("#sendIcon").hide();$(".overlay").hide()}})})
+$("#sendIcon").click(function(){$(".overlay").fadeTo("slow",0.65);$(".overlay").html('<div class="loaderP"><div class="loaderB">');$.ajax({type:"POST",url:"/online/ajax.php",data:"data="+encodeURIComponent($("#sendIcon").data("tpl"))+'&'+$("#theMail").serialize(),success:function(r){$("#editable").html(r);$("#mailIcon").show().css("background","green").css("color","whitesmoke");$("#sendIcon").hide();$(".overlay").hide()}})})
 $("a[name=modal]").click(function(e){e.preventDefault();$('.overlay').fadeTo("fast",0.65);$("#mwin").addClass("popup-show")});
 $(".popup .close,.overlay").click(function(e){e.preventDefault();$(".overlay").hide();$("#mwin").removeClass("popup-show")});
 $("#editable").html(function(index,text){if($(this).data("hl")){var t=$(this).data("hl");return text.replace(new RegExp(t, 'g'), "<mark>"+t+"</mark>")}})
-if($("#timedisplay").length)setInterval(function(){if(seconds<59)seconds++;else{seconds=0;if(minutes<59)minutes++;else{minutes=0;hours=hours<23?hours+1:0}}var sts=seconds+"",stm=minutes+"";if(sts.length<2)sts="0"+sts;if(stm.length<2)stm="0"+stm;$("#timedisplay").html("время сервера: "+hours+":"+stm+":"+sts)},1000)
+if($("#timedisplay").length>6)setInterval(function(){if(seconds<59)seconds++;else{seconds=0;if(minutes<59)minutes++;else{minutes=0;hours=hours<23?hours+1:0}}var sts=seconds+"",stm=minutes+"";if(sts.length<2)sts="0"+sts;if(stm.length<2)stm="0"+stm;$("#timedisplay").html(hours+":"+stm+":"+sts)},1000)
+$("#toggleFunZone").click(function(){$.ajax({type:"POST",url:"/online/ajax.php",data:"data="+encodeURIComponent($("#funZone").data("tpl")),success:function(r){c=r?"on":"off";$("#funZoneIndicator").html('<img src="images/'+c+'.gif" border="0" alt="'+c+'">');$("#comments_wrapper").html(r);if(c=="on")bindCroppic()}})})
+bindCroppic()
 })

@@ -147,7 +147,7 @@ if ($role == 'president') $hint .= '<a href="" onClick="$(\'#addsform\').toggle(
 <form id="addsform" class="hidden" method="POST">
 формат дополнений и поправок прогнозов (размер названия, отступы) такой же, как при публикации прогнозов;<br>
 пропуск первого матча из-за красной карточки не помечайте - это делается автоматически при расчете итогов;<br>
-указывайте время сервера - это поможет определить прогнозы, отосланные после начала реальных матчей<br>
+указывайте среднеевропейское время - это поможет определить прогнозы, отправленные после начала матчей<br>
 <textarea name=addprognoz class="monospace" rows="' . max(6, substr_count($addfile, "\n") + 1) . '" cols="67">'.htmlspecialchars($addfile).'</textarea><br>
 <input type=submit name=submit value="сохранить">
 </form>
@@ -176,7 +176,7 @@ foreach ($mbox as $msg) {
     $aprognoz[$team] = array('prog' => $prog, 'time' => $time, 'pena' => $pena, 'warn' => $warn);
 
   if (($prog != $hidden) || ($role == 'president')) {
-    $hint .= htmlspecialchars(mb_sprintf('%-21s%-20s%-5s', $team, $prog, $warn)) . date('d M y  H:i:s', $time) . "\n";
+    $hint .= htmlspecialchars(mb_sprintf('%-21s%-20s%-5s', $team, $prog, $warn)) . date_tz('d M y  H:i:s', '', $time, $_COOKIE['TZ'] ?? 'Europe/Berlin') . "\n";
     if (($penalties = trim($pena)) && ($prog != $hidden)) $hint .= '                     ' . strtolower($penalties) . "\n";
   }
 }
@@ -210,7 +210,7 @@ if ($addfile) {
       }
       if ($time = trim(substr($line, 0, 29))) $time = strtotime($time);
       $aprognoz[$team] = array('time' => $time, 'prog' => $prognoz, 'pena' => '', 'warn' => $warn);
-      ($time) ? $date = date('d M y  H:i:s', $time) : $date = '';
+      ($time) ? $date = date_tz('d M y  H:i:s', '', $time, $_COOKIE['TZ'] ?? 'Europe/Berlin') : $date = '';
       if (($prognoz != $hidden) || ($role == 'president'))
         $hint .= htmlspecialchars(mb_sprintf('%-21s%-20s%-5s', $team, $prognoz, $warn)) . $date . "\n";
     }
@@ -292,7 +292,7 @@ foreach ($program_matches as $line) if ($line = trim($line)) { // rows
         $tournament = '&nbsp;';
         $match = $realteam[$hfix].' - '.$realteam[$afix];
       }
-      $mt = '-:-'; $rt = '?'; $tn = '??:??'; // по умолчанию информации о счёте и времени матча нет
+      $mt = '-:-'; $rt = '?'; $tn = '19:00'; // по умолчанию информации о счёте и времени матча нет
       if (isset($base[$match])) {
         list($match_date, $match_time) = explode(' ', $base[$match][2]);
         list($match_month, $match_day) = explode('-', $match_date);
@@ -344,7 +344,11 @@ foreach ($program_matches as $line) if ($line = trim($line)) { // rows
         }
         $tr_id = $base[$match][6] ? ' id="' . $base[$match][6] . '"' : '';
       }
-      else $tr_id = '';
+      else
+      {
+        $tr_id = '';
+        $match_date = substr($dm, 3, 2).'-'.substr($dm, 0, 2);
+      }
       $mdp[$nm] = array('home' => $home, 'away' => $away, 'trnr' => $tournament, 'date' => $dm, 'rslt' => $mt, 'case' => $rt);
       if ($nm == 11) {
         if ($closed) $colspan = 7;
@@ -354,7 +358,7 @@ foreach ($program_matches as $line) if ($line = trim($line)) { // rows
 ';
         $rprognoz .= ' ';
       }
-      $program_table .= '<tr'.$tr_id.'><td class="tdn">'.$nm.'</td><td style="min-width:288px;'.($tr_id != '' ? 'cursor:pointer" onClick="details($(this).closest(\'tr\'))' : '').'">'.$home.' - '.$away.'</td><td>'.$tournament.'</td><td class="td1">&nbsp;'.$dm.' '.$tn.'&nbsp;</td><td align="center">&nbsp;'.$mt.'&nbsp;</td><td align="center">&nbsp;'.$rt.'&nbsp;</td>';
+      $program_table .= '<tr'.$tr_id.'><td class="tdn">'.$nm.'</td><td style="min-width:288px;'.($tr_id != '' ? 'cursor:pointer" onClick="details($(this).closest(\'tr\'))' : '').'">'.$home.' - '.$away.'</td><td>'.$tournament.'</td><td class="td1">&nbsp;'.date_tz('d.m H:i', $match_date, $tn, $_COOKIE['TZ'] ?? 'Europe/Berlin').'&nbsp;</td><td align="center">&nbsp;'.$mt.'&nbsp;</td><td align="center">&nbsp;'.$rt.'&nbsp;</td>';
 //      if (!$closed && ($role != 'badlogin')) {
 //        (($publish && $nm == 1) || $rt != '?') ? $onchange = 'disabled="disabled"' :  $onchange = 'onchange="newpredict(); return false;"';
       if ($rt == '1' || $rt == 'X' || $rt == '2') {
@@ -433,7 +437,8 @@ foreach ($program_matches as $line) if ($line = trim($line)) { // rows
 $program_table .= '</tbody>
 </table>
 ';
-if (!$closed) $hint = '<p class="red">Контрольный срок отправки прогнозов: '.$lastdate.' '.$lasttm.'</p>' . $hint;
+if (!$closed)
+  $hint = '<p class="red">Контрольный срок отправки прогнозов: '.date_tz($lasttm ? 'd.m H:i' : 'd.m', substr($lastdate, 3, 2).'-'.substr($lastdate, 0, 2), $lasttm, $_COOKIE['TZ'] ?? 'Europe/Berlin').'</p>' . $hint;
 
 // теперь список прогнозов по парам виртуальных матчей
 // use simulated results if any
@@ -530,7 +535,7 @@ foreach ($virtmatch as $line) {
     $gs++;
   }
   else if (isset($aprognoz[$home]['time']) && $aprognoz[$home]['time'])
-    $date = date('d M y  H:i:s', $aprognoz[$home]['time']);
+    $date = date_tz('d M y  H:i:s', '', $aprognoz[$home]['time'], $_COOKIE['TZ'] ?? 'Europe/Berlin');
   else
     $date = '                   ';
 
@@ -616,7 +621,7 @@ foreach ($virtmatch as $line) {
     $gs++;
   }
   else if (isset($aprognoz[$away]['time']) && $aprognoz[$away]['time'])
-    $date = date('d M y  H:i:s', $aprognoz[$away]['time']);
+    $date = date_tz('d M y  H:i:s', '', $aprognoz[$away]['time'], $_COOKIE['TZ'] ?? 'Europe/Berlin');
   else
     $date = '                   ';
 
@@ -875,7 +880,7 @@ function show_alert(){
 	}
 	return false;
 }
-var '.date('\h\o\u\r\s=G,\m\i\n\u\t\e\s=i,\\s\e\c\o\n\d\s=s',time()).',sendfp='.(date('G',time())>2&&$today_matches>2*$today_bz?'true':'false').',base=[]
+var '.date_tz('\h\o\u\r\s=G,\m\i\n\u\t\e\s=i,\s\e\c\o\n\d\s=s', '', time(), $_COOKIE['TZ'] ?? 'Europe/Berlin').',sendfp='.(date('G',time())>2&&$today_matches>2*$today_bz?'true':'false').',base=[]
 ' . $id_arr . '
 mom=[]
 momup=function(i){clearInterval(mom[i]);mom[i]=setInterval(function(){if(!isNaN(base[i][3])){tm=+base[i][3];base[i][3]=(tm==45||tm==90)?tm+"+":++tm;row=$("#"+i)[0];row.cells[5].innerHTML="<span class=\"blink\">"+base[i][3]+"’</span>"}},60000)}
@@ -912,8 +917,8 @@ function detrow(t,tmpz){
 		else if(t==6)out+="<div class=\"min right\">"+tmps[0]+"\"</div><div class=\"right\">"+tmps[2]+"<br><em>"+tmps[1]+"</em></div>";
 		out+="</td><td class=\"center\">";
 		if(t<2)out+="&#9917;";
-		else if(t<6)out+="<img src=\"https://www.livescore.bz/img/N"+(t<4?"k":"s")+"kart.gif\" height=\"12\">";
-		else out+="<img src=\"https://www.livescore.bz/img/sub.gif\" height=\"12\">";
+		else if(t<6)out+="<i class=\"text-"+(t<4?"danger":"warning")+"\">&#x25AE;</i>";
+		else out+="<h5 class=\"green-red\">&#x21c5;</h3>";
 		out+="</td><td class=\"side\">";
 		if(t==1||t==3||t==5)out+="<div class=\"min left\">"+tmps[0]+"\"</div><div class=\"left\">"+tmps[1]+"</div>";
 		else if(t==7)out+="<div class=\"min left\">"+tmps[0]+"\"</div><div class=\"left\">"+tmps[2]+"<br><em>"+tmps[1]+"</em></div>";

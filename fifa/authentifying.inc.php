@@ -9,9 +9,10 @@ if ($email_ok) {
   $data_cfg = [
    'cmd' => 'auth_token',
    'name' => $name,
+   'mail' => $_POST['name_str'],
    'ts' => (time() + 600)
   ];
-  $cfg = base64_encode(mcrypt_encrypt( MCRYPT_BLOWFISH, $key, json_encode($data_cfg), MCRYPT_MODE_CBC, $iv ));
+  $cfg = rtrim(base64_encode(openssl_encrypt( json_encode($data_cfg), 'AES-256-CBC', $key, 0, $iv )), '=');
   // ======================================================
   send_email('FPrognoz.org <fp@fprognoz.org>', '', $_POST['name_str'], 'ФП. Временная ссылка для входа на сайт ' . $this_site,
 'Вы получили временную ссылку для для доступа на сайт ' . $this_site . '.

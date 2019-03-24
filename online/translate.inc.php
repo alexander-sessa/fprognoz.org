@@ -99,6 +99,8 @@ $translate = array(
 'Oleksandria' => 'Александрия',
 'Zakarpattia Uzhhorod' => 'Закарпатье',
 'Dnipro Dnipropetrovsk' => 'Днепр',
+'Dnipro-1' => 'Днепр-1',
+"Inhulets'" => 'Ингулец',
 'Karpaty' => 'Карпаты',
 'Volyn' => 'Волынь',
 'Sevastopol' => 'Севастополь',
@@ -138,5 +140,6 @@ $translate = array(
 'Krumkachy' => 'Крумкачы',
 'Gorodeya' => 'Городея',
 'Isloch' => 'Ислочь',
+'Energetyk-BDU' => 'Энергетик-БГУ',
 );
 ?>

@@ -28,11 +28,13 @@ foreach ($codes as $player) if ($player[0] != '#')
       $cfm['?'] = ' selected';
 //      $warning = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; !!! Пожалуйста, подтвердите свое участие !!!';
     }
-    foreach ($cfm as $choice => $selected) $out .= '<option value="'.$choice.'"'.$selected.'>'.$choice.'</option>';
-    $out .= '</select></td><td><input type="text" name="email" value="'.$aplayer[3].'" /><input type="submit" /></td></tr>
+    foreach ($cfm as $choice => $selected)
+      $out .= '<option value="'.$choice.'"'.$selected.'>'.$choice.'</option>';
+
+    $out .= '</select></td><td><input type="text" name="email" value="'.$aplayer[3].'"><input type="submit"></td></tr>
 ';
   }
-  else $out .= '<tr><td>'.$aplayer[0].'</td><td>'.$team_name.'</td><td>'.$aplayer[2].'</td><td align="center">'.$aplayer[5].'</td><td>&nbsp;</td></tr>
+  else $out .= '<tr><td>'.$aplayer[0].'</td><td>'.$team_name.'</td><td class="player_name">'.$aplayer[2].'</td><td align="center">'.$aplayer[5].'</td><td>&nbsp;</td></tr>
 ';
   $tsv .= $aplayer[0].'	'.$aplayer[1].'	'.$aplayer[2].'	'.$aplayer[3].'	'.$aplayer[4].'	'.$aplayer[5].'
 ';

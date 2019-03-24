@@ -22,6 +22,7 @@ $ccs = array(
 'FRA' => array('Франция', 'France'),
 'PRT' => array('Португалия', 'Portugal'),
 'SCO' => array('Шотландия', 'Scotland'),
+'SUI' => array('Швейцария', 'Switzerland'),
 'UEFA' => array('УЕФА', 'UEFA'),
 );
 $online_dir = '/home/fp/data/online/';
@@ -75,6 +76,7 @@ print '<?xml version="1.0" encoding="utf-8"?>
 <a href="sco.php">Scotland</a><br />
 <a href="esp.php">Spain</a><br />
 <a href="ukr.php">Ukraine</a><br />
+<a href="sui.php">Switzerland</a><br />
 </p>
 </card></wml>';
 ?>

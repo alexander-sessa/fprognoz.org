@@ -271,6 +271,7 @@ $("#sortable").sortable()
         else {
           $st = '-';
           $tr_id = '';
+          $match_date = substr($dm, 3, 2).'-'.substr($dm, 0, 2);
         }
         $mdp[$nm] = array('home' => $home, 'away' => $away, 'trnr' => $tournament, 'date' => $dm, 'rslt' => $mt, 'case' => $rt);
 
@@ -280,7 +281,7 @@ $("#sortable").sortable()
           $program_table .= '</tr>
 ';
         }
-        $program_table .= '<tr' . $tr_id . '><td class="tdn">'.$nm.'</td><td style="text-align:left;width:288px' . ($tr_id != '' ? ';cursor:pointer" onClick="details($(this).closest(\'tr\'))' : '') . '">'.$home.' - '.$away.'</td><td align="left">'.$tournament.'</td><td align="right">&nbsp;'.$dm.' '.$tn.'&nbsp;</td><td align="center">&nbsp;'.$mt.'&nbsp;</td><td align="middle">&nbsp;'.$rt.'&nbsp;</td>';
+        $program_table .= '<tr' . $tr_id . '><td class="tdn">'.$nm.'</td><td style="text-align:left;width:288px' . ($tr_id != '' ? ';cursor:pointer" onClick="details($(this).closest(\'tr\'))' : '') . '">'.$home.' - '.$away.'</td><td align="left">'.$tournament.'</td><td align="right">&nbsp;'.date_tz('d.m H:i', $match_date, $tn, $_COOKIE['TZ'] ?? 'Europe/Berlin').'&nbsp;</td><td align="center">&nbsp;'.$mt.'&nbsp;</td><td align="middle">&nbsp;'.$rt.'&nbsp;</td>';
 
 // $l, $nm, $rt, $mt, $mtemp, $prognoz_str, (!$closed && $team_code)
           if ($rt == '1' || $rt == '0' || $rt == '2') {
@@ -1261,7 +1262,7 @@ $("#sortable").sortable()
       default   : $hint = '';
     }
   else {
-    $hint = '<p class="red">Срок отправки прогнозов '.$lastdate.' '.$lasttm.' по времени сервера<br /></p>';
+    $hint = '<p class="red">Срок отправки прогнозов '.date_tz('d.m H:i', substr($lastdate, 3, 2).'-'.substr($lastdate, 0, 2), $lasttm, $_COOKIE['TZ'] ?? 'Europe/Berlin').'<br></p>';
     switch($l) {
       case 'FFP': $match_title .= 'Для всех 11 матчей программки надо угадывать исход.'; break;
       case 'PRE': $match_title .= 'Для всех 10 матчей программки надо угадывать счёт.'; break;
@@ -1318,7 +1319,7 @@ else
 <!--link href="css/prognoz.css?ver=625" rel="stylesheet"-->
 <script type="text/javascript" src="js/jquery/jquery.ui.touch-punch.min.js"></script>
 <script>//<![CDATA[
-var '.date('\h\o\u\r\s=G,\m\i\n\u\t\e\s=i,\s\e\c\o\n\d\s=s',time()).',sendfp=false,base=[],mom=[]
+var '.date_tz('\h\o\u\r\s=G,\m\i\n\u\t\e\s=i,\s\e\c\o\n\d\s=s', '', time(), $_COOKIE['TZ'] ?? 'Europe/Berlin').',sendfp=false,base=[],mom=[]
 ' . $id_arr . '
 function newpredict(){
 	var p="";
@@ -1348,7 +1349,7 @@ function show_alert() {
 	if(r=(s.match(/[*]/gi).length==0||confirm("В прогнозе остались незаполненные позиции.') . '\nВы действительно хотите отправить его в таком виде?")))document.forms[0].submit();
 	return r;
 }
-momup=function(i){clearInterval(mom[i]);mom[i]=setInterval(function(){if(!isNaN(base[i][3])){tm=+base[i][3];base[i][3]=(tm==45||tm==90)?tm+"+":++tm;row=$("#"+i)[0];row.cells[5].innerHTML="<span class=\"blink\">"+base[i][3]+"’</span>"}},60000);}
+momup=function(i){clearInterval(mom[i]);mom[i]=setInterval(function(){if(!isNaN(base[i][3])){tm=+base[i][3];base[i][3]=(tm==45||tm==90)?tm+"+":++tm;row=$("#"+i)[0];row.cells[5].innerHTML="<span class=\"blink\">"+base[i][3]+"’</span>"}},60000)}
 scorefix=function(d){
 	i=d.idx
 	m=+d.dk
@@ -1382,8 +1383,8 @@ function detrow(t,tmpz){
 		else if(t==6)out+="<div class=\"min right\">"+tmps[0]+"\"</div><div class=\"right\">"+tmps[2]+"<br><em>"+tmps[1]+"</em></div>";
 		out+="</td><td class=\"center\">";
 		if(t<2)out+="&#9917;";
-		else if(t<6)out+="<img src=\"https://www.livescore.bz/img/N"+(t<4?"k":"s")+"kart.gif\" height=\"12\" />";
-		else out+="<img src=\"https://www.livescore.bz/img/sub.gif\" height=\"12\" />";
+		else if(t<6)out+="<i class=\"text-"+(t<4?"danger":"warning")+"\">▮</i>";
+		else out+="<h5 class=\"green-red\">⮁</h3>";
 		out+="</td><td class=\"side\">";
 		if(t==1||t==3||t==5)out+="<div class=\"min left\">"+tmps[0]+"\"</div><div class=\"left\">"+tmps[1]+"</div>";
 		else if(t==7)out+="<div class=\"min left\">"+tmps[0]+"\"</div><div class=\"left\">"+tmps[2]+"<br><em>"+tmps[1]+"</em></div>";
