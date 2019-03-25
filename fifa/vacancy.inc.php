@@ -41,7 +41,7 @@ if (isset($_POST['name_str'])) {
   $teamsin = $_POST['teams_in'];
   $teamsout = $_POST['teams_out'];
   if (!$human) {
-    $params['secret'] = '6Lc8dioUAAAAAC3_a9PP6k9r5aA2_o2S5kq1j3oJ';
+    $params['secret'] = $recaptcha_secret2;
     $params['response'] = $_POST['g-recaptcha-response'];
 //    $uri = http_build_query($params);
     $options = array(
@@ -125,7 +125,7 @@ echo '
 <tr><td align="right">коды команд, от которых откажетесь: </td><td><input type="text" name="teams_out" value="'.$teamsout.'" size="40" /></td></tr>
 <tr><td align="right">коды команд, которые хотите получить: </td><td><input type="text" name="teams_in" value="'.$teamsin.'" size="40" /></td></tr>
 </table>
-<p><button class="g-recaptcha" data-sitekey="6Lc8dioUAAAAAArLlgGJDVEy6nwwQDSKWrmAOvkq" data-callback="onSubmit"> отправить заявку </button></p>
+<p><button class="g-recaptcha" data-sitekey="'.$recaptcha_sitekey.'" data-callback="onSubmit"> отправить заявку </button></p>
 </form></center>
 Есть 6 свободных команды в первой лиге ФП Украины: Александрия, Колос, Рух, Оболонь, ФК Львов и Кривбасс, а также команда второй французской лиги - Troyes.
 <br />

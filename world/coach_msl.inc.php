@@ -81,8 +81,7 @@ exit;
           $path = dirname(__FILE__).'/'.$class.'.php';
           require_once $path;
         });
-        $secret = '%some_secret_key%;
-        $recaptcha = new \ReCaptcha\ReCaptcha($secret);
+        $recaptcha = new \ReCaptcha\ReCaptcha($recaptcha_secret);
         $resp = $recaptcha->setExpectedHostname($_SERVER['SERVER_NAME'])
                           ->setExpectedAction('registration')
                           ->setScoreThreshold(0.5)
