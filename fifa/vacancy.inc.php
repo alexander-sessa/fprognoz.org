@@ -1,33 +1,6 @@
     <p class="title text15b">&nbsp;&nbsp;&nbsp;Форма отправки заявок на свободные команды</p>
     <hr size="1" width="98%" />
 <?php
-
-/* main section */
-
-function HTTP_CURL($url, $ref, $uri, $cookie) {
-  $ch = curl_init(); 
-  $options = array(
-CURLOPT_URL => $url,
-CURLOPT_USERAGENT => 'Mozilla/5.0 (compatible; SFPautoTrainer/1.0; +https://fprognoz.org)',
-CURLOPT_COOKIEJAR => '/home/fp/fprognoz.org/sfp-team/cookie/'.$cookie,
-CURLOPT_COOKIEFILE => '/home/fp/fprognoz.org/sfp-team/cookie/'.$cookie,
-CURLOPT_HTTPHEADER => array('ACCEPT_LANGUAGE: ru', 'CONNECTION: Keep-Alive'),
-CURLOPT_REFERER => $ref,
-CURLOPT_HEADER => 1,
-CURLOPT_FOLLOWLOCATION => 1,
-CURLOPT_TIMEOUT => 60,
-CURLOPT_RETURNTRANSFER => true
-);
-  if ($uri != '') {
-    $options[CURLOPT_POST] = 1;
-    $options[CURLOPT_POSTFIELDS] = $uri;
-  }
-  curl_setopt_array($ch, $options);
-  $ret = curl_exec($ch); 
-  curl_close($ch); 
-  return $ret;
-}
-
 if (isset($_SESSION['Coach_name'])) {
   $name = $_SESSION['Coach_name'];
   $human = true;

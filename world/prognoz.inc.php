@@ -1283,7 +1283,7 @@ auto_comment($position, $newposition, $min_diff, ball('home', $i, $size), ball('
       $match_title .= '
 </div>';
 
-      $prognozlists[] = '<div id="tab-'.$matchn.'" class="multitabs"'.(isset($n) && $matchn == $n ? '' : ' style="display:none"').'>
+      $prognozlists[] = '<div id="tab-'.$matchn.'" class="multitabs"'.(isset($n) && $matchn == $n || $published && $matchn == 1 ? '' : ' style="display:none"').'>
 '.$match_title.'
   <div class="monospace">
 '.$prognozlist_head . $prognozlist.'
@@ -1400,9 +1400,11 @@ else if (isset($updates)) // REST responce on event 'FT'
 ') . '"}]';
 else
 {
-  $html = '
-<link rel="stylesheet" href="/css/balls.css?ver=17">
-' . ($published ? '<div style="height:20px"></div>' : '<script>//<![CDATA[
+  $html = $closed ? '' : '
+<link rel="stylesheet" href="/css/balls.css?ver=17">';
+  $html .= '
+<script>//<![CDATA[';
+  $html .= $published ? '' : '
 var '.date_tz('\h\o\u\r\s=G,\m\i\n\u\t\e\s=i,\s\e\c\o\n\d\s=s', '', time(), $_COOKIE['TZ'] ?? 'Europe/Berlin').',sendfp='.(date('G')>2&&$today_matches>2*$today_bz?'true':'false').',base=[],mom=[]
 ' . $id_arr . '
 function newpredict(){var p="";m=$("#pl").data("view")?6:18;for(i=1;i<=m;i++)p+=(ps=$("#dice"+i).val())?ps:"=";$("#prognoz_str").val(p);}
@@ -1459,8 +1461,6 @@ $(document).ready(function(){
       $("#replace-"+$("#dynamic").data("tab")).css("color","red")}
     })
 })
-'
-.($today_matches || true ? '
 momup=function(i){clearInterval(mom[i]);mom[i]=setInterval(function(){if(!isNaN(base[i][3])){tm=+base[i][3];base[i][3]=(tm==45||tm==90)?tm+"+":++tm;row=$("#"+i)[0];row.cells[5].innerHTML="<span class=\"blink\">"+base[i][3]+"’</span>"}},60000)}
 for(i=1;i<=6;i++){if($.isArray(base[i])&&!isNaN(base[i][3]))momup(i)}
 scorefix=function(d){
@@ -1483,7 +1483,8 @@ scorefix=function(d){
 		row.cells[4].innerHTML=(base[i][1]==1)?"<span class=\"blink\">"+r+"</span>":(s=="FT")?r:"<span class=\"red\">"+r+"</span>"
 		row.cells[5].innerHTML=(s=="HT"||s=="SP")?"<span class=\"red\">"+s+"</span>":(s=="?"||s=="PP")?"<span>"+s+"</span>":(s=="FT")?"<span>"+((h==a)?0:(h>a)?1:2)+"</span>":"<span class=\"blink\">"+s+"’</span>"
 	}
-}
+}';
+  $html .= '
 function detrow(t,tmpz){
 	m=t>5?1:0;out="";
 	for(i=1-m;i<tmpz.length-m;i++){
@@ -1515,16 +1516,19 @@ mdetails=function(tmpd,id,pos1,pos2){
 }
 socket=io.connect("//score2live.net:1998",{"reconnect":true,"reconnection delay":500,"max reconnection attempts":20,"secure":true})
 socket.on("connect",function(){socket.emit("hellothere")})
+socket.on("footdetails",function(data){data=data[0];if ($(".p-table").find("tr[did="+data.id+"]").length)mdetails(data.mdetay,data.id,data.pos1,data.pos2)})';
+  $html .= $published ? '
+//]]></script>
+<div style="height:20px"></div>' : '
 socket.on("hellobz",function(){socket.emit("getscores","football(soccer)","today")})
 socket.on("scoredatas",function(d){if(sendfp){$.post("'.$this_site.'",{a:"'.$a.'",m:"'.$m.'",s:"'.$s.'",t:"'.$t.'",matches:JSON.stringify(d.data.matches)},function(json){$.each(JSON.parse(json),function(idx,obj){base.push(obj.id);base[obj.id]=obj.d})})}$("#statusline").html("")})
-socket.on("footdetails",function(data){data=data[0];if ($(".p-table").find("tr[did="+data.id+"]").length)mdetails(data.mdetay,data.id,data.pos1,data.pos2)})
 socket.on("guncelleme",function(d){var json="";$.each(d.updates,function(index,ux){if(base[ux.idx]!==undefined){if(ux.s==4&&base[ux.idx][3]!="FT")json+=(json.length?",":"")+JSON.stringify(ux);scorefix(ux)}});if(json.length)$.post("'.$this_site.'",{a:"'.$a.'",m:"'.$m.'",s:"'.$s.'",t:"'.$t.'"'.(isset($n)?',n:"'.$n.'"':'').',updates:"["+json+"]"},function(res){JSON.parse(res,function(k,v){if(k=="id")id=v;else if(k=="html")$(id).html(decodeURIComponent(v))})})})
-' : '
-') . '//]]></script>
+//]]></script>
 <div class="d-flex">
 	<div id="statusline" class="w-100 text-left">получение результатов с <a href="https://www.livescore.bz" sport="football(soccer)" data-1="today" lang="en">www.livescore.bz</a></div>
 	<div id="timedisplay" class="w-100 text-right">&nbsp;</div>
-</div>') . '
+</div>';
+  $html .= '
 <div class="h4 text-center">' . $head . '</div>
 <div class="d-flex">
 	<div class="table-condensed table-striped mx-auto">' . $program_table . '</div>

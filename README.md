@@ -53,6 +53,8 @@ $redis_host = 'somename.xoo62h.ng.0001.use2.cache.amazonaws.com';
 $redis_port = 6379;
 
 $salt = 'произвольная фраза для защиты передаваемых данных';
+$recaptcha_sitekey = 'ключ сайта google recaptcha';
+$recaptcha_secret = 'секретный ключ google recaptcha';
 
 $mail_server = '{fprognoz.org:993/imap/ssl}INBOX';
 $mail_user = 'somename';
@@ -95,8 +97,8 @@ $mail_password = 'пароль для почты';
 
 ## Зависимости
 * Для приёма прогнозов по почте требуются imap-сервер (dovecot-imapd) и incron, в задачах incron дожна быть указана **/var/mail/ваш_почтовый_ящик IN_CLOSE_WRITE /путь_к_сайту/fprognoz.org/online/scanmail.php**
-* Используются следующие модули php: php-curl (для построения рейтинга), php-imap (для приёма прогнозов по почте), php-mbstring, php-tidy (для сохранения в красивом формате текстов после CKEditor)
-* Для извлечения рейтинга команд из файлов в XLS-формате используется **ssconvert**, входящий в пакет **gnumeric**
+* Используются следующие модули php: php-imap (для приёма прогнозов по почте), php-mbstring, php-tidy (для сохранения в красивом формате текстов после CKEditor), php-gd, php-xml и php-zip (эти 3 требуются для построения внутреннего рейтинга реальных команд)
+* Для извлечения рейтинга команд из файлов в XLS-формате используется **phpoffice/phpspreadsheet**, установленный посредством **composer**
 
 Больше полезной информации для огранизаторов турниров есть на самом web-сервере в файле **fifa/help-hq.inc.php**
 

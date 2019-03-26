@@ -1,37 +1,39 @@
 #!/usr/bin/php
 <?php
+require '/home/fp/vendor/autoload.php';
+use \PhpOffice\PhpSpreadsheet\Reader\Xls;
+
 $ranking = '/home/fp/data/online/ranking/';
 include 'realteam.inc.php';
 $year = 2019;
 // rank 2019
 
 function remote_file_size($url) {
-     $ch = curl_init($url);
-     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-     curl_setopt($ch, CURLOPT_HEADER, TRUE);
-     curl_setopt($ch, CURLOPT_NOBODY, TRUE);
-     $data = curl_exec($ch);
-     $size = curl_getinfo($ch, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
-     curl_close($ch);
-     return $size;
+    stream_context_set_default(['http' => ['method' => 'HEAD']]);
+    $head = array_change_key_case(get_headers($url, 1));
+    return $head['content-length'] ?? 0;
 }
 
 function write_year_ranking($year) {
   global $ranking;
   global $realteam;
-  $xl = file($ranking . 'ECR' . $year . '.txt');
-  unset($xl[0]);
   $out = $log = '';
-  foreach ($xl as $line) if (strlen($line) > 16) {
-    $line = str_replace('	NED	', '	NLD	', $line);
-    $a = explode('	', $line);
-    $nc = $a[2] == '' || is_numeric($a[2]) ? 3 : 2;
-    $team = trim($a[$nc++], ' "');
-    $cc = trim($a[$nc++], '"');
-    $score = isset($a[$nc]) ? $a[$nc] : 0;
-    if ($team && isset($realteam[$team])) {
+  $reader = new Xls();
+  $spreadsheet = $reader->load($ranking . 'ECR' . $year . '.xls');
+  $sheet = $spreadsheet->getSheet(0);
+  $col = 'A';
+  while ($sheet->getCell($col.'1') != $year)
+    $col++;
+
+  $row = 2;
+  while (trim($sheet->getCell($col.($row++))))
+  {
+    $nc = $col;
+    $team = trim($sheet->getCell(($nc++).$row), ' "');
+    $cc = trim($sheet->getCell(($nc++).$row), '"');
+    $score = $sheet->getCell($nc.$row) ?? 0;
+    if ($team && isset($realteam[$team]))
       $out .= $realteam[$team].','.$cc.','.str_replace(',', '.', $score)."\n";
-    }
     else if ($score)
       $log .= $year.': ' . $score.' '.$cc.','.$team."\n";
 
@@ -43,7 +45,6 @@ function write_year_ranking($year) {
 $url = 'http://www.european-football-statistics.co.uk/ecr/ECR' . $year . '.xls';
 if (!is_file($ranking . 'ECR' . $year . '.xls') || remote_file_size($url) != filesize($ranking . 'ECR' . $year . '.xls')) {
   file_put_contents($ranking . 'ECR' . $year . '.xls', file_get_contents($url));
-  exec("/usr/bin/ssconvert -O 'separator=\"	\"' ".$ranking."ECR$year.xls ".$ranking."ECR$year.txt 2>/dev/null");
   $log = write_year_ranking($year);
   $log .= write_year_ranking($year - 1);
   // merge rankings
