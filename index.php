@@ -1538,26 +1538,22 @@ else {
 
     <title><?=$title?></title>
 
-    <!-- Bootstrap CSS CDN -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link href="/css/fp.css?ver=270" rel="stylesheet">
     <link href="/css/comments.css?ver=2" rel="stylesheet">
     <link href="/js/croppic/croppic.css" rel="stylesheet">
+
     <!--[if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script><![endif]-->
     <script defer src="https://use.fontawesome.com/releases/v5.2.0/js/solid.js" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.2.0/js/fontawesome.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.slim.js" integrity="sha256-RtMTraB5gGlLER0FkKBcaXCmZCQCxkKS/dXm7MSEoEY=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.min.js" crossorigin="anonymous"></script>
-    <!--script src="https://cdn.ckeditor.com/ckeditor5/11.0.1/inline/ckeditor.js"></script>
-    <script src="https://cdn.ckeditor.com/ckeditor5/11.0.1/inline/translations/ru.js"></script-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.6/jstz.min.js"></script>
-    <script src="/js/ckeditor5-inline/build/ckeditor.js"></script>
-    <script src="/js/ckeditor5-inline/build/translations/ru.js"></script>
-    <script src="/js/jquery/jquery-ui.min.js"></script>
-    <script src="/js/jquery/jquery.color.js"></script>
-    <script src="/js/jquery/jquery.ui.touch-punch.min.js"></script>
-    <script src="/js/socket.io/socket.io.slim.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.6/jstz.min.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/12.0.0/inline/ckeditor.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/12.0.0/inline/translations/ru.js"></script>
+    <script src="/js/jquery-ui/jquery-ui.min.js"></script>
+    <script src="/js/jquery-ui/jquery.ui.touch-punch.min.js"></script>
     <script src="/js/croppic/croppic-3.0.min.js"></script>
     <script src="/js/fp.js?ver=194"></script>
 </head>

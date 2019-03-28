@@ -99,7 +99,15 @@ function last_season($cca) {
 
   return $season;
 }
-
+$names = [
+  'Gleb Arsatov' => 'Gleb',
+  'Andrey_Vedeneyev' => 'Andrey Vedeneyev',
+  'AnDrusha' => 'Андрей Вышинский',
+  'Максим Кузнецов' => 'maku',
+  'Eugeny (Joker) Plugin' => 'Joker',
+  'Витя Барановский' => 'Vitya',
+  'Serge Shibaev' => 'Villarreal'
+];
 $imap = imap_open($mail_server, $mail_user, $mail_password);
 if (!$imap)
   $log .= ' can not connect to ' . $mail_server . ': ' . imap_last_error();
@@ -114,10 +122,16 @@ else {
       $content = is_file($tour_dir . '/mail') ? file_get_contents($tour_dir . '/mail') : '';
       foreach ($predicts as $line) {
         $log .= ' ' . trim($line);
+        list($team, $predict, $tstamp, $pena) = explode(';', $line);
+        if (isset($names[$team]))
+        { // дублирование имён для некоторых...
+            $line1 = $names[$team] . ';' . $predict . ';' . $tstamp . ';' . $pena;
+            $new .= $line1;
+            $log .= ' ' . trim($line1) . ' received;';
+        }
         if (strpos($content, $line) === false) {
-          list($team, $predict, $tstamp, $pena) = explode(';', $line);
           $line1 = $team . ';' . $predict . ';' . ($tstamp - 1) . ';' . $pena;
-          if (strpos($content, $line) === false) {
+          if (strpos($content, $line1) === false) {
             $new .= $line;
             $log .= ' received;';
           }

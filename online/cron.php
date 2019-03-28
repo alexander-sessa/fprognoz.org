@@ -341,7 +341,20 @@ function build_prognozlist($country_code, $season, $tour) {
   $prognozlist = '';
   if ($country_code == 'UNL')
   {
-    $ccarr = ['BLR', 'ENG', 'ESP', 'FRA', 'GER', 'ITA', 'NLD', 'PRT', 'RUS', 'SCO', 'SUI', 'UKR'];
+    $ccarr = [
+      'Беларусь' => 'BLR',
+      'Англия' => 'ENG',
+      'Испания' => 'ESP',
+      'Франция' => 'FRA',
+      'Германия' => 'GER',
+      'Италия' => 'ITA',
+      'Голландия' => 'NLD',
+      'Португалия' => 'PRT',
+      'Россия' => 'RUS',
+      'Шотландия' => 'SCO',
+      'Швейцария' => 'SUI',
+      'Украина' => 'UKR'
+    ];
     $path = $online_dir . "$country_code/$season/";
     $prognoz_dir = $path . 'prognoz/' . $tour . '/';
     $players = $players_unl = [];
@@ -392,21 +405,34 @@ function build_prognozlist($country_code, $season, $tour) {
 
     $g = 0;
 
-    $files = scandir($prognoz_dir);
-    $participants = [];
-    foreach ($files as $file)
-      if ($file[0] != '.' && $file != 'cal' && $file != 'mail' && $file != 'term')
-        $participants[] = $file;
 
+    $cal = file($prognoz_dir . 'cal', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    $participants = [];
+    foreach ($cal as $line)
+    {
+      $match = explode(' - ', substr($line, 0, strpos($line, ';')));
+      for ($i = 0; $i < 2; $i++)
+        $match[$i] = $ccarr[$match[$i]] ?? $match[$i];
+
+      $participants = array_merge($participants, $match);
+    }
     foreach ($participants as $cc)
     {
       $cc_predicts = [];
       $new = false;
-      if (is_file($prognoz_dir . $cc))
-      {
+
+      $cc_sv = file($path . $cc.'.csv', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+      $cc_pr = [];
+      if (!is_file($prognoz_dir . $cc))
+        foreach ($cc_sv as $sv_line)
+          $cc_pr[] = explode(';', $sv_line, 2)[0].';;;';
+
+      else
         $cc_pr = file($prognoz_dir . $cc, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        foreach ($cc_pr as $pr_line)
-        {
+
+
+      foreach ($cc_pr as $pr_line)
+      {
           list($code, $predict) = explode(';', $pr_line);
           $predict = strtr($predict, [' ' => '']);
           if (isset($all_predicts[$cc][$code]) && $all_predicts[$cc][$code] != $predict)
@@ -426,12 +452,11 @@ function build_prognozlist($country_code, $season, $tour) {
 
             }
           }
-        }
+      }
 
-        $cc_pr = file($path . $cc.'.csv', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        foreach ($cc_pr as $pr_line)
-        {
-          $name = explode(';', $pr_line, 2)[0];
+      foreach ($cc_sv as $sv_line)
+      {
+          $name = explode(';', $sv_line, 2)[0];
           if (!isset($cc_predicts[$code]))
           {
             if (isset($all_predicts[$cc][$code]))
@@ -447,28 +472,9 @@ function build_prognozlist($country_code, $season, $tour) {
 
             }
           }
-        }
       }
-      else
-      {
-        $cc_pr = file($path . $cc.'.csv', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        foreach ($cc_pr as $pr_line)
-        {
-          $name = explode(';', $pr_line, 2)[0];
-          if (isset($all_predicts[$cc][$code]))
-          {
-            $new = true;
-            $cc_predicts[$code] = $all_predicts[$cc][$code];
-          }
-          else
-          {
-            $cc_predicts[$code] = '';
-            if (trim($predict))
-              $prognozlist .= "Ошибка в прогнозе от $code: $predict\n";
 
-          }
-        }
-      }
+
       $main_size = in_array($cc, $ccarr) && ($t < 12 || $t > 95) ? 5 : 6;
       // дополнительная сортировка $cc_predicts: пустышки вниз
       $n = 0;
@@ -488,6 +494,10 @@ function build_prognozlist($country_code, $season, $tour) {
           else
           {
             $n++;
+/* только для отладки!!!
+            if ($g == count($generators))
+              $g = 0;
+*/
             $prognoz_gen = rtrim($generators[$g++], ' *');
             $prognoz_gen[0] = '0';
             $out .= "$code *;$prognoz_gen;;1\n";
