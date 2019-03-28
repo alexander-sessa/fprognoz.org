@@ -58,14 +58,9 @@ su -c 'tar -xzf /vagrant/images.tgz' fp
 
 # Set cron jobs
 sudo crontab -l -u fp > mycron
-mycron <<':'
-*   * * * *  cd /var/www/site/online; ./cron.php 2>/dev/null >/dev/null &
-1   2 * * *  cd /var/www/site/online; ./xscores.php; ./parse_soccerway.php ; ./newrank.php 2>/dev/null >/dev/null &
-:
+sed -i '$ a \*   * * * *  cd /var/www/site/online; ./cron.php 2>/dev/null >/dev/null &\n1   2 * * *  cd /var/www/site/online; ./xscores.php; ./parse_soccerway.php ; ./newrank.php 2>/dev/null >/dev/null &' mycron
 sudo crontab mycron -u fp
 sudo incrontab -l -u fp > mycron
-mycron <<':'
-/var/mail/fp IN_CLOSE_WRITE /home/fp/fprognoz.org/online/scanmail.php
-:
+sed -i '$ a \/var/mail/fp IN_CLOSE_WRITE /home/fp/fprognoz.org/online/scanmail.php' mycron
 sudo incrontab mycron -u fp
 rm mycron
