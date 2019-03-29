@@ -41,26 +41,18 @@ sudo systemctl reload nginx
 
 # Creating user and installing the site
 sudo useradd -m -U fp
-sudo install -g fp -o fp -d /var/www/site
 cd ~fp
+su -c 'composer require google/recaptcha' fp
+su -c 'composer require phpoffice/phpspreadsheet' fp
+sudo install -g fp -o fp -d /var/www/site
+sudo ln -s /var/www/site fprognoz.org
+su -c 'tar -xzf /vagrant/data.tgz' fp
 su -c 'git config --global user.name "Your Name"' fp
 su -c 'git config --global user.email "your@e-mail"' fp
 su -c 'git clone https://github.com/alexander-sessa/fprognoz.org.git /var/www/site' fp
-su -c 'composer require google/recaptcha' fp
-su -c 'composer require phpoffice/phpspreadsheet' fp
-sudo ln -s /var/www/site fprognoz.org
-
-# Unpacking data, additional images and scripts
-su -c 'tar -xzf /vagrant/data.tgz' fp
-cd fprognoz.org
+cd /var/www/site
 su -c 'tar -xzf /vagrant/images.tgz' fp
-#su -c 'tar -xzf /vagrant/js.tgz --skip-old-files' fp
 
 # Set cron jobs
-sudo crontab -l -u fp > mycron
-sed -i '$ a \*   * * * *  cd /var/www/site/online; ./cron.php 2>/dev/null >/dev/null &\n1   2 * * *  cd /var/www/site/online; ./xscores.php; ./parse_soccerway.php ; ./newrank.php 2>/dev/null >/dev/null &' mycron
-sudo crontab mycron -u fp
-sudo incrontab -l -u fp > mycron
-sed -i '$ a \/var/mail/fp IN_CLOSE_WRITE /home/fp/fprognoz.org/online/scanmail.php' mycron
-sudo incrontab mycron -u fp
-rm mycron
+sudo crontab /vagrant/cron -u fp
+sudo incrontab /vagrant/incron -u fp

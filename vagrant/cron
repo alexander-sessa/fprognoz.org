@@ -1,0 +1,2 @@
+*   * * * *  cd /var/www/site/online; ./cron.php 2>/dev/null >/dev/null &
+1   2 * * *  cd /var/www/site/online; ./xscores.php; ./parse_soccerway.php; ./newrank.php 2>/dev/null >/dev/null &
