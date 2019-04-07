@@ -757,6 +757,7 @@ if ($published)
 
 $half1 = $renew = false;
 $half2 = $closed && filesize($prognoz_dir.'/closed');
+$reload = !$half2 && is_file($prognoz_dir.'/term') ? 30 + file_get_contents($prognoz_dir.'/term') - time() : 0;
 $notice = '&nbsp;';
 $rprognoz = $protocol = $log = $program_table = $id_arr = $id_json = $js_bets = $prognozlist = '';
 $today_matches = $today_bz = $finished = 0;
@@ -1531,7 +1532,7 @@ socket.on("footdetails",function(data){data=data[0];if ($(".p-table").find("tr[d
 socket.on("hellobz",function(){socket.emit("getscores","football(soccer)","today")})
 socket.on("scoredatas",function(d){if(sendfp){$.post("'.$this_site.'",{a:"'.$a.'",m:"'.$m.'",s:"'.$s.'",t:"'.$t.'",matches:JSON.stringify(d.data.matches)},function(json){$.each(JSON.parse(json),function(idx,obj){base.push(obj.id);base[obj.id]=obj.d})})}$("#statusline").html("")})
 socket.on("guncelleme",function(d){var json="";$.each(d.updates,function(index,ux){if(base[ux.idx]!==undefined){if(ux.s==4&&base[ux.idx][3]!="FT")json+=(json.length?",":"")+JSON.stringify(ux);scorefix(ux)}});if(json.length)$.post("'.$this_site.'",{a:"'.$a.'",m:"'.$m.'",s:"'.$s.'",t:"'.$t.'"'.(isset($n)?',n:"'.$n.'"':'').',updates:"["+json+"]"},function(res){JSON.parse(res,function(k,v){if(k=="id")id=v;else if(k=="html")$(id).html(decodeURIComponent(v))})})})
-//]]></script>
+'.($reload ? 'setTimeout(function(){location.reload();},1000*'.$reload.')' : '').'//]]></script>
 <div class="d-flex">
 	<div id="statusline" class="w-100 text-left">получение результатов с <a href="https://www.livescore.bz" sport="football(soccer)" data-1="today" lang="en">www.livescore.bz</a></div>
 	<div id="timedisplay" class="w-100 text-right">'.$notice.'</div>
