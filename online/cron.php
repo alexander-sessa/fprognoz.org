@@ -979,13 +979,16 @@ if (true) {
         $log .= " send reminder for $tour;";
         $absent[$tour] = get_absent_mails($cca, $tour);
       }
-      else if ($action == 'close') { // сбор адресов для рассылки "тормозам"
-        $log .= " close $tour;";
-
-        $season = 2019;
+      else if ($action == 'close') { // дедлайны UNL
+        $season = date('Y');
         $tour_dir = $online_dir . $cca . '/' . $season . '/prognoz/' . $tour . '/';
-          if ($cca == 'UNL' && !is_file($tour_dir . 'closed') && !is_file($tour_dir . 'published')) {
-            // публикация прогнозов после начала первого матча
+        if (is_file($tour_dir . 'closed'))
+        { // запрет замен по событию "дедлайн 2 тайма"
+            file_put_contents($tour_dir . 'closed', '2');
+            $log .= " close substitutions for $tour;";
+        }
+        else if ($cca == 'UNL')
+        { // публикация прогнозов по событию "дедлайн 1 тайма"
             $prognozlist = str_replace('&lt;', '<', build_prognozlist($cca, $season, $tour));
             file_put_contents($online_dir . $cca . '/' . $season . '/publish/' . $tour, $prognozlist);
             $prognozlist .= '
@@ -999,9 +1002,8 @@ https://fprognoz.org/?a=' . $ccn[$cca] . ($tour[4] == 'L' ? '&l='.substr($tour, 
             send_to_all($cca, $subjects[$cca].' Принятые прогнозы на тур ' . $tour . ' (авто-публикация)', $prognozlist);
             touch($tour_dir . ($cca == 'UNL' ? 'closed' : 'published'));
             touch($online_dir . 'schedule/task/start.' . $tour);
-            $log .= ' publish predicts of ' . $tour . ';';
-          }
-
+            $log .= " publish predicts of $tour;";
+        }
       }
       else if ($action == 'monitor') { // check if some match started or finished or 2nd time started
         $tour_monitor = file("$today_dir/$file", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);

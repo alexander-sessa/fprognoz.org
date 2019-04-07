@@ -600,6 +600,7 @@ function match_row($nm, $match, $home, $away, $tournament) {
     $out = '<tr><td colspan="'.($published ? 6 : 7).'"></td></tr>';
 */
   $out .= '<tr' . $tr_id . '><td class="tdn">'.$nm.'</td><td style="text-align:left;width:288px' . ($tr_id != '' ? ';cursor:pointer" onClick="details($(this).closest(\'tr\'))' : '') . '">'.$home.' - '.$away.'</td><td align="left">'.$tournament.'</td><td align="right">&nbsp;'.date_tz('d.m&\n\b\s\p;H:i', $match_date, $tn, $_COOKIE['TZ'] ?? 'Europe/Berlin').'&nbsp;</td><td align="center">&nbsp;'.$mt.'&nbsp;</td><td align="middle">&nbsp;'.$rt.'&nbsp;</td>';
+$published = false;
   if (!$published) // дополняем таблицу блоком предсказаний
   {
     if ($rt == '1' || $rt == 'X' || $rt == '2')
@@ -750,14 +751,13 @@ $program_file = $season_dir . '/programs/' . $tour;
 $prognoz_dir = $season_dir. '/prognoz/' . $tour;
 $closed = is_file($prognoz_dir.'/closed');
 $published = is_file($prognoz_dir.'/published');
+$published = false;
 $config = json_decode(file_get_contents($season_dir . '/fp.cfg'), true);
 $query_string = ($cut = strpos($_SERVER['QUERY_STRING'], '&n=')) ? substr($_SERVER['QUERY_STRING'], 0, $cut) : $_SERVER['QUERY_STRING'];
 if ($published)
   $query_string = strtr($query_string, ['prognoz' => 'result']);
 
-$half1 = $renew = false;
-$half2 = $closed && filesize($prognoz_dir.'/closed');
-$notice = '&nbsp;';
+$half1 = $half2 = $renew = false;
 $rprognoz = $protocol = $log = $program_table = $id_arr = $id_json = $js_bets = $prognozlist = '';
 $today_matches = $today_bz = $finished = 0;
 $teamCodes = $aprognoz = $scorez = $teams = $mdp = $cc = $my_predicts = $history = $prognoz_array = $prognoz_half = [];
@@ -846,26 +846,20 @@ if (isset($_SESSION['Coach_name'])) {
     // замены на второй тайм НЕ ПРИНИМАТЬ ПОСЛЕ НАЧАЛА 2 ТАЙМА !!!!!
 
     if (isset($_POST['replace'])) {
-      if (filesize($prognoz_dir.'/closed'))
-        $notice = '<span class="text-danger">✘ </span> поздно - начался 2-й тайм';
-      else
-      {
-        $out = '';
-        $log = 'состав второго тайма:<br>';
-        $lines = file($prognoz_dir.'/'.$_POST['ccode']);
-        foreach ($lines as $line) if (trim($line)) {
-          list($name, $predict, $ts, $rest) = explode(';', trim($line));
-          $log .= (strlen($log) > 45 ? ', ' : ' ') . (isset($_POST[strtr(rawurlencode($name), ['.' => '_'])]) ? '<mark>' : '') . $name . (isset($_POST[rawurlencode($name)]) ? '</mark>' : '');
-          $out .= $name.';'.$predict.';'.trim($ts).';'.(isset($_POST[strtr(rawurlencode($name), ['.' => '_'])]) ? '4' : '').'
+      $out = '';
+      $log = 'состав второго тайма:<br>';
+      $lines = file($prognoz_dir.'/'.$_POST['ccode']);
+      foreach ($lines as $line) if (trim($line)) {
+        list($name, $predict, $ts, $rest) = explode(';', trim($line));
+        $log .= (strlen($log) > 45 ? ', ' : ' ') . (isset($_POST[strtr(rawurlencode($name), ['.' => '_'])]) ? '<mark>' : '') . $name . (isset($_POST[rawurlencode($name)]) ? '</mark>' : '');
+        $out .= $name.';'.$predict.';'.trim($ts).';'.(isset($_POST[strtr(rawurlencode($name), ['.' => '_'])]) ? '4' : '').'
 ';
-        }
-        $cc_pr = explode("\n", $out);
-        file_put_contents($prognoz_dir.'/'.$_POST['ccode'], $out);
-        $hisfile = fopen($prognoz_dir.'/.'.$_POST['ccode'], 'a');
-        fwrite($hisfile, "$team_code;$log;" . time() . "\n");
-        fclose($hisfile);
-        $notice = '<span class="text-success">✔ </span>состав 2-го тайма сохранён';
       }
+      $cc_pr = explode("\n", $out);
+      file_put_contents($prognoz_dir.'/'.$_POST['ccode'], $out);
+      $hisfile = fopen($prognoz_dir.'/.'.$_POST['ccode'], 'a');
+      fwrite($hisfile, "$team_code;$log;" . time() . "\n");
+      fclose($hisfile);
     }
   }
 }
@@ -1534,7 +1528,7 @@ socket.on("guncelleme",function(d){var json="";$.each(d.updates,function(index,u
 //]]></script>
 <div class="d-flex">
 	<div id="statusline" class="w-100 text-left">получение результатов с <a href="https://www.livescore.bz" sport="football(soccer)" data-1="today" lang="en">www.livescore.bz</a></div>
-	<div id="timedisplay" class="w-100 text-right">'.$notice.'</div>
+	<div id="timedisplay" class="w-100 text-right">&nbsp;</div>
 </div>';
   $html .= '
 <div class="h4 text-center">' . $head . '</div>

@@ -34,24 +34,26 @@ sudo apt-get install -y nginx
 sudo apt-get install -y certbot python-certbot-nginx
 sudo apt-get install -y php-fpm php-imap php-mbstring php-xml php-tidy php-gd php-zip
 sudo apt-get install -y composer
+
 # Unpacking custom server settings from etc.tgz
 sudo tar -xzf /vagrant/etc.tgz -C /
+
 # Reload nginx. Add mail/dns services reloading if need or just reboot the VM
 sudo systemctl reload nginx
 
 # Creating user and installing the site
 sudo useradd -m -U fp
-cd ~fp
-su -c 'composer require google/recaptcha' fp
-su -c 'composer require phpoffice/phpspreadsheet' fp
 sudo install -g fp -o fp -d /var/www/site
-sudo ln -s /var/www/site fprognoz.org
-su -c 'tar -xzf /vagrant/data.tgz' fp
-su -c 'git config --global user.name "Your Name"' fp
-su -c 'git config --global user.email "your@e-mail"' fp
-su -c 'git clone https://github.com/alexander-sessa/fprognoz.org.git /var/www/site' fp
-cd /var/www/site
-su -c 'tar -xzf /vagrant/images.tgz' fp
+sudo ln -s /var/www/site /home/fp/fprognoz.org
+su -c 'cd ~fp
+composer require google/recaptcha
+composer require phpmailer/phpmailer
+composer require phpoffice/phpspreadsheet
+tar -xzf /vagrant/data.tgz
+git config --global user.name "Your Name"
+git config --global user.email "your@e-mail"
+git clone https://github.com/alexander-sessa/fprognoz.org.git fprognoz.org
+tar -xzf /vagrant/images.tgz -d fprognoz.org' fp
 
 # Set cron jobs
 sudo crontab /vagrant/cron -u fp

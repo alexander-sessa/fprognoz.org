@@ -100,11 +100,12 @@ function last_season($cca) {
   return $season;
 }
 $names = [
+  'kipelov1234' => 'andrey tumanovich',
   'Gleb Arsatov' => 'Gleb',
-  'Andrey_Vedeneyev' => 'Andrey Vedeneyev',
+  'Andrey_Vedeneev' => 'Andrey Vedeneev',
   'AnDrusha' => 'Андрей Вышинский',
   'Максим Кузнецов' => 'maku',
-  'Eugeny (Joker) Plugin' => 'Joker',
+  'Eugene (Joker) Plugin' => 'Joker',
   'Витя Барановский' => 'Vitya',
   'Serge Shibaev' => 'Villarreal'
 ];
