@@ -186,6 +186,7 @@ function build_personal_nav() {
     $sched[0] = "$startYear/$startMonth";
     $sched[1] = ($startMonth == 12) ? ($startYear + 1)."/01" : sprintf("%4d/%02d", $startYear, $startMonth + 1);
     $world = file_get_contents($online_dir . 'UNL/'.$startYear.'/codes.tsv');
+    $final = file($online_dir . 'UNL/'.$startYear.'/final', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 //    $sfp20 = file_get_contents($online_dir . 'IST/'.$startYear.'/codes.tsv');
     $tout = '';
     for ($nm=0; $nm <= 1; $nm++) {
@@ -209,7 +210,9 @@ function build_personal_nav() {
               $status = 6; // завершён
             else if (is_file($tour_dir.'/closed'))
               $status = 4; // играется
-            else if (strpos(file_get_contents($tour_dir.'/mail'), $_SESSION['Coach_name']) !== false)
+            else if ($tourCode > 'UNL11' && !in_array($_SESSION['Coach_name'], $final))
+              $status = 0; // не участвует
+            else if (strpos(file_get_contents($tour_dir.'/mail'), $_SESSION['Coach_name'].';') !== false)
               $status = 5; // есть прогноз
             else
               $status = ($timeStamp <= $currentTime + 86400) ? 2 : 3; // нет прогноза
@@ -612,6 +615,7 @@ function bz_matches($json) {
 'Belgium: Jupiler',
 'Greece: Super League',
 'Switzerland: Premier League',
+'Turkey: Super League',
 
 'UEFA: Euro',
 'UEFA: Champions League',
@@ -1423,26 +1427,47 @@ else if ($a == 'sfp-team') { // сбор туров сезона для SFP
 }
 
 else if ($a == 'world' || $a == 'sfp-20') { // сбор туров Мировой Лиги и Лиги Наций + юбилейный турнир
-  $tnames = ['MSL' => 'Лига Сайтов', 'UNL' => 'Лига Наций', 'WL' => 'Мировая Лига', 'IST' => 'Турнир SFP-20!'];
+  $tnames = ['MSL' => 'Лига Сайтов', 'UNL' => 'Лига Наций', 'UFT' => 'Финальный турнир', 'WL' => 'Мировая Лига', 'IST' => 'Турнир SFP-20!'];
   foreach ($tnames as $code => $tname) {
-    $s_dir = $online_dir . ($code == 'MSL' ? 'UNL' : $code) . '/' . $s . '/';
+    $s_dir = $online_dir . ($code == 'MSL' || $code == 'UFT' ? 'UNL' : $code) . '/' . $s . '/';
     $aa = $code == 'IST' ? 'sfp-20' : 'world';
-    $suffix = ($code != 'UNL' && $code != 'MSL' || substr($s, 0, 4) < '2018') ? '' : '_' . strtolower($code);
-    if (($code != 'UNL' && $code != 'MSL' || substr($s, 0, 4) > '2018') && is_dir($s_dir.'programs')) {
+    $suffix = ($code != 'UFT' && $code != 'UNL' && $code != 'MSL' || substr($s, 0, 4) < '2018') ? '' : '_' . strtolower($code);
+    if (($code != 'UFT' && $code != 'UNL' && $code != 'MSL' || substr($s, 0, 4) > '2018') && is_dir($s_dir.'programs')) {
+//                    <a href="#SUISubmenu" data-toggle="collapse" aria-expanded="'.(isset($t) ? 'true' : 'false').'" class="dropdown-toggle">'.$tname.'</a>
+//                    <ul class="collapse list-unstyled'.(isset($t) ? ' show' :'').'" id="SUISubmenu">';
       $sidebar .= '
                 <li class="active">
-                    <a href="#'.$code.'Submenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">'.$tname.'</a>
-                    <ul class="collapse list-unstyled show" id="'.$code.'Submenu">';
+                    <a href="#'.$code.'Submenu" data-toggle="collapse" aria-expanded="'.($code == 'UNL' ? 'false' : 'true').'" class="dropdown-toggle">'.$tname.'</a>
+                    <ul class="collapse list-unstyled'.($code == 'UNL' ? '' : ' show').'" id="'.$code.'Submenu">';
       $dir = scandir($s_dir.'programs', 1);
       foreach ($dir as $prog)
-        if ($prog[0] != '.' && $prog[3] < 9) {
+        if ($prog[0] != '.' && $code != 'UFT' && $prog < 'UNL12') {
           $tt = substr($prog, 3);
           $to = $tt;
           $prefix = '<a href="?a='.$aa.'&amp;s='.$s.'&amp;t='.$to;
           $sidebar .= '
                         <li>
                             <div class="tlinks">
-                            '.$prefix.'&amp;m=text&amp;ref=p">тур<span>'.$tt.':</span></a>';
+                            '.$prefix.'&amp;m=text&amp;ref=p">тур <span>'.$tt.':</span></a>';
+          if (is_file($s_dir . 'publish/it' . $to))
+            $sidebar .= $prefix.'&amp;m=result">итоги,</a>'.
+                        $prefix.'&amp;m=stat&amp;l='.$suffix[2].'">стат.</a>';
+          else
+            $sidebar .= $prefix.'&amp;m=prognoz"> &nbsp; прогнозы</a>';
+
+          $sidebar .= '
+                            </div>
+                        </li>';
+        }
+        else if ($prog[0] != '.' && $code == 'UFT' && $prog > 'UNL11' && $prog < 'UNL17') {
+          $tt = substr($prog, 3);
+          $to = $tt;
+          $tt -= 11;
+          $prefix = '<a href="?a='.$aa.'&amp;s='.$s.'&amp;t='.$to;
+          $sidebar .= '
+                        <li>
+                            <div class="tlinks">
+                            '.$prefix.'&amp;m=text&amp;ref=p">тур <span>'.$tt.':</span></a>';
           if (is_file($s_dir . 'publish/it' . $to))
             $sidebar .= $prefix.'&amp;m=result">итоги,</a>'.
                         $prefix.'&amp;m=stat&amp;l='.$suffix[2].'">стат.</a>';
@@ -1467,7 +1492,7 @@ else if ($a == 'world' || $a == 'sfp-20') { // сбор туров Мирово�
 
       if (is_file($s_dir.'codes.tsv'))
         $sidebar .= '
-                <li><a href="?a='.$aa.'&amp;s='.$s.'&amp;m=player'.($suffix == '_msl' ? '&amp;l=s' : '').'">Участники</a></li>';
+                <li><a href="?a='.$aa.'&amp;s='.$s.'&amp;m=player'.($suffix != '_unl' ? '&amp;l='.$suffix[2] : '').'">Участники</a></li>';
 
       $sidebar .= '
                 <li><a href="?a='.$aa.'&amp;m=coach'.$suffix.'">Тренерская</a></li>
@@ -1572,8 +1597,8 @@ else {
 echo '
         <nav id="sidebar">
             <div class="sidebar-header">
-                <a href="?a=world&m=prognoz&s=2019&t=07"><h5>Лига Наций / Сайтов:<br>страница 8-го тура</h5></a>
-                <a href="?a=world&m=result&s=2019&t=06"><h6>Итоги 7-го тура</h6></a>
+                <a href="?a=world&m=prognoz&s=2019&t=12"><h5>Финальный турнир:<br>страница 1-го тура</h5></a>
+                <a href="?a=world&m=result&s=2019&t=11"><h6>Итоги 11-го тура ЛН/ЛС</h6></a>
                 <a href="?m=news&s=2018-19"><h6>Новости SFP - ФИФА</h6></a>
             </div>
 

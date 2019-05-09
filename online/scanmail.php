@@ -100,14 +100,7 @@ function last_season($cca) {
   return $season;
 }
 $names = [
-  'kipelov1234' => 'andrey tumanovich',
-  'Gleb Arsatov' => 'Gleb',
   'Andrey_Vedeneev' => 'Andrey Vedeneev',
-  'AnDrusha' => 'Андрей Вышинский',
-  'Максим Кузнецов' => 'maku',
-  'Eugene (Joker) Plugin' => 'Joker',
-  'Витя Барановский' => 'Vitya',
-  'Serge Shibaev' => 'Villarreal'
 ];
 $imap = imap_open($mail_server, $mail_user, $mail_password);
 if (!$imap)

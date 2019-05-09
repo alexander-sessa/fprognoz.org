@@ -1830,9 +1830,17 @@ function build_itogi($country_code, $season, $tour)
           $amb[$home]['r'] = $gh - $ga;
           $amb[$home]['g'] = $gh;
           $amb[$away]['f']++;
-          $gb[$th][$home]['t'][$tn] = $hh;
-          $gb[$th][$home]['h'] += $hh;
-//          $gb[$th][$home]['n'] = $home;
+          if ($country_code == 'UEFA')
+          {
+            $gb[$th][$home]['t'][$tn] = $hh;
+            $gb[$th][$home]['h'] += $hh;
+          }
+          else
+          {
+            $gb[$th]['t'][$tn] = $hh;
+            $gb[$th]['h'] += $hh;
+            $gb[$th]['n'] = $home;
+          }
         }
         if ($ta == '*')
           $tt[$away]['i']++;
@@ -1845,9 +1853,17 @@ function build_itogi($country_code, $season, $tour)
           $amb[$away]['r'] = $ga - $gh;
           $amb[$away]['g'] = $ga;
           $amb[$home]['f']++;
-          $gb[$ta][$away]['t'][$tn] = $ha;
-          $gb[$ta][$away]['h'] += $ha;
-//          $gb[$ta][$away]['n'] = $away;
+          if ($country_code == 'UEFA')
+          {
+            $gb[$ta][$away]['t'][$tn] = $ha;
+            $gb[$ta][$away]['h'] += $ha;
+          }
+          else
+          {
+            $gb[$ta]['t'][$tn] = $ha;
+            $gb[$ta]['h'] += $ha;
+            $gb[$ta]['n'] = $away;
+          }
         }
         if ($gh > $ga)
         {
@@ -2320,25 +2336,45 @@ function build_itogi($country_code, $season, $tour)
   {
     $att = array();
     foreach ($gb as $tr => $gbteams)
-      foreach ($gbteams as $nm => $atemp)
+      // цикл по тренерам
+      if ($country_code == 'UEFA')
+        foreach ($gbteams as $nm => $atemp)
+        { // цикл по их командам
+          $nm = $gb[$tr]['n'];
+          $att['t'][] = $tr;
+          $att['n'][] = $nm;
+          $att['h'][] = $gb[$tr][$nm]['h'];
+          $att['z'][] = sizeof($gb[$tr][$nm]['t']);
+          $att['pl'][] = $tt[$nm]['pl'];
+          $att['p'][] = $tt[$nm]['p'];
+          $att['r'][] = $tt[$nm]['r'];
+          $att['g'][] = $tt[$nm]['g'];
+        }
+
+      else
       {
-//        $nm = $gb[$tr]['n'];
+        $nm = $gb[$tr]['n'];
         $att['t'][] = $tr;
         $att['n'][] = $nm;
-        $att['h'][] = $gb[$tr][$nm]['h'];
-        $att['z'][] = sizeof($gb[$tr][$nm]['t']);
+        $att['h'][] = $gb[$tr]['h'];
+        $att['z'][] = sizeof($gb[$tr]['t']);
         $att['pl'][] = $tt[$nm]['pl'];
         $att['p'][] = $tt[$nm]['p'];
         $att['r'][] = $tt[$nm]['r'];
         $att['g'][] = $tt[$nm]['g'];
       }
+
     array_multisort($att['h'],SORT_DESC, $att['z'], $att['pl'], $att['p'],SORT_DESC, $att['r'],SORT_DESC, $att['g'],SORT_DESC, $att['t'], $att['n'], $att['h']);
     $out = '';
     $nt = $tourn - floor((64 - $maxcoach - $maxteam) / 3);
     for($i=0; $i<sizeof($att['t']); $i++) if ($tr = trim($att['t'][$i]))
     {
       $nm = $att['n'][$i];
-      $gb[$tr][$nm]['p'] = $i + 1;
+      if ($country_code == 'UEFA')
+        $gb[$tr][$nm]['p'] = $i + 1;
+      else
+        $gb[$tr]['p'] = $i + 1;
+
       $out .= sprintf('%2s', $i+1).'.  '
             . mb_sprintf('%-'.($maxcoach + 1).'s', $tr)
             . mb_sprintf('%-'.($maxteam + 1).'s', $nm)
@@ -2347,10 +2383,13 @@ function build_itogi($country_code, $season, $tour)
       $missed = 0;
       for ($j=1; $j<=$tourn; $j++)
       {
-        if (isset($gb[$tr][$nm]['t'][$j]))
+        if (isset($gb[$tr]['t'][$j]) || isset($gb[$tr][$nm]['t'][$j]))
         {
           if ($j > $nt)
-            $out .= sprintf('%3s', $gb[$tr][$nm]['t'][$j]);
+            if ($country_code == 'UEFA')
+              $out .= sprintf('%3s', $gb[$tr][$nm]['t'][$j]);
+            else
+              $out .= sprintf('%3s', $gb[$tr]['t'][$j]);
 
         }
         else

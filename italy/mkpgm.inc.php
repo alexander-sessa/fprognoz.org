@@ -121,9 +121,14 @@ function IntervalsTable() {
             }
             else if ($cc == 'UCL' || $cc == 'UEL')
               $tnmt = '';
-/*
             else if ($cc == 'INT')
             {
+              if ($home == 'FYR Macedonia')
+                $home = 'North Macedonia';
+
+              if ($away == 'FYR Macedonia')
+                $away = 'North Macedonia';
+/*
               if ($tnmt == 'Friendly')
                 $tnmt = 'FR';
               else {
@@ -135,8 +140,8 @@ function IntervalsTable() {
                 if (strpos($tnmt, ' Q')) $to .= 'Q';
                 $tnmt = $to;
               }
-            }
 */
+            }
             if ($date > date('m-d'))
             {
               if ($date < $day1 && $date > '01-00')

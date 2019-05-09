@@ -35,11 +35,16 @@ function ccode_team($ccode) {
 
 // добавление результатов тура
 function rewrite_cal($prognoz_dir, $scorez) {
+  global $tour;
   $cal = '';
   $n = 1;
   foreach ($scorez as $match => $score)
   {
-    $group = $n == 1 ? 'Лига Сайтов' : ($n == 12 ? 'Лига Наций' : '');
+    if ($tour < 'UNL12')
+      $group = $n == 1 ? 'Лига Сайтов' : ($n == 12 ? 'Лига Наций' : '');
+    else
+      $group = $n == 1 ? 'Финальный турнир' : ($n == 4 ? 'Товарищеские матчи' : '');
+
     $cal .= "$match;;$group;$score\n";
     $n++;
   }
@@ -161,7 +166,7 @@ $(document).ready(function(){
 </script>
 ';
 
-  foreach ($roles as $league => $coach) if ($coach == 'coach')
+  foreach ($roles as $league => $coach) if ($coach == 'coach' && ($league == 's' || $tour < 'UNL12'))
   {
     // если есть, загрузить prognoz/tour/cc
     // обновить в нём прогнозы из all_predicts (если есть обновления, записать!)
@@ -211,7 +216,7 @@ $(document).ready(function(){
 //<input type="hidden" id="tour" name="tour" value="'.$tour.'">
     $out .= '
 <br>
-<div class="pl-3 h6">Управление сборной в Лиге '.($league == 'n' ? 'Наций' : 'Сайтов').'</div>
+<div class="pl-3 h6">Управление сборной в '.($tour < 'UNL12' ? 'Лиге '.($league == 'n' ? 'Наций' : 'Сайтов') : 'Финальном турнире').'</div>
 <input type="hidden" id="team-'.$league.'" name="team" value="'.$cc[$league].'">
 <div style="display:flex">
   <div class="numzone">
@@ -757,7 +762,7 @@ if ($published)
 
 $half1 = $renew = false;
 $half2 = $closed && filesize($prognoz_dir.'/closed');
-$reload = !$half2 && is_file($prognoz_dir.'/term') ? 30 + file_get_contents($prognoz_dir.'/term') - time() : 0;
+$reload = !$half2 && is_file($prognoz_dir.'/term') ? 59 + file_get_contents($prognoz_dir.'/term') - time() : 0;
 $notice = '&nbsp;';
 $rprognoz = $protocol = $log = $program_table = $id_arr = $id_json = $js_bets = $prognozlist = '';
 $today_matches = $today_bz = $finished = 0;
@@ -775,10 +780,25 @@ if (isset($_SESSION['Coach_name'])) {
       break;
     }
 
+  // заплата для Финального турнира
+  if ($tour > 'UNL11')
+    switch ($_SESSION['Coach_name'])
+    {
+      case 'Андрей Новиков': $teamCodes['n'] = 'Севас'; break;
+      case 'andrey tumanovich': $teamCodes['n'] = 'kipelov1234'; break;
+      case 'Евгений': $teamCodes['n'] = 'антон'; break;
+      case 'Витя Барановский': $teamCodes['s'] = 'Витя Барановский'; break;
+      case 'Вячеслав Ковалевский': $teamCodes['s'] = 'Вячеслав Ковалевский'; break;
+      case 'Serge Vasiliev': $teamCodes['s'] = 'Serge Vasiliev'; break;
+      case 'Максим Кузнецов': $teamCodes['s'] = 'Максим Кузнецов'; break;
+      case 'Александр Сесса': $teamCodes['s'] = 'Александр Сесса'; break;
+      case 'Кирилл Голощёков': $teamCodes['s'] = 'Кирилл Голощёков'; break;
+    }
+
   if (count($teamCodes))
   {
     $team_select = $data_dir . 'personal/'.$_SESSION['Coach_name'].'/team.'.date('Y');
-    if (isset($teamCodes['n']) && is_file($team_select))
+    if ($t < 12 && isset($teamCodes['n']) && is_file($team_select))
     {
       // определение роли
       $cc['n'] = trim(file_get_contents($team_select));
@@ -812,14 +832,14 @@ if (isset($_SESSION['Coach_name'])) {
       }
       // состав команды для тренера
       if ($roles['s'] == 'coach')
-        foreach ($codes as $cline) {
-          $arr = explode('	', $cline);
-          if ($arr[1] == $cc['s'])
-            $myteam['s'][] = $arr[0];
+      {
+        $squad = file($season_dir.'/'.$cc['s'].'.csv', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        foreach ($squad as $cline)
+          $myteam['s'][] = explode(';', $cline)[0];
 
-        }
-
+      }
     }
+
     // выборка своих прогнозов и историй получения прогнозов для тренеров
     $predicts = file($prognoz_dir.'/mail', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
     foreach ($predicts as $predict) {
@@ -897,13 +917,23 @@ $base = get_results_by_date(date('m', $day_before), date('d', $day_before), $upd
     (isset($etap['постфикс']) ? $etap['постфикс'] : '');
 */
 $tt = $t - 1;
-$head = '<a href="/?a=world&s=2019&t='.($tt < 10 ? '0' : '').$tt.'&m=prognoz" title="предыдущий тур"><i class="fas fa-arrow-circle-left"></i></a> Лиги Сайтов и Наций 2019. '.($t < 90 ? 'Тур '.ltrim($t, '0') : 'Пробный тур '.($t - 96)).' <a href="/?a=world&s=2019&t='.($tt < 8 ? '0' : '').($tt+2).'&m=prognoz" title="следующий тур"><i class="fas fa-arrow-circle-right"></i></a><br>';
+$head = '<a href="/?a=world&s=2019&t='.($tt < 10 ? '0' : '').$tt.'&m=prognoz" title="предыдущий тур"><i class="fas fa-arrow-circle-left"></i></a> ';
+if ($t < 12)
+  $head .= 'Лиги Сайтов и Наций 2019. Тур '.ltrim($t, '0');
+else if ($t < 16)
+  $head .= 'Финальный турнир ЛН 2019. Тур '.($t - 11);
+else if ($t > 95)
+  $head .= 'Лига Наций 2019. Пробный тур '.($t - 96);
+//if (is_file())
+$head .= ' <a href="/?a=world&s=2019&t='.($tt < 8 ? '0' : '').($tt+2).'&m=prognoz" title="следующий тур"><i class="fas fa-arrow-circle-right"></i></a>';
+
+$head .= '<br>';
 if (count($teamCodes) && !$closed)
 {
   $head .= '
 <span class="small">код тура: <b>'.$cca.$t.'</b> ';
-  if (count($teamCodes) == 1 || $teamCodes['n'] == $teamCodes['s'])
-    $head .= '<input type="hidden" id="single_code" name="team_code" value="'.current($teamCodes).'"><b>'.current($teamCodes).'</b><br>';
+  if ($t > 11 || count($teamCodes) == 1 || $teamCodes['n'] == $teamCodes['s'])
+    $head .= ' <input type="hidden" id="single_code" name="team_code" value="'.current($teamCodes).'"><b>'.current($teamCodes).'</b><br>';
   else
   {
     $head .= '<select id="team_codes" name="team_code">';
@@ -1025,7 +1055,7 @@ if (is_file($prognoz_dir.'/cal'))
       $prognozlist = $homelist = '';
       $home_team_fn = team_ccode($teams['home']['team']);
       $away_team_fn = team_ccode($teams['away']['team']);
-      if ($t < 90 && $teams['home']['team'] != $home_team_fn)
+      if ($t < 12 && $teams['home']['team'] != $home_team_fn)
       {
         $league = 'n';
         $size = 5;
@@ -1264,11 +1294,19 @@ auto_comment($position, $newposition, $min_diff, ball('home', $i, $size), ball('
 <b>' . $awayline . '</b>
 ' . $sites[$teams['away']['team']] . '<br>' . $awaylist;
 
-      // определяем, изменился ли счёт в матчеe
+      // определяем, изменился ли счёт в матче
       $score = $teams['home']['goal'].':'.$teams['away']['goal'].' ('.$teams['home']['total'].'-'.$teams['away']['total'].')';
-      if ($matchn == 1 || $matchn == 12) ///// поменять!!!
-        $cal .= '<li class="h6"><br>'.($matchn == 1 ? 'Лига Сайтов' : 'Лига Наций').'</li>
+      if ($t < '12')
+      {
+        if ($matchn == 1 || $matchn == 12) ///// поменять!!!
+          $cal .= '<li class="h6"><br>'.($matchn == 1 ? 'Лига Сайтов' : 'Лига Наций').'</li>
 ';
+      }
+      else
+        if ($matchn == 1 || $matchn == 4) ///// поменять!!!
+          $cal .= '<li class="h6"><br>'.($matchn == 1 ? 'Финальный турнир' : 'Товарищеские матчи').'</li>
+';
+
       $cal .= '<li>
   <a href="javascript:void(0)" onClick="showTab('.$matchn.')">'.$teams['home']['team'].' - '.$teams['away']['team'].'</a>
   <div class="mt-res">'.$score.'</div>
@@ -1328,9 +1366,17 @@ auto_comment($position, $newposition, $min_diff, ball('home', $i, $size), ball('
     $i = 1;
     foreach ($scorez as $match => $score)
     {
-      if ($i == 1 || $i == 12) ///// поменять!!!
-        $cal .= '<li class="h6"><br>'.($i == 1 ? 'Лига Сайтов' : 'Лига Наций').'</li>
+      if ($t < '12')
+      {
+        if ($i == 1 || $i == 12) ///// поменять!!!
+          $cal .= '<li class="h6"><br>'.($i == 1 ? 'Лига Сайтов' : 'Лига Наций').'</li>
 ';
+      }
+      else
+        if ($i == 1 || $i == 4) ///// поменять!!!
+          $cal .= '<li class="h6"><br>'.($i == 1 ? 'Финальный турнир' : 'Товарищеские матчи').'</li>
+';
+
       $cal .= '<li>
   <a href="javascript:void(0)" onClick="showTab('.$i++.')">'.$match.'</a>
   <div class="mt-res">'.$score.'</div>
@@ -1345,7 +1391,7 @@ $hint = '';
 if (!$published)
   foreach (['n', 's'] as $league)
   {
-    if ($roles[$league] == 'coach') {
+    if (($t < 12 || $league == 's') && $roles[$league] == 'coach') {
       if (is_file($prognoz_dir.'/.'.$cc[$league])) {
         $his = file($prognoz_dir.'/.'.$cc[$league]);
         foreach ($his as $his_line) {
@@ -1353,7 +1399,7 @@ if (!$published)
           $history[$league][$timestamp][] = ['event' => 'coach', 'name' => $name, 'what' => $what];
         }
       }
-      $hint .= '<a href="" onClick=\'$("#chronology-'.$league.'").toggle(); return false\'>показать/скрыть историю тура в Лиге '.($league == 's' ? 'Сайтов' : 'Наций&nbsp;').'</a><br>';
+      $hint .= '<a href="" onClick=\'$("#chronology-'.$league.'").toggle(); return false\'>показать/скрыть историю тура в '.($t < 12 ? 'Лиге '.($league == 's' ? 'Сайтов' : 'Наций&nbsp;') : 'Финальном турнире').'</a><br>';
       $hint .= '<p id="chronology-'.$league.'" class="hidden text-left">';
       foreach ($history[$league] as $timestamp => $events)
         foreach ($events as $event)
@@ -1532,7 +1578,7 @@ socket.on("footdetails",function(data){data=data[0];if ($(".p-table").find("tr[d
 socket.on("hellobz",function(){socket.emit("getscores","football(soccer)","today")})
 socket.on("scoredatas",function(d){if(sendfp){$.post("'.$this_site.'",{a:"'.$a.'",m:"'.$m.'",s:"'.$s.'",t:"'.$t.'",matches:JSON.stringify(d.data.matches)},function(json){$.each(JSON.parse(json),function(idx,obj){base.push(obj.id);base[obj.id]=obj.d})})}$("#statusline").html("")})
 socket.on("guncelleme",function(d){var json="";$.each(d.updates,function(index,ux){if(base[ux.idx]!==undefined){if(ux.s==4&&base[ux.idx][3]!="FT")json+=(json.length?",":"")+JSON.stringify(ux);scorefix(ux)}});if(json.length)$.post("'.$this_site.'",{a:"'.$a.'",m:"'.$m.'",s:"'.$s.'",t:"'.$t.'"'.(isset($n)?',n:"'.$n.'"':'').',updates:"["+json+"]"},function(res){JSON.parse(res,function(k,v){if(k=="id")id=v;else if(k=="html")$(id).html(decodeURIComponent(v))})})})
-'.($reload ? 'setTimeout(function(){location.reload();},1000*'.$reload.')' : '').'//]]></script>
+'.($reload > 0 ? 'setTimeout(function(){location.reload();},'.$reload.'000)' : '').'//]]></script>
 <div class="d-flex">
 	<div id="statusline" class="w-100 text-left">получение результатов с <a href="https://www.livescore.bz" sport="football(soccer)" data-1="today" lang="en">www.livescore.bz</a></div>
 	<div id="timedisplay" class="w-100 text-right">'.$notice.'</div>
@@ -1553,10 +1599,18 @@ socket.on("guncelleme",function(d){var json="";$.each(d.updates,function(index,u
   if ($published && !is_file($season_dir.'/publish/it'.$t))
   {
     file_put_contents($season_dir.'/publish/it'.$t, $html);
-    file_put_contents($season_dir.'/publish/plstn'.$t, var_export($players_n, true));
-    file_put_contents($season_dir.'/publish/plsts'.$t, var_export($players_s, true));
-    file_put_contents($season_dir.'/publish/tmstn'.$t, var_export($teams_n, true));
-    file_put_contents($season_dir.'/publish/tmsts'.$t, var_export($teams_s, true));
+    if ($t < 12)
+    { // основной турнир
+      file_put_contents($season_dir.'/publish/plstn'.$t, var_export($players_n, true));
+      file_put_contents($season_dir.'/publish/plsts'.$t, var_export($players_s, true));
+      file_put_contents($season_dir.'/publish/tmstn'.$t, var_export($teams_n, true));
+      file_put_contents($season_dir.'/publish/tmsts'.$t, var_export($teams_s, true));
+    }
+    else
+    { // финальный турнир
+      file_put_contents($season_dir.'/publish/plstf'.$t, var_export($players_s, true));
+      file_put_contents($season_dir.'/publish/tmstf'.$t, var_export($teams_s, true));
+    }
   }
   else
     print($html);

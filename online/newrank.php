@@ -22,15 +22,18 @@ function write_year_ranking($year) {
   $spreadsheet = $reader->load($ranking . 'ECR' . $year . '.xls');
   $sheet = $spreadsheet->getSheet(0);
   $col = 'A';
-  while ($sheet->getCell($col.'1') != $year)
+  while ($sheet->getCell($col.'1') != (string)$year)
     $col++;
 
-  $row = 2;
+  $row = 1;
   while (trim($sheet->getCell($col.($row++))))
   {
     $nc = $col;
     $team = trim($sheet->getCell(($nc++).$row), ' "');
     $cc = trim($sheet->getCell(($nc++).$row), '"');
+    if ($cc == 'NED')
+      $cc = 'NLD';
+
     $score = $sheet->getCell($nc.$row) ?? 0;
     if ($team && isset($realteam[$team]))
       $out .= $realteam[$team].','.$cc.','.str_replace(',', '.', $score)."\n";

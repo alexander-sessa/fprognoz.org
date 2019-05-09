@@ -3,7 +3,7 @@
 'USA' => 'United States',
 'Czechia' => 'Czech Republic',
 'Ireland' => 'Republic of Ireland',
-'Macedonia' => 'FYR Macedonia',
+'Macedonia' => 'North Macedonia',
 'South Korea' => 'Korea Republic',
 'China' => 'China PR',
 'North Korea' => 'Korea DPR',

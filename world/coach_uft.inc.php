@@ -27,6 +27,7 @@ function make_passwd($code, $name, $mail) {
 Удачи!
 ');
 }
+
 $escape_chars = [
 "\\" => '_',
 "/" => '_',
@@ -39,13 +40,21 @@ $escape_chars = [
 ':' => '_',
 '|' => '_',
 ];
+
+$ccf = array(
+'ЛФОП-ГУРУ' => 'ЛФОП-ГУРУ',
+'Fprognoz.com' => 'Fprognoz.com',
+'SEclub.org' => 'SEclub.org',
+'NLD' => 'Голландия',
+'ITA' => 'Италия',
+'BLR' => 'Беларусь',
+);
+
 $closed = true;
 $ac_head = '';
-echo '<p class="title text15b">&nbsp;&nbsp;&nbsp;Тренерская Лиги Сайтов</p>
+echo '<p class="title text15b">&nbsp;&nbsp;&nbsp;Тренерская участников Финального турнира Лиги Наций</p>
 <hr size="1" width="98%">
-Закрыто. Если ваша команда пробилась в Финальный турнир, Вам <a href="/?a=world&m=coach_uft">сюда</a>';
-exit;
-
+';
   $s = $cur_year;
   $codes = file($online_dir.'UNL/'.$s.'/codes.tsv');
   foreach ($codes as $line) {
@@ -60,10 +69,15 @@ exit;
        )
     {
       $team_name = $team;
-      $closed = false;
-      break;
+      if (isset($ccf[$team_name]))
+      {
+        $closed = false;
+        break;
+      }
     }
   }
+
+$closed = true;
 
   if (isset($_POST['teamname'])) {
 
@@ -71,31 +85,9 @@ exit;
 
     if (!$_POST['teamname'] || !$_POST['teamsite'] || !$_POST['coach1'] || !$_POST['cmail1'])
       echo '<p style="color:red;font-weight:bold">Не заполнены все обязательные поля!</p>';
-    else {
-      if (isset($_SESSION['Coach_name']))
+    else if (isset($_SESSION['Coach_name']))
         $human = true;
-      else
-      {
-        spl_autoload_register(function ($class) {
-          $class = str_replace('\\', '/', $class);//'
-          $path = dirname(__FILE__).'/'.$class.'.php';
-          require_once $path;
-        });
-        $recaptcha = new \ReCaptcha\ReCaptcha($recaptcha_secret);
-        $resp = $recaptcha->setExpectedHostname($_SERVER['SERVER_NAME'])
-                          ->setExpectedAction('registration')
-                          ->setScoreThreshold(0.5)
-                          ->verify($_POST['token'], $_SERVER['REMOTE_ADDR'])
-                          ->toArray();
-        $human = ($resp['success'] && ($resp['score'] >= 0.5)) || $resp['error-codes'][0] == 'timeout-or-duplicate';
-        //$human = true;
 
-        $postdata = fopen($online_dir.'UNL/'.$s.'/postdata2', 'a');
-        fwrite($postdata, var_export($_POST, true) . ',');
-        fwrite($postdata, var_export($resp, true) . ',');
-        fclose($postdata);
-      }
-    }
     if ($human) {
       $s = $cur_year;
       $postdata = fopen($online_dir.'UNL/'.$s.'/postdata', 'a');
@@ -111,7 +103,7 @@ exit;
       }
       else
         $fn = $_POST['teamlabel'];
-
+/*
       $sites_file = file($online_dir.'UNL/'.$s.'/sites.inc');
       $sites_out = '';
       $edit = false;
@@ -128,15 +120,14 @@ exit;
 
       $sites_out .= ');';
       file_put_contents($online_dir.'UNL/'.$s.'/sites.inc', $sites_out);
-
+*/
       $codes = file($online_dir.'UNL/'.$s.'/codes.tsv');
       $codes_out = '';
       foreach ($codes as $line)
         if (!strpos($line, "	$teamname	"))
           $codes_out .= $line;
 
-      $order = [];
-      $squad = [];
+      $order = $players = $squad = [];
       for ($i=1; $i<17; $i++) {
         $player = '';
         if ($_POST['code'.$i] || $player = trim($_POST['player'.$i])) {
@@ -153,10 +144,12 @@ exit;
             $email = $_POST['email'.$i];
 
           $order[$code] = isset($_POST['pos'.$i]) ? $_POST['pos'.$i] : $i;
+          $players[$code] = ';'.$email.';'.(in_array($code, [trim($_POST['coach1']), trim($_POST['coach2'])]) ? 'coach' : '').';
+';
           $squad[$code] = $code.'	'.$teamname.'	'.$player.'	'.$email.'	'
           . (in_array($code, [trim($_POST['coach1']), trim($_POST['coach2'])]) ? 'coach' : $_POST['prog'.$i]) . '	
 ';
-          if ($email)
+          if ($teamname == $ccf[$teamname] && $email)
             make_passwd($code, $player, $email);
 
         }
@@ -166,6 +159,8 @@ exit;
         if ($coach && !isset($order[$coach])) // неиграющий тренер
         {
           $order[$coach] = 0;
+          $players[$code] = ";$email;coach;\n";
+
           $squad[$coach] = $coach.'	'.$teamname.'	'.$coach.'	'.$_POST['cmail'.$i].'	coach	
 ';
           make_passwd($coach, $coach, $_POST['cmail'.$i]);
@@ -178,15 +173,18 @@ exit;
       foreach ($order as $code => $pos)
       {
         if ($pos)
-          $csv .= $code.';;;
-';
+          $csv .= $code.$players[$code];
+
         if (!in_array($code, [$_POST['coach1'], $_POST['coach2']]))
           $codes_out .= $squad[$code];
 
       }
-      file_put_contents($online_dir.'UNL/'.$s.'/codes.tsv', $codes_out);
+      if ($teamname == $ccf[$teamname])
+      {
+        file_put_contents($online_dir.'UNL/'.$s.'/codes.tsv', $codes_out);
+        build_access();
+      }
       file_put_contents($online_dir.'UNL/'.$s.'/'.$teamname.'.csv', $csv);
-      build_access();
 
       if (isset($_SESSION['Coach_name']))
         echo '<p style="font-weight:bold">Изменения сохранены. Участникам команды, у которых добавился или изменился e-mail, высланы сгенерированные пароли.</p>';
@@ -202,9 +200,7 @@ if ($closed)
 {
   echo '
 Дверь в Тренерскую заперта. Изнутри не слышно ни звука.<br>
-На двери висит табличка <strong>"Регистрация в турнир закончена"</strong>.<br>
-Если Вы уверены, что ваша команда успеет подготовиться за то малое время, что осталось до начала первого тура,
-подайте заявку e-mail-ом или на странице <a href="/?a=world&m=hq">Президиум</a>.';
+На двери висит табличка <strong>"Регистрация в турнир закрыта"</strong>.';
 }
 else
 {
@@ -218,11 +214,12 @@ else
     list($code, $team, $name, $email, $role) = explode('	', $line);
     $role = trim($role);
     $player[$team][$code] = ['code' => $code, 'name' => $name, 'email' => $email, 'role' => $role];
-    if ($role == 'coach' && ($name == $_POST['coach1'] || (isset($_SESSION['Coach_name']) && $name == $_SESSION['Coach_name']))) {
-      $team_name = $team;
+    if ($role == 'coach' && ($name == $_POST['coach1'] || (isset($_SESSION['Coach_name']) && $code == $_SESSION['Coach_name']))) {
+      $team_code = $team;
       $closed = false;
     }
   }
+  $team_name = $ccf[$team_code];
   eval('$sites = '.file_get_contents($online_dir.'UNL/'.$s.'/sites.inc'));
   if (isset($sites[$team_name]) && $sites[$team_name]) {
     $logo = $sites[$team_name];
@@ -234,7 +231,7 @@ else
   }
   else $teamsite = $teamlabel = '';
   $coach = [];
-  foreach ($player[$team_name] as $pcode => $pl)
+  foreach ($player[$team_code] as $pcode => $pl)
     if ($pl['role'] == 'coach')
       $coach[] = $pl;
 
@@ -261,7 +258,7 @@ label.file-upload input[type=file]{display:block;position:absolute;top:0;right:0
   <div class="form-group row">
     <label for="teamname" class="col-sm-2 col-form-label">Название команды*</label>
     <div class="col-sm-8">
-      <strong>'.$team_name.'</strong><input type="hidden" name="teamname" value="'.$team_name.'">
+      <strong>'.$team_name.'</strong><input type="hidden" name="teamname" value="'.$team_code.'">
     </div>
   </div>
   <div class="form-group row">
@@ -325,7 +322,7 @@ label.file-upload input[type=file]{display:block;position:absolute;top:0;right:0
     <div class="col-sm-1"><i class="fas fa-envelope"></i></div>
   </div>
 ';
-  $squad = file($online_dir.'UNL/'.$s.'/'.$team_name.'.csv');
+  $squad = file($online_dir.'UNL/'.$s.'/'.$team_code.'.csv');
   $players = [];
   for ($i=1; $i<=16; $i++)
     $players[$i] = ['code' => '', 'name' => '', 'mail' => '', 'role' => ''];
@@ -334,8 +331,8 @@ label.file-upload input[type=file]{display:block;position:absolute;top:0;right:0
   foreach ($squad as $line) {
     list($name, $mail, $role) = explode(';', trim($line));
     $code = $name;
-    $name = (isset($player[$team_name][$code]['name']) && $player[$team_name][$code]['name']) ? $player[$team_name][$code]['name'] : $name;
-    $players[$i++] = ['code' => $code, 'name' => $name, 'mail' => $player[$team_name][$code]['email'], 'role' => $player[$team_name][$code]['role']];
+    $name = (isset($player[$team_code][$code]['name']) && $player[$team_code][$code]['name']) ? $player[$team_code][$code]['name'] : $name;
+    $players[$i++] = ['code' => $code, 'name' => $name, 'mail' => $mail ? $mail : $player[$team_code][$code]['email'], 'role' => $role ? $role : $player[$team_code][$code]['role']];
 //    $players[$i++] = ['code' => $player[$team_name][$name]['code'], 'name' => $player[$team_name][$name]['name'], 'mail' => $player[$team_name][$name]['email'], 'role' => $player[$team_name][$name]['role']];
   }
   for ($i=1; $i<=16; $i++) {

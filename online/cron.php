@@ -400,7 +400,8 @@ function build_prognozlist($country_code, $season, $tour) {
     $generators = [];
     $gen = file($path . 'gen');
     $t = ltrim(substr($tour, 3), 0);
-    for ($i = 0; $i < 20; $i++)
+    $ng = $t < 12 ? 20 : 10;
+    for ($i = 0; $i < $ng; $i++)
       $generators[$i] = trim($gen[($t - 1) * 23 + 3 + $i]);
 
     $g = 0;

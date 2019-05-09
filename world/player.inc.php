@@ -15,8 +15,16 @@ $ccr = array(
 'SUI' => 'Швейцария',
 'SCO' => 'Шотландия',
 );
+$ccf = array(
+'ЛФОП-ГУРУ' => 'ЛФОП-ГУРУ',
+'Fprognoz.com' => 'Fprognoz.com',
+'SEclub.org' => 'SEclub.org',
+'NLD' => 'Голландия',
+'ITA' => 'Италия',
+'BLR' => 'Беларусь',
+);
 
-if (!isset($l) || $l != 's')
+if (!isset($l) || $l == 'n')
 {
   $player = isset($_SESSION['Coach_name']) ? $_SESSION['Coach_name'] : '';
   $mycc = '';
@@ -81,7 +89,7 @@ if (!isset($l) || $l != 's')
 </form>
 <br>';
 }
-else
+else if ($l == 's')
 {
   eval('$sites = '.file_get_contents($online_dir.'UNL/'.$s.'/sites.inc'));
   $codes = file($online_dir.'UNL/'.$s.'/codes.tsv');
@@ -91,7 +99,7 @@ else
   {
     list($code, $team, $name, $email, $role) = explode('	', $line);
     if (!array_key_exists($team, $ccr))
-    { // здесь только сборные сайтов
+    { // здесь только избранные
       if ($team != $prev)
       {
         $prev = $team;
@@ -130,6 +138,63 @@ else
   $out .= $head . $coach_prefix . $coach . $squad;
   echo '
 <p class="title text15b">&nbsp;&nbsp;&nbsp;Участники Лиги Сайтов</p>
+<style>
+.teamcard { border: 1px solid blue; border-radius: 20px; margin:10px; padding: 10px }
+.teamname { display:flex; font-weight:bold; font-size:125% }
+</style>
+<div>
+' . $out . '
+</div>';
+}
+else if ($l == 'f')
+{
+  eval('$sites = '.file_get_contents($online_dir.'UNL/'.$s.'/sites.inc'));
+  $codes = file($online_dir.'UNL/'.$s.'/codes.tsv');
+  $prev = '';
+  $out = $head = $coach = $squad = $coach_prefix = '';
+  foreach ($codes as $line)
+  {
+    list($code, $team, $name, $email, $role) = explode('	', $line);
+    if (array_key_exists($team, $ccf))
+    { // здесь только избранные
+      if ($team != $prev)
+      {
+        $prev = $team;
+        $out .= $head . $coach_prefix . $coach . $squad;
+        $head = '
+    <div class="teamcard">
+      <div class="teamname">
+        <div style="width:100px; text-align:center">'.$sites[$ccf[$team]].'</div>
+        <div>'.$ccf[$team].'</div>
+      </div>
+      <div>';
+        $coach_prefix = 'Тренер: ';
+        $coach = $code;
+        $squad = '
+      </div>
+      <div>
+        Состав: ';
+        $lines = file($online_dir.'UNL/'.$s.'/'.$team.'.csv');
+        foreach ($lines as $line)
+        {
+          list($name, $mail, $role) = explode(';', trim($line));
+          $squad .= $name.', ';
+        }
+        $squad = rtrim($squad, ', ');
+        $squad .= '
+      </div>
+    </div>';
+      }
+      else if (trim($role == 'coach'))
+      {
+        $coach_prefix = 'Тренеры: ';
+        $coach .= ', '.$code;
+      }
+    }
+  }
+  $out .= $head . $coach_prefix . $coach . $squad;
+  echo '
+<p class="title text15b">&nbsp;&nbsp;&nbsp;Участники Финального турнира Лиги Наций</p>
 <style>
 .teamcard { border: 1px solid blue; border-radius: 20px; margin:10px; padding: 10px }
 .teamname { display:flex; font-weight:bold; font-size:125% }

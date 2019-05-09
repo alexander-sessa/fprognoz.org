@@ -32,7 +32,7 @@ eval('$sites = '.file_get_contents($online_dir.'UNL/'.$s.'/sites.inc'));
 $ac_head = '';
 echo '<p class="title text15b">&nbsp;&nbsp;&nbsp;Тренерская Лиги Наций</p>
 <hr size="1" width="98%">
-Закрыто до окончания 11-го тура';
+Закрыто. Если ваша команда пробилась в Финальный турнир, Вам <a href="/?a=world&m=coach_uft">сюда</a>';
 exit;
 if (isset($_SESSION['Coach_name']) && !isset($_POST['teamname'])) {
 
