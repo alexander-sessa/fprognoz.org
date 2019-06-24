@@ -52,8 +52,8 @@ if (!is_file($ranking . 'ECR' . $year . '.xls') || remote_file_size($url) != fil
   $log .= write_year_ranking($year - 1);
   // merge rankings
   $week = date('W');
-  $k = $week < 24 ? min(50, $week + 18) : max(0, $week - 35);
-  //$k = $week < 35 ? min(50, $week + 18) : $week - 35;
+  //$k = $week < 24 ? min(50, $week + 18) : max(0, $week - 35);
+  $k = $week < 35 ? min(50, $week + 18) : $week - 35;
   $balance = 1 - $k / 50;
   $teams = array();
   $rank = file($ranking . 'rank.' . ($year - 1));

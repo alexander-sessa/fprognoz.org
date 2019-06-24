@@ -920,7 +920,7 @@ $tt = $t - 1;
 $head = '<a href="/?a=world&s=2019&t='.($tt < 10 ? '0' : '').$tt.'&m=prognoz" title="предыдущий тур"><i class="fas fa-arrow-circle-left"></i></a> ';
 if ($t < 12)
   $head .= 'Лиги Сайтов и Наций 2019. Тур '.ltrim($t, '0');
-else if ($t < 16)
+else if ($t < 17)
   $head .= 'Финальный турнир ЛН 2019. Тур '.($t - 11);
 else if ($t > 95)
   $head .= 'Лига Наций 2019. Пробный тур '.($t - 96);
@@ -1558,7 +1558,7 @@ function detrow(t,tmpz){
 	}
 	return out;
 }
-details=function(dom){mid=dom.attr("id");row=$(".p-table").find("tr[did="+mid+"]");if(row.length)row.remove();else{dom.after("<tr did="+mid+"><td colspan=7 class=\"det\"><div class=\"loaderP\"><div class=\"loader\"></td></tr>");socket.emit("footballdetails",mid)}}
+details=function(dom){mid=dom.attr("id");row=$(".p-table").find("tr[did="+mid+"]");if(row.length)row.remove();else{dom.after("<tr did="+mid+"><td colspan=7 class=\"det\"><div class=\"loaderP\"><div class=\"loader\"></td></tr>");socket.emit("footballdetails",Math.abs(mid))}}
 mdetails=function(tmpd,id,pos1,pos2){
 	if(tmpd!=""&&tmpd!=null&&tmpd!="########?~?|"){
 		tps=tmpd.split("#");tab="<table class=\"tablex\">";
@@ -1571,7 +1571,7 @@ mdetails=function(tmpd,id,pos1,pos2){
 }
 socket=io.connect("//score2live.net:1998",{"reconnect":true,"reconnection delay":500,"max reconnection attempts":20,"secure":true})
 socket.on("connect",function(){socket.emit("hellothere")})
-socket.on("footdetails",function(data){data=data[0];if ($(".p-table").find("tr[did="+data.id+"]").length)mdetails(data.mdetay,data.id,data.pos1,data.pos2)})';
+socket.on("footdetails",function(data){data=data[0];if ($(".p-table").find("tr[did="+data.id+"]").length)mdetails(data.mdetay,data.id,data.pos1,data.pos2);else if ($(".p-table").find("tr[did=-"+data.id+"]").length)mdetails(data.mdetay,-data.id,data.pos2,data.pos1)})';
   $html .= $published ? '
 //]]></script>
 <div style="height:20px"></div>' : '

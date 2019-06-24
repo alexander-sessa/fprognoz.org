@@ -7,9 +7,9 @@
 'ENGLAND#3R' => 'England: FA Cup',
 'ENGLAND#QF' => 'England: FA Cup',
 'ENGLAND#SF' => 'England: FA Cup',
-'ENGLAND#FINAL' => 'England: FA Cup',
+'ENGLAND#CFINAL' => 'England: FA Cup',
 'ENGLAND#CS' => 'England: Community Shield',
-'831605' => 'England: Championship Playoff',
+'ENGLAND#FINAL' => 'England: Championship Playoff',
 
 'GERMANY#BL' => 'Germany: 1. Bundesliga',
 'GERMANY#R16' => 'Germany: DFB Pokal',
@@ -18,6 +18,7 @@
 'GERMANY#SF' => 'Germany: DFB Pokal',
 'GERMANY#FINAL' => 'Germany: DFB Pokal',
 'GERMANY#BPO' => 'Germany: 1. Bundesliga qualification',
+'GERMANY#RPO' => 'Germany: 1. Bundesliga Play-offs',
 'GERMANY#SC' => 'Germany: German Super Cup',
 
 'ITALY#A' => 'Italy: Serie A',
@@ -106,6 +107,7 @@
 'BELGIUM#1A' => 'Belgium: First Division A',
 'GREECE#SL' => 'Greece: Super League',
 'SWITZERLAND#SL' => 'Switzerland: Super League',
+'SWITZERLAND#FINAL' => 'Switzerland: FA Cup',
 
 'EUROPE (UEFA)#A' => 'International: UEFA Nations League',
 'EUROPE (UEFA)#B' => 'International: UEFA Nations League',

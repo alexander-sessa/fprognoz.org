@@ -178,8 +178,8 @@ function build_personal_nav() {
     $tudb = array();
     $out = '';
     $nextEvent = $currentTime + 300;
-    $startTime = $currentTime - 259200; // - 3 day
-//    $startTime = $currentTime - 518400; // - 6 day
+//    $startTime = $currentTime - 259200; // - 3 day
+    $startTime = $currentTime - 518400; // - 6 day
     $startDay = date('d', $startTime);
     $startMonth = date('m', $startTime);
     $startYear = date('Y', $startTime);
@@ -639,7 +639,7 @@ function bz_matches($json) {
   $res_path = $online_dir . 'results/';
   $lock = $online_dir . 'log/results.lock';
   include ('online/realteam.inc.php');
-  $matches = json_decode(stripslashes($json), true);
+  $matches = json_decode($json, true); //  $matches = json_decode(stripslashes($json), true);
   $update = false;
   $year = date('Y');
   $m = date('m');
@@ -1597,8 +1597,8 @@ else {
 echo '
         <nav id="sidebar">
             <div class="sidebar-header">
-                <a href="?a=world&m=prognoz&s=2019&t=12"><h5>Финальный турнир:<br>страница 1-го тура</h5></a>
-                <a href="?a=world&m=result&s=2019&t=11"><h6>Итоги 11-го тура ЛН/ЛС</h6></a>
+                <a href="?a=world&m=prognoz&s=2019&t=16"><h5>Финальный турнир:<br>страница 5-го тура</h5></a>
+                <a href="?a=world&m=result&s=2019&t=15"><h6>Итоги 4-го тура ФТ ЛН</h6></a>
                 <a href="?m=news&s=2018-19"><h6>Новости SFP - ФИФА</h6></a>
             </div>
 
