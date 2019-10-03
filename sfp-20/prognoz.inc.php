@@ -1412,7 +1412,7 @@ mdetails=function(tmpd,id,pos1,pos2){
 		$wrapper=$("tr[did="+id+"]").find(".tablex");$wrapper.find(".sortable").sort(function(a,b){one=a.dataset.min;two=b.dataset.min;ones=one.split("+");one=ones[0];twos=two.split("+");two=twos[0];return +one - +two}).appendTo($wrapper);
 	}else $("tr[did="+id+"] td.det").html("<table class=\"tablex\"><tr><td><div align=center style=\"padding:4px;\">информация о матче пока не поступила</div></td></tr></table>")
 }
-socket=io.connect("https://score2live.net:1998",{"reconnect":true,"reconnection delay":500,"max reconnection attempts":20,"secure":true})
+socket=io.connect("https://www.score2live.net:1998",{"reconnect":true,"reconnection delay":500,"max reconnection attempts":20,"secure":true})
 socket.on("connect",function(){socket.emit("hellothere")})
 socket.on("hellobz",function(){socket.emit("getscores","football(soccer)","today")})
 socket.on("scoredatas",function(d){if(sendfp){$.post("'.$this_site.'",{a:"'.$a.'",m:"'.$m.'",s:"'.$s.'",t:"'.$t.'",matches:JSON.stringify(d.data.matches)},function(json){$.each(JSON.parse(json),function(idx,obj){base.push(obj.id);base[obj.id]=obj.d})})}$("#statusline").css("display","none")})

@@ -1,48 +1,56 @@
 #код	файл с эмблемой клуба	название	город	год	стадион	мест	сайт
-AVANGARD	russiaAVANGARD.png	ФК Авангард Курск	Курск	1958	Стадион "Трудовые Резервы"	11329	http://www.fc-avangard.ru
-ALANIA	russiaALANIA.png	ФК Алания (Спартак) Владикавказ	Владикавказ	1921/2011	Республиканский стадион "Спартак"	32464	http://www.spartak-vladikavkaz.ru
-AMKAR	russiaAMKAR.png	ФК Амкар Пермь	Пермь	1994	Стадион "Звезда"	20000	http://fc-amkar.org
-ANZHI	russiaANZHI.png	ФК Анжи Махачкала	Каспийск	1991	Анжи-Арена	31000	http://www.fc-anji.ru
-ARSENALT	russiaARSENALT.png	ФК Арсенал Тула	Тула	2008	Стадион "Арсенал"	20048	http://arsenaltula.ru
-BALTIKA	russiaBALTIKA.png	ФК Балтика Калининград	Калининград	1954	Стадион "Балтика"	14664	http://www.fc-baltika.ru
-BIOLOG	russiaBIOLOG.png	ФК Биолог Новокубанск	Новокубанск		Стадион "Биолог"	2300	http://fcbiolog.ru
-VOLGA-T	russiaVOLGA-T.png	ФК Волга Тверь	Тверь	1957	Стадион "Химик"	7680	http://www.fc-volga.ru
-KAVKAZ	russiaKAVKAZ.png	ФК Газпром Трансгаз Ставрополь	Рыздвяный	1986	Стадион "Факел"	1290	http://www.fc-gts.ru
-DIN-BRN	russiaDIN-BRN.png	ФК Динамо Барнаул	Барнаул		Стадион "Динамо"	15000	http://www.fc-dinamo-barnaul.ru
-DIN-B	russiaDIN-B.png	ФК Динамо Брянск	Брянск	1931	Стадион "Динамо"	10100	http://www.fkdb.ru
-DIN-M	russiaDIN-M.png	ФК Динамо Москва	Москва	1923	Арена "Химки"	18636	http://www.fcdinamo.ru
-DIN-SP	russiaDIN-SP.png	ФК Динамо Санкт-Петербург	Санкт-Петербург	2010	Малая спортивная арена	3000	http://www.fcdynamospb.ru
-DIN-ST	russiaDIN-ST.png	ФК Динамо Ставрополь	Ставрополь	1924	Стадион "Динамо"	15982	http://www.dynamost.ru
-ENISEY	russiaENISEY.png	ФК Енисей Красноярск	Красноярск	1937	Центральный стадион	32500	http://www.fc-enisey.ru/
-ZENIT-SP	russiaZENIT-SP.png	ФК Зенит Санкт-Петербург	Санкт-Петербург	1925	Стадион Петровский	21838	http://www.fc-zenit.ru
-KRASNODAR	russiaKRASNODAR.png	ФК Краснодар	Краснодар	2007	Стадион "Кубань"	35200	http://www.fckrasnodar.ru
-KRSOV	russiaKRSOV.png	ПФК Крылья Советов Самара	Самара	1942	Стадион "Металлург"	33001	http://www.kc-camapa.ru
-KUBAN	russiaKUBAN.png	ФК Кубань Краснодар	Краснодар	1928	Стадион "Кубань"	35200	http://www.fckuban.ru
-LOKO	russiaLOKO.png	ФК Локомотив Москва	Москва	1923	Стадион "Локомотив"	28800	http://www.fclm.ru
-MASHUK	russiaMASHUK.png	ФК Машук-КМВ Пятигорск	Пятигорск	1936	Центральный стадион "Машук"	10365	http://www.fc-mashuk.ru/
-MORDOV	russiaMORDOV.png	ФК Мордовия Саранск	Саранск	1961	Стадион "Старт"	12000	http://www.fc-mordovia.ru/
-MOSCOW	russiaMOSCOW.png	ФК Москва	Москва	1997	Стадион "Торпедо" им. Эдуарда Стрельцова	14274	http://www.fcmoscow.ru
-ROSTOV	russiaROSTOV.png	ФК Ростов	Ростов-на-Дону	1930	Стадион "Олимп 2"	15840	http://www.fc-rostov.ru
-ROTOR	russiaROTOR.png	ФК Ротор Волгоград	Волгоград	1929	Центральный стадион "Ротор"	32120	http://www.rotor-fc.com
-RUBIN	russiaRUBIN.png	ФК Рубин Казань	Казань	1958	Центральный стадион "Казань"	30133	http://www.rubin-kazan.ru
-SATURN	russiaSATURN.png	ФК Сатурн Московская область	Раменское	1946	Стадион "Сатурн"	16726	http://www.saturn-fc.ru
-SIBIR	russiaSIBIR.png	ФК Сибирь Новосибирск	Новосибирск	1936	Стадион "Спартак"	12567	http://www.fc-sibir.ru
-SKA-R	russiaSKA-R.png	ФК СКА Ростов-на-Дону	Ростов-на-Дону	1937	Стадион СКА СКВО	27300	http://www.ska-rostov.ru
-HABAR	russiaHABAR.png	ФК СКА Хабаровск	Хабаровск	1946	Стадион им. В. И. Ленина	15200	http://www.fc-skaenergy.ru
-SOKOL	russiaSOKOL.png	ФК Сокол Саратов	Саратов	2005	Стадион "Локомотив"	15260	http://www.sokol-saratov.ru
-SPARTAK	russiaSPARTAK.png	ФК Спартак Москва	Москва	1922	Олимпийский стадион "Лужники"	84745	http://spartak.com
-SPARTAK2	russiaSPARTAK.png	ФК Спартак Москва 2	Москва		Футбольное поле 4 "Спартак"	4000	http://spartak2.ru
-TAMBOV	russiaTAMBOV.png	ФК Тамбов	Тамбов		Стадион "Спартак"	8000	http://fc-tambov.ru
-TEREK	russiaTEREK.png	ФК Ахмат Грозный	Грозный	1958	Ахмат Арена	30597	http://www.fc-terek.ru
-TOMSK	russiaTOMSK.png	ФК Томь Томск	Томск	1957	Стадион "Труд"	15500	http://fctomtomsk.ru
-TOR-V	russiaTOR-V.png	ФК Торпедо Владимир	Владимир	1959	Стадион "Торпедо"	19700	http://www.torpedo33.com
-TOR-M	russiaTOR-M.png	ФК Торпедо Москва	Москва	1930	Стадион "Торпедо" им. Эдуарда Стрельцова	14274	http://fc-tm.ru/
-TOSNO	russiaTOSNO.png	ФК Тосно	Тосно	2013	Малая Спортивная Арена	3000	http://fctosno.ru
-URAL	russiaURAL.png	ФК Урал Свердловская область	Екатеринбург	1930	СКБ-Банк Арена	10000	http://fc-ural.ru
-UFA	russiaUFA.png	ФК Уфа	Уфа	2009	Стадион "Нефтяник"	15234	http://fcufa.pro
-FAKEL	russiaFAKEL.png	ФК Факел Воронеж	Воронеж	1947	Центральный стадион профсоюзов	31793	http://www.fakelfc.ru/
-KHIMKI	russiaKHIMKI.png	ФК Химки	Химки	1997	Стадион "Родина"	10033	http://www.fckhimki.ru
-CSKA	russiaCSKA.png	ПФК ЦСКА Москва	Москва	1911	Арена "Химки"	18636	http://www.pfc-cska.com
-CHERNOM	russiaCHERNOM.png	ФК Черноморец Новороссийск	Новороссийск	1907	Центральный стадион	12910	http://www.fcchernomorets.ru
-CHERTAN	russiaCHERTAN.png	ФК Чертаново Москва	Москва		Стадион "Салют"	2500	http://www.chertanovo-football.ru
-SHINNIK	russiaSHINNIK.png	ФК Шинник Ярославль	Ярославль	1957	Стадион "Шинник"	22871	http://www.shinnik.com
+AVANGARD	russia/AVANGARD.png	ФК Авангард Курск	Курск	1958	Стадион "Трудовые Резервы"	11329	http://www.fc-avangard.ru
+ALANIA	russia/ALANIA.png	ФК Алания (Спартак) Владикавказ	Владикавказ	1921/2011	Республиканский стадион "Спартак"	32464	http://www.spartak-vladikavkaz.ru
+AMKAR	russia/AMKAR.png	ФК Амкар Пермь	Пермь	1994	Стадион "Звезда"	20000	http://fc-amkar.org
+ANZHI	russia/ANZHI.png	ФК Анжи Махачкала	Каспийск	1991	Анжи-Арена	31000	http://www.fc-anji.ru
+ARMAVIR	russia/ARMAVIR.png	ФК Армавир	Армавир	1960	Стадион "Юность"	5700	http://fcarmavir.ru
+ARSENALT	russia/ARSENALT.png	ФК Арсенал Тула	Тула	2008	Стадион "Арсенал"	20048	http://arsenaltula.ru
+AHMAT	russia/AHMAT.png	ФК Ахмат Грозный	Грозный	1958	Ахмат Арена	30597	http://www.fc-terek.ru
+BALTIKA	russia/BALTIKA.png	ФК Балтика Калининград	Калининград	1954	Стадион "Балтика"	14664	http://www.fc-baltika.ru
+BIOLOG	russia/BIOLOG.png	ФК Биолог Новокубанск	Новокубанск		Стадион "Биолог"	2300	http://fcbiolog.ru
+VOLGA-T	russia/VOLGA-T.png	ФК Волга Тверь	Тверь	1957	Стадион "Химик"	7680	http://www.fc-volga.ru
+VOLGAR	russia/VOLGAR.png	ФК Волгарь Астрахань	Астрахань	1938	Центральный Стадион "Астраханьгазпром"	17712	http://www.volgar-fc.ru
+KAVKAZ	russia/KAVKAZ.png	ФК Газпром Трансгаз Ставрополь	Рыздвяный	1986	Стадион "Факел"	1290	http://www.fc-gts.ru
+DIN-BRN	russia/DIN-BRN.png	ФК Динамо Барнаул	Барнаул		Стадион "Динамо"	15000	http://www.fc-dinamo-barnaul.ru
+DIN-B	russia/DIN-B.png	ФК Динамо Брянск	Брянск	1931	Стадион "Динамо"	10100	http://www.fkdb.ru
+DIN-M	russia/DIN-M.png	ФК Динамо Москва	Москва	1923	Арена "Химки"	18636	http://www.fcdinamo.ru
+DIN-SP	russia/DIN-SP.png	ФК Динамо Санкт-Петербург	Санкт-Петербург	2010	Малая спортивная арена	3000	http://www.fcdynamospb.ru
+DIN-ST	russia/DIN-ST.png	ФК Динамо Ставрополь	Ставрополь	1924	Стадион "Динамо"	15982	http://www.dynamost.ru
+ENISEY	russia/ENISEY.png	ФК Енисей Красноярск	Красноярск	1937	Центральный стадион	32500	http://www.fc-enisey.ru/
+ZENIT-SP	russia/ZENIT-SP.png	ФК Зенит Санкт-Петербург	Санкт-Петербург	1925	Стадион Петровский	21838	http://www.fc-zenit.ru
+ZENIT-2	russia/ZENIT-2.png	ФК Зенит Санкт-Петербург 2	Санкт-Петербург	1993	Стадион "Смена"	3000	https://2.fc-zenit.ru
+KOMETA	russia/KOMETA.png	ФК Калуга	Калуга	2002	Арена "Анненки"	3643	http://fc-kaluga.ru
+KRASNODAR	russia/KRASNODAR.png	ФК Краснодар	Краснодар	2007	Стадион "Кубань"	35200	http://www.fckrasnodar.ru
+KRSOV	russia/KRSOV.png	ПФК Крылья Советов Самара	Самара	1942	Стадион "Металлург"	33001	http://www.kc-camapa.ru
+KUBAN	russia/KUBAN.png	ФК Кубань Краснодар	Краснодар	1928	Стадион "Кубань"	35200	http://www.fckuban.ru
+LOKO	russia/LOKO.png	ФК Локомотив Москва	Москва	1923	Стадион "Локомотив"	28800	http://www.fclm.ru
+LUCH-V	russia/LUCH-V.png	ФК Луч-Энергия Владивосток	Владивосток	1958	Стадион "Динамо"	10500	http://fcle.ru
+MASHUK	russia/MASHUK.png	ФК Машук-КМВ Пятигорск	Пятигорск	1936	Центральный стадион "Машук"	10365	http://www.fc-mashuk.ru/
+MORDOV	russia/MORDOV.png	ФК Мордовия Саранск	Саранск	1961	Стадион "Старт"	12000	http://www.fc-mordovia.ru/
+MOSCOW	russia/MOSCOW.png	ФК Москва	Москва	1997	Стадион "Торпедо" им. Эдуарда Стрельцова	14274	http://www.fcmoscow.ru
+ROSTOV	russia/ROSTOV.png	ФК Ростов	Ростов-на-Дону	1930	Стадион "Олимп 2"	15840	http://www.fc-rostov.ru
+ROTOR	russia/ROTOR.png	ФК Ротор Волгоград	Волгоград	1929	Центральный стадион "Ротор"	32120	http://www.rotor-fc.com
+RUBIN	russia/RUBIN.png	ФК Рубин Казань	Казань	1958	Центральный стадион "Казань"	30133	http://www.rubin-kazan.ru
+SATURN	russia/SATURN.png	ФК Сатурн Московская область	Раменское	1946	Стадион "Сатурн"	16726	http://www.saturn-fc.ru
+SIBIR	russia/SIBIR.png	ФК Сибирь Новосибирск	Новосибирск	1936	Стадион "Спартак"	12567	http://www.fc-sibir.ru
+SKA-R	russia/SKA-R.png	ФК СКА Ростов-на-Дону	Ростов-на-Дону	1937	Стадион СКА СКВО	27300	http://www.ska-rostov.ru
+HABAR	russia/HABAR.png	ФК СКА Хабаровск	Хабаровск	1946	Стадион им. В. И. Ленина	15200	http://www.fc-skaenergy.ru
+SOKOL	russia/SOKOL.png	ФК Сокол Саратов	Саратов	2005	Стадион "Локомотив"	15260	http://www.sokol-saratov.ru
+SOCHI	russia/SOCHI.png	ФК Сочи	Сочи	2010	Олимпийский стадион "Фишт"	48000	http://pfcsochi.ru
+SPARTAK	russia/SPARTAK.png	ФК Спартак Москва	Москва	1922	Олимпийский стадион "Лужники"	84745	http://spartak.com
+SPARTAK2	russia/SPARTAK.png	ФК Спартак Москва 2	Москва		Футбольное поле 4 "Спартак"	4000	http://spartak2.ru
+TAMBOV	russia/TAMBOV.png	ФК Тамбов	Тамбов		Стадион "Спартак"	8000	http://fc-tambov.ru
+TEREK	russia/TEREK.png	ФК Ахмат Грозный	Грозный	1958	Ахмат Арена	30597	http://www.fc-terek.ru
+TOMSK	russia/TOMSK.png	ФК Томь Томск	Томск	1957	Стадион "Труд"	15500	http://fctomtomsk.ru
+TOR-V	russia/TOR-V.png	ФК Торпедо Владимир	Владимир	1959	Стадион "Торпедо"	19700	http://www.torpedo33.com
+TOR-M	russia/TOR-M.png	ФК Торпедо Москва	Москва	1930	Стадион "Торпедо" им. Эдуарда Стрельцова	14274	http://fc-tm.ru/
+TOSNO	russia/TOSNO.png	ФК Тосно	Тосно	2013	Малая Спортивная Арена	3000	http://fctosno.ru
+URAL	russia/URAL.png	ФК Урал Свердловская область	Екатеринбург	1930	СКБ-Банк Арена	10000	http://fc-ural.ru
+UFA	russia/UFA.png	ФК Уфа	Уфа	2009	Стадион "Нефтяник"	15234	http://fcufa.pro
+FAKEL	russia/FAKEL.png	ФК Факел Воронеж	Воронеж	1947	Центральный стадион профсоюзов	31793	http://www.fakelfc.ru/
+KHIMKI	russia/KHIMKI.png	ФК Химки	Химки	1997	Стадион "Родина"	10033	http://www.fckhimki.ru
+CSKA	russia/CSKA.png	ПФК ЦСКА Москва	Москва	1911	Арена "Химки"	18636	http://www.pfc-cska.com
+CHAIKA	russia/CHAIKA.png	ФК Чайка Песчанокопское	Песчанокопское	1997	Центральный стадион им. И. П. Чайка	2500	http://fc-chayka.ru
+CHERNOM	russia/CHERNOM.png	ФК Черноморец Новороссийск	Новороссийск	1907	Центральный стадион	12910	http://www.fcchernomorets.ru
+CHERTAN	russia/CHERTAN.png	ФК Чертаново Москва	Москва		Стадион "Салют"	2500	http://www.chertanovo-football.ru
+SHINNIK	russia/SHINNIK.png	ФК Шинник Ярославль	Ярославль	1957	Стадион "Шинник"	22871	http://www.shinnik.com

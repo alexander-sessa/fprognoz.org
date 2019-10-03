@@ -2,10 +2,12 @@
 $country = "scotland";
 
 $teams = array(
+"1914" => "ROSS",
+);
+/*
 "1908" => "ABERDEEN",
 "1918" => "AYR",
 "1898" => "CELTIC",
-"1907" => "DUNDEE",
 "1903" => "DUN_UTD",
 "1913" => "FALKIRK",
 "1922" => "HAMILTON",
@@ -17,14 +19,14 @@ $teams = array(
 "1902" => "MOTHER",
 "1909" => "PARTICK",
 "1899" => "RANGERS",
-"1914" => "ROSS",
+
 "1912" => "STJOHN",
 "1916" => "STMIRREN",
-);
-/*
-"1938" => "ELGIN",
 "1930" => "STRAN",
+
+"1938" => "ELGIN",
 "1910" => "CLYDE",
+"1907" => "DUNDEE",
 "1915" => "QUEENS",
 "1910" => "Clyde",
 "1915" => "Queen of the South",

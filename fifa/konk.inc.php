@@ -1,5 +1,5 @@
 <?php
-$tour = (isset($t) && $t) ? 'KONK' . $t : 'KONK36';
+$tour = (isset($t) && $t) ? 'KONK' . $t : 'KONK37';
 echo '    <h4 class="text-center">&nbsp;&nbsp;&nbsp;Форма отправки заявок на конкурс ' . $tour . '</h4>
 ';
 

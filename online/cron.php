@@ -278,6 +278,16 @@ function pr_validate($pr) {
 }
 
 function SwissStanding($cal_file) {
+  if (!is_file($cal_file))
+  { // если нет календаря, используем порядок команд из codes.tsv
+    $cal_file = substr($cal_file, 0, -2) . 'odes.tsv';
+    $codes = file($cal_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    $teams = [];
+    foreach ($codes as $line)
+      $teams[] = explode('	', $line)[1];
+
+    return [[], $teams];
+  }
   $cal = file($cal_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
   $games = $teams = [];
   foreach ($cal as $line) {

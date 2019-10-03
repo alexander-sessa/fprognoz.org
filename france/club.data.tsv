@@ -1,13 +1,18 @@
 #код	файл с эмблемой клуба	название	город	год	стадион	мест	сайт
-ANGERS	france/ANGERS.png	Angers SCO	Angers	1919	Stade Jean Bouin	17100	http://www.angers-sco.fr
+AJACCIO	france/AJACCIO.png	AC Ajaccio	Ajaccio	1910	Stade François Coty	10660	http://www.ac-ajaccio.com
+AMIENS	france/AMIENS.png	Amiens SC	Amiens	1901	Stade Crédit Agricole de la Licorne	17100	http://www.angers-sco.fr
+ANGERS	france/ANGERS.png	Angers SCO	Angers	1919	Stade Jean Bouin	12481	http://www.amiensfootball.com
 AUXERRE	france/AUXERRE.png	AJ Auxerre	Auxerre	1905	Stade de l'Abbé Deschamps	23467	http://www.aja.fr
 BASTIA	france/BASTIA.png	SC Bastia	Furian	1905	Stade Armand Césari	16480	http://www.sc-bastia.net
 BORDO	france/BORDO.png	FC Girondins de Bordeaux	Bordeaux	1881	Stade Jacques Chaban-Delmas	34263	http://www.girondins.com
+BREST	france/BREST.png	Stade Brestois 29	Brest	1950	Stade Francis-Le Blé	15931	http://www.sb29.com
 CAEN	france/CAEN.png	Stade Malherbe Caen	Caen	1897	Stade Michel d'Ornano	21500	http://www.smcaen.fr
 CANNES	france/CANNES.png	Association Sportive de Cannes	Cannes	1902	Stade Pierre de Coubertin	11211	http://www.ascannes.info
+DIJON	france/DIJON.png	Dijon FCO	Dijon	1936	Stade Gaston-Gérard	16098	http://www.dfco.fr
 GENGAM	france/GENGAM.png	En Avant Guingamp	Guingamp	1912	Stade du Roudourou	18250	http://www.eaguingamp.com
 LAVAL	france/LAVAL.png	Stade Lavallois Mayenne FC	Laval	1902	Stade Francis Le Basser	18467	http://www.stade-lavallois.com
-LENS	france/LENS.png	Racing Club de Lens	Lens	1906	Stade Bollaert-Delelis	41233	http://www.rclens.fr/
+LEHAVRE	france/LEHAVRE.png	Le Havre AC	Le Havre	1872	Stade Océane	25178	http://www.hac-foot.com
+LENS	france/LENS.png	Racing Club de Lens	Lens	1906	Stade Bollaert-Delelis	41233	http://www.rclens.fr
 LILLE	france/LILLE.png	Lille OSC Métropole	Villeneuve d'Ascq	1944	Grand Stade Lille Métropole	50157	http://www.losc.fr
 LORIENT	france/LORIENT.png	FC Lorient	Lorient	1926	Stade Yves Allainmat - Le Moustoir	18970	http://www.fclweb.fr
 METZ	france/METZ.png	FC Metz	Metz	1932	Stade Saint-Symphorien	26700	http://www.fcmetz.com/
@@ -16,11 +21,16 @@ MONTPEL	france/MONTPEL.png	Montpellier HSC	Montpellier	1974	Stade de la Mosson	3
 NANCY	france/NANCY.png	AS Nancy-Lorraine	Tomblaine	1967	Stade Marcel Picot	20087	http://www.asnl.net
 NANT	france/NANT.png	FC Nantes	Nantes	1943	Stade de la Beaujoire - Louis Fonteneau	38285	http://www.fcnantes.com
 NICE	france/NICE.png	OGC de Nice Côte d'Azur	Nice	1904	Stade Municipal du Ray	18696	http://www.ogcnice.com
+NIMES	france/NIMES.png	Nîmes Olympique	Nîmes	1937	Stade des Costières	18482	http://www.nimesolympique.fr
 LYON	france/LYON.png	Olympique Lyonnais	Lyon	1950	Stade de Gerland	41842	http://www.olweb.fr
 MARSELLE	france/MARSELLE.png	Olympique de Marseille	Marseille	1899	Stade Vélodrome	60031	http://www.om.net
+PARIS	france/PARIS.png	Paris FC	Paris	1969	Stade Sébastien-Charléty	20000	http://www.parisfootballclub.com
 PSG	france/PSG.png	Paris Saint-Germain FC	Paris	1970	Parc des Princes	48428	http://www.psg.fr
 REDSTAR	france/REDSTAR.png	Red Star FC 93	Saint-Ouen	1897	Stade de Paris (Stade Bauer)	10000	http://www.redstarfc93.fr/
 REIMS	france/REIMS.png	Stade de Reims	Reims	1909	Stade Auguste-Delaune II	21684	http://www.stade-de-reims.com/
 RENN	france/RENN.png	Stade Rennais FC	Rennes	1901	Stade de la Route de Lorient	31127	http://www.staderennais.com
 ST_ETIEN	france/ST_ETIEN.png	AS Saint-Étienne Loire	Saint-Ètienne	1920	Stade Geoffroy-Guichard	35616	http://www.asse.fr
+SOCHAUX	france/SOCHAUX.png	FC Sochaux-Montbéliard	Montbéliard	1928	Stade Auguste-Bonal	20005	http://www.fcsochaux.fr
+STRAS	france/STRAS.png	RC Strasbourg Alsace	Strasbourg	1906	Stade de la Meinau	26109	http://www.rcstrasbourgalsace.fr
 TOULOUSE	france/TOULOUSE.png	Toulouse FC	Toulouse	1937	Stade Municipal	35472	http://www.tfc.info
+VALENC	france/VALENC.png	Valenciennes FC	Valenciennes	1913	Stade du Hainaut	24926	http://www.va-fc.com

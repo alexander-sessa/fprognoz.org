@@ -205,7 +205,7 @@ scorefix=function(d){
 		row.cells[5].innerHTML=(s=="HT"||s=="SP")?"<span class=\"red\">"+s+"</span>":(s=="?"||s=="PP")?"<span>"+s+"</span>":(s=="FT")?"<span>"+((h==a)?"X":(h>a)?1:2)+"</span>":"<span class=\"blink\">"+s+"’</span>"
 	}
 }
-socket=io.connect("//score2live.net:1998",{"reconnect":true,"reconnection delay":500,"max reconnection attempts":20,"secure":true})
+socket=io.connect("//www.score2live.net:1998",{"reconnect":true,"reconnection delay":500,"max reconnection attempts":20,"secure":true})
 socket.on("connect",function(){socket.emit("hellothere")})
 socket.on("hellobz",function(){socket.emit("getscores","football(soccer)","today")})
 socket.on("scoredatas",function(d){$("#statusline").css("display","none")})

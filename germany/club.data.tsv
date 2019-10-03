@@ -7,8 +7,10 @@ BAYER	germany/BAYER.png	TSV Bayer 04 Leverkusen	Leverkusen	1904	BayArena	30210	h
 BAYERN	germany/BAYERN.png	FC Bayern München	München	1900	Allianz-Arena	71901	http://www.fcbayern.telekom.de
 BOCHUM	germany/BOCHUM.png	VFL Bochum 1848	Bochum	1848	rewirpowerSTADION	30748	http://www.vfl-bochum.de
 BOR-D	germany/BOR-D.png	BV Borussia 09 Dortmund	Dortmund	1909	Signal-Iduna-Park	80720	http://www.bvb.de
+BOR-D-II	germany/BOR-D.png	BV Borussia 09 Dortmund II	Dortmund	1909	Stadion Rote Erde	25000	https://www.bvb.de/ger/Mannschaften/U23
 BOR-M	germany/BOR-M.png	Borussia VfL Mönchengladbach	Mönchengladbach	1900	Stadion im BORUSSIA-PARK	54057	http://www.borussia.de
 BRAUNSCH	germany/BRAUNSCH.png	Braunschweiger TSV Eintracht 1895	Braunschweig	1895	Eintracht-Stadion	23325	http://www.eintracht.com
+JENA	germany/JENA.png	FC Carl Zeiss Jena	Jena	1903	Ernst-Abbe-Sportfeld	15500	http://www.fc-carlzeiss-jena.de
 DARMSTADT	germany/DARMSTADT.png	SV Darmstadt 1898	Darmstadt	1898	Merck-Stadion am Böllenfalltor	16500	http://www.sv98.de
 DUISBURG	germany/DUISBURG.png	MDV Duisburg	Duisburg	1902	Schauinsland-Reisen-Arena	31514	http://www.msv-duisburg.de
 DYNAMO-D	germany/DYNAMO-D.png	SG Dynamo Dresden	Dresden	1953	DDV-Stadion	32066	http://www.dynamo-dresden.de
@@ -16,24 +18,35 @@ EINTRACHT	germany/EINTRACHT.png	Eintracht Frankfurt	Frankfurt am Main	1899	Comme
 FREIBURG	germany/FREIBURG.png	SC Freiburg	Freiburg	1904	Schwarzwald-Stadion	24000	http://www.scfreiburg.com
 FORTUNA	germany/FORTUNA.png	Düsseldorfer TUS Fortuna 1895	Düsseldorf	1895	ESPRIT arena	54500	http://www.fortuna-duesseldorf.de
 GREUTHER	germany/GREUTHER.png	SPVGG Greuther Fürth	Fürth	1903	Stadion am Laubenweg	18000	http://www.greuther-fuerth.de
+HALLE	germany/HALLE.png	Hallescher FC	Halle/Saale	1966	ERDGAS Sportpark	15065	http://www.hallescherfc.de
+HAMBURG	germany/HAMBURG.png	Hamburger SV	Hamburg	1887	Imtech Arena	57030	http://www.hsv.de
 HANNOVER	germany/HANNOVER.png	Hannover 96	Hannover	1896	HDI-Arena	49000	http://www.hannover96.de
 HANSA	germany/HANSA.png	FC Hansa Rostock	Rostock	1965	DKB Arena	29000	http://www.fc-hansa.de
-HAMBURG	germany/HAMBURG.png	Hamburger SV	Hamburg	1887	Imtech Arena	57030	http://www.hsv.de
 HEIDEN	germany/HEIDEN.png	1 FC. Heidenheim 1946	Heidenheim an der Brenz	1946	Voith-Arena	15000	http://www.fc-heidenheim.de
 HERTHA	germany/HERTHA.png	Hertha BSC	Berlin	1892	Olympiastadion Berlin	77116	http://www.herthabsc.de
 HOFFEN	germany/HOFFEN.png	TSG 1899 Hoffenheim	Sinsheim-Hoffenheim	1899	Wirsol Rhein-Neckar-Arena	30164	http://www.achtzehn99.de
 INGOL	germany/INGOL.png	FC Ingolstadt 04	Ingolstadt	2004	Audi-Sportpark	15729	http://www.fcingolstadt.de
+JAHN	germany/JAHN.png	SSV Jahn 2000 Regensburg	Regensburg	2000	Continental Arena	15224	http://www.ssv-jahn.de
 KAISER	germany/KAISER.png	1. FC Kaiserslautern	Kaiserslautern	1900	Fritz-Walter-Stadion	49780	http://www.fck.de
 KARLS	germany/KARLSRUHER.png	Karlsruher SC	Karlsruhe	1898	Wildparkstadion	29699	http://www.ksc.de
+KIEL	germany/KIEL.png	Kieler SV Holstein 1900	Kiel	1900	Holstein-Stadion	13400	http://www.holstein-kiel.de
 KOLN	germany/KOLN.png	1. FC Köln	Köln	1948	RheinEnergieStadion	50076	http://www.fc-koeln.de
 LEIPZIG	germany/LEIPZIG.png	Rasen Ballsport Leipzig	Leipzig	2009	Red Bull Arena	44345	http://www.dierotenbullen.com
+MAGDEBURG	germany/MAGDEBURG.png	1. FC Magdeburg	Magdeburg	1965	MDCC-Arena	27250	http://www.1fcm.de
 MAINZ	germany/MAINZ.png	1. FSV Mainz 05	Mainz	1905	Coface Arena	34034	http://www.mainz05.de
+MEPPEN	germany/MEPPEN.png	SV Meppen 1912	Meppen	1912	Hänsch-Arena	16500	http://www.svmeppen.de
 NURNBERG	germany/NURNBERG.png	1. FC Nürnberg	Nürnberg	1900	Max-Morlock-Stadion	50000	http://www.fcn.de
+OSNABRUCK	germany/OSNABRUCK.png	VFL Osnabrück	Osnabrück	1899	Bremer Brücke	16667	http://www.vfl.de
 PADERBORN	germany/PADERBORN.png	SC Paderborn 07	Paderborn	1907	Benteler-Arena	15306	http://www.scpaderborn07.de
 SANDHAUS	germany/SANDHAUS.png	SV Sandhausen	Sandhausen	1916	Hardtwaldstadion	15414	http://www.svsandhausen.de
 SCHALKE	germany/SCHALKE.png	FC Schalke 04	Gelsenkirchen	1904	Veltins-Arena	61973	http://www.schalke04.de
 STPAULI	germany/STPAULI.png	FC St. Pauli	Hamburg	1910	Millerntor-Stadion	29546	http://www.fcstpauli.com
 STUTTGART	germany/STUTTGART.png	VfB Stuttgart 1893	Stuttgart	1893	Mercedes-Benz-Arena	60469	http://www.vfb.de
 UNION	germany/UNION.png	1.FC Union Berlin	Berlin	1966	Stadion An der Alten Försterei	21717	http://www.fc-union-berlin.de
+UNTERHACH	germany/UNTERHACH.png	SpVgg Unterhaching	Unterhaching	1925	Alpenbauer Sportpark	15053	http://www.spvggunterhaching.de
+VIKTORIA	germany/VIKTORIA.png	FC Viktoria Köln	Köln	1904	Sportpark Höhenberg	6271	http://www.viktoria1904.de
+WALDHOF	germany/WALDHOF.png	SV Waldhof Mannheim 07	Mannheim	1907	Carl-Benz-Stadion	25667	http://www.waldhof-mannheim.de
+WEHEN	germany/WEHEN.png	SV Wehen Wiesbaden	Wiesbaden	1926	BRITA-Arena	13144	http://www.svwehen-wiesbaden.de
 WERDER	germany/WERDER.png	SV Werder Bremen	Bremen	1899	Weserstadion	42358	http://www.werder.de
 WOLFSBURG	germany/WOLFSBURG.png	VfL Wolfsburg	Wolfsburg	1945	VOLKSWAGEN ARENA	30000	http://www.vfl-wolfsburg.de
+ZWICKAU	germany/ZWICKAU.png	FSV Zwickau	Zwickau	1912	GGZ-ARENA	10134	http://www.fsv-zwickau.de

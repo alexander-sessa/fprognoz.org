@@ -1,150 +1,147 @@
-<h4>&nbsp;&nbsp;&nbsp;Предсезонный конкурс 2018 г.</h4>
+<h4>&nbsp;&nbsp;&nbsp;Предсезонный конкурс 2019 г.</h4>
 <div class="monospace">
 ФП УЕФА объявляет предсезонный конкурс, в котором будут разыграны свободные команды во всех ФП-ассоциациях.
-Код программки конкурса - KONK36.
+Код программки конкурса - KONK37.
 
  Разыгрываемые команды
  =====================
 
 Англия - 4 команды в лиге Championship из числа:
 -----------------------------------------------
-Cardiff City
 Crystal Palace
-Fulham
-Watford
-Birmingham City
-Bristol City
-Ipswich Town
-Millwall
-Preston North End
+Norwich City
+Sheffield United
 Sheffield Wednesday
+Watford
+Bristol City
+Preston North End
 
-Нынешние хозяева команд Norwich City, Sunderland и Nottingham Forest могут заявиться на конкурс с целью отстоять место в ФП Англии.
+Нынешние хозяева команд Fulham, Sunderland и Brighton могут заявиться на конкурс с целью отстоять место в ФП Англии.
 
-Германия - 5 команд в Бундеслиге-2 из числа:
--------------------------------------------
-Eintracht Braunschweig
-Ingolstadt
-Dynamo Dresden
+Германия - 4 команды в Бундеслиге-2 из числа:
+--------------------------------------------
+Hertha BSC
+Köln
+Paderborn
 Erzgebirge Aue
 Holstein Kiel
 Jahn Regensburg
-Köln
-MSV Duisburg
 Sandhausen
 
-Нынешние хозяева команд Hansa, Hertha и Darmstadt могут заявиться на конкурс с целью отстоять место в ФП Германии.
+Нынешние хозяева команд Freiburg, Fortuna и Darmstadt могут заявиться на конкурс с целью отстоять место в ФП Германии.
 
-Испания - КОМАНДА В ПРИМЕРЕ (LA LIGA) - Real Oviedo
-а также 4 команды в Сегунде из числа:
----------------------------------------------------
-Celta de Vigo
-Girona
+Испания - 2 команды в Сегунде из числа:
+--------------------------------------
+Leganés
 Huesca
 Rayo Vallecano
-Alcorcón
-Cádiz
-Córdoba
-Lugo
-Reus Deportiu
+Elche
+Las Palmas
 
-Нынешние хозяева команд Leganés и Real Madrid могут заявиться на конкурс с целью отстоять место в ФП Испании.
+Нынешние хозяева команд Ponferradina и Real Madrid могут заявиться на конкурс с целью отстоять место в ФП Испании.
+Athletic Bilbao оставлен в Сегунде в качестве награды за победу А. Сессы в 4-м сезоне ФП Швейцарии.
 
-Италия - КОМАНДА СЕРИИ А, УЧАСТНИК ЛИГИ ЕВРОПЫ - Ternana
-а также 3 команды в Серии В из числа:
---------------------------------------------------------
-Empoli
-Frosinone
+Италия - 4 команды в Серии В из числа:
+-------------------------------------
+Bologna
+Foggia
+Lecce
 Sassuolo
 Benevento
-Carpi
-Cittadella
-Crotone
-Perugia
+Pescara
 Spezia
+Cittadella
+Perugia
 
-Нынешние хозяева команд Pisa и Bologna могут заявиться на конкурс с целью отстоять место в ФП Италии.
+Нынешние хозяева команд Chievo и Palermo могут заявиться на конкурс с целью отстоять место в ФП Италии.
 
-Франция - 2 КОМАНДЫ ЛИГИ 1 из числа:
+Франция - 2 команды в Лиге 2 из числа:
 -------------------------------------
-Montpellier
-Amiens SC
 Nîmes
-Reims
-а также команда Лиги 2 - Bastia
+Lens
+Grenoble Foot 38
+Clermont
+Châteauroux
+Niort
 
-Португалия - 5 КОМАНД ПРИМЕЙРЫ из числа:
----------------------------------------
-Academica - УЧАСТНИК ЛИГИ ЧЕМПИОНОВ
-Vitoria Setubal
-Desportivo Aves
-Feirense
-Moreirense
-Portimonense
-Santa Clara
-Tondela
+Нынешние хозяева команд Orléans, PSG и Troyes могут заявиться на конкурс с целью отстоять место в ФП Франции.
+Одно место в Лиге 2 (Brest) отдано А. Сессе в качестве награды за выигрыш Золотой Бутсы 4-го сезона ФП Швейцарии.
 
-Нынешние хозяева команд Marítimo и Estoril могут заявиться на конкурс с целью отстоять место в ФП Португалии.
-
-Голландия - 4 КОМАНДЫ ЭРЕДИВИЗИ из числа:
+Португалия - 2 КОМАНДЫ ПРИМЕЙРЫ из числа:
 ----------------------------------------
-Roda JC
-Emmen
-Exelsior
-Fortuna Sittard
-NEC
-Sparta
-Telstar
-Twente
+Vitória Guimarães
+Moreirense
+Santa Clara
+Portimonense
+Vitória Setúbal
+Desportivo Aves
+Tondela
+Paços de Ferreira
+Famalicão
+Gil Vicente
 
-Нынешний хозяева команд Feyenoord, Ajax и PSV (ах, какие имена!) могут заявиться на конкурс с целью отстоять место в ФП Голландии.
+Нынешний хозяин команды Belenenses может заявиться на конкурс с целью отстоять место в ФП Португалии.
+
+Голландия - 1 КОМАНДА ЭРЕДИВИЗИ из числа:
+----------------------------------------
+!!! Ajax !!!
+Emmen
+Fortuna Sittard
+RKC Waalwijk
+Sparta
+
+Нынешние хозяева команд Cambuur и Heracles могут заявиться на конкурс с целью отстоять место в ФП Голландии.
 
 Шотландия - 3 КОМАНДЫ ПРЕМЬЕРШИПА из числа:
 ------------------------------------------
-Hearts
-Livingston
+Alloa Athletic
+Arbroath
 Greenock Morton
 Dunfermline
 Queen of the South
+Stranraer
 
-Нынешние хозяева команд Hamilton, Elgin и Dundee могут заявиться на конкурс с целью отстоять место в ФП Шотландии.
+Нынешние хозяева команд Hamilton, Dundee и Livingston могут заявиться на конкурс с целью отстоять место в ФП Шотландии.
 
-Беларусь - 2 КОМАНДЫ ПРЕМЬЕР ЛИГИ из числа:
+Белоруссия - 2 КОМАНДЫ ПРЕМЬЕР ЛИГИ из числа:
 -------------------------------------------
-Днепр Могилёв
-Луч Минск
-Смолевичи-СТИ
-Торпедо-Минск
-Шахтёр Солигорск
+Ислочь
+Энергетик-БДУ
+Тарпеда
 
-Нынешние хозяева команд Ислочь и Коммунальник могут заявиться на конкурс с целью отстоять место в ФП Беларуси.
+Нынешние хозяева команд Днепр Могилёв и ФК Минск могут заявиться на конкурс с целью отстоять место в ФП Белоруссии.
 
-Россия - КОМАНДА ФНЛ - Анжи (Махачкала)
-а также 5 команд 2-го дивизиона (ПФЛ) из числа:
-----------------------------------------------
+Россия - 5 команд 2-го дивизиона (ПФЛ) из числа:
+-----------------------------------------------
 Ахмат
 Оренбург
-Динамо Брянск
 Тамбов
 Армавир
-Луч
+Краснодар-2
+Нефтехимик
 Нижний Новгород
-Сочи
-Тюмень
+Спартак-2
+Текстильщик
+Чайка
+Чертаново
 
-Нынешние хозяева команд Мордовия и Динамо Ст могут заявиться на конкурс с целью отстоять место в ФП России.
+Нынешние хозяева команд СКА Р-н-Д, Мордовия и Динамо Б могут заявиться на конкурс с целью отстоять место в ФП России.
 
-Украина - 3 КОМАНДЫ ПРЕМЬЕР ЛИГИ:
---------------------------------
+Украина - 5 команд Первой лиги из числа:
+---------------------------------------
 Александрия
-Десна
-Заря
 Львов
-
-Нынешние хозяева команд Карпаты и Ворскла могут заявиться на конкурс с целью отстоять место в ФП Украины.
+Оболонь-Бровар
+Ингулец
+Прикарпатье
+Рух
+Агробизнес
+Кремень
+Черкащина-Академия
 
 
 Количество разыгрываемых команд может увеличиться после окончания кампании по сбору подтверждений участия в новом сезоне.
+Ещё один возможный источник свободных команд - "пожертвования" участников конкурса с исчерпанной квотой.
 
 
  Оформление заявки
@@ -156,7 +153,7 @@ Queen of the South
 - команды, от которой игрок откажется в пользу выигранных команд, если у игрока не окажется свободных квот;
 - команды, на которые претендует игрок в порядке предпочтения.
 Можно указать дополнительную информацию, которую посчитаете важной.
-Заявку можно сделать на странице <a href="?m=konk&t=36">https://fprognoz.org?m=konk&t=36</a> или отправить емейлом.
+Заявку можно сделать на странице <a href="?m=konk&t=37">https://fprognoz.org?m=konk&t=37</a> или отправить емейлом.
 
 Форма конкурсной заявки для отправки почтой:
 
@@ -165,7 +162,7 @@ Queen of the South
  В поле To: FP
  (в теле письма):        Например:
  FP_Prognoz              FP_Prognoz
- (код тура)              KONK36
+ (код тура)              KONK37
  (Имя_Фамилия)           Sergey_Rebrov
  (ваши прогнозы)         12XXXX121212XX2111122221X12XXXX11122221X
  (команды, от которых    Bayern (Германия)
@@ -175,57 +172,57 @@ Queen of the South
   желаете играть)
 
 Заявки на конкурс принимаются до начала первого матча программки.
-Если какие-то матчи программки будут сыграны до 1 сентября, они не будут учтены.
+Если какие-то матчи программки будут сыграны до 31 августа, они не будут учтены.
 
 
  Программка конкурса
  ===================
 
  +-------------------------------------------------------+
- | N | Программка конкурса KONK36                  | ДРМ |
+ | N | Программка конкурса KONK37                  | ДРМ |
  |---+---------------------------------------------+-----|
- |  1| Leicester City - Liverpool              ENG |09-01|
- |  2| Burnley - Manchester United             ENG |09-01|
- |  3| Crystal Palace - Southampton            ENG |09-01|
- |  4| Everton - Huddersfield Town             ENG |09-01|
- |  5| West Ham United - Wolverhampton         ENG |09-01|
- |  6| Cardiff City - Arsenal                  ENG |09-02|
- |  7| Watford - Tottenham Hotspur             ENG |09-02|
- |  8| Hoffenheim - Freiburg                   GER |09-01|
- |  9| Eintracht Frankfurt - Werder Bremen     GER |09-01|
- | 10| Augsburg - Borussia M'gladbach          GER |09-01|
- | 11| Nürnberg - Mainz 05                     GER |09-01|
- | 12| Stuttgart - Bayern München              GER |09-01|
- | 13| RB Leipzig - Fortuna Düsseldorf         GER |09-02|
- | 14| Angers SCO - Lille                      FRA |09-01|
- | 15| Dijon - Caen                            FRA |09-01|
- | 16| Reims - Montpellier                     FRA |09-01|
- | 17| Rennes - Bordeaux                       FRA |09-01|
- | 18| Strasbourg - Nantes                     FRA |09-01|
- | 19| Monaco - Olympique Marseille            FRA |09-02|
- | 20| Deportivo Alavés - Espanyol             ESP |09-02|
- | 21| Real Betis - Sevilla                    ESP |09-02|
- | 22| Eibar - Real Sociedad                   ESP |08-31| x
- | 23| Getafe - Real Valladolid                ESP |08-31| x
- | 24| Levante - Valencia                      ESP |09-02|
- | 25| Rayo Vallecano - Athletic Club          ESP |09-01|
- | 26| Celta de Vigo - Atlético Madrid         ESP |09-01|
- | 27| Atalanta - Cagliari                     ITA |09-02|
- | 28| Bologna - Inter                         ITA |09-01|
- | 29| Chievo - Empoli                         ITA |09-02|
- | 30| Fiorentina - Udinese                    ITA |09-02|
- | 31| Milan - Roma                            ITA |08-31| x
- | 32| Sampdoria - Napoli                      ITA |09-02|
- | 33| Sassuolo - Genoa                        ITA |09-02|
- | 34| Арсенал К - Заря                        UKR |09-01|
- | 35| Краснодар - Локомотив М                 RUS |09-01|
- | 36| Зенит - Спартак М                       RUS |09-02|
- | 37| Heracles - AZ                           NLD |09-02|
- | 38| Vitesse - Ajax                          NLD |09-02|
- | 39| Chaves - Sporting Braga                 PRT |09-02|
- | 40| Desportivo Aves - Marítimo              PRT |09-02|
+ |  1| Southampton - Manchester United         ENG |08-31|
+ |  2| Leicester City - AFC Bournemouth        ENG |08-31|
+ |  3| Newcastle United - Watford              ENG |08-31|
+ |  4| West Ham United - Norwich City          ENG |08-31|
+ |  5| Burnley - Liverpool                     ENG |08-31|
+ |  6| Everton - Wolverhampton Wanderers       ENG |09-01|
+ |  7| Arsenal - Tottenham Hotspur             ENG |09-01|
+ |  8| Bayer Leverkusen - Hoffenheim           GER |08-31|
+ |  9| Freiburg - Köln                         GER |08-31|
+ | 10| Schalke 04 - Hertha BSC                 GER |08-31|
+ | 11| Union Berlin - Borussia Dortmund        GER |08-31|
+ | 12| Werder Bremen - Augsburg                GER |09-01|
+ | 13| Eintracht Frankfurt - Fortuna           GER |09-01|
+ | 14| Getafe - Deportivo Alavés               ESP |08-31|
+ | 15| Levante - Real Valladolid               ESP |08-31|
+ | 16| Real Betis - Leganés                    ESP |08-31|
+ | 17| Espanyol - Granada                      ESP |09-01|
+ | 18| Villarreal - Real Madrid                ESP |09-01|
+ | 19| Angers SCO - Dijon                      FRA |08-31|
+ | 20| Toulouse - Amiens SC                    FRA |08-31|
+ | 21| Reims - Lille                           FRA |09-01|
+ | 22| Rennes - Nice                           FRA |09-01|
+ | 23| Nantes - Montpellier                    FRA |08-31|
+ | 24| Strasbourg - Monaco                     FRA |09-01|
+ | 25| Olympique Marseille - Saint-Étienne     FRA |09-01|
+ | 26| Atalanta - Torino                       ITA |09-01|
+ | 27| Bologna - SPAL_не_учитывается           ITA |08-30|
+ | 28| Cagliari - Inter                        ITA |09-01|
+ | 29| Genoa - Fiorentina                      ITA |09-01|
+ | 30| Juventus - Napoli                       ITA |08-31|
+ | 31| Lazio - Roma                            ITA |09-01|
+ | 32| Sassuolo - Sampdoria                    ITA |09-01|
+ | 33| Rangers - Celtic                        SCO |09-01|
+ | 34| Урал - Краснодар                        RUS |09-01|
+ | 35| Арсенал Тула - ЦСКА                     RUS |09-01|
+ | 36| Спартак М - Зенит                       RUS |09-01|
+ | 37| Vitesse - AZ                            NLD |09-01|
+ | 38| Willem II - Feyenoord                   NLD |09-01|
+ | 39| Belenenses - Boavista                   PRT |09-01|
+ | 40| Sporting Braga - Benfica                PRT |09-01|
  |-------------------------------------------------------|
- | Последний срок отправки прогнозов                31.08|
+ | Последний срок отправки прогнозов                30.08|
  +-------------------------------------------------------+
 
 
@@ -250,5 +247,5 @@ Queen of the South
 столько команд в разных федерациях, сколько ему позволяют его квоты и
 положение по итогам конкурса.
 
-За ходом конкурса можно следить в реальном времени на странице <a href="?m=konk36">https://fprognoz.org?m=konk36</a>
+За ходом конкурса можно следить в реальном времени на странице <a href="?m=konk37">https://fprognoz.org?m=konk37</a>
 </div>

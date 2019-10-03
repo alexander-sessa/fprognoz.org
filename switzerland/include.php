@@ -15,7 +15,7 @@ $teams = array(
 "2181" => "AARAU",
 "2185" => "CHIASSO",
 "2184" => "SCHAFF",
-"2182" => "KRIENS",
+"2192" => "KRIENS",
 "2952" => "FCLS",
 "8785" => "RAPPER",
 "2176" => "SERVET",
@@ -25,6 +25,7 @@ $teams = array(
 "9790" => "BAVOIS",
 "8756" => "BASEL2",
 "2194" => "BELLIN",
+"13673" => "BLACKS",
 "11543" => "BREITE",
 "9783" => "BRUHL",
 "8600" => "CHAM",
@@ -39,6 +40,10 @@ $teams = array(
 "2190" => "YVERDON",
 "8762" => "ZURICH2",
 "2197" => "BADEN",
+"8601" => "REDSTAR",
+"2955" => "SOLOT",
+"8784" => "TUGGEN",
+"15796" => "WETTSWIL",
 "8776" => "OLDBOTS",
 );
 
@@ -66,6 +71,7 @@ $names = array(
 "9790" => "Bavois",
 "8756" => "Basel II",
 "2194" => "Bellinzona",
+"13673" => "Black Stars",
 "11543" => "Breitenrain",
 "9783" => "Brühl",
 "8600" => "Cham",
@@ -80,6 +86,10 @@ $names = array(
 "2190" => "Yverdon Sport",
 "8762" => "Zürich II",
 "2197" => "Baden",
+"8601" => "Red Star Zürich",
+"2955" => "Solothurn",
+"8784" => "Tuggen",
+"15796" => "Wettswil-Bonstetten",
 "8776" => "Old Boys",
 );
 ?>

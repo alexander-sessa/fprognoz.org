@@ -59,9 +59,15 @@ for ($day=-1; $day<=13; $day++) {
   $content = str_replace("\r", '', $content);
   $arr = explode('<div id="midbannerdiv">', $content);
   $data = '';
-  for ($i = 0; $i <= 1; $i++)
-    if ($cut = strpos($arr[$i], '<div id="1'))
-      $data .= substr($arr[$i], $cut);
+  if (sizeof($arr) > 1)
+  {
+      for ($i = 0; $i <= 1; $i++)
+          if ($cut = strpos($arr[$i], '<div id="1'))
+              $data .= substr($arr[$i], $cut);
+
+  }
+  else
+      $data .= substr($arr[0], strpos($arr[0], '<div id="1'));
 
   $matches = explode('<div id="1', $data);
   foreach($matches as $match) if (strpos($match, ' data-') && !strpos($match, '(W)') && !strpos($match, '(U17)') && !strpos($match, '(U19)') && !strpos($match, '(U21)')) {

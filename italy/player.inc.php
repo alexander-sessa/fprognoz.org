@@ -34,7 +34,7 @@ foreach ($codes as $player) if ($player[0] != '#')
     $out .= '</select></td><td><input type="text" name="email" value="'.$aplayer[3].'"><input type="submit"></td></tr>
 ';
   }
-  else $out .= '<tr><td>'.$aplayer[0].'</td><td>'.$team_name.'</td><td class="player_name">'.$aplayer[2].'</td><td align="center">'.$aplayer[5].'</td><td>&nbsp;</td></tr>
+  else $out .= '<tr><td>'.$aplayer[0].'</td><td>'.$team_name.'</td><td class="player_name">'.$aplayer[2].'</td><td align="center">'.$aplayer[5].'</td><td>'.($role == 'president' ? $aplayer[3] : '&nbsp;').'</td></tr>
 ';
   $tsv .= $aplayer[0].'	'.$aplayer[1].'	'.$aplayer[2].'	'.$aplayer[3].'	'.$aplayer[4].'	'.$aplayer[5].'
 ';

@@ -3,6 +3,11 @@ mb_regex_encoding('UTF-8');
 include 'online/realteam.inc.php';
 include 'online/cc.inc.php';
 include 'online/translate.inc.php';
+$granted = $admin;
+$granted[] = $president;
+$arr = explode(',', $vice);
+foreach ($arr as $name)
+    $granted[] = trim($name);
 
 function GetTourFromCalendar($tour, $cal) {
   $cclen = $tour[4] == 'L' ? 5 : 3;
@@ -214,30 +219,38 @@ function BuildMatchesRank($d) {
       if ($ccc == 'BLR' && $cc == 'RUS')
         $rating += $rat[$cc] / 2;
 
-      if ($cc == 'INT') {
-        $rating = ($rating + $teams[$cc][$mdata[0]] + $teams[$cc][$mdata[1]] + 200) / 2;
-        if ($ccn[$ccc] != $mdata[0] && $ccn[$ccc] != $mdata[1])
-          $rating -= 100;
+      if ($cc == 'INT')
+      {
+          if ($tournament == 'CLU')
+              $rating = 100;
+          else
+          {
+              $rating = ($rating + $teams[$cc][$mdata[0]] + $teams[$cc][$mdata[1]] + 200) / 2;
+              if ($ccn[$ccc] != $mdata[0] && $ccn[$ccc] != $mdata[1])
+                  $rating -= 100;
 
-        if (!isset($teams[$cc][$mdata[0]])) {
-          if ($_SESSION['Coach_name'] == 'Александр Сесса')
-            $ret .= ' no rank: '.$mdata[0].'<br>';
+              if (!isset($teams[$cc][$mdata[0]]))
+              {
+                  if ($_SESSION['Coach_name'] == 'Александр Сесса')
+                      $ret .= ' no rank: '.$mdata[0].'<br>';
 
-          $ratingh = 20;
-        }
-        else
-          $ratingh = $teams[$cc][$mdata[0]];
+                  $ratingh = 20;
+              }
+              else
+                  $ratingh = $teams[$cc][$mdata[0]];
 
-        if (!isset($teams[$cc][$mdata[1]])) {
-          if ($_SESSION['Coach_name'] == 'Александр Сесса')
+              if (!isset($teams[$cc][$mdata[1]]))
+              {
+                  if ($_SESSION['Coach_name'] == 'Александр Сесса')
+                      $ret .= ' no rank: '.$mdata[1].'<br>';
 
-            $ret .= ' no rank: '.$mdata[1].'<br>';
-          $ratinga = 20;
-        }
-        else
-          $ratinga = $teams[$cc][$mdata[1]];
+                  $ratinga = 20;
+              }
+              else
+                  $ratinga = $teams[$cc][$mdata[1]];
 
-        $rating -= abs(10 + $ratingh - $ratinga);
+              $rating -= abs(10 + $ratingh - $ratinga);
+          }
       }
       else {
         $cc1 = $cc;
@@ -339,7 +352,7 @@ function SortableMatchesList($ddd, $add) {
   rsort($mrated);
   $r10 = $mrated[9];
   $r15 = $mrated[14];
-  $r20 = (sizeof($mrated) > 20) ? max(25, $mrated[69]) : 0; // $r20 = max(30, $mrated[39])
+  $r20 = (sizeof($mrated) > 20) ? max(10, $mrated[99]) : 0; // $r20 = max(30, $mrated[39])
   $list .= SortableMatchesSublist($r10, 999, $ccc);
   $list .= '<li class="sortable_module" id="hline-1"><hr></li>';
   $list .= SortableMatchesSublist($r15, $r10, $ccc);
@@ -353,7 +366,7 @@ $ccc = isset($_GET['cc']) ? $_GET['cc'] : $cca;
 /////  die('access denied');
 
 ////////include('../' . strtolower($ccn[$ccc]) . '/settings.inc.php');
-if ($_SESSION['Coach_name'] != $president && $_SESSION['Coach_name'] != $vice && !in_array($_SESSION['Coach_name'], $admin))
+if (!in_array($_SESSION['Coach_name'], $granted))
   die('access denied');
 
 $cal = $gen = '';

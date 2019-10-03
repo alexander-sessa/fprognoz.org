@@ -1,22 +1,35 @@
 #код	файл с эмблемой клуба	название	город	год	стадион	мест	сайт
-ARSENALK	ukraineARSENAL.png	ФК Арсенал Киев	Киев	1934	Стадион "Динамо" им. Валерия Лобановского	17000	http://arsenal-kyiv.com
-VOLYN	ukraineVOLYN.png	ФК Волынь Луцк	Луцк	1960	Стадион "Авангард"	12080	http://www.fcvolyn.net
-DIN-K	ukraineDIN-K.png	ФК Динамо Киев	Киев	1927	НСК "Олимпийский"	70050	http://www.fcdynamo.kiev.ua
-DNEPR	ukraineDNEPR.png	ФК Днепр Днепропетровск	Днепропетровск	1918	Днепр Арена	31003	http://www.fcdnipro.dp.ua
-VORSKLA	ukraineVORSKLA.png	ФК Ворскла Полтава	Полтава	1955	Стадион "Ворскла" им. Алексея Бутовского	24795	http://www.vorskla.com.ua/
-ZARYA-L	ukraineZARYA-L.png	ФК Заря Луганск	Луганск	1923	Стадион "Авангард"	22288	http://www.zarya-lugansk.com
-ZIRKA	ukraineZIRKA.png	ФК Зирка Кропивницкий	Кропивницкий	1922	Стадион "Зирка"	14628	http://www.fczirka.com.ua
-ILLICH	ukraineILLICH.png	ФК Ильичёвец Мариуполь	Мариуполь	1938	Стадион "Ильичёвец"	12680	http://www.fcilich.com
-KARPATY	ukraineKARPATY.png	ФК Караты Львов	Львов	1963	Стадион "Украина"	28051	http://www.fckarpaty.lviv.ua
-KRIVBAS	ukraineKRIVBAS.png	ФК Кривбас Кривой Рог	Кривой Рог	1959	Стадион "Металлург"	29783	http://www.fckryvbas.com.ua/
-METAL	ukraineMETAL.png	ФК Металист Харьков	Харьков	1925	Областной спорткомплекс "Металист"	41307	http://www.metalist.ua/
-MET-D	ukraineMET-D.png	ФК Металлург Донецк	Донецк	1996	Стадион "Металлург"	5194	http://metallurg.donetsk.ua/
-MET-Z	ukraineMET-Z.png	ФК Металлург Запорожье	Запорожье	1935	Стадион "Славутич-Арена"	12000	http://http://www.fcmetalurg.com/
-NIVA-V	ukraineNIVA-V.png	ПФК Нива Винница	Винница	1958	Центральный городской стадион	14000	http://fcniva.vn.ua
-NIKOLAEV	ukraineNIKOLAEV.png	МФК Николаев	Николаев	1920	Центральный городской стадион	25175	http://mfc.mk.ua
-OLIMPIK	ukraineOLIMPIK.png	ФК Олимпик Донецк	Донецк	2001	Стадион СК Олимпик	1320	http://olimpik.com.ua
-OBOLON	ukraineOBOLON.png	ФК Оболонь Киев	Киев	1992	Оболонь Арена	5103	http://www.facebook.com/soccerway
-SEVAST	ukraineSEVAS.png	ПФК Севастополь	Севастополь	2002	СК "Севастополь"	5864	http://www.fcsevastopol.com
-STAL	ukraineSTAL.png	ФК Сталь Днепродзержинск	Днепродзержинск	1926	Стадион "Металлург"	2900	http://www.fcstal.com.ua
-CHERN	ukraineCHERN.png	ФК Черноморец Одесса	Одесса	1936	Стадион "Черноморец"	34164	http://www.chernomorets.odessa.ua
-SHAH-D	ukraineSHAH-D.png	ФК Шахтер Донецк	Донецк	1936	Донбасс Арена	53423	http://www.shakhtar.com
+AVANGARD	ukraine/AVANGARD.png	ФК Авангард Краматорск	Краматорск	1955	Стадион "Прапор"	6000	http://fc-avangard.com.ua
+AGROBIZ	ukraine/AGROBIZ.png	ФК Агробизнес Волочиск	Волочиск	2015	Стадион "Юность"	4000	http://fcab.com.ua
+ALEXAN	ukraine/ALEXAN.png	ФК Александрия	Александрия	1991	КСК "Ника"	7000	http://www.pfcalexandria.com.ua
+ARSENALK	ukraine/ARSENAL.png	ФК Арсенал Киев	Киев	1934	Стадион "Динамо" им. Валерия Лобановского	17000	http://arsenal-kyiv.com
+BALKANY	ukraine/BALKANY.png	ФК Балканы Заря	Заря	2007	Стадион им. Бориса Тропанца	3000	http://fcbalkans.com.ua
+VERES	ukraine/VERES.png	НК Верес Ровно	Ровно	1957	Стадион "Авангард"	4500	http://www.nkveres.club
+VOLYN	ukraine/VOLYN.png	ФК Волынь Луцк	Луцк	1960	Стадион "Авангард"	12080	http://www.fcvolyn.net
+VORSKLA	ukraine/VORSKLA.png	ФК Ворскла Полтава	Полтава	1955	Стадион "Ворскла" им. Алексея Бутовского	24795	http://www.vorskla.com.ua/
+HIRNYK	ukraine/HIRNYK.png	ФК Горняк-Спорт Горишние Плавни	Горишние Плавни	1987	Стадион "Юность"	3000	http://gornyak-sport.net
+DESNA	ukraine/DESNA.png	ФК Десна Чернигов	Чернигов	1960	Стадион им. Юрия Гагарина	14150	http://fcdesna.at.ua
+DIN-K	ukraine/DIN-K.png	ФК Динамо Киев	Киев	1927	НСК "Олимпийский"	70050	http://www.fcdynamo.kiev.ua
+DNEPR	ukraine/DNEPR.png	ФК Днепр	Днепр	1918	Днепр Арена	31003	http://www.fcdnipro.dp.ua
+DNEPR-1	ukraine/DNEPR-1.png	СК Днепр-1	Днепр	2017	Днепр Арена	31003	https://scdnipro1.com.ua
+ZARYA-L	ukraine/ZARYA-L.png	ФК Заря Луганск	Луганск	1923	Стадион "Авангард"	22288	http://www.zarya-lugansk.com
+ZIRKA	ukraine/ZIRKA.png	ФК Зирка Кропивницкий	Кропивницкий	1922	Стадион "Зирка"	14628	http://www.fczirka.com.ua
+ILLICH	ukraine/ILLICH.png	ФК Ильичёвец Мариуполь	Мариуполь	1938	Стадион "Ильичёвец"	12680	http://www.fcilich.com
+KARPATY	ukraine/KARPATY.png	ФК Карпаты Львов	Львов	1963	Стадион "Украина"	28051	http://www.fckarpaty.lviv.ua
+KOLOS	ukraine/KOLOS.png	ФК Колос Ковалёвка	Ковалёвка	2012	Оболонь-Арена	5103	http://www.koloskovalivka.com
+KRIVBAS	ukraine/KRIVBAS.png	ФК Кривбас Кривой Рог	Кривой Рог	1959	Стадион "Металлург"	29783	http://www.fckryvbas.com.ua/
+LVOV	ukraine/LVOV.png	ФК Львов	Львов	2006	Арена Львов	34915	http://www.fclviv.com.ua
+METAL	ukraine/METAL.png	ФК Металист Харьков	Харьков	1925	Областной спорткомплекс "Металист"	41307	http://www.metalist.ua/
+MET1925	ukraine/MET1925.png	ФК Металист-1925 Харьков	Харьков	2016	Областной спорткомплекс "Металист"	41307	http://metalist1925.com
+MET-D	ukraine/MET-D.png	ФК Металлург Донецк	Донецк	1996	Стадион "Металлург"	5194	http://metallurg.donetsk.ua/
+MET-Z	ukraine/MET-Z.png	ФК Металлург Запорожье	Запорожье	1935	Стадион "Славутич-Арена"	12000	http://http://www.fcmetalurg.com/
+NIVA-V	ukraine/NIVA-V.png	ПФК Нива Винница	Винница	1958	Центральный городской стадион	14000	http://niva.vn.ua
+NIKOLAEV	ukraine/NIKOLAEV.png	МФК Николаев	Николаев	1920	Центральный городской стадион	25175	http://mfc.mk.ua
+OLIMPIK	ukraine/OLIMPIK.png	ФК Олимпик Донецк	Донецк	2001	Стадион СК Олимпик	1320	http://olimpik.com.ua
+OBOLON	ukraine/OBOLON.png	ФК Оболонь-Бровар Киев	Киев	2013	Оболонь Арена	5103	http://fcbrovar.obolon.ua
+RUKH	ukraine/RUKH.png	ФК Рух Львов	Львов	2003	СКИФ	3742	http://fcrukh.com
+SEVAST	ukraine/SEVAS.png	ПФК Севастополь	Севастополь	2002	СК "Севастополь"	5864	http://www.fcsevastopol.com
+STAL	ukraine/STAL.png	ФК Сталь Днепродзержинск	Днепродзержинск	1926	Стадион "Металлург"	2900	http://www.fcstal.com.ua
+TAVRIA	ukraine/TAVRIA.png	ФК Таврия Симферополь	Берислав	1958	Стадион "Машиностроитель"	1500	http://www.sctavriya.com
+CHERN	ukraine/CHERN.png	ФК Черноморец Одесса	Одесса	1936	Стадион "Черноморец"	34164	http://www.chernomorets.odessa.ua
+SHAH-D	ukraine/SHAH-D.png	ФК Шахтер Донецк	Донецк	1936	Донбасс Арена	53423	http://www.shakhtar.com

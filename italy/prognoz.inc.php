@@ -241,7 +241,7 @@ if (!$closed && sizeof($teamCodes)) {
   $head .= '<span class="small">прогноз на тур: <input type="text" id="prognoz_str" name="prognoz_str" value="" size="50">
 <input type="hidden" name="enemy_str" value="">
 <input type="submit" name="submitpredict" value=" отправить "></span></form>
-<a href="?m=help" class="small" target="_blank">как пользоваться формой отправки прогноза</a>
+<a href="?m=help#frm" class="small" target="_blank">как пользоваться формой отправки прогноза</a>
 ';
 }
 
@@ -937,7 +937,7 @@ mdetails=function(tmpd,id,pos1,pos2){
 		$wrapper=$("tr[did="+id+"]").find(".tablex");$wrapper.find(".sortable").sort(function(a,b){one=a.dataset.min;two=b.dataset.min;ones=one.split("+");one=ones[0];twos=two.split("+");two=twos[0];return +one - +two}).appendTo($wrapper);
 	}else $("tr[did="+id+"] td.det").html("<table class=\"tablex\"><tr><td><div align=center style=\"padding:4px;\">информация о матче пока не поступила</div></td></tr></table>")
 }
-socket=io.connect("//score2live.net:1998",{"reconnect":true,"reconnection delay":500,"max reconnection attempts":20,"secure":true})
+socket=io.connect("//www.score2live.net:1998",{"reconnect":true,"reconnection delay":500,"max reconnection attempts":20,"secure":true})
 socket.on("connect",function(){socket.emit("hellothere")})
 socket.on("hellobz",function(){socket.emit("getscores","football(soccer)","today")})
 socket.on("scoredatas",function(d){if(sendfp){$.post("'.$this_site.'",{matches:JSON.stringify(d.data.matches),a:"'.$a.'"'.($l?',l:"'.$l.'"':'').',m:"prognoz",s:"'.$s.'",t:"'.$t.'"},function(json){$.each(JSON.parse(json),function(idx,obj){base.push(obj.id);base[obj.id]=obj.d})})}$("#statusline").css("display","none")})

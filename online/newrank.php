@@ -5,7 +5,7 @@ use \PhpOffice\PhpSpreadsheet\Reader\Xls;
 
 $ranking = '/home/fp/data/online/ranking/';
 include 'realteam.inc.php';
-$year = 2019;
+$year = 2020;
 // rank 2019
 
 function remote_file_size($url) {
@@ -61,19 +61,25 @@ function write_year_ranking($year) {
       $log .= $year.': ' . $score.' '.$cc.','.$team."\n";
 
   }
+
+// Gil Vicente
+  if ($year == 2019)
+    $out .= 'Gil Vicente,PRT,20
+';
+
   file_put_contents($ranking . 'rank.' . $year, $out);
   return $log;
 }
 
 $url = 'http://www.european-football-statistics.co.uk/ecr/ECR' . $year . '.xls';
 if (!is_file($ranking . 'ECR' . $year . '.xls') || remote_file_size($url) != filesize($ranking . 'ECR' . $year . '.xls')) {
-  file_put_contents($ranking . 'ECR' . $year . '.xls', HTTP_CURL($url, 'http://www.european-football-statistics.co.uk/ecr/ecr01-19.htm'));
+  file_put_contents($ranking . 'ECR' . $year . '.xls', HTTP_CURL($url, 'http://www.european-football-statistics.co.uk/ecr/ecr01-20.htm'));
   $log = write_year_ranking($year);
   $log .= write_year_ranking($year - 1);
   // merge rankings
   $week = date('W');
-  //$k = $week < 24 ? min(50, $week + 18) : max(0, $week - 35);
-  $k = $week < 35 ? min(50, $week + 18) : $week - 35;
+  $k = $week < 24 ? min(50, $week + 18) : max(0, $week - 35);
+  //$k = $week < 35 ? min(50, $week + 18) : $week - 35;
   $balance = 1 - $k / 50;
   $teams = array();
   $rank = file($ranking . 'rank.' . ($year - 1));

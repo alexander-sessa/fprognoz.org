@@ -720,7 +720,8 @@ $("#sortable").sortable()
         if ($nm++ == 5) {
           if (!$thith && !$tptsh) $teama = min(3, $teama);
           if (!$thita && !$tptsa) $teamh = min(3, $teamh);
-          $match_title .= '  '.$teamh.':'.$teama.' ('.$thith.'-'.$thita.') ('.$tptsh.'-'.$tptsa.')</b>';
+          $match_title .= '  '.$teamh.':'.$teama.' ('.$thith.'-'.$thita.') ('.$tptsh.'-'.$tptsa.')</b> &nbsp; <a href="http://profi-prognoza.ru/profiopen/?s='.substr($cur_year, 0, 4).'&t='.ltrim($t, '0').'&n='.$n.'" target="_blank">Матч-центр на profi-prognoza.ru</a>';
+
           if (isset($renew))
             rewrite_cal($prognoz_dir, $line0, $score0, $teamh.':'.$teama.' ('.$thith.'-'.$thita.') ('.$tptsh.'-'.$tptsa.')'."\n");
 
@@ -745,7 +746,7 @@ $("#sortable").sortable()
           if (!$thith) $teama = min(3, $teama);
           if (!$thita) $teamh = min(3, $teamh);
           $match_title .= '  '.$teamh.':'.$teama.' ('.$thith.'-'.$thita.')</b>';
-          if (isset($link) && trim($link)) $match_title .= ' &nbsp; <a href="http://kfp.ru/fest/ffp2018/matchcenter.php?'.$link.'" target="_blank">Матч-центр на KFP.RU</a>';
+          if (isset($link) && trim($link)) $match_title .= ' &nbsp; <a href="http://kfp.ru/fest/ffp2019/matchcenter.php?'.$link.'" target="_blank">Матч-центр на KFP.RU</a>';
           if (isset($renew))
             rewrite_cal($prognoz_dir, $line0, $score0, $teamh.':'.$teama.' ('.$thith.'-'.$thita.')'."\n");
 
@@ -1319,7 +1320,7 @@ else
 <!--link href="css/prognoz.css?ver=625" rel="stylesheet"-->
 <script type="text/javascript" src="js/jquery/jquery.ui.touch-punch.min.js"></script>
 <script>//<![CDATA[
-var '.date_tz('\h\o\u\r\s=G,\m\i\n\u\t\e\s=i,\s\e\c\o\n\d\s=s', '', time(), $_COOKIE['TZ'] ?? 'Europe/Berlin').',sendfp=false,base=[],mom=[]
+var '.date_tz('\h\o\u\r\s=G,\m\i\n\u\t\e\s=i,\s\e\c\o\n\d\s=s', '', time(), $_COOKIE['TZ'] ?? 'Europe/Berlin').',sendfp=true,base=[],mom=[]
 ' . $id_arr . '
 function newpredict(){
 	var p="";
@@ -1403,7 +1404,7 @@ mdetails=function(tmpd,id,pos1,pos2){
 		$wrapper=$("tr[did="+id+"]").find(".tablex");$wrapper.find(".sortable").sort(function(a,b){one=a.dataset.min;two=b.dataset.min;ones=one.split("+");one=ones[0];twos=two.split("+");two=twos[0];return +one - +two}).appendTo($wrapper);
 	}else $("tr[did="+id+"] td.det").html("<table class=\"tablex\"><tr><td><div align=center style=\"padding:4px;\">информация о матче пока не поступила</div></td></tr></table>")
 }
-socket=io.connect("//score2live.net:1998",{"reconnect":true,"reconnection delay":500,"max reconnection attempts":20,"secure":true})
+socket=io.connect("//www.score2live.net:1998",{"reconnect":true,"reconnection delay":500,"max reconnection attempts":20,"secure":true})
 socket.on("connect",function(){socket.emit("hellothere")})
 socket.on("hellobz",function(){socket.emit("getscores","football(soccer)","today")})
 socket.on("scoredatas",function(d){if(sendfp){$.post("'.$this_site.'",{matches:JSON.stringify(d.data.matches),a:"sfp-team",m:"prognoz",l:"'.$l.'",s:"'.$s.'",t:"'.$t.'"},function(json){$.each(JSON.parse(json),function(idx,obj){base.push(obj.id);base[obj.id]=obj.d})})}$("#statusline").css("display","none")})

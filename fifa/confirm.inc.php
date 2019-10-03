@@ -101,7 +101,7 @@ if (isset($_SESSION['Coach_name'])) {
     $out .= '
     <tr><td colspan="4">
       <br />
-      <b>ВНИМАНИЕ</b>: с этого сезона снимается архаичное ограничение на написание имён игроков латиницей.<br />
+      <b>ВНИМАНИЕ</b>: с сезона 2018-19 снято архаичное ограничение на написание имён игроков латиницей.<br />
       Вы можете сменить написание своего имени здесь и сейчас:
 <input id="new_name" type="text" name="new_name" value="'.$_SESSION['Coach_name'].'" data-tpl="'.$cfg.'" style="padding-left:5px" />
 <span id="valid_name" style="color:green"><i class="fas fa-check"></i> это имя используется Вами сейчас</span>

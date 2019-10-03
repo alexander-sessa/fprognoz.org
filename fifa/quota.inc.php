@@ -1,13 +1,13 @@
     <p class="title text15b">&nbsp;&nbsp;&nbsp;Информация о квотах</p>
     <hr size="1" width="98%" />
 <p>
-Регламент определяет каждому участнику ФП квоту в 2 команды плюс еще 1 команда в "отечественном" чемпионате.<br />
+Регламент определяет каждому участнику ФП квоту в 2 команды плюс еще 1 команда в "отечественном" чемпионате.<br>
 Квота увеличивается за спортивные достижения (выигрыш чемпионата, золотой бутсы, кубка, еврокубка)
-и за активное участие в работе ФП-ассоциаций (см. столбец "дополнительная квота").<br />
-Игроки, у которых превышена квота (показаны на розовом фоне), чтобы не терять команду, могут устроиться в одну или несколько
-ФП-ассоциаций в качестве пресс-атташе - писать обзоры туров или этапов турниров. Иначе придётся отказаться от одной из своих команд.<br />
-У игроков, показанных на зелёном фоне, есть возможность взять больше команд - к их услугам страница <a href="/?m=vacancy">"Вакансии"</a>.<br />
-Сколько именно команд Вам доступно, можно определить отняв от числа в колонке "квота" число в колонке "учёт в квоте".<br />
+и за активное участие в работе ФП-ассоциаций (см. столбец "дополнительная квота").<br>
+Игроки, у которых превышена квота (показаны на розовом фоне) или исчерпана (жёлтый фон),
+могут устроиться в одну или несколько ФП-ассоциаций в качестве пресс-атташе - писать обзоры туров или этапов турниров.<br>
+У игроков, показанных на зелёном фоне, есть возможность взять больше команд - к их услугам <a href="/?m=konkurs">Предсезонный конкурс</a> и страница <a href="/?m=vacancy">"Вакансии"</a>.<br>
+Сколько именно команд Вам доступно, можно определить отняв от числа в колонке "квота" число в колонке "учёт в квоте".<br>
 Игроки, показанные на желтом фоне, могут взять еще одну команду в одной из "отечественных" ассоциаций, при условии,
 что "отечественной" команды у них еще нет.
 </p>
@@ -29,7 +29,7 @@ $teams = array();
 $coach = array();
 $table = array();
 $lnames = array();
-$stat = array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0);
+$stat = array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0);
 $maxteam = 0;
 $maxcoach = 0;
 $maxlname = 0;
@@ -42,18 +42,15 @@ foreach ($ccs as $country_code => $country_name) {
 
   $acodes = file($online_dir . $country_code . '/' . $season . '/codes.tsv');
   foreach ($acodes as $scode) if (($scode[0] != '-') && ($scode[0] != '#') && ($scode = trim($scode))) {
-    $ateams = explode('	', $scode);
-    $t = $country_code.':'.$ateams[0];
-    $n = $ateams[1];
-    $teams[$t] = $n;
-    $maxteam = max($maxteam, strlen($n));
-    $c = $ateams[2];
-    $coach[$c]['teams'][] = "$n ($country_code)";
-    $maxcoach = max($maxcoach, strlen($c));
-    $m = $ateams[3];
-    if ($l = trim($ateams[4])) {
-      $lnames[$n] = $l;
-      $maxlname = max($maxlname, strlen($l));
+    list($team_code, $team_name, $coach_name, $coach_mail, $long_name, $confirm) = explode('	', $scode);
+    $t = $country_code.':'.$team_code;
+    $teams[$t] = $team_name;
+    $maxteam = max($maxteam, strlen($team_name));
+    $coach[$coach_name]['teams'][] = "$team_name ($country_code)";
+    $maxcoach = max($maxcoach, strlen($coach_name));
+    if (trim($long_name)) {
+      $lnames[$team_name] = $long_name;
+      $maxlname = max($maxlname, strlen($long_name));
     }
   }
 }
@@ -67,34 +64,39 @@ foreach ($qb as $line) if ($line = trim($line)) {
     $coach[$c]['qb'][] = $qb;
 
 }
-foreach ($coach as $c => $ac) if ($c = trim($c)) {
+foreach ($coach as $c => $ac) if ($c != 'вакансия' && $c = trim($c)) {
   $r0 = 0;
   $rN = 0;
-  if (isset($ac['teams'])) foreach ($ac['teams'] as $n) {
-    if (strpos($n, '(ESP)')
-     || strpos($n, '(ENG)')
-     || strpos($n, '(ITA)')
-     || strpos($n, '(GER)')
-     || strpos($n, '(NLD)')
-     || strpos($n, '(PRT)')
-     || strpos($n, '(FRA)')
-     || strpos($n, '(SCO)'))
-      $r0++;
+  if (isset($ac['teams']))
+    foreach ($ac['teams'] as $n) {
+      if (strpos($n, '(ESP)')
+       || strpos($n, '(ENG)')
+       || strpos($n, '(ITA)')
+       || strpos($n, '(GER)')
+       || strpos($n, '(NLD)')
+       || strpos($n, '(PRT)')
+       || strpos($n, '(FRA)')
+       || strpos($n, '(SCO)'))
+        $r0++;
 
-    if (strpos($n, '(BLR)')
-     || strpos($n, '(RUS)')
-     || strpos($n, '(UKR)'))
-      $rN++;
-
-    if ($n == 'Hamburger SV (GER)') {
-      $rN++;
-      $r0--;
+      if (strpos($n, '(BLR)')
+       || strpos($n, '(RUS)')
+       || strpos($n, '(UKR)'))
+      {
+        if ($rN)
+          $r0++;
+        else
+          $rN++;
+      }
+      if ($n == 'Hamburger SV (GER)') {
+        $rN++;
+        $r0--;
+      }
     }
-  }
-  $rL = ($rN > 1) ? 1 : 0;
+
   $stat[$r0 + $rN]++;
   $qc = (isset($ac['qc'])) ? 2 + $ac['qc'] : 2;
-  $table[] = array('c' => $c, 'rn' => $r0 + $rN, 'rl' => $r0 + $rL, 'qc' => $qc);
+  $table[] = array('c' => $c, 'rn' => $r0 + $rN, 'rl' => $r0, 'qc' => $qc);
 }
 echo '<table class="table w100">
   <tr>
@@ -125,7 +127,7 @@ foreach ($table as $ac) if ($c = trim($ac['c'])) {
     <td>';
   if (isset($coach[$c]['teams']))
     foreach ($coach[$c]['teams'] as $n)
-      $out .= $n.'<br />';
+      $out .= $n.'<br>';
 
   $out .= '</td>
     <td align="center">'.$ac['rn'].'</td>
@@ -135,7 +137,7 @@ foreach ($table as $ac) if ($c = trim($ac['c'])) {
   $qb = "";
   if (isset($coach[$c]['qb']))
     foreach ($coach[$c]['qb'] as $q)
-      $qb .= $q.'<br />';
+      $qb .= $q.'<br>';
 
   if (!$qb)
     $qb = '&nbsp;';

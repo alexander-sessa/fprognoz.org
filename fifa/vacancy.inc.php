@@ -6,8 +6,10 @@ if (isset($_SESSION['Coach_name'])) {
   $human = true;
 }
 else
+{
+  $name = '';
   $human = false;
-
+}
 if (isset($_POST['name_str'])) {
   $name = $_POST['name_str'];
   $pemail = $_POST['email_str'];
@@ -93,20 +95,20 @@ echo '
 <center>
 <form id="proform" name="tform" action="/?m=vacancy" enctype="multipart/form-data" method="post">
 <table align="center" width="98%">
-<tr><td align="right">укажите ваше имя и фамилию латинскими буквами: </td><td><input type="text" name="name_str" value="'.$name.'" size="40" /></td></tr>
+<tr><td align="right">укажите ваше игровое или полное имя: </td><td><input type="text" name="name_str" value="'.$name.'" size="40" /></td></tr>
 <tr><td align="right">e-mail, на который отправлять информацию сервера: </td><td><input type="text" name="email_str" value="'.$pemail.'" size="40" /></td></tr>
 <tr><td align="right">коды команд, от которых откажетесь: </td><td><input type="text" name="teams_out" value="'.$teamsout.'" size="40" /></td></tr>
 <tr><td align="right">коды команд, которые хотите получить: </td><td><input type="text" name="teams_in" value="'.$teamsin.'" size="40" /></td></tr>
 </table>
 <p><button class="g-recaptcha" data-sitekey="'.$recaptcha_sitekey.'" data-callback="onSubmit"> отправить заявку </button></p>
 </form></center>
+<br>
 Свободны команды:<br>
-- в итальянской Серии В Pisa (практически обречена на вылет, но даст право поучаствовать в сборной Италии).<br>
-- в ПФЛ (вторая лига) ФП России Спартак-2 - даёт возможность попасть в сборную России.<br>
-Есть 5 свободных команд в первой лиге ФП Украины: Рух, Оболонь, ФК Львов, Александрия и Кривбасс - любая даёт пропуск в сборную Украины.
-<br />
-<br />
-Вы также можете зарегистрировать команду для участия в открытых краткосрочных турнирах ФП ШВЕЙЦАРИИ (<a href="?a=switzerland&amp;m=register">РЕГИСТРАЦИЯ</a>)<br />
+ФП Германии, 3. Liga: Fortuna (5 очков) и Osnabrück (3 очка в 3 турах чемпионата);<br>
+ФП Украины, Первая лига: Александрия - 0 очков после 4-х туров.<br>
+Комады достанутся тем, кто первым подаст заявку.<br>
+<br>
+Но Вы можете зарегистрировать команду для участия в открытых краткосрочных турнирах ФП ШВЕЙЦАРИИ (<a href="?a=switzerland&amp;m=register">ВЫБОР КОМАНДЫ</a>)<br>
 и в любительской ФП-ассоциации Финляндии (<a href="?a=finland&amp;m=register">РЕГИСТРАЦИЯ В ФП ФИНЛЯНДИИ</a>).<br>
 ';
 ?>

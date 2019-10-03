@@ -157,7 +157,9 @@ function mb_vsprintf($format, $argv, $encoding=null) {
 
 function current_season($y, $m, $cc) {
   if ($cc == 'SUI')
-    return '2019-2';
+    return '2019-3';
+//  else if ($cc == 'RUS' || $cc == 'FRA')
+//    return '2018-19';
   else
     if ($m < 7) $y--;
 
@@ -178,8 +180,8 @@ function build_personal_nav() {
     $tudb = array();
     $out = '';
     $nextEvent = $currentTime + 300;
-//    $startTime = $currentTime - 259200; // - 3 day
-    $startTime = $currentTime - 518400; // - 6 day
+    $startTime = $currentTime - 259200; // - 3 day
+//    $startTime = $currentTime - 518400; // - 6 day
     $startDay = date('d', $startTime);
     $startMonth = date('m', $startTime);
     $startYear = date('Y', $startTime);
@@ -324,6 +326,7 @@ function build_personal_nav() {
       $out .= '
                             <li class="nav-item">' . $tout .'
                             </li>';
+
 
     $prev_fp = '';
     foreach (['SFP', 'BLR', 'ENG', 'ESP', 'FRA', 'GER', 'ITA', 'NLD', 'PRT', 'RUS', 'SCO', 'UKR', 'SUI', 'UEFA'] as $countryCode) {
@@ -639,6 +642,7 @@ function bz_matches($json) {
   $res_path = $online_dir . 'results/';
   $lock = $online_dir . 'log/results.lock';
   include ('online/realteam.inc.php');
+//file_put_contents('log', $json);
   $matches = json_decode($json, true); //  $matches = json_decode(stripslashes($json), true);
   $update = false;
   $year = date('Y');
@@ -1036,10 +1040,10 @@ else { // restored session
 
 if (isset($_SESSION['Coach_name'])) {
   $apikey = rtrim(base64_encode(openssl_encrypt( json_encode(['cmd' => 'send_by_api', 'email' => $_SESSION['Coach_mail']]), 'AES-256-CBC', $key, 0, $iv )), '=');
-  if (strtotime('7/16') < time() && time() <= strtotime('9/1')
+  if (strtotime('7/8') < time() && time() <= strtotime('8/31')
    && !is_file($data_dir.'personal/'.$coach_name.'/'.date('Y'))) {
     $a = 'fifa';
-    $m = 'confirm'; // кампания сбора подтверждений с 16 июля по 1 сентября
+    $m = 'confirm'; // кампания сбора подтверждений с 8 июля по 31 августа
   }
   $role = acl($_SESSION['Coach_name']);
   if ($have_redis)
@@ -1238,6 +1242,7 @@ if (in_array($cca, $classic_fa)) { // сбор туров сезона для к
 //  if ($cca == 'UKR')
 //    $sidebar .= '
 //                <li><a href="?a='.$a.'&amp;m=register">Выбор команды</a></li>';
+
   $sidebar .= '
                 <li><a href="?a='.$a.'&amp;m=hq">Президиум</a></li>
                 <li><a href="?a='.$a.'&amp;m=hof">ЗАЛ СЛАВЫ</a></li>';
@@ -1597,9 +1602,8 @@ else {
 echo '
         <nav id="sidebar">
             <div class="sidebar-header">
-                <a href="?a=world&m=prognoz&s=2019&t=16"><h5>Финальный турнир:<br>страница 5-го тура</h5></a>
-                <a href="?a=world&m=result&s=2019&t=15"><h6>Итоги 4-го тура ФТ ЛН</h6></a>
-                <a href="?m=news&s=2018-19"><h6>Новости SFP - ФИФА</h6></a>
+                <a href="/?m=vacancy"><h5>Свободные команды:</h5>Германия и Украина</a><br><br>
+                <a href="/?m=news&s=2019-20"><h6>Новости SFP - ФИФА</h6></a>
             </div>
 
             <ul class="list-unstyled components">
@@ -1652,7 +1656,7 @@ echo '
       echo '
                 <h0>
 У Вас нет пароля?<br>
-Укажите полное имя,<br>
+Укажите игровое имя,<br>
 а в поле пароля -<br>
 код вашей команды,<br>
 если таковая есть.<br>
@@ -1677,6 +1681,7 @@ echo '
                     <a href="#cmdSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Ваши команды</a>
                     <ul class="collapse list-unstyled" id="cmdSubmenu"-->';
     foreach ($cmd_db as $cc => $cc_data)
+if ($cc != 'UNL') // временно не показываем
       foreach ($cc_data as $code => $team)
         if ($team['usr'] == $_SESSION['Coach_name']) {
           echo '
@@ -1857,7 +1862,7 @@ echo '
 ';
   }
 */
-  $nohl = ['club', 'main', 'mkpgm', 'news'];
+  $nohl = ['club', 'main', 'mkpgm', 'news', 'set'];
   echo '
             <div class="main">';
   include ('fifa/register.inc.php'); // регистрация в сборных ассоциаций
@@ -1911,17 +1916,20 @@ echo '
                             <li><div>Разрешено редактировать составы: </div><input id="club_edit" type="checkbox" name="club_edit"'.($club_edit ? ' checked="checked"' : '').' /></li>';
     echo '
                             <li><h5>Турниры: <div class="add_tournament" data-id="tournament-'.(count($config) - 1).'"><button class="fas fa-plus-circle" title="добавить турнир" /></button></div></h5>';
-    if (isset($config[0]['format'])) foreach ($config as $n => $tournament) {
-      $stages = count($config[0]['format']);
-      echo '
+    if (isset($config[0]['format']))
+      foreach ($config as $n => $tournament)
+      {
+        $stages = count($config[0]['format']);
+        echo '
                                 <ul id="tournament-'.$n.'">
                                     <li><div>Название турнира: </div><input type="text" name="tournament['.$n.']" value="'.(isset($tournament['tournament']) ? $tournament['tournament'] : '').'" placeholder="не обязательно" /> <div class="delete_stage" data-id="tournament-'.$n.'"><button class="fas fa-trash" title="удалить турнир"></button></div></li>
                                     <li><div>Префикс кода тура: </div><input type="text" name="prefix['.$n.']" value="'.(isset($tournament['prefix']) ? $tournament['prefix'] : '').'" placeholder="по умолчанию - код ассоциации" /></li>
                                     <li><div>Схема розыгрыша: </div><select name="type['.$n.']"><option value="chm">чемпионат (круговой турнир)</option><option value="cup" '.(isset($tournament['type']) && $tournament['type'] == 'cup' ? ' selected="selected"' : '').'>кубок (турнир с выбыванием)</option><option value="com" '.(isset($tournament['type']) && $tournament['type'] == 'com' ? ' selected="selected"' : '').'>комбинированный (группы + плей-офф)</option></select></li>
                                     <li><div>Нумерация туров: </div><select name="numeration['.$n.']"><option value="stage">поэтапная (каждый этап начинается туром 1)</option><option value="toend" '.(isset($tournament['nume']) && $tournament['nume'] == 'toend' ? ' selected="selected"' : '').'>сквозная (без сброса номера, как в еврокубках)</option></select></li>
                                     <li><h6>Этапы: <div class="add_stage" data-id="trn-'.$n.'-st-'.($stages - 1).'"><button class="fas fa-plus-circle" title="добавить этап" /></button></div></h6>';
-      foreach ($tournament['format'] as $e => $stage) {
-        echo '
+        foreach ($tournament['format'] as $e => $stage)
+        {
+          echo '
                                         <ul id="trn-'.$n.'-st-'.$e.'">
                                             <li><div>Название этапа: </div><input type="text" name="stage['.$n.']['.$e.']" value="'.(isset($stage['stage']) ? $stage['stage'] : '').'" placeholder="не обязательно" /> <div class="delete_stage" data-id="trn-'.$n.'-st-'.$e.'"><button class="fas fa-trash" title="удалить этап"></button></div></li>
                                             <li><div>Суффикс кода тура: </div><input type="text" name="suffix['.$n.']['.$e.']" value="'.(isset($stage['suffix']) ? $stage['suffix'] : '').'" placeholder="по умолчанию нет" /></li>
@@ -1932,16 +1940,17 @@ echo '
                                             <li><div>Префикс названия тура: </div><input type="text" name="nprefix['.$n.']['.$e.']" value="'.(isset($stage['nprefix']) ? $stage['nprefix'] : '').'" placeholder="по умолчанию Тур: " /></li>
                                         </ul>
                                         <div id="div-trn-'.$n.'-st-'.($stages - 1).'" class="stage-div"></div>';
-      }
-      echo '
+        }
+        echo '
                                     </li>
                                 </ul>
                                 <div id="div-tournament-'.(count($config) - 1).'" class="tournament-div"></div>';
-    }
-    echo '
+      }
+      echo '
                             </li>
                         </ul>
                     </form>';
+
   }
   else if (isset($content))
   {

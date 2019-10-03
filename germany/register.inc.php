@@ -1,4 +1,5 @@
 <?php
+$max = 48;
 $registered = false;
 $codestsv = '';
 $codes = file($online_dir."$cca/$cur_year/codes.tsv");
@@ -19,9 +20,9 @@ foreach ($codes as $line)
     $registered = true;
 
 }
-$err = false;
-if (isset($_POST['reg']))
+if (isset($_POST['_reg']))
 {
+  $err = false;
   if (!isset($_SESSION['Coach_name']))
   {
     if (!isset($_POST['user']) || !trim($_POST['user']))
@@ -58,17 +59,19 @@ if (isset($_POST['reg']))
 }
 if ($registered)
   echo 'Вы уже зарегистрированы для участия в '.$title;
-else if (sizeof($codes) > 99)
-  echo 'Регистрация в '.$title.' закончена.';
+else if (sizeof($codes) >= $max)
+  echo 'Регистрация в '.$title.' остановлена в связи с полной укомплектованностью лиг.';
 else if (isset($_POST['reg']) && !$err)
 {
   if (!isset($_SESSION['Coach_name']))
     $_SESSION['Coach_name'] = ucwords(trim($_POST['user']));
 
-  if (isset($_POST['email']))
+  if (isset($_SESSION['Coach_mail']))
+    $email = trim($_SESSION['Coach_mail']);
+  else if (isset($_POST['email']))
     $email = trim($_POST['email']);
   else
-    foreach ($cmd_db as $ccode => $teams)
+    foreach ($cma_db as $ccode => $teams)
       foreach ($teams as $team)
         if ($_SESSION['Coach_name'] == $team['usr']) {
           $email = $team['eml'];
@@ -98,16 +101,16 @@ else
   echo '<form action="" method="post">
 ';
   if (!isset($_SESSION['Coach_name'])) {
-    echo 'Для участия в '.$title.' необходимо войти на сайт под своим именем.<br />
+    echo 'Для участия в '.$title.' необходимо войти на сайт под своим игровым именем.<br />
 Если у Вас еще нет доступа на сайт, мы можем сделать его сейчас.<br />
 Все поля обязательны к заполнению.<br />
 <br />
-Укажите свой игровой ник или (что желательно) своё настоящее полное имя (с фамилией):<br />
+Укажите своё имя или игровой ник:<br />
 <input type="text" name="user" /><br />
 <br />
-Укажите свой eMail для получения материалов ассоциации (календарь, программки, прогнозы игроков, итоги, обзоры):<br />
+Укажите свой EMail для получения материалов ассоциации (календарь, программки, прогнозы игроков, итоги, обзоры):<br />
 <input type="text" name="email" /><br />
-Внимание: указание недействительного eMail-а повлечет отмену регистрации.<br />
+Внимание: указание недействительного EMail-а повлечет отмену регистрации.<br />
 <br />
 Укажите пароль (дважды для проверки правильности набора):<br />
 <input type="password" name="pass1" /><br />

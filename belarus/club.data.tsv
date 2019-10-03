@@ -1,18 +1,22 @@
 #код	файл с эмблемой клуба	название	город	год	стадион	мест	сайт
-BATE	belarusBATE.png	ФК БАТЭ Борисов	Барысаў (Борисов)	1973	Гарадскі стадыён	5502	http://www.fcbate.by
-BELSHINA	belarusBELSHINA.png	ФК Белшина Бобруйск	Бабруйск (Бобруйск)	1977	Стадыён "Спартак"	3661	http://www.fcbelshina.by
-DINBR	belarusDINBR.png	ФК Динамо Брест	Брэст (Брест)	1960	Стадыён ДАСК "Брэсцкі"	10169	http://www.dynamo-brest.by
-DINMN	belarusDINMN.png	ФК Динамо Минск	Мінск (Минск)	1927	Стадыён "Дынама"	41024	http://www.dinamo-minsk.by
-GOMEL	belarusGOMEL.png	ФК Гомель	Гомель	1959	Стадыён "Цэнтральны"	14307	http://www.fcgomel.by
-GRANIT	belarusGRANIT.png	ФК Гранит Микашевичи	Мікашэвічы (Микашевичи)	1978	Стадыён "Польсье"	2000	http://www.fcgranit.by/
-KOMM	belarusKOMM.png	ФК Слоним (бывший Коммунальник)	Слонім (Слоним)	1969	Стадыён "Юнацтва"	2220	http://fcslonim.hol.es/index.html
-KRUMKACH	belarusKRUMKACH.png	ФК Крумкачы Минск	Минск	2014	Стадыён ФК "Минск"	3100	http://krumka.by
-MINSK	belarusMINSK.png	ФК Минск	Мінск (Минск)	1954 / 2006	Стадыён "Дынама"	41000	http://www.fcminsk.com
-NAFTAN	belarusNAFTAN.png	ФК Нафтан Новополоцк	Наваполацк (Новополоцк)	1963	Стадыён "Атлант"	4522	http://www.fcnaftan.com
-NEMAN	belarusNEMAN.png	ФК Неман Гродно	Гродна (Гродно)	1964	Стадыён "Нёман"	9000	http://www.fcneman.by/
-SKVICH	belarusSKVICH.png	ФК СКВИЧ Минск	Мінск (Минск)	2000	САК "Алімпійскі"	1000	http://www.skvich.by/
-SLAVIYA	belarusSLAVIYA.png	ФК Славия Мозырь	Мазыр (Мозырь)	1987	Стадыён "Юнацтва"	5371	http://www.slaviya.by
-SLUTSK	belarusSLUTSK.png	ФК Слуцк	Слуцк	1998	Гарадскі стадыён	2000	http://sfc-slutsk.by/
-TORPEDO	belarusTORPEDO.png	ФК Торпедо Жодино	Жодзіна (Жодино)	1961	Стадыён "Тарпеда"	6524	http://tarpeda.zhodzina.info
-SHAKH	belarusSHAKH.png	ФК Шахтёр Солигорск	Салігорск (Солигорск)	1963	Стадыён "Будаўнік"	4200	http://www.fcshakhter.by
-VITEBSK	belarusVITEBSK.png	ФК "Витебск"	Витебск	1960	ЦСК	8144	http://www.fc.vitebsk.by
+BATE	belarus/BATE.png	ФК БАТЭ Борисов	Барысаў (Борисов)	1973	Гарадскі стадыён	5502	http://www.fcbate.by
+BELSHINA	belarus/BELSHINA.png	ФК Белшина Бобруйск	Бабруйск (Бобруйск)	1977	Стадыён "Спартак"	3661	http://www.fcbelshina.by
+DINBR	belarus/DINBR.png	ФК Динамо Брест	Брэст (Брест)	1960	Стадыён ДАСК "Брэсцкі"	10169	http://www.dynamo-brest.by
+DINMN	belarus/DINMN.png	ФК Динамо Минск	Мінск (Минск)	1927	Стадыён "Дынама"	41024	http://www.dinamo-minsk.by
+DNEPR-M	belarus/DNEPR-M.png	ФК Днепр Могилёв	Молилёв	1960	Стадыён "Спартак"	7990	http://fcdnepr.by
+GOMEL	belarus/GOMEL.png	ФК Гомель	Гомель	1959	Стадыён "Цэнтральны"	14307	http://www.fcgomel.by
+GORODEYA	belarus/GORODEYA.png	ФК Городея	Городея	2004	Стадыён "Сахарник"	2100	http://fcgorodeya.by
+GRANIT	belarus/GRANIT.png	ФК Гранит Микашевичи	Мікашэвічы (Микашевичи)	1978	Стадыён "Польсье"	2000	http://www.fcgranit.by/
+KOMM	belarus/KOMM.png	ФК Слоним (бывший Коммунальник)	Слонім (Слоним)	1969	Стадыён "Юнацтва"	2220	http://fcslonim.hol.es/index.html
+KRUMKACH	belarus/KRUMKACH.png	ФК Крумкачы Минск	Минск	2014	Стадыён ФК "Минск"	3100	http://krumka.by
+LUCH-M	belarus/LUCH-M.png	ФК Луч Минск	Мінск (Минск)	2007	СОК "Олимпийский"	3100	http://www.fc-luch.by
+MINSK	belarus/MINSK.png	ФК Минск	Мінск (Минск)	1954 / 2006	Стадыён "Дынама"	41000	http://www.fcminsk.com
+NAFTAN	belarus/NAFTAN.png	ФК Нафтан Новополоцк	Наваполацк (Новополоцк)	1963	Стадыён "Атлант"	4522	http://www.fcnaftan.com
+NEMAN	belarus/NEMAN.png	ФК Неман Гродно	Гродна (Гродно)	1964	Стадыён "Нёман"	9000	http://www.fcneman.by/
+SKVICH	belarus/SKVICH.png	ФК СКВИЧ Минск	Мінск (Минск)	2000	САК "Алімпійскі"	1000	http://www.skvich.by/
+SLAVIYA	belarus/SLAVIYA.png	ФК Славия Мозырь	Мазыр (Мозырь)	1987	Стадыён "Юнацтва"	5371	http://www.slaviya.by
+SLUTSK	belarus/SLUTSK.png	ФК Слуцк	Слуцк	1998	Гарадскі стадыён	2000	http://sfc-slutsk.by/
+VEDRICH	belarus/VEDRICH.png	ФК Спутник	Речица	2016	Стадыён "Цэнтральны"	3550	https://ok.ru/fcsputnik
+TORPEDO	belarus/TORPEDO.png	ФК Торпедо Жодино	Жодзіна (Жодино)	1961	Стадыён "Тарпеда"	6524	http://tarpeda.zhodzina.info
+SHAHTER	belarus/SHAHTER.png	ФК Шахтёр Солигорск	Салігорск (Солигорск)	1963	Стадыён "Будаўнік"	4200	http://www.fcshakhter.by
+VITEBSK	belarus/VITEBSK.png	ФК "Витебск"	Витебск	1960	ЦСК	8144	http://www.fc.vitebsk.by

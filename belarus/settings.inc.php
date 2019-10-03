@@ -3,10 +3,10 @@ $cca = 'BLR';
 $description = 'Футбол-Прогнозная ассоциация Беларуси';
 $title = 'ФП Беларуси';
 $main_header = 'Новости ФП Беларуси';
-$cur_year = '2018-19';
-$president = 'Витя Барановский';
+$cur_year = '2019-20';
+$president = 'ВитЬя Барановский';
 $vice = 'Вячеслав Ковалевский';
-$pressa = 'Alex Tarasov';
-$coach = 'Витя Барановский';
-$club_edit = true;
+$pressa = 'AlexTar77';
+$coach = 'ВитЬя Барановский';
+$club_edit = false;
 ?>

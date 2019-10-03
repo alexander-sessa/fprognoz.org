@@ -1,12 +1,12 @@
 <?php
-$last_month = 02;
-$last_day = 12;
+$last_month = 8;
+$last_day = 30;
 if (!isset($updates)) $updates = NULL;
 $base = get_results_by_date($last_month, $last_day, $updates);
 $rprognoz = '';
 $publish = true;
-$tour = 'KONK35';
-$nm = 20;
+$tour = 'KONK37';
+$nm = 40;
 // формирование показа программки тура с реальными результатами
 // парсинг программки
 $matches = explode("\n", file_get_contents($online_dir . 'konkurs/programs/' . $tour));
@@ -105,13 +105,13 @@ foreach ($matches as $line) if ($line = trim($line)) {
 $program_table .=  '</table>
 ';
 $aprognoz = array();
-$addfile = file_get_contents($online_dir . 'konkurs/adds/' . $tour);
+$addfile = time() > 1567249200 ? file_get_contents($online_dir . 'konkurs/adds/' . $tour) : '';
 $added = explode("\n", $addfile);
 foreach ($added as $line) if ($line = rtrim($line)) {
   if ($line[0] != ' ') {
-    $team = trim(substr($line, 0, 21));
-    $line = trim(substr($line, 22, 40));
-    if ($cut = min(21, strpos($line, ' ', 15))) $prognoz = trim(substr($line, 0, $cut));
+    $team = trim(mb_substr($line, 0, 21));
+    $line = trim(mb_substr($line, 22, 40));
+    if ($cut = min(21, mb_strpos($line, ' ', 15))) $prognoz = trim(substr($line, 0, $cut));
     else $prognoz = trim($line);
     $aprognoz[$team] = $prognoz;
   }
@@ -133,7 +133,7 @@ foreach ($aprognoz as $ta => $prog) {
     }
     else $colored .= $prognoz[$i];
 
-  $prognozlist .= sprintf('%-21s', $ta).sprintf('%-16s', $colored).'  '.sprintf('%2s',$hita)."\n";
+  $prognozlist .= mb_sprintf('%-21s', $ta).sprintf('%-16s', $colored).'  '.sprintf('%2s',$hita)."\n";
 }
 //$prognozlist .= '
 //Количество игроков, угадавших прогнозы:
@@ -227,7 +227,7 @@ socket.on("guncelleme",function(d){
     <br />
 ' . $program_table . '    <br />
     <table align="center"><tr>
-      <td><div id="pl" style="white-space:pre; font-family: monospace; text-align: left;">
+      <td><div id="pl" style="white-space:pre; font-family: monospace; text-align: left; font-size: 1.2em">
 ' . $prognozlist . '
       </div></td>
     </tr></table>

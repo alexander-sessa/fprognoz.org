@@ -387,7 +387,9 @@ $club_edit = '.(isset($_POST['club_edit']) ? 'true' : 'false').';
         mkdir($new.'programs', 0755, true);
         mkdir($new.'publish', 0755, true);
         copy($old.'codes.tsv', $new.'codes.tsv');
-        copy($old.'headers',   $new.'headers');
+        copy($old.'bombers',   $new.'bombers');
+        copy($old.'header',   $new.'header');
+        copy($old.'news',   $new.'news');
         copy($old.'p.tpl',     $new.'p.tpl');
         copy($old.'it.tpl',    $new.'it.tpl');
         copy($old.'pc.tpl',    $new.'pc.tpl');
@@ -422,6 +424,12 @@ $club_edit = '.(isset($_POST['club_edit']) ? 'true' : 'false').';
   if ($data['cmd'] == 'send_mail') {
     $ret = 0;
     include ('../' . $data['a'] . '/settings.inc.php');
+    $granted = $admin;
+    $granted[] = $president;
+    $arr = explode(',', $vice.','.$pressa);
+    foreach ($arr as $name)
+        $granted[] = trim($name);
+
     $team_select = '';
     if (isset($_POST['p']) && $data['a'] == 'world')
     {
@@ -430,7 +438,7 @@ $club_edit = '.(isset($_POST['club_edit']) ? 'true' : 'false').';
         $team_select = file_get_contents($team_file);
 
     }
-    if ($team_select || $data['author'] == $president || $data['author'] == $vice || $data['author'] == $pressa || in_array($data['author'], $admin))
+    if ($team_select || in_array($data['author'], $granted))
     {
       $cca = array_search($data['a'], $ccn);
       $email = '';
