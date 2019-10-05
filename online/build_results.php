@@ -833,6 +833,68 @@ function get_groups($tcode, $ccal)
 
 }
 
+function init_tt() {
+  $a = [
+    'm', 'mh', 'ma', 'w', 'wh', 'wa', 'wag', 'was', 'd', 'dh', 'da', 'l', 'lh', 'la', 'lgh', 'lga', 'lsh', 'lsa',
+    'g', 'gh', 'ga', 's', 'sh', 'sa', 'h', 'hh', 'ha', 'r', 'rh', 'ra', 'p', 'ph', 'pa', 'pl', 'i',
+    'bw', 'bwh', 'bwa', 'bg', 'bgh', 'bga', 'bs', 'bsh', 'bsa', 'bl', 'blh', 'bla', 'blg', 'bls', 'bbn', 'bbr'];
+  return array_fill_keys($a, 0);
+}
+
+function horse_raven($fname, $tourn, $gb, $maxcoach, $maxteam) {
+  global $cca;
+
+  $a = [];
+  $maxln = 24;
+  $file = file($fname, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+  if (!sizeof($file))
+    return '';
+
+  foreach ($file as $line)
+  {
+    list($tn, $team, $tour, $bet, $players) = explode(',', $line);
+    if ($tour <= $tourn)
+    {
+      if (!isset($a[$tn]))
+        $a[$tn] = ['c' => 0, 'f' => 0, 'n' => $team, 'p' => 0, 's' => ''];
+
+      $a[$tn]['c']++;
+      if (isset($a[$tn]['t']) && $a[$tn]['t'] == $tour)
+        $a[$tn]['s'] = rtrim($a[$tn]['s'], ',').$bet.',';
+      else
+        $a[$tn]['s'] .= "$tour/$bet,";
+
+      if (strlen($a[$tn]['s']) > $maxln && !strpos($a[$tn]['s'], "\n"))
+        $a[$tn]['s'] .= "\n                                            ";
+
+      $a[$tn]['t'] = $tour;
+      $a[$tn]['f'] += $bet == '2' ? 400 : $bet == 'X' ? 20 : 1;
+      $a[$tn]['p'] += $players;
+    }
+  }
+  $att = [];
+  foreach ($a as $tn => $at)
+  {
+    $att['t'][] = $tn;
+    $att['n'][] = $at['n'];
+    $att['c'][] = $at['c'];
+    $att['f'][] = $at['f'];
+    $att['p'][] = $at['p'];
+    $att['g'][] = $cca == 'UEFA' ? $gb[$tn][$at['n']]['p'] : $gb[$tn]['p'];
+    // $maxln = max($maxln, strlen($a[$tn]['s']));
+  }
+  array_multisort($att['c'],SORT_DESC, $att['p'],SORT_DESC, $att['f'],SORT_DESC, $att['g'],SORT_DESC, $att['t'], $att['n']);
+  $out = mb_sprintf('%'.($maxcoach + $maxteam).'s', 'раз тур/рез').sprintf('%'.$maxln.'s', "из\n");
+  for($i = 0; $i < sizeof($att['t']); $i++)
+  {
+    $tr = $att['t'][$i];
+    $out .= ($i ? sprintf('%2s. ', $i + 1) : '_1_.') . mb_sprintf(' %-'.($maxcoach + 1).'s', $tr)
+        . mb_sprintf('%-'.($maxteam + 1).'s', $att['n'][$i]) . sprintf('%2s', $att['c'][$i]).'  '
+        . mb_sprintf('%-'.$maxln.'s', rtrim($a[$tr]['s'], ',')) . sprintf('%4s', $att['p'][$i])."\n";
+  }
+  return rtrim($out);
+}
+
 function build_itogi($country_code, $season, $tour)
 {
   global $online_dir;
@@ -1208,37 +1270,31 @@ function build_itogi($country_code, $season, $tour)
     $prognozr = str_replace(' ', '', $rprognoz);
     // удары по воротам
     $hith = $hita = 0;
-    for ($i=0; $i<count($realmatch); $i++) if ($prognozr[$i] != '-') {
-      if ($prognozr[$i] == $prognozh[$i]) {
-        $hith++;
-        if ($aprognoz[$home]['warn'][0] != '*')
-          if (isset($realmatch[$i+1]['hits']))
-            $realmatch[$i+1]['hits']++;
-          else
-            $realmatch[$i+1]['hits'] = 1;
+    for ($i = 0; $i < count($realmatch); $i++)
+    {
+      $plrs[$i] = $plrs[$i] ?? 0;
+      $realmatch[$i + 1]['hits'] = $realmatch[$i + 1]['hits'] ?? 0;
+      if ($prognozr[$i] != '-')
+      {
+        if ($prognozr[$i] == $prognozh[$i]) {
+          $hith++;
+          if ($aprognoz[$home]['warn'][0] != '*')
+            $realmatch[$i + 1]['hits']++;
+
+        }
+        if ($prognozr[$i] == $prognoza[$i]) {
+          $hita++;
+          if ($aprognoz[$away]['warn'][0] != '*')
+            $realmatch[$i + 1]['hits']++;
+
+        }
+        if (($aprognoz[$home]['warn'][0] != '*') && ($prognozh[$i] != '='))
+          $plrs[$i]++;
+
+        if (($aprognoz[$away]['warn'][0] != '*') && ($prognoza[$i] != '='))
+          $plrs[$i]++;
 
       }
-      if ($prognozr[$i] == $prognoza[$i]) {
-        $hita++;
-        if ($aprognoz[$away]['warn'][0] != '*')
-          if (isset($realmatch[$i+1]['hits']))
-            $realmatch[$i+1]['hits']++;
-          else
-            $realmatch[$i+1]['hits'] = 1;
-
-      }
-      if (($aprognoz[$home]['warn'][0] != '*') && ($prognozh[$i] != '='))
-        if (isset($plrs[$i]))
-          $plrs[$i]++;
-        else
-          $plrs[$i] = 1;
-
-      if (($aprognoz[$away]['warn'][0] != '*') && ($prognoza[$i] != '='))
-        if (isset($plrs[$i]))
-          $plrs[$i]++;
-        else
-          $plrs[$i] = 1;
-
     }
     // голы, счет и протокол матча
     $goalh = $goala = $gn = 0;
@@ -1335,7 +1391,7 @@ function build_itogi($country_code, $season, $tour)
       $wresults[] = $line3.$goala.sprintf('%4s', '('.$hita.')').'  (* generator *)';
 
     // заготовка для обновления календаря
-    $newcaltour .= "$home - $away  $goalh:$goala".str_repeat(' ', 30 - mb_strlen("$home - $away  $goalh:$goala")).'  (';
+    $newcaltour .= mb_sprintf('%-32s', "$home - $away  $goalh:$goala").'  (';
     if ($aprognoz[$home]['warn'][0] == '*')
       $newcaltour .= "*:$hith:";
     else
@@ -1490,7 +1546,7 @@ function build_itogi($country_code, $season, $tour)
   {
     $bout .= $tn . str_repeat(' ', 20 - mb_strlen($tn));
     for ($i=0; $i<=$tourn; $i++)
-      if (trim($atemp[$i]))
+      if (isset($atemp[$i]) && trim($atemp[$i]))
         $bout .= $atemp[$i].',';
       else
         $bout .= '  ,';
@@ -1648,7 +1704,7 @@ function build_itogi($country_code, $season, $tour)
     $plhtpos = strpos($line, '[PlayersHits]');
     $out = '';
     for ($i=0; $i<=count($realmatch); $i++)
-      $out .= $programme[$i].str_repeat(' ', $plhtpos - mb_strlen($programme[$i])).$playerhits[$i]."\n";
+      $out .= mb_sprintf('%-'.$plhtpos.'s', $programme[$i]) . $playerhits[$i]."\n";
 
     $template = str_replace($line, $out, $template);
     // [NumPredict] в будущем возможен параметр n-N
@@ -1793,7 +1849,15 @@ function build_itogi($country_code, $season, $tour)
 */
 // tt: team =>
 //  m mh ma  w wh wa  d dh da  l lh la  g gh ga  s sh sa  r rh ra  p ph pa
-// bw bwh bwa bgh bga bsh bsa bl blh bla lgh lga lsh lsa wag was ser h hh ha
+// bw bwh bwa bg bgh bga bs bsh bsa bl blh bla lgh lga lsh lsa wag was h hh ha
+// w wh wa l lh la bls blg
+// ser
+        if (!isset($tt[$home]))
+          $tt[$home] = init_tt();
+
+        if (!isset($tt[$away]))
+          $tt[$away] = init_tt();
+
         $tt[$home]['m']++;
         $tt[$away]['m']++;
         $tt[$home]['mh']++;
@@ -1829,16 +1893,16 @@ function build_itogi($country_code, $season, $tour)
           $amb[$home]['t'] = $th;
           $amb[$home]['r'] = $gh - $ga;
           $amb[$home]['g'] = $gh;
-          $amb[$away]['f']++;
+          $amb[$away]['f'] = 1 + ($amb[$away]['f'] ?? 0);
           if ($country_code == 'UEFA')
           {
             $gb[$th][$home]['t'][$tn] = $hh;
-            $gb[$th][$home]['h'] += $hh;
+            $gb[$th][$home]['h'] = $hh + (isset($gb[$th][$home]['h']) ? $gb[$th][$home]['h'] : 0);
           }
           else
           {
             $gb[$th]['t'][$tn] = $hh;
-            $gb[$th]['h'] += $hh;
+            $gb[$th]['h'] = $hh + ($gb[$th]['h'] ?? 0);
             $gb[$th]['n'] = $home;
           }
         }
@@ -1852,16 +1916,16 @@ function build_itogi($country_code, $season, $tour)
           $amb[$away]['t'] = $ta;
           $amb[$away]['r'] = $ga - $gh;
           $amb[$away]['g'] = $ga;
-          $amb[$home]['f']++;
+          $amb[$home]['f'] = 1 + ($amb[$home]['f'] ?? 0);
           if ($country_code == 'UEFA')
           {
             $gb[$ta][$away]['t'][$tn] = $ha;
-            $gb[$ta][$away]['h'] += $ha;
+            $gb[$ta][$away]['h'] = $ha + (isset($gb[$ta][$away]['h']) ? $gb[$ta][$away]['h'] : 0);
           }
           else
           {
             $gb[$ta]['t'][$tn] = $ha;
-            $gb[$ta]['h'] += $ha;
+            $gb[$ta]['h'] = $ha + ($gb[$ta]['h'] ?? 0);
             $gb[$ta]['n'] = $away;
           }
         }
@@ -1900,24 +1964,24 @@ function build_itogi($country_code, $season, $tour)
             if ($bbr == $tt[$home]['bbr'])
               $tt[$home]['bbn']++;
 
-            if ($bbr > $best['h']['bbr'])
+            if (!isset($best['h']) || $bbr > $best['h']['bbr'])
             {
               $best['h']['bbr'] = $bbr;
               $best['h']['rez'] = "$gh-$ga";
               $best['h']['team'] = "$home - $away ($tn тур),";
             }
-            elseif ($bbr == $best['h']['bbr'])
+            else if ($bbr == $best['h']['bbr'])
               $best['h']['team'] .= "$home - $away ($tn тур),";
 
             if ($ta != '*')
             {
-              if ($bbr > $best['d']['bbr'])
+              if (!isset($best['d']) || $bbr > $best['d']['bbr'])
               {
                 $best['d']['bbr'] = $bbr;
                 $best['d']['rez'] = "$gh-$ga";
                 $best['d']['team'] = "$home - $away ($tn тур),";
               }
-              elseif ($bbr == $best['d']['bbr'])
+              else if ($bbr == $best['d']['bbr'])
                 $best['d']['team'] .= "$home - $away ($tn тур),";
 
             }
@@ -1960,7 +2024,7 @@ function build_itogi($country_code, $season, $tour)
             if ($bbr == $tt[$away]['bbr'])
               $tt[$away]['bbn']++;
 
-            if ($bbr > $best['a']['bbr'])
+            if (!isset($best['a']) || $bbr > $best['a']['bbr'])
             {
               $best['a']['bbr'] = $bbr;
               $best['a']['rez'] = "$ga-$gh";
@@ -1971,7 +2035,7 @@ function build_itogi($country_code, $season, $tour)
 
             if ($th != '*')
             {
-              if ($bbr > $best['g']['bbr'])
+              if (!isset($best['g']) || $bbr > $best['g']['bbr'])
               {
                 $best['g']['bbr'] = $bbr;
                 $best['g']['rez'] = "$ga-$gh";
@@ -2279,17 +2343,17 @@ function build_itogi($country_code, $season, $tour)
   // [BestResults] в будущем возможен параметр n-N
   $out = '';
   $outg = '';
-  if ($best['d']['bbr'] > $best['g']['bbr'])
+  if (isset($best['d']['bbr']) && (!isset($best['g']['bbr']) || $best['d']['bbr'] > $best['g']['bbr']))
     $out .= sprintf('%-8s', $best['d']['rez']) . rtrim($best['d']['team'], ',')."\n";
 
-  if (trim($best['g']['rez']))
-    $out .= sprintf('%-8s', $best['g']['rez'].'г') . rtrim($best['g']['team'], ',')."\n";
+  if (isset($best['g']['rez']) && trim($best['g']['rez']))
+    $out .= mb_sprintf('%-8s', $best['g']['rez'].'г') . rtrim($best['g']['team'], ',')."\n";
 
-  if (($best['h']['bbr'] > $best['d']['bbr']) && ($best['h']['bbr'] > $best['a']['bbr']))
+  if (isset($best['h']['bbr']) && ((!isset($best['d']['bbr']) || $best['h']['bbr'] > $best['d']['bbr'])) && ((!isset($best['a']['bbr']) || $best['h']['bbr'] > $best['a']['bbr'])))
     $outg .= sprintf('%-8s', $best['h']['rez'].'(*)') . rtrim($best['h']['team'], ',')."\n";
 
-  if ($best['a']['bbr'] > $best['g']['bbr'])
-    $outg .= sprintf('%-8s', $best['a']['rez'].'(*)г') . rtrim($best['a']['team'], ',')."\n";
+  if (isset($best['a']['bbr']) && (!isset($best['g']['bbr']) || $best['a']['bbr'] > $best['g']['bbr']))
+    $outg .= mb_sprintf('%-8s', $best['a']['rez'].'(*)г') . rtrim($best['a']['team'], ',')."\n";
 
   if ($outg)
     $out .= "\n  с учётом игр с генераторами:\n".$outg;
@@ -2338,9 +2402,10 @@ function build_itogi($country_code, $season, $tour)
     foreach ($gb as $tr => $gbteams)
       // цикл по тренерам
       if ($country_code == 'UEFA')
+      {
         foreach ($gbteams as $nm => $atemp)
         { // цикл по их командам
-          $nm = $gb[$tr]['n'];
+          //$nm = $gb[$tr]['n'];
           $att['t'][] = $tr;
           $att['n'][] = $nm;
           $att['h'][] = $gb[$tr][$nm]['h'];
@@ -2350,7 +2415,7 @@ function build_itogi($country_code, $season, $tour)
           $att['r'][] = $tt[$nm]['r'];
           $att['g'][] = $tt[$nm]['g'];
         }
-
+      }
       else
       {
         $nm = $gb[$tr]['n'];
@@ -2822,11 +2887,11 @@ function build_itogi($country_code, $season, $tour)
     else
       $att['n'][] = $tn;
 
-    $att['t'][] = $amb[$tn]['t'];
-    $att['h'][] = $amb[$tn]['h'];
-    $att['x'][] = $amb[$tn]['x'];
-    $att['cr'][] = $amb[$tn]['r'];
-    $att['cg'][] = $amb[$tn]['g'];
+    $att['t'][] = $amb[$tn]['t'] ?? 0;
+    $att['h'][] = $amb[$tn]['h'] ?? 0;
+    $att['x'][] = $amb[$tn]['x'] ?? 0;
+    $att['cr'][] = $amb[$tn]['r'] ?? 0;
+    $att['cg'][] = $amb[$tn]['g'] ?? 0;
     $att['f'][] = $amb[$tn]['f'];
     $att['pl'][] = $tt[$tn]['pl'];
     $att['p'][] = $tt[$tn]['p'];
@@ -2884,24 +2949,23 @@ function build_itogi($country_code, $season, $tour)
   $line = "\n[SuperBoots]";
   if ($fr = (strpos($template, $line)))
   {
-    $atb = array();
+    $atb = [];
     for ($i=1; $i<=$tourn; $i++) if ($tn = trim($superb[$i]['t']))
     {
+      if (!isset($atb[$tn]))
+        $atb[$tn] = array_fill_keys(['b', 'd', 'h', 'm'], 0);
+
       $atb[$tn]['n'] = $superb[$i]['n'];
       $atb[$tn]['b']++;
       $atb[$tn]['d'] += $superb[$i]['d'];
       $atb[$tn]['h'] += $superb[$i]['h'];
       $atb[$tn]['m'] += $superb[$i]['m'];
     }
-    $att = array();
+    $att = [];
     foreach ($atb as $tn => $atemp)
     {
       $att['t'][] = $tn;
-      if (isset($lnames[$atb[$tn]['n']]))
-        $att['n'][] = $lnames[$atb[$tn]['n']];
-      else
-        $att['n'][] = $atb[$tn]['n'];
-
+      $att['n'][] = isset($lnames[$atb[$tn]['n']]) ? $lnames[$atb[$tn]['n']] : $atb[$tn]['n'];
       $att['b'][] = $atb[$tn]['b'];
       $att['d'][] = $atb[$tn]['d'];
       $att['h'][] = $atb[$tn]['h'];
@@ -2911,144 +2975,32 @@ function build_itogi($country_code, $season, $tour)
       $att['r'][] = $tt[$nm]['r'];
       $att['g'][] = $tt[$nm]['g'];
     }
-    for($i=0; $i<sizeof($att['t']); $i++)
+    for($i = 0; $i < sizeof($att['t']); $i++)
       $att['o'][$i] = $att['h'][$i] / $att['m'][$i];
 
     array_multisort($att['b'],SORT_DESC, $att['d'],SORT_DESC, $att['o'],SORT_DESC, $att['pl'], $att['p'],SORT_DESC, $att['r'],SORT_DESC, $att['g'],SORT_DESC, $att['t'], $att['n'], $att['h'], $att['m']);
-    $out = sprintf('%-'.($maxcoach-12).'s', ' ').str_repeat(' ', $nmax).'раз отрыв рез  из
+    $out = str_repeat(' ', $maxcoach + $nmax - 12).'раз отрыв рез  из
 ';
-    for($i=0; $i<sizeof($att['t']); $i++)
+    for($i = 0; $i < sizeof($att['t']); $i++)
     {
       $tr = $att['t'][$i];
-      $out .= sprintf('%2s', $i+1).'.  ' . $tr . str_repeat(' ', $maxcoach + 1 - mb_strlen($tr))
-            . $att['n'][$i] . str_repeat(' ', $nmax - mb_strlen($att['n'][$i]))
-            . sprintf('%2s', $att['b'][$i]) . sprintf('%5s', $att['d'][$i])
-            . sprintf('%5s', $att['h'][$i]) . sprintf('%5s', $att['m'][$i])."\n";
+      $out .= ($i ? sprintf('%2s. ', $i + 1) : '_1_.') . mb_sprintf(' %-'.($maxcoach + 1).'s', $tr)
+          . mb_sprintf('%-'.$nmax.'s', $att['n'][$i])
+          . sprintf('%2s', $att['b'][$i]) . sprintf('%5s', $att['d'][$i])
+          . sprintf('%5s', $att['h'][$i]) . sprintf('%5s', $att['m'][$i])."\n";
     }
-    $out = str_replace(' 1. ', '_1_.', $out);
     $template = str_replace($line, rtrim($out), $template);
   }
   // [DarkHorse]
   $line = "\n[DarkHorse]";
-  if ($fr = (strpos($template, $line)))
-  {
-    $atemp = file($hfname);
-    $horse = array();
-    foreach ($atemp as $l) if ($l = trim($l))
-    {
-      $al = explode(',', $l);
-      if ($al[2] <= $tourn)
-      {
-        $tn = $al[0];
-        $horse[$tn]['n'] = $al[1];
-        $horse[$tn]['c']++;
-        if (isset($horse[$tn]['t']) && ($horse[$tn]['t'] == $al[2]))
-          $horse[$tn]['s'] = rtrim($horse[$tn]['s'], ',').$al[3].',';
-        else
-          $horse[$tn]['s'] .= $al[2].'/'.$al[3].',';
+  if (strpos($template, $line))
+    $template = str_replace($line, horse_raven($hfname, $tourn, $gb, $maxcoach, $maxteam), $template);
 
-        if (strlen($horse[$tn]['s']) > $maxln && !strpos($horse[$tn]['s'], "\n"))
-          $horse[$tn]['s'] .= "\n                                            ";
-
-        $horse[$tn]['t'] = $al[2];
-        if ($al[3] == '2')
-           $al[3] = 400; 
-        elseif ($al[3] == 'X')
-           $al[3] = 20;
-
-        $horse[$tn]['f'] += $al[3];
-        $horse[$tn]['p'] += $al[4];
-      }
-    }
-    $att = array();
-    $maxln = 24;
-    foreach ($horse as $tn => $atemp)
-    {
-      $att['t'][] = $tn;
-      $att['n'][] = $horse[$tn]['n'];
-      $att['c'][] = $horse[$tn]['c'];
-      $att['f'][] = $horse[$tn]['f'];
-      $att['p'][] = $horse[$tn]['p'];
-      $att['g'][] = $gb[$tn][$horse[$tn]['n']]['p'];
-      // $maxln = max($maxln, strlen($horse[$tn]['s']));
-    }
-    array_multisort($att['c'],SORT_DESC, $att['p'],SORT_DESC, $att['f'],SORT_DESC, $att['g'],SORT_DESC, $att['t'], $att['n']);
-    $out = '';
-    for($i=0; $i<sizeof($att['t']); $i++)
-    {
-      $tr = $att['t'][$i];
-      $out .= sprintf('%2s', $i+1).'.  '
-            . $tr . str_repeat(' ', $maxcoach + 1 - mb_strlen($tr))
-            . $att['n'][$i] . str_repeat(' ', $maxteam + 1 - mb_strlen($att['n'][$i]))
-            . sprintf('%2s', $att['c'][$i]).'  '
-            . rtrim($horse[$tr]['s'], ',') . str_repeat(' ', $maxln - mb_strlen(rtrim($horse[$tr]['s'], ',')))
-            . sprintf('%4s', $att['p'][$i])."\n";
-    }
-    $out = str_repeat(' ', $maxcoach + $maxteam - mb_strlen('раз тур/рез')) . 'раз тур/рез'.
-           sprintf('%'.($maxln-1).'s', 'из')."\n".  str_replace(' 1. ', '_1_.', $out);
-    $template = str_replace($line, rtrim($out), $template);
-  }
   // [WhiteRaven]
   $line = "\n[WhiteRaven]";
-  if ($fr = (strpos($template, $line)))
-  {
-    $atemp = file($vfname);
-    $raven = array();
-    foreach ($atemp as $l) if ($l = trim($l))
-    {
-      $al = explode(',', $l);
-      if ($al[2] <= $tourn)
-      {
-        $tn = $al[0];
-        $raven[$tn]['n'] = $al[1];
-        $raven[$tn]['c']++;
-        if (isset($raven[$tn]['t']) && ($raven[$tn]['t'] == $al[2]))
-          $raven[$tn]['s'] = rtrim($raven[$tn]['s'], ',').$al[3].',';
-        else
-          $raven[$tn]['s'] .= $al[2].'/'.$al[3].',';
+  if (strpos($template, $line))
+    $template = str_replace($line, horse_raven($vfname, $tourn, $gb, $maxcoach, $maxteam), $template);
 
-        if (strlen($raven[$tn]['s']) > $maxln && !strpos($raven[$tn]['s'], "\n"))
-          $raven[$tn]['s'] .= "\n                                            ";
-
-        $raven[$tn]['t'] = $al[2];
-        if ($al[3] == '2')
-          $al[3] = 400; 
-        elseif ($al[3] == 'X')
-          $al[3] = 20;
-
-        $raven[$tn]['f'] += $al[3];
-        $raven[$tn]['p'] += $al[4];
-      }
-    }
-    $att = array();
-    $maxln = 24;
-    foreach ($raven as $tn => $atemp)
-    {
-      $att['t'][] = $tn;
-      $att['n'][] = $raven[$tn]['n'];
-      $att['c'][] = $raven[$tn]['c'];
-      $att['f'][] = $raven[$tn]['f'];
-      $att['p'][] = $raven[$tn]['p'];
-      $att['g'][] = $gb[$tn][$raven[$tn]['n']]['p'];
-      // $maxln = max($maxln, strlen($raven[$tn]['s']));
-    }
-    array_multisort($att['c'],SORT_DESC, $att['p'],SORT_DESC, $att['f'],SORT_DESC, $att['g'],SORT_DESC, $att['t'], $att['n']);
-    $out = '';
-    for($i=0; $i<sizeof($att['t']); $i++)
-    {
-      $tr = $att['t'][$i];
-      $out .= sprintf('%2s', $i+1).'.  '
-            . $tr . str_repeat(' ', $maxcoach + 1 - mb_strlen($tr))
-            . $att['n'][$i] . str_repeat(' ', $maxteam + 1 - mb_strlen($att['n'][$i]))
-            . sprintf('%2s', $att['c'][$i]).'  '
-            . rtrim($raven[$tr]['s'], ',') . str_repeat(' ', $maxln - mb_strlen(rtrim($raven[$tr]['s'], ',')))
-            . sprintf('%4s', $att['p'][$i])."\n";
-    }
-    $out = str_repeat(' ', $maxcoach + $maxteam - mb_strlen('раз тур/рез')) . 'раз тур/рез'.
-           sprintf('%'.($maxln-1).'s', 'из')."\n".
-    str_replace(' 1. ', '_1_.', $out);
-    $template = str_replace($line, rtrim($out), $template);
-  }
     // [Cards]
     $maxln = max(14, $maxteam);
     $out = sprintf('%'.($maxln + 3).'s', 'Тур  ');
@@ -3101,9 +3053,9 @@ function build_itogi($country_code, $season, $tour)
 }
 
 $online_dir = '/home/fp/data/online/';
-$tour_code_prefix = $argv[1]; //'RUS' 'CHAML';
-$s = $argv[2]; //'2018-19';
-$t = $argv[3]; //'01';
+$tour_code_prefix = $argv[1]; //'CHAML'; //'RUS' 
+$s = $argv[2]; //'2019-20'; //
+$t = $argv[3]; //'01'; //
 chdir('/home/fp/fprognoz.org/online');
 $atourn = ['CHAML', 'GOLDL', 'CUPSL', 'UEFAL'];
 $acal = $ateams = [];

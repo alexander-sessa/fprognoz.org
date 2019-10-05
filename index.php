@@ -214,7 +214,7 @@ function build_personal_nav() {
               $status = 4; // играется
             else if ($tourCode > 'UNL11' && !in_array($_SESSION['Coach_name'], $final))
               $status = 0; // не участвует
-            else if (strpos(file_get_contents($tour_dir.'/mail'), $_SESSION['Coach_name'].';') !== false)
+            else if (strpos("\n".file_get_contents($tour_dir.'/mail'), "\n".$_SESSION['Coach_name'].';') !== false)
               $status = 5; // есть прогноз
             else
               $status = ($timeStamp <= $currentTime + 86400) ? 2 : 3; // нет прогноза
@@ -256,11 +256,11 @@ function build_personal_nav() {
               }
               elseif (is_file($tour_dir.'/closed')) {
                 $team_str1 = ($countryCode == 'SFP') ? $cmd_db[$countryCode][$code]['cmd'] : $team_str;
-                $content = file_get_contents($tour_dir.'/mail');
-                if (strpos($content, substr($team_str1, 0, $cut).';') === false) {
+                $content = "\n".file_get_contents($tour_dir.'/mail');
+                if (strpos($content, "\n".substr($team_str1, 0, $cut).';') === false) {
                   if (is_file($tour_dir.'/adds')) {
-                    $content = file_get_contents($tour_dir.'/adds');
-                    if (strpos($content, $cmd_db[$countryCode][$code]['cmd'].' ') === false)
+                    $content = "\n".file_get_contents($tour_dir.'/adds');
+                    if (strpos($content, "\n".$cmd_db[$countryCode][$code]['cmd'].' ') === false)
                       $tudb[$team_str][$tourCode] = 1; // 1 - прогноза нет и больше не принимаются
                     else
                       $tudb[$team_str][$tourCode] = 4; // 4 - прогноз найден в дополнениях
@@ -280,15 +280,15 @@ function build_personal_nav() {
                 else
                   $team_str1 = $team_str;
 
-                $content = is_file($tour_dir.'/mail') ? file_get_contents($tour_dir.'/mail') : '';
-                if ((strpos($content, substr($team_str, 0, $cut).';') === false)
-                && (strpos($content, $team_str1.';') === false)) {
+                $content = is_file($tour_dir.'/mail') ? "\n".file_get_contents($tour_dir.'/mail') : '';
+                if ((strpos($content, "\n".substr($team_str, 0, $cut).';') === false)
+                && (strpos($content, "\n".$team_str1.';') === false)) {
                   if (is_file($tour_dir.'/adds'))
-                    $content = file_get_contents($tour_dir.'/adds');
+                    $content = "\n".file_get_contents($tour_dir.'/adds');
                   else
                     $content = '';
 
-                  if (strpos($content, $cmd_db[$countryCode][$code]['cmd'].' ') === false) {
+                  if (strpos($content, "\n".$cmd_db[$countryCode][$code]['cmd'].' ') === false) {
                     if (($action == 'remind' && $timeStamp <= $currentTime + 86400)
                     || is_file($tour_dir.'/published'))
                       $tudb[$team_str][$tourCode] = 2; // 2 - прогноза нет и уже горит
