@@ -5,7 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache" />
 <meta http-equiv="Pragma" content="no-cache" />
 <title>FPrognoz.org Draw Tool (EC Group stage)</title>
-<link rel="StyleSheet" href="css/fpo.css" type="text/css">
+<link rel="StyleSheet" href="../css/fp.css" type="text/css">
 </head>
 <body>
 <center>

@@ -2196,13 +2196,12 @@ function build_itogi($country_code, $season, $tour)
     array_multisort($att['g'],SORT_DESC, $att['ga'],SORT_DESC, $att['s'], $att['pl'], $att['n']);
     $out = '';
     for($i=0; $i<sizeof($att['n']); $i++)
-      $out .= sprintf('%2s', $i+1).'.  '
-            . $att['n'][$i] . str_repeat(' ', $nmax - mb_strlen($att['n'][$i]))
+      $out .= ($i ? sprintf('%2s. ', $i + 1) : '_1_.').' '
+            . mb_sprintf('%-'.$nmax.'s', $att['n'][$i])
             . sprintf('%2s', $att['g'][$i])
             . ' (в гостях - ' . sprintf('%2s', $att['ga'][$i])
             . ', пропущено - ' . sprintf('%2s', $att['s'][$i]).")\n";
 
-    $out = str_replace(' 1. ', '_1_.', $out);
     $template = str_replace($line, rtrim($out), $template);
   }
   // [BestDiff] в будущем возможен параметр n-N
@@ -2226,12 +2225,11 @@ function build_itogi($country_code, $season, $tour)
     array_multisort($att['r'],SORT_DESC, $att['g'],SORT_DESC, $att['pl'], $att['s'], $att['n']);
     $out = '';
     for($i=0; $i<sizeof($att['n']); $i++)
-      $out .= sprintf('%2s', $i+1).'.  '
-            . $att['n'][$i] . str_repeat(' ', $nmax - mb_strlen($att['n'][$i]))
+      $out .= ($i ? sprintf('%2s. ', $i + 1) : '_1_.').' '
+            . mb_sprintf('%-'.$nmax.'s', $att['n'][$i])
             . sprintf('%3s', sprintf('%+d', $att['r'][$i]))
             . ' ('.$att['g'][$i].'-'.$att['s'][$i].")\n";
 
-    $out = str_replace(' 1. ', '_1_.', $out);
     $template = str_replace($line, rtrim($out), $template);
   }
   // [Burglar] в будущем возможен параметр n-N
@@ -2261,14 +2259,13 @@ function build_itogi($country_code, $season, $tour)
     array_multisort($att['bw'],SORT_DESC, $att['br'],SORT_DESC, $att['bg'],SORT_DESC, $att['bbb'],SORT_DESC, $att['bwa'],SORT_DESC, $att['bra'],SORT_DESC, $att['bga'],SORT_DESC, $att['pl'], $att['n'], $att['bs'], $att['bsa']);
     $out = '';
     for($i=0; $i<sizeof($att['n']); $i++) if ($att['bw'][$i])
-      $out .= sprintf('%2s', $i+1).'.  '
-            . $att['n'][$i] . str_repeat(' ', $nmax - mb_strlen($att['n'][$i]))
+      $out .= ($i ? sprintf('%2s. ', $i + 1) : '_1_.').' '
+            . mb_sprintf('%-'.$nmax.'s', $att['n'][$i])
             . sprintf('%2s', $att['bw'][$i])
             . ' ('.$att['bg'][$i].'-'.$att['bs'][$i]
             . ') В гостях: '.sprintf('%2s', $att['bwa'][$i])
             . ' ('.$att['bga'][$i].'-'.$att['bsa'][$i].")\n";
 
-    $out = str_replace(' 1. ', '_1_.', $out);
     $template = str_replace($line, rtrim($out), $template);
   }
   // [BlackHole] в будущем возможен параметр n-N
@@ -2297,14 +2294,13 @@ function build_itogi($country_code, $season, $tour)
     array_multisort($att['bw'],SORT_DESC, $att['br'], $att['bg'],SORT_DESC, $att['bwa'], $att['bra'],SORT_DESC, $att['bga'],SORT_DESC, $att['pl'], $att['n'], $att['bs'], $att['bsa']);
     $out = '';
     for($i=0; $i<sizeof($att['n']); $i++) if ($att['bw'][$i])
-      $out .= sprintf('%2s', $i+1).'.  '
-            . $att['n'][$i] . str_repeat(' ', $nmax - mb_strlen($att['n'][$i]))
+      $out .= ($i ? sprintf('%2s. ', $i + 1) : '_1_.').' '
+            . mb_sprintf('%-'.$nmax.'s', $att['n'][$i])
             . sprintf('%2s', $att['bw'][$i])
             . ' ('.$att['bg'][$i].'-'.$att['bs'][$i]
             . ') В гостях: '.sprintf('%2s', $att['bwa'][$i])
             . ' ('.$att['bsa'][$i].'-'.$att['bga'][$i].")\n";
 
-    $out = str_replace(' 1. ', '_1_.', $out);
     $template = str_replace($line, rtrim($out), $template);
   }
   // [AgroGuest] в будущем возможен параметр n-N
@@ -2332,12 +2328,11 @@ function build_itogi($country_code, $season, $tour)
     array_multisort($att['wa'],SORT_DESC, $att['war'],SORT_DESC, $att['wag'],SORT_DESC, $att['pa'],SORT_DESC, $att['ra'],SORT_DESC, $att['ga'],SORT_DESC, $att['pl'], $att['n'], $att['was']);
     $out = '';
     for($i=0; $i<sizeof($att['n']); $i++) if ($att['wa'][$i])
-      $out .= sprintf('%2s', $i+1).'.  '
-            . $att['n'][$i] . str_repeat(' ', $nmax - mb_strlen($att['n'][$i]))
+      $out .= ($i ? sprintf('%2s. ', $i + 1) : '_1_.').' '
+            . mb_sprintf('%-'.$nmax.'s', $att['n'][$i])
             . sprintf('%2s', $att['wa'][$i])
             . ' ('.$att['wag'][$i].'-'.$att['was'][$i].")\n";
 
-    $out = str_replace(' 1. ', '_1_.', $out);
     $template = str_replace($line, rtrim($out), $template);
   }
   // [BestResults] в будущем возможен параметр n-N
@@ -2482,7 +2477,7 @@ function build_itogi($country_code, $season, $tour)
   $line = '[Series]';
   if ($fr = (strpos($template, $line)))
   {
-    $nt = floor((78 - $maxteam) / 2); 
+    $nt = floor((78 - $maxteam) / 2);
     $out = '';
     ksort($tt);
     $series = array();
@@ -2868,13 +2863,12 @@ function build_itogi($country_code, $season, $tour)
 
       if ($i++ < $max) {
         $nm = isset($lnames[$tn]) ? $lnames[$tn] : $tn;
-        $out .= sprintf('%2s', $i) . '.  '
-              . $nm . str_repeat(' ', $nmax -  mb_strlen($nm))
+        $out .= ($i ? sprintf('%2s. ', $i) : '_1_.') . ' '
+              . mb_sprintf('%-'.$nmax.'s', $nm)
               . sprintf('%3s', $pts).' ('. $atn[$tn] .")\n";
         $prev = $pts;
       }
     }
-    $out = str_replace(' 1. ', '_1_.', $out);
     $template = str_replace($line, rtrim($out), $template);
   }
   // [MiniBoots] в будущем возможен параметр n-N
@@ -2910,13 +2904,12 @@ function build_itogi($country_code, $season, $tour)
       case '2': $f = 'г с ген.'; break;
       case '3': $f = 'г'; break;
     }
-    $out .= sprintf('%2s', $i+1).'.  '
-          . $att['t'][$i] . str_repeat(' ', $maxcoach + 1 - mb_strlen($att['t'][$i]))
-          . $att['n'][$i] . str_repeat(' ', $nmax - mb_strlen($att['n'][$i]))
+    $out .= ($i ? sprintf('%2s. ', $i + 1) : '_1_.').' '
+          . mb_sprintf('%-'.($maxcoach + 1).'s', $att['t'][$i])
+          . mb_sprintf('%-'.$nmax.'s', $att['n'][$i])
           . sprintf('%2s', $att['h'][$i]).'  ('
           . $att['cg'][$i].':'.($att['cg'][$i] - $att['cr'][$i])."$f)\n";
   }
-  $out = str_replace(' 1. ', '_1_.', $out);
   $template = str_replace('[MiniBoots]', rtrim($out), $template);
   $atemp = file($sfname);
   $superb = array();

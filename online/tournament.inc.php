@@ -99,6 +99,7 @@ $tourname = array(
 'УЕФА' => 'International: UEFA Cup',
 'КУЕФА' => 'International: UEFA Cup Qualification',
 'ОЧМ' => 'International: World Cup Qualification',
+'ОЧЕ' => 'International: Euro Qualification',
 'ЧМ' => 'International: World Cup',
 'INT' => 'International: Friendlies',
 );

@@ -914,7 +914,7 @@ function Today($year, $m, $d, $dayofweek, $minute) {
   }
   else {
 //    $url = 'http://2admin.xscores.com:5002/stream?s=1&seq=' . $old_seq;
-    $url = 'https://newnetty2.xscores.com/stream?s=1&seq=' . $old_seq;
+    $url = 'https://newnetty1.xscores.com/stream?s=1&seq=' . $old_seq;
     $content = file_get_contents($url, 0, $ctx);
     if ($seq = substr($content, 0, 8)) {
       $matches = explode('#', $content);
