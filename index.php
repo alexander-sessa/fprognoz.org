@@ -1,15 +1,15 @@
 <?php
 /*
-- бомбардиры
+- дублирование кодов туров в ерокубках
+- поправить комменты (как на сайте Мастер-серии)
+- внутренняя почта
+? бомбардиры
 - в draw создавать файлы календаря и генераторов кубка
 - двойное редатирование (текст + html), где это возможно, и формирование сообщений с обеими частями
 - вставка вырезанной цитаты в комментариях
-- отправка токена с учетом смены пароля (закомментировано)
-- смена пароля по токену или сразу после входа
-- забыл пароль
+? отправка токена с учетом смены пароля (закомментировано)
 - fp.cfg для старых сезонов, конвертирование в utf-8
 - история SFP
-- инструкция
 - организатору
 - конкурсы
 */
@@ -157,7 +157,7 @@ function mb_vsprintf($format, $argv, $encoding=null) {
 
 function current_season($y, $m, $cc) {
   if ($cc == 'SUI')
-    return '2019-3';
+    return '2019-4';
 //  else if ($cc == 'RUS' || $cc == 'FRA')
 //    return '2018-19';
   else
@@ -199,10 +199,10 @@ function build_personal_nav() {
           list($timeStamp, $countryCode, $tourCode, $action) = explode('.', $event);
           $currentSeason = current_season($startYear, $startMonth, $countryCode);
 
-
-//if ($tourCode == 'SUI08' || $tourCode == 'SUI09')
-//  $currentSeason = '2018-1';
-
+/*
+if (in_array($tourCode, ['SUIG1', 'SUIG2', 'SUIG3']))
+  $currentSeason = '2019-3';
+*/
 
 // World
 //          if ($countryCode == 'UNL' && $action == 'remind' && strpos($world, $_SESSION['Coach_name']) !== false) {
@@ -332,10 +332,10 @@ function build_personal_nav() {
     foreach (['SFP', 'BLR', 'ENG', 'ESP', 'FRA', 'GER', 'ITA', 'NLD', 'PRT', 'RUS', 'SCO', 'UKR', 'SUI', 'UEFA'] as $countryCode) {
       $currentSeason = current_season($startYear, $startMonth, $countryCode);
 
-
-//if ($tourCode == 'SUI08' || $tourCode == 'SUI09')
-//  $currentSeason = '2018-1';
-
+/*
+if (in_array($tourCode, ['SUIG1', 'SUIG2', 'SUIG3']))
+  $currentSeason = '2019-3';
+*/
 
       $tout = '';
       foreach ($cmd_db[$countryCode] as $c => $team) if ($team['usr'] == $_SESSION['Coach_name']) {
@@ -365,13 +365,12 @@ function build_personal_nav() {
           else
             $linktext = 'text&ref=it';
 
-
-
-//if ($tcode == 'SUI08' || $tcode == 'SUI09')
-//  $currentSeason = '2018-1';
-//else if ($tcode == 'SUI01' || $tcode == 'SUI02' || $tcode == 'SUI02')
-//  $currentSeason = '2018-2';
-
+/*
+if (in_array($tcode, ['SUIG1', 'SUIG2', 'SUIG3']))
+  $currentSeason = '2019-3';
+else if ($countryCode == 'SUI')
+  $currentSeason = '2019-4';
+*/
 
           if ($ll != '&' && ($status != 0 || $countryCode != 'SFP'))
             $tout .= '
@@ -965,8 +964,9 @@ foreach ($access as $access_str) {
   list($code, $as_code, $team, $name, $mail, $pwd, $rol) = explode(';', $access_str);
   $cmd_db[$as_code][$code] = ['ccn' => $as_code, 'cmd' => $team, 'usr' => $name, 'eml' => $mail, 'rol' => $rol];
   if ($auth || isset($_POST['submitnewpass'])) { // аутентификация или контрольная проверка пароля
-    if (($hash == $pwd || $hash == $SuperPWD) &&
-       ($name_str == mb_strtoupper($code) || $name_str == mb_strtoupper($name) || $name_str == strtoupper($mail)))
+    if (($pwd == '' || $hash == $pwd || $hash == $SuperPWD || ($data['cmd'] == 'auth_token' && $data['ts'] > time()))
+      && ($name_str == mb_strtoupper($code) || $name_str == mb_strtoupper($name)
+        || $name_str == strtoupper($mail) || strtoupper($_SESSION['Coach_mail']) == strtoupper($mail)))
     {
       $passed = true;
       if (isset($_POST['submitnewpass'])) {
@@ -1399,6 +1399,14 @@ else if ($a == 'sfp-team') { // сбор туров сезона для SFP
                     <a href="#'.$league.'Submenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">'.$tname.'</a>
                     <ul class="collapse list-unstyled show" id="'.$league.'Submenu">';
       $dir = scandir($season_dir.$league, 1);
+      if ($coach_name == 'Александр Сесса')
+        $sidebar .= '
+                        <li>
+                            <div class="tlinks">
+                                <a href="?a='.$a.'&amp;s='.$s.'&amp;l='.$league.'&amp;m=touradd">+</a>
+                            </div>
+                        </li>';
+
       foreach ($dir as $tt)
         if (!in_array($tt[0], ['.', 'n'])) {
           $to = $tt;
@@ -1499,6 +1507,10 @@ else if ($a == 'world' || $a == 'sfp-20') { // сбор туров Мирово�
         $sidebar .= '
                 <li><a href="?a='.$aa.'&amp;s='.$s.'&amp;m=player'.($suffix != '_unl' ? '&amp;l='.$suffix[2] : '').'">Участники</a></li>';
 
+      if ($code == 'MSL')
+        $sidebar .= '
+                <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=reglament-ms">Регламент Мастер-серии</a></li>';
+
       $sidebar .= '
                 <li><a href="?a='.$aa.'&amp;m=coach'.$suffix.'">Тренерская</a></li>
                 <br>';
@@ -1579,7 +1591,8 @@ else {
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.slim.js" integrity="sha256-RtMTraB5gGlLER0FkKBcaXCmZCQCxkKS/dXm7MSEoEY=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.6/jstz.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.6/jstz.min.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/12.0.0/inline/ckeditor.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/12.0.0/inline/translations/ru.js"></script>
     <script src="/js/jquery-ui/jquery-ui.min.js"></script>
@@ -1602,7 +1615,7 @@ else {
 echo '
         <nav id="sidebar">
             <div class="sidebar-header">
-                <a href="/?m=vacancy"><h5>Свободные команды:</h5>Германия и Украина</a><br><br>
+                <a href="/?m=vacancy"><h5>Свободные команды:</h5>в ФП Германии и Украины</a><br><br>
                 <a href="/?m=news&s=2019-20"><h6>Новости SFP - ФИФА</h6></a>
             </div>
 
@@ -1698,7 +1711,7 @@ if ($cc != 'UNL') // временно не показываем
                 </li-->
                 <p></p>
                 <li id="funZone" data-tpl="'.$fcfg.'"><a id="toggleFunZone" href="javascript:void(0)">Показ фан-зоны &nbsp; <span id="funZoneIndicator"><img src="images/'.$gb_status.'.gif" border = "0" alt="'.$gb_status.'" /></span></a></li>
-                <li><a id="change_pass" href="?m=pass"'.(isset($data['ts']) ? ' data-ts="'.$data['ts'].'" onClick="newPassword()"' : (isset($_POST['pass_str']) ? ' data-ts="'.time().'" onClick="newPassword()"' : '')).'>Смена пароля</a></li>
+                <li><a id="change_pass" href="?m=pass'.($token ? '&token='.$token : '').'"'.(isset($data['ts']) ? ' data-ts="'.$data['ts'].'" onClick="newPassword()"' : (isset($_POST['pass_str']) ? ' data-ts="'.time().'" onClick="newPassword()"' : '')).'>Смена пароля</a></li>
                 <li><a href="?m=api">API</a></li>
                 <li><a href="?logout=1">Выход</a></li>
                 <p></p>';

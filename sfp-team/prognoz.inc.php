@@ -15,6 +15,11 @@ $rules = $rprognoz = $protocol = $team_code = '';
 $hidden = 'прогноз не показан';
 $stat = false;
 
+if (isset($_POST['do_task']))
+{
+  touch($online_dir.'schedule/task/'.$_POST['do_task'].'.'.$tour);
+}
+
 $acodes = file($online_dir.'SFP/'.$s.'/codes.tsv');
 if (isset($_SESSION['Coach_name'])) {
   foreach ($acodes as $scode) if ($scode[0] != '#') {
@@ -763,8 +768,8 @@ $("#sortable").sortable()
 ';
         break;
       case 'SPR':
-        if ($prognozh == '' && $goala > 2) $goala = 2;
-        if ($prognoza == '' && $goalh > 2) $goalh = 2;
+        if ($prognozh == '' && $goala > 1) $goala = 1;
+        if ($prognoza == '' && $goalh > 1) $goalh = 1;
         if ($nm < 8) {
           $teamh += $goalh;
           $teama += $goala;
@@ -1222,30 +1227,30 @@ $("#sortable").sortable()
       $sffp = str_replace('-', '/', $season);
 //      elseif ($tour == 10) $head = '<b>ФФП-' . $sffp . '. Квалификация в плей-офф/доп.матч за 5 место в группе D (' . $tour . ' тур)</b><br />';
 //      elseif ($tour == 11) $head = '<b>ФФП-' . $sffp . '. Квалификация в плей-офф (' . $tour . ' тур)</b><br />';
-      if ($tour <= 5) $head = '<b>ФФП-' . $sffp . '. 1 этап, ' . $tour . ' тур</b><br />';
-      else if ($tour <= 10) $head = '<b>ФФП-' . $sffp . '. 2 этап, ' . ($tour - 5) . ' тур (' . $tour . ' тур)</b><br />';
+      if ($tour <= 8) $head = '<b>ФФП-' . $sffp . '. 1 этап, ' . $tour . ' тур</b><br />';
+//      else if ($tour <= 10) $head = '<b>ФФП-' . $sffp . '. 2 этап, ' . ($tour - 5) . ' тур (' . $tour . ' тур)</b><br />';
 //      elseif ($tour <= 15) $head = '<b>ФФП-' . $sffp . '. 1/8 финала, ' . ($tour - 11) . ' матч (' . $tour . ' тур)</b><br />';
 //      elseif ($tour <= 20) $head = '<b>ФФП-' . $sffp . '. 1/4 финала, ' . ($tour - 17) . ' матч (' . $tour . ' тур)</b><br />';
 //      elseif ($tour <= 22) $head = '<b>ФФП-' . $sffp . '. 1/2 финала, ' . ($tour - 20) . ' матч (' . $tour . ' тур)</b><br />';
 //      else $head = '<b>ФФП-' . $sffp . '. Финал и серия за 3 место, ' . ($tour - 22) . ' матч (' . $tour . ' тур)</b><br />';
-      else $head = '<b>ФФП-' . $sffp . '. Финальный турнир, ' . ($tour - 10) . ' тур (' . $tour . ' тур)</b><br />';
+      else $head = '<b>ФФП-' . $sffp . '. Финальный турнир, ' . ($tour - 8) . ' тур (' . $tour . ' тур)</b><br />';
       break;
      case 'PRO':
       $tour = ltrim($t, '0');
       $spro = substr($season, 0, 4);
       if ($tour <= 5) $head = '<b>PROFI OPEN ' . $spro . '. Групповой этап. Тур ' . $tour . '</b><br />';
-      else if ($tour <= 10) $head = '<b>PROFI OPEN ' . $spro . '. 2-й групповой этап. Тур ' . ($tour - 5) . ' (' . $tour . ' тур)</b><br />';
-//      elseif ($tour == 8) $head = '<b>PROFI OPEN ' . $spro . '. 1/8 финала</b><br />';
-//      elseif ($tour == 9) $head = '<b>PROFI OPEN ' . $spro . '. 1/4 финала</b><br />';
-//      elseif ($tour == 10) $head = '<b>PROFI OPEN ' . $spro . '. 1/2 финала</b><br />';
-//      elseif ($tour == 11) $head = '<b>PROFI OPEN ' . $spro . '. Финал</b><br />';
-      else $head = '<b>PROFI OPEN ' . $spro . '. Финальный турнир. Тур ' . ($tour - 10) . ' (' . $tour . ' тур)</b><br />';
+//      else if ($tour <= 10) $head = '<b>PROFI OPEN ' . $spro . '. 2-й групповой этап. Тур ' . ($tour - 5) . ' (' . $tour . ' тур)</b><br />';
+      else if ($tour < 8) $head = '<b>PROFI OPEN ' . $spro . '. 1/8 финала</b><br />';
+      else if ($tour < 10) $head = '<b>PROFI OPEN ' . $spro . '. 1/4 финала</b><br />';
+      else if ($tour < 12) $head = '<b>PROFI OPEN ' . $spro . '. 1/2 финала</b><br />';
+      else if ($tour < 15) $head = '<b>PROFI OPEN ' . $spro . '. Финал</b><br />';
+//      else $head = '<b>PROFI OPEN ' . $spro . '. Финальный турнир. Тур ' . ($tour - 10) . ' (' . $tour . ' тур)</b><br />';
       break;
      case 'SPR':
       $tour = ltrim($t, '0');
-      if ($tour <= 5) $head = '<b>XII Спартакиада-2018. Этап 1. Тур ' . $tour . '</b><br />';
+      if ($tour <= 9) $head = '<b>XII Спартакиада-2019. Этап 1. Тур ' . $tour . '</b><br />';
 //      elseif ($tour <= 10) $head = '<b>XII Спартакиада-2018. Этап 2 Тур ' . ($tour - 5) . '</b><br />';
-      else $head = '<b>XII Спартакиада-2018. Финал. Тур ' . ($tour - 7) . '</b><br />';
+      else $head = '<b>XII Спартакиада-2019. Финал. Тур ' . ($tour - 9) . '</b><br />';
       break;
      case 'TOR':
       $tour = ltrim($t, '0');
@@ -1423,7 +1428,7 @@ socket.on("guncelleme",function(d){var json="";$.each(d.updates,function(index,u
 <h5>' . $match_title . '</h5>
 <div class="d-flex">
 	<div id="pl" class="monospace w-100">' . $prognozlist . '</div>
-	<div'.($closed ? ' id="mt"' : ' style="width: 700px;"').'>Матчи тура:<br><br>' . $cal . '</div>
+	<div'.($closed ? ' id="mt"' : ' style="width: 700px;"').'>'.(in_array($coach_name, $admin) ? '<form id="renew_form" method="POST"><input type="hidden" name="do_task" value="'.($publish ? 'renew' : 'parse').'"><button class="small bg-danger rounded-circle text-white">R</button> Матчи тура:</form>' : 'Матчи тура:').'<br><br>' . $cal . '</div>
 </div>
 ';
 }

@@ -39,12 +39,12 @@ $escape_chars = [
 ':' => '_',
 '|' => '_',
 ];
-$closed = true;
+$closed = false;
 $ac_head = '';
 echo '<p class="title text15b">&nbsp;&nbsp;&nbsp;Тренерская Лиги Сайтов</p>
-<hr size="1" width="98%">
-Закрыто. Если ваша команда пробилась в Финальный турнир, Вам <a href="/?a=world&m=coach_uft">сюда</a>';
-exit;
+<hr size="1" width="98%">';
+//Закрыто. Если ваша команда пробилась в Финальный турнир, Вам <a href="/?a=world&m=coach_uft">сюда</a>';
+//exit;
 
   $s = $cur_year;
   $codes = file($online_dir.'UNL/'.$s.'/codes.tsv');
@@ -76,6 +76,7 @@ exit;
         $human = true;
       else
       {
+/*
         spl_autoload_register(function ($class) {
           $class = str_replace('\\', '/', $class);//'
           $path = dirname(__FILE__).'/'.$class.'.php';
@@ -88,12 +89,12 @@ exit;
                           ->verify($_POST['token'], $_SERVER['REMOTE_ADDR'])
                           ->toArray();
         $human = ($resp['success'] && ($resp['score'] >= 0.5)) || $resp['error-codes'][0] == 'timeout-or-duplicate';
-        //$human = true;
-
         $postdata = fopen($online_dir.'UNL/'.$s.'/postdata2', 'a');
         fwrite($postdata, var_export($_POST, true) . ',');
         fwrite($postdata, var_export($resp, true) . ',');
         fclose($postdata);
+*/
+        $human = true;
       }
     }
     if ($human) {
@@ -102,11 +103,17 @@ exit;
       fwrite($postdata, var_export($_POST, true) . ',');
       fclose($postdata);
 
-      $teamname = $_POST['teamname'];
+      $teamname = rawurldecode($_POST['teamname']);
 
       if (isset($_FILES['file']) && $fn = $_FILES['file']['name']) {
-        $fn = 'images/sites/'.strtr($_POST['teamname'], $escape_chars).substr($fn, strrpos($fn, '.'));
+        $fn = 'images/sites/'.strtr($teamname, $escape_chars).substr($fn, strrpos($fn, '.'));
         move_uploaded_file($_FILES['file']['tmp_name'], $fn);
+        $fn = '/'.$fn;
+      }
+      else if (substr($_POST['teamlabel'], 0, 5) == 'http:')
+      {
+        $fn = 'images/sites/'.strtr($teamname, $escape_chars).substr($_POST['teamlabel'], strrpos($_POST['teamlabel'], '.'));
+        file_put_contents($fn, file_get_contents($_POST['teamlabel']));
         $fn = '/'.$fn;
       }
       else
@@ -208,7 +215,19 @@ if ($closed)
 }
 else
 {
-  echo 'Вниманию тренеров: у нас есть "фан-зоны" для обсуждения турниров.<br>
+  if (!isset($team_name))
+    echo '<p>Прежде, чем регистрировать команду, проверьте - может быть, она уже есть в списке <a href ="/?a=world&m=player&l=s">участников</a>.<br>
+Команда может попасть туда как участник предыдущего сезона - в этом случае авторизуйтесь на сайте и отредактируйте заявку команды.<br>
+Если Вы забыли или потеряли пароль, войдите на сайт без пароля по временной ссылке.<br>
+Она будет выслана, если Вы при входе укажете e-mail с пустым полем пароля и кликните по "войти без пароля?".<br>
+Вы сможете задать новый пароль, если после входа по полученной ссылке сразу перейдёте на страницу "Смена пароля" в личном кабинете (правая панель навигации).<br>
+Если ваша проблема с доступом к своей сборной не решается, свяжитесь с <a href="/?a=world&m=hq">Президиумом Лиги</a>.</p>
+<p>Последний срок регистрации - 19 февраля.<br>
+Турнир Лиги Сайтов пройдёт с 22 февраля по 3 мая.<br>
+До его начала будут проведены 4 пробных тура - 26 января, 2, 9 и 16 февраля.</p>
+';
+  else
+    echo '<p>Вниманию тренеров: у нас есть "фан-зоны" для обсуждения турниров.<br>
 Если хотите в них участвовать, после входа на сайт с паролем кликните по пункту "Показ фан-зоны" в личном кабинете (правая панель навигации).<br>
 Игрокам они тоже доступны.<br>
 При необходимости можно сделать закрытые зоны обсуждения для команд-участников. Если надо - сообщите.</p>';
@@ -259,9 +278,9 @@ label.file-upload input[type=file]{display:block;position:absolute;top:0;right:0
 <script>$(document).ready(function(){$(".file-upload").file_upload();})</script>
 <div class="container-fluid">
   <div class="form-group row">
-    <label for="teamname" class="col-sm-2 col-form-label">Название команды*</label>
+    <label for="teamname" class="col-sm-2 col-form-label">Название команды'.($team_name ? '' : '*').'</label>
     <div class="col-sm-8">
-      <strong>'.$team_name.'</strong><input type="hidden" name="teamname" value="'.$team_name.'">
+      '.($team_name ? '<strong>'.$team_name.'</strong>' : '').'<input type="'.($team_name ? 'hidden' : 'text').'" class="form-control" name="teamname" value="'.rawurlencode($team_name).'">
     </div>
   </div>
   <div class="form-group row">
@@ -303,12 +322,10 @@ label.file-upload input[type=file]{display:block;position:absolute;top:0;right:0
 <p>* - обязательные поля</p>
 <p>
 <br>
-<strong>Состав команды:</strong> (тренер не обязан быть игроком команды)</p>
+<strong>Состав команды:</strong> (учтите, что тренер не обязан быть игроком команды -
+не забудьте добавить себя в состав, если собираетесь "выходить на поле")</p>
 <p>Вы можете изменить номера игроков для предварительного формирования основного состава на все туры -
 в него попадут игроки №№1-6.</p>
-<p>Заполнение колонки "имя" не обязательно - если не заполнять, там будет повторён ник игрока.<br>
-Но если есть желание указать реальное имя - заполняйте.<br>
-Имя не используется на автоматически генерируемых страницах, но может быть использовано в обзорах.</p>
 <p>Все участники, у которых указан e-mail, получат пароли на доступ к сайту с возможностью
 самостоятельно делать ставки и оставлять комментарии в фан-зонах.</p>
 <p>Если указан e-mail и отмечено "высылать материалы турнира", игрок будет получать:<br />
@@ -319,10 +336,10 @@ label.file-upload input[type=file]{display:block;position:absolute;top:0;right:0
 <div class="container-fluid">
   <div class="form-group gutter-2 row">
     <div class="col-sm-1">№</div>
-    <div class="col-sm-3">ник участника</div>
+    <div class="col-sm-3">игровое имя участника</div>
     <div class="col-sm-3 hidden">имя, или повтор ника</div>
     <div class="col-sm-5">e-mail, не обязательно</div>
-    <div class="col-sm-1"><i class="fas fa-envelope"></i></div>
+    <div class="col-sm-1" title="высылать материалы турнира"><i class="fas fa-envelope"></i></div>
   </div>
 ';
   $squad = file($online_dir.'UNL/'.$s.'/'.$team_name.'.csv');
@@ -350,16 +367,16 @@ label.file-upload input[type=file]{display:block;position:absolute;top:0;right:0
     echo '
   <div class="form-group gutter-2 row">
     <div class="col-sm-1"><input type="text" class="form-control" name="pos' . $i . '" value="'.$i.'"></div>
-    <div class="col-sm-3"><input type="text" class="form-control" id="code' . $i . '" name="code' . $i . '" placeholder="ник участника" value="'.$players[$i]['code'].'"></div>
+    <div class="col-sm-3"><input type="text" class="form-control" id="code' . $i . '" name="code' . $i . '" placeholder="игровое имя участника" value="'.$players[$i]['code'].'"></div>
     <div class="col-sm-3 hidden"><input type="text" class="form-control" id="player' . $i . '" name="player' . $i . '" placeholder="имя участника" value="'.$players[$i]['name'].'"></div>
     <div class="col-sm-5"><input type="text" class="form-control" id="email' . $i . '" name="email' . $i . '" placeholder="e-mail, не обязательно" value="'.$players[$i]['mail'].'"></div>
-    <label for="email' . $i . '" class="fpgrid-1"> &nbsp; <input type="checkbox" class="form-check-input" name="prog' . $i . '"' . $prog . $disabled.'></label>
+    <label for="email' . $i . '" class="fpgrid-1">&nbsp;&nbsp;&nbsp;<input type="checkbox" class="form-check-input" name="prog' . $i . '"' . $prog . $disabled.'></label>
   </div>';
   }
   echo '
 </div>
 <br>
-<button class="btn btn-primary"> сохранить изменения </button></p>
+<button class="btn btn-primary ml-4"> сохранить изменения </button></p>
 </form>
 ';
 }

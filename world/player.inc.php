@@ -16,12 +16,6 @@ $ccr = array(
 'SCO' => 'Шотландия',
 );
 $ccf = array(
-'ЛФОП-ГУРУ' => 'ЛФОП-ГУРУ',
-'Fprognoz.com' => 'Fprognoz.com',
-'SEclub.org' => 'SEclub.org',
-'NLD' => 'Голландия',
-'ITA' => 'Италия',
-'BLR' => 'Беларусь',
 );
 
 if (!isset($l) || $l == 'n')
@@ -194,7 +188,7 @@ else if ($l == 'f')
   }
   $out .= $head . $coach_prefix . $coach . $squad;
   echo '
-<p class="title text15b">&nbsp;&nbsp;&nbsp;Участники Финального турнира Лиги Наций</p>
+<p class="title text15b">&nbsp;&nbsp;&nbsp;Участники Финального Турнира</p>
 <style>
 .teamcard { border: 1px solid blue; border-radius: 20px; margin:10px; padding: 10px }
 .teamname { display:flex; font-weight:bold; font-size:125% }

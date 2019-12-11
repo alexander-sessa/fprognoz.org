@@ -103,24 +103,37 @@ function IntervalsTable() {
   </thead>
   <tbody>';
   $time = strtotime('tue +-2 week');
-  for ($w = -2; $w <= 6; $w++) {
+  for ($w = -2; $w <= 6; $w++)
+  {
     $time += 604800 + 3600;
     $week = date('W', $time);
     $year = date('Y', $time);
+
+    if ($week == '01')
+      $year = 2020;
+
     $day1 = date('m-d', $time);
+
+if ($day1 == '12-31')
+  $day1 = '01-01'; // fix 2020
+
     $day2 = date('m-d', $time + 172800);
     $day3 = date('m-d', $time + 259200);
     $day4 = date('m-d', $time + 518400);
     $day5 = date('m-d', $time + 604800);
     $s1 = $s2 = '';
     $t1 = $t2 = 0;
-    foreach ($ccs as $cc => $country) if ($cc != 'SUI') {
+    foreach ($ccs as $cc => $country) if ($cc != 'SUI1')
+    {
       foreach ($suffix as $tournament)
-        if (is_file($online_dir . "fixtures/$year/$week/$cc$tournament")) {
+        if (is_file($online_dir . "fixtures/$year/$week/$cc$tournament"))
+        {
           $ac = file($online_dir . "fixtures/$year/$week/$cc$tournament", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-          foreach ($ac as $line) {
-           list($home, $away, $date, $kick, $tnmt) = explode(',', trim($line));
-            if ($cc == 'RUS' || $cc == 'UKR' || $cc == 'BLR') { // перевод кирилличных названий
+          foreach ($ac as $line)
+          {
+            list($home, $away, $date, $kick, $tnmt) = explode(',', trim($line));
+            if ($cc == 'RUS' || $cc == 'UKR' || $cc == 'BLR')
+            { // перевод кирилличных названий
               $home = $translate[$home];
               $away = $translate[$away];
             }
@@ -147,12 +160,13 @@ function IntervalsTable() {
               }
 */
             }
-            if ($date > date('m-d'))
+            if ($date > date('m-d') || $date[0] == '0') // fix 2020
             {
               if ($date < $day1 && $date > '01-00')
               {
                 if (isset($day3p))
                   $matches[$day3p][$cc][$home.' - '.$away] = [trim($home),trim($away),$date,$kick,$tnmt];
+
               }
               else if ($date < $day3)
                 $matches[$day1][$cc][$home.' - '.$away] = [trim($home),trim($away),$date,$kick,$tnmt];
@@ -170,7 +184,8 @@ function IntervalsTable() {
       $t2 += $m3;
       $s2 .= '<td'.($m3 && ($cc == $ccc) ? ' bgcolor=pink' : '').'>'.$m3.'</td>';
     }
-    if ($t1 > 0) {
+    if ($t1 > 0)
+    {
       if (!$d)
         $d = $day1;
 
@@ -181,7 +196,8 @@ function IntervalsTable() {
 <td><a href='?a=$a&m=mkpgm&cc=$ccc&d=$day1+$day3&add=$uadd#tour'> + </a></td>
 <td>$t1</td>$s1</tr>";
     }
-    if ($t2 > 0) {
+    if ($t2 > 0)
+    {
       if (!$d)
         $d = $day3;
 

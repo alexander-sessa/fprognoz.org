@@ -82,6 +82,7 @@ $tourname = array(
 'Тур' => 'Turkey: Süper Lig',
 'Авт' => 'Austria: Bundesliga',
 'Бел' => 'Belgium: First Division A',
+'BEL' => 'Belgium: First Division A',
 'Шва' => 'Switzerland: Super League',
 'Швц' => 'Switzerland: Super League',
 'Грц' => 'Greece: Super League',

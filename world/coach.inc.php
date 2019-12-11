@@ -129,7 +129,7 @@ if (isset($_SESSION['Coach_name']) && !isset($_POST['teamname'])) {
 
       }
 
-    $season = (strlen($s) == 7) ? $s : (($ac == 'SUI') ? '2019-1' : '2018-19');
+    $season = (strlen($s) == 7) ? $s : (($ac == 'SUI') ? '2019-4' : '2019-20');
     $codes = file($online_dir.'UNL/'.$s.'/'.$ac.'.csv');
     $col_height = count($codes) * 24 + 144; //24
     $coach_col = '';
@@ -352,7 +352,7 @@ else if (isset($ac) && strlen($ac) == 3) {
       $player[$name] = $mail;
 
   }
-  $season = (strlen($s) == 7) ? $s : (($ac == 'SUI') ? '2019-1' : '2018-19');
+  $season = (strlen($s) == 7) ? $s : (($ac == 'SUI') ? '2019-4' : '2019-20');
   $codes = file($online_dir.$ac.'/'.$season.'/codes.tsv');
   if (!isset($col_height))
     $col_height = count($codes) * 24;
@@ -372,7 +372,7 @@ else if (isset($ac) && strlen($ac) == 3) {
       <p>Вы можете призвать игрока в сборную:</p>';
     foreach ($codes as $line) {
       list($code, $team, $name, $mail, $long, $conf) = explode('	', $line);
-      if (!isset($player[$name]) && !is_file($data_dir . 'personal/'.$name.'/team.2019'))
+      if (!isset($player[$name]) && !is_file($data_dir . 'personal/'.$name.'/team.2020'))
         $player_col .= '
       <input type="submit" value="призвать" name="'.base64_encode($name.';'.$mail).'" /> '.$name.' ('.$team.') ('.$mail.')</br>';
 

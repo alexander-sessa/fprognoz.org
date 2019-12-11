@@ -917,15 +917,15 @@ $base = get_results_by_date(date('m', $day_before), date('d', $day_before), $upd
     (isset($etap['постфикс']) ? $etap['постфикс'] : '');
 */
 $tt = $t - 1;
-$head = '<a href="/?a=world&s=2019&t='.($tt < 10 ? '0' : '').$tt.'&m=prognoz" title="предыдущий тур"><i class="fas fa-arrow-circle-left"></i></a> ';
+$head = '<a href="/?a=world&s='.$s.'&t='.($tt < 10 ? '0' : '').$tt.'&m=prognoz" title="предыдущий тур"><i class="fas fa-arrow-circle-left"></i></a> ';
 if ($t < 12)
-  $head .= 'Лиги Сайтов и Наций 2019. Тур '.ltrim($t, '0');
+  $head .= 'Лиги Сайтов и Наций '.$s.'. Тур '.ltrim($t, '0');
 else if ($t < 17)
-  $head .= 'Финальный турнир ЛН 2019. Тур '.($t - 11);
+  $head .= 'Финальный Турнир '.$s.'. Тур '.($t - 11);
 else if ($t > 95)
-  $head .= 'Лига Наций 2019. Пробный тур '.($t - 96);
+  $head .= 'Лига Наций '.$s.'. Пробный тур '.($t - 95);
 //if (is_file())
-$head .= ' <a href="/?a=world&s=2019&t='.($tt < 8 ? '0' : '').($tt+2).'&m=prognoz" title="следующий тур"><i class="fas fa-arrow-circle-right"></i></a>';
+$head .= ' <a href="/?a=world&s='.$s.'&t='.($tt < 8 ? '0' : '').($tt+2).'&m=prognoz" title="следующий тур"><i class="fas fa-arrow-circle-right"></i></a>';
 
 $head .= '<br>';
 if (count($teamCodes) && !$closed)
