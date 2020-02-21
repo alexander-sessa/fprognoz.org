@@ -1,7 +1,39 @@
 <?php
 include ('swiss.inc.php');
 
-eval('$games = ' . file_get_contents('/home/fp/data/online/UNL/2019/games.inc') . ';');
+if (is_file('/home/fp/data/online/UNL/2020/games.inc'))
+  eval('$games = ' . file_get_contents('/home/fp/data/online/UNL/2020/games.inc') . ';');
+else
+  $games = [
+'АФК-Кузбасс' => [],
+'ФК Форвард' => [],
+'SEclub' => [],
+'VOON.RU' => [],
+'Профессионалы прогноза' => [],
+'ОЛФП' => [],
+'Спартанцы IT' => [],
+'Fprognoz.com' => [],
+'SaSiSa' => [],
+'Мегаспорт' => [],
+'Чемпионат Прогнозов' => [],
+'SFP' => [],
+'Жемчужина Кузбасса' => [],
+'liga1.ru' => [],
+'АСП "Погоня"' => [],
+'Эксперты IВUрrоg' => [],
+'Onedivision' => [],
+'КЛФП "Харьков"' => [],
+'КСП "Торпедо" им. Эдуарда Стрельцова' => [],
+'7-40' => [],
+'Red Anfield' => [],
+'PrimeGang' => [],
+'Студия Прогнозист' => [],
+'ЛФОП.ГУРУ' => [],
+'eurocups.ru' => [],
+'Kings Forecasts' => [],
+'МоbiSport24' => [],
+'Отряд ZidanClub' => []
+];
 
 $teams = [];
 $tour = 0;

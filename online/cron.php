@@ -190,16 +190,22 @@ function send_to_all($country_code, $subj, $body) {
   $acodes = file($online_dir . "$country_code/$season/codes.tsv");
   $sentto = array();
   $emails = '';
-  foreach ($acodes as $scode) if ($scode[0] != '#' && $scode[0] != '-') {
-    $ateams = explode('	', $scode);
-    $name = trim($ateams[2]);
-    $email = trim($ateams[3]);
-    if (!in_array($name, $sentto)) {
-      $sentto[] = $name;
-      $tarr = explode(',', $email);
-      foreach ($tarr as $email) $emails .= $name . ' <' . trim($email) . '>, ';
+  if ($country_code == 'UNL')
+    $emails = implode(',', file($online_dir . 'UNL/'.date('Y').'/emails', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
+  else
+    foreach ($acodes as $scode) if ($scode[0] != '#' && $scode[0] != '-')
+    {
+      $ateams = explode('	', $scode);
+      $name = trim($ateams[2]);
+      $email = trim($ateams[3]);
+      if (!in_array($name, $sentto))
+      {
+        $sentto[] = $name;
+        $tarr = explode(',', $email);
+        foreach ($tarr as $email) $emails .= $name . ' <' . trim($email) . '>, ';
+      }
     }
-  }
+
   if ($emails = rtrim($emails, ', ')) send_email($from, '', $emails, $subj, $body);
 }
 
@@ -371,7 +377,7 @@ function build_prognozlist($country_code, $season, $tour) {
     foreach ($acodes as $line)
     {
       list($code, $cc, $rest) = explode('	', $line, 3);
-      $players[$code] = $cc;
+      $players[trim($code)] = $cc;
     }
     // а теперь аналогично для всех наших
     foreach ($ccarr as $cc)
@@ -380,7 +386,7 @@ function build_prognozlist($country_code, $season, $tour) {
       foreach ($squad as $line)
       {
         list($name, $email, $rest) = explode(';', $line, 3);
-        $players_unl[$name] = $cc;
+        $players_unl[trim($name)] = $cc;
       }
     }
     $predicts = [];
@@ -388,7 +394,7 @@ function build_prognozlist($country_code, $season, $tour) {
     foreach ($mail as $line)
     {
       list($code, $predict, $rest) = explode(';', $line, 3);
-      $predicts[$code] = $predict;
+      $predicts[trim($code)] = $predict;
     }
     $all_predicts = [];
     foreach ($predicts as $code => $predict)
@@ -408,11 +414,12 @@ function build_prognozlist($country_code, $season, $tour) {
 
     }
     $generators = [];
-    $gen = file($path . 'gen');
+    $gen = file($path . 'gen', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
     $t = ltrim(substr($tour, 3), 0);
-    $ng = $t < 12 ? 20 : 10;
+    //$ng = $t < 12 ? 20 : 10;
+    $ng = 20;
     for ($i = 0; $i < $ng; $i++)
-      $generators[$i] = trim($gen[($t - 1) * 23 + 3 + $i]);
+      $generators[$i] = trim($gen[($t - 1) * 21 + 1 + $i]);
 
     $g = 0;
 
@@ -463,6 +470,7 @@ function build_prognozlist($country_code, $season, $tour) {
 
             }
           }
+
       }
 
       foreach ($cc_sv as $sv_line)
@@ -483,6 +491,7 @@ function build_prognozlist($country_code, $season, $tour) {
 
             }
           }
+
       }
 
 
@@ -518,6 +527,46 @@ function build_prognozlist($country_code, $season, $tour) {
       file_put_contents($prognoz_dir . $cc, $out);
       $prognozlist .= "$cc\n\n$out\n";
     }
+
+    // код "Валерий Лобановский (Old Stars)"
+/*
+    $prognozlist .= "Old Stars\n\n";
+    $rosterGenNumber = 1; // определитель состава
+    $replaceGenNumber = 4; // определитель замен
+    $g = 10; // первый генератор для ботов
+    $roster = $generators[$g + $generators[$t - 1][$rosterGenNumber - 1]]; // первые 9 определяют порядок ботоигроков
+    $replace = $generators[$g + $generators[$t - 1][$replaceGenNumber - 1]]; // 11, 14, 17 - опредеяют число замен по >4
+    $rn = ($replace[11] > 4 ? 1 : 0) + ($replace[14] > 4 ? 1 : 0) + ($replace[17] > 4 ? 1 : 0);
+    $out = [];
+    for ($i = 0; $i < 9; $i++)
+    { // номера, уходящие с поля
+      if ($replace[$i] < 7)
+        $out[] = $replace[$i] - 1;
+
+      if (sizeof($out) >= $rn)
+        break;
+    }
+    $in = [];
+    for ($i = 0; $i < 9; $i++)
+    { // номера, выходящие на поле
+      if ($replace[$i] > 6)
+        $in[] = $replace[$i] - 1;
+
+      if (sizeof($in) >= $rn)
+        break;
+    }
+    $cc_sv = file($path . 'Old Stars.csv', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    $oldStars = '';
+    for ($i = 0; $i < 9; $i++)
+    {
+      $p = explode(';', $cc_sv[$roster[$i] - 1], 2)[0].';'.rtrim($generators[$g + $roster[$i]], ' *').';;';
+      $prognozlist .= $p . ($i < 6 ? '1' : '') . "\n";
+      $oldStars .= $p . (($i < 6 && !in_array($i, $out)) || ($i > 5 && in_array($i, $in)) ? '4' : '') . "\n";
+    }
+    file_put_contents($prognoz_dir . 'Old Stars', $oldStars);
+*/
+    // конец кода "Валерий Лобановский (Old Stars)"
+
     touch($prognoz_dir . 'closed');
     return $prognozlist;
   }
@@ -823,17 +872,19 @@ function Today($year, $m, $d, $dayofweek, $minute) {
     $arr = explode('<div id="midbannerdiv">', $content);
     $data = '';
     for ($i = 0; $i <= 1; $i++)
-      if ($cut = strpos($arr[$i], '<div id="1'))
+      if ($cut = strpos($arr[$i], '<a id="1'))
+//was      if ($cut = strpos($arr[$i], '<div id="1'))
         $data .= substr($arr[$i], $cut);
 
-    $matches = explode('<div id="1', $data);
+    $matches = explode('<a id="1', $data);
+//was    $matches = explode('<div id="1', $data);
     foreach($matches as $match) if (strpos($match, ' data-') && !strpos($match, '(W)') && !strpos($match, '(U17)') && !strpos($match, '(U19)') && !strpos($match, '(U21)')) {
       $match = strtr($match, array('<b>' => '', '</b>' => ''));
       $i = '1'.substr($match, 0, 6);
       $ev = substr($match, strpos($match, ' data-') + 6);
       $ev = substr($ev, 0, strpos($ev, '>')).';';
       $ev = '$'.str_replace(' data_', ';$', strtr($ev, ['-' => '_']));
-      $ev = strtr($ev, [' "' => ' \"', '" ' => '\" ', '".' => '\".']);
+      $ev = strtr($ev, [' "' => ' \"', '" ' => '\" ']);//, '".' => '\".']);
       eval($ev);
       $g = $country_name.'#'.$league_short;
       if (isset($groups[$g])) {

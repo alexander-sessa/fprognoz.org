@@ -1,0 +1,20 @@
+﻿[Event "Полуфинал Чемпионата города 2020"]
+[Site "Батайск"]
+[Date "2019.11.09"]
+[Round "1"]
+[White "Локтионов Максим"]
+[Black "Шелковский Артем"]
+[Result "0-1"]
+[ECO "B13"]
+
+1. e4 c6 2. Nf3 d5 3. exd5 cxd5 4. d4 Bf5 5. Bb5+ Nd7 6. O-O Ngf6 7. Re1 e6
+8. Bg5 Be7 9. Nc3 O-O 10. Bxd7 Qxd7 11. Ne5 Qc7 12. Bf4 Qb6 13. Rb1 Rfc8 14. a3
+Ne4 15. Nxe4 Bxe4 16. Nd7 Qc6 17. Ne5 Qxc2 18. Qxc2 Rxc2 19. b4 Rac8 20. Rbc1
+a5 21. Rxc2 Rxc2 22. bxa5 Bxa3 23. f3 Bf5 24. g4 Bg6 25. Nxg6 hxg6 26. Rb1 Bb2
+27. Rd1 Rc4 28. Be3 Ra4 29. Rb1 Ra1 30. Rxa1 Bxa1 31. Kf2 Bc3 32. Ke2 Bxa5 
+33. Kd3 Bc7 34. h3 Bd6 35. Kc3 f6 36. Kd3 Kf7 37. f4 e5 38. dxe5 fxe5 39. fxe5 
+Bxe5 40. Bb6 Ke6 41. Ke3 Kd6 42. Ba5 Kc5 43. Kd3 b5 44. Kc2 Kc4 45. h4 b4
+{Черные ставят мат} 46. h5 gxh5 47. gxh5 b3+ 48. Kb1 Kd3 49. Bb4 Ke2 50. Kc1 d4 
+51. Ba3 d3 52. Kb1 d2 53. Bc1 d1=Q
+
+

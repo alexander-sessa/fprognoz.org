@@ -1,0 +1,23 @@
+[Event "Monthly Rapid Arena"]
+[Site "https://lichess.org/BpXRj9YH"]
+[Date "2020.01.30"]
+[Round "-"]
+[White "STALINEZ"]
+[Black "Chesspistol"]
+[Result "1-0"]
+[UTCDate "2020.01.30"]
+[UTCTime "19:10:51"]
+[WhiteElo "2095"]
+[BlackElo "2174"]
+[WhiteRatingDiff "+8"]
+[BlackRatingDiff "-7"]
+[Variant "Standard"]
+[TimeControl "600+0"]
+[ECO "E61"]
+[Opening "King's Indian Defense"]
+[Termination "Normal"]
+[Annotator "lichess.org"]
+
+1. d4 { [%eval 0.25] [%clk 0:10:00] } 1... Nf6 { [%eval 0.22] [%clk 0:10:00] } 2. c4 { [%eval 0.18] [%clk 0:09:58] } 2... g6 { [%eval 0.07] [%clk 0:09:59] } 3. Nc3 { [%eval 0.36] [%clk 0:09:55] } 3... Bg7 { [%eval 0.58] [%clk 0:09:58] } { E61 King's Indian Defense } 4. Nf3 { [%eval 0.3] [%clk 0:09:52] } 4... O-O { [%eval 0.56] [%clk 0:09:57] } 5. Bg5?! { (0.56 → 0.00) Inaccuracy. Best move was e4. } { [%eval 0.0] [%clk 0:09:45] } (5. e4 d6 6. Be2 e5 7. O-O exd4 8. Nxd4 Nc6 9. Be3 Nxd4) 5... d6 { [%eval 0.25] [%clk 0:09:55] } 6. e3 { [%eval 0.0] [%clk 0:09:43] } 6... c5 { [%eval 0.12] [%clk 0:09:53] } 7. Be2 { [%eval 0.15] [%clk 0:09:40] } 7... cxd4 { [%eval 0.23] [%clk 0:09:52] } 8. exd4 { [%eval 0.41] [%clk 0:09:38] } 8... Nc6?! { (0.41 → 1.37) Inaccuracy. Best move was h6. } { [%eval 1.37] [%clk 0:09:51] } (8... h6 9. Be3 Ng4 10. Bd2 e5 11. dxe5 Nxe5 12. O-O Be6 13. Nd5 Bxd5 14. cxd5 Nbd7 15. Re1) 9. O-O?! { (1.37 → 0.36) Inaccuracy. Best move was d5. } { [%eval 0.36] [%clk 0:09:34] } (9. d5 Nb4 10. O-O h6 11. Be3 Ng4 12. Bd4 Nf6 13. Qd2 Bf5 14. Rac1 e5 15. dxe6 fxe6) 9... Bg4?! { (0.36 → 1.07) Inaccuracy. Best move was h6. } { [%eval 1.07] [%clk 0:09:44] } (9... h6 10. Be3 e6 11. Qc1 Kh7 12. Rd1 Ne7 13. Bf4 Nh5 14. Nb5 Nxf4 15. Qxf4 d5 16. c5) 10. d5 { [%eval 1.27] [%clk 0:09:27] } 10... Bxf3 { [%eval 1.09] [%clk 0:09:40] } 11. Bxf3 { [%eval 1.27] [%clk 0:09:23] } 11... Ne5 { [%eval 1.31] [%clk 0:09:40] } 12. Be2 { [%eval 0.97] [%clk 0:09:17] } 12... Rc8 { [%eval 1.32] [%clk 0:09:39] } 13. b3 { [%eval 0.95] [%clk 0:09:05] } 13... h6 { [%eval 1.23] [%clk 0:09:38] } 14. Be3 { [%eval 1.15] [%clk 0:08:58] } 14... a6 { [%eval 1.3] [%clk 0:09:33] } 15. Rc1 { [%eval 1.14] [%clk 0:08:55] } 15... Qd7 { [%eval 1.53] [%clk 0:09:26] } 16. Qd2 { [%eval 1.3] [%clk 0:08:47] } 16... Neg4 { [%eval 1.47] [%clk 0:09:20] } 17. Bxg4?! { (1.47 → 0.89) Inaccuracy. Best move was Bd4. } { [%eval 0.89] [%clk 0:08:38] } (17. Bd4 h5 18. h3 Nh6 19. Be3 Nf5 20. Bf4 Nh7 21. Rfe1 b6 22. Qd3 Rfe8 23. Bf1 Nf6) 17... Nxg4 { [%eval 0.68] [%clk 0:09:18] } 18. Bd4?! { (0.68 → 0.07) Inaccuracy. Best move was Bb6. } { [%eval 0.07] [%clk 0:08:36] } (18. Bb6 Nf6) 18... Bxd4 { [%eval 0.26] [%clk 0:08:54] } 19. Qxd4 { [%eval 0.2] [%clk 0:08:33] } 19... Qf5?! { (0.20 → 0.91) Inaccuracy. Best move was b5. } { [%eval 0.91] [%clk 0:08:52] } (19... b5 20. Ne4 Qf5 21. Nd2 Rfe8 22. h3 Nf6 23. Rfd1 Kh7 24. Rc3 bxc4 25. bxc4 Rc7 26. Re1) 20. h3 { [%eval 1.15] [%clk 0:08:20] } 20... Ne5 { [%eval 0.95] [%clk 0:08:46] } 21. Qe3 { [%eval 0.9] [%clk 0:08:03] } 21... Kh7? { (0.90 → 2.53) Mistake. Best move was g5. } { [%eval 2.53] [%clk 0:08:40] } (21... g5 22. Ne2 Kh7 23. a4 Rg8 24. Rc3 Qf6 25. Qe4+ Qg6 26. Qxg6+ Rxg6 27. g4 Re8 28. Kg2) 22. Ne2? { (2.53 → 0.88) Mistake. Best move was f4. } { [%eval 0.88] [%clk 0:07:45] } (22. f4 Nd7) 22... b5?! { (0.88 → 1.92) Inaccuracy. Best move was g5. } { [%eval 1.92] [%clk 0:07:47] } (22... g5 23. a4 Rg8 24. g4 Qf6 25. Ng3 Qf3 26. Rc3 Qxe3 27. Rxe3 a5 28. Nf5 Rge8 29. Kg2) 23. cxb5? { (1.92 → 0.67) Mistake. Best move was f4. } { [%eval 0.67] [%clk 0:07:34] } (23. f4 Nd7) 23... axb5 { [%eval 0.26] [%clk 0:07:45] } 24. Nd4 { [%eval 0.23] [%clk 0:07:32] } 24... Qd7?? { (0.23 → 5.40) Blunder. Best move was Qd3. } { [%eval 5.4] [%clk 0:06:49] } (24... Qd3) 25. f4 { [%eval 4.88] [%clk 0:07:18] } { Black resigns. } 1-0
+
+

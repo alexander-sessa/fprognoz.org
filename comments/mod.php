@@ -80,4 +80,5 @@ $mod_text = array(
 );
 echo $mod_text[$status];
 $redis->close();
+exit();
 ?>

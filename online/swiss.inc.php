@@ -14,16 +14,17 @@ function SwissDraw($games, $teams, $verbose=false) {
   $countTeams = count($teams);
   $newRounds = [];
   $error = '';
-  if ($countTeams > 1) {
+  if ($countTeams > 1)
+  {
     $nbGames = ceil($countTeams / 2);
     $hasDummy = $countTeams % 2;
-    if (count($games) == 0) {
+    if (count($games['SFP']) == 0) {
       $error = 'Начальное распределение команд.';
       for ($i = 0; $i < $nbGames - $hasDummy; $i++)
         $newRounds[] = $teams[$i].' - '.$teams[$nbGames - $hasDummy + $i];
 
       if ($hasDummy)
-        $newRounds[] = $teams[$countTeams - 1].' - Швейцария';
+        $newRounds[] = $teams[$countTeams - 1].' - Old Stars';
 
     }
     else { // не первый тур
@@ -31,7 +32,7 @@ function SwissDraw($games, $teams, $verbose=false) {
       if ($hasDummy) // при необходимости выбираем кандидатов на пропуск тура
         for ($i = $countTeams - 1; $i >= 0; $i--)
           //if (!isset($games[$teams[$i]][$teams[$i]]))
-          if (!isset($games[$teams[$i]][$teams[$i]]) && !isset($games[$teams[$i]]['Швейцария']))
+          if (!isset($games[$teams[$i]][$teams[$i]]) && !isset($games[$teams[$i]]['Old Stars']))
             $dummy[] = $teams[$i];
 
       // brute force: если не находится решение, для последней определённой пары создаём в
@@ -154,7 +155,7 @@ function SwissDraw($games, $teams, $verbose=false) {
         $error = 'Невозможно составить список матчей.';
       else {
         if ($hasDummy)
-          $newRounds[] = $byeTeam.' - Швейцария';
+          $newRounds[] = $byeTeam.' - Old Stars';
 
         if (count($newRounds) < $n)
           $error = 'Невозможно составить ПОЛНЫЙ список матчей.';

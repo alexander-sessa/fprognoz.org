@@ -157,7 +157,7 @@ function mb_vsprintf($format, $argv, $encoding=null) {
 
 function current_season($y, $m, $cc) {
   if ($cc == 'SUI')
-    return '2019-4';
+    return '2020-1';
 //  else if ($cc == 'RUS' || $cc == 'FRA')
 //    return '2018-19';
   else
@@ -188,10 +188,12 @@ function build_personal_nav() {
     $sched[0] = "$startYear/$startMonth";
     $sched[1] = ($startMonth == 12) ? ($startYear + 1)."/01" : sprintf("%4d/%02d", $startYear, $startMonth + 1);
     $world = file_get_contents($online_dir . 'UNL/'.$startYear.'/codes.tsv');
-    $final = file($online_dir . 'UNL/'.$startYear.'/final', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+/////    $final = file($online_dir . 'UNL/'.$startYear.'/final', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 //    $sfp20 = file_get_contents($online_dir . 'IST/'.$startYear.'/codes.tsv');
     $tout = '';
-    for ($nm=0; $nm <= 1; $nm++) {
+    for ($nm=0; $nm <= 1; $nm++)
+      if (is_dir($online_dir . 'schedule/'.$sched[$nm]))
+    {
       $dir = scandir($online_dir . 'schedule/'.$sched[$nm]);
       foreach ($dir as $fname) if ($fname[0] != '.' && ($nm || $fname >= $startDay)) {
         $subdir = scandir($online_dir . 'schedule/'.$sched[$nm].'/'.$fname);
@@ -199,10 +201,10 @@ function build_personal_nav() {
           list($timeStamp, $countryCode, $tourCode, $action) = explode('.', $event);
           $currentSeason = current_season($startYear, $startMonth, $countryCode);
 
-/*
-if (in_array($tourCode, ['SUIG1', 'SUIG2', 'SUIG3']))
-  $currentSeason = '2019-3';
-*/
+
+//if (in_array($tourCode, ['SUI09']))
+//  $currentSeason = '2019-4';
+
 
 // World
 //          if ($countryCode == 'UNL' && $action == 'remind' && strpos($world, $_SESSION['Coach_name']) !== false) {
@@ -212,8 +214,8 @@ if (in_array($tourCode, ['SUIG1', 'SUIG2', 'SUIG3']))
               $status = 6; // завершён
             else if (is_file($tour_dir.'/closed'))
               $status = 4; // играется
-            else if ($tourCode > 'UNL11' && !in_array($_SESSION['Coach_name'], $final))
-              $status = 0; // не участвует
+/////            else if ($tourCode > 'UNL11' && !in_array($_SESSION['Coach_name'], $final))
+/////              $status = 0; // не участвует
             else if (strpos("\n".file_get_contents($tour_dir.'/mail'), "\n".$_SESSION['Coach_name'].';') !== false)
               $status = 5; // есть прогноз
             else
@@ -332,10 +334,10 @@ if (in_array($tourCode, ['SUIG1', 'SUIG2', 'SUIG3']))
     foreach (['SFP', 'BLR', 'ENG', 'ESP', 'FRA', 'GER', 'ITA', 'NLD', 'PRT', 'RUS', 'SCO', 'UKR', 'SUI', 'UEFA'] as $countryCode) {
       $currentSeason = current_season($startYear, $startMonth, $countryCode);
 
-/*
-if (in_array($tourCode, ['SUIG1', 'SUIG2', 'SUIG3']))
-  $currentSeason = '2019-3';
-*/
+
+//if (in_array($tourCode, ['SUI09']))
+//  $currentSeason = '2019-4';
+
 
       $tout = '';
       foreach ($cmd_db[$countryCode] as $c => $team) if ($team['usr'] == $_SESSION['Coach_name']) {
@@ -365,12 +367,13 @@ if (in_array($tourCode, ['SUIG1', 'SUIG2', 'SUIG3']))
           else
             $linktext = 'text&ref=it';
 
-/*
-if (in_array($tcode, ['SUIG1', 'SUIG2', 'SUIG3']))
-  $currentSeason = '2019-3';
-else if ($countryCode == 'SUI')
-  $currentSeason = '2019-4';
-*/
+
+//if (in_array($tcode, ['SUI09']))
+//  $currentSeason = '2019-4';
+//else 
+if ($countryCode == 'SUI')
+  $currentSeason = '2020-1';
+
 
           if ($ll != '&' && ($status != 0 || $countryCode != 'SFP'))
             $tout .= '
@@ -487,7 +490,8 @@ function build_access() {
     foreach ($codes as $line) if (trim($line)) {
       list($code, $cmd, $name, $email) = explode("\t", $line);
       $email = trim($email);
-      $code = trim($code, '- ');
+// не надо минус резать!     $code = trim($code, '- ');
+      $code = trim($code);
       if ($ccc == 'UNL')
         $name = $code; // здесь имена могут дублироваться, поэтому только код!
 
@@ -521,6 +525,7 @@ function script_from_cache($file) {
 
 function get_results($lastdate) {
   global $online_dir;
+
   list($day, $month) = explode('.', $lastdate);
   $date = sprintf('%02d-%02d', trim($month), trim($day));
   $year = date('Y', time());
@@ -530,10 +535,12 @@ function get_results($lastdate) {
   $fyear = $year;
   $base = array();
   $week = date('W', strtotime($fyear.'-'.$date));
-  if ($date == '01-02') $fyear = $year - 1;
+  if (in_array($date, ['12-31'])) $week = '01';
+  if (in_array($date, ['12-26'])) $fyear = $year - 1;
   $fname = $fyear.'.'.$week;
   is_file($online_dir . 'results/'.$fname) ? $archive = file($online_dir . 'results/'.$fname) : $archive = array();
-  if (++$week == '54') {
+  if (++$week == '53') //54
+  {
     $week = '01';
     $fyear++;
   }
@@ -734,7 +741,8 @@ function get_results_by_date($month, $day, $update = NULL) {
 //  if ($month > 7) $year--;
   $base = array();
   $week = date('W', strtotime($year.'-'.$date));
-  if ($date == '01-02') $year--;
+  if (in_array($date, ['12-31'])) $week = '01';
+  if (in_array($date, ['12-26'])) $year--;
   $fname = $year.'.'.$week;
   $seq = 0;
   if (is_file($online_dir . 'results/'.$fname)) {
@@ -747,7 +755,8 @@ function get_results_by_date($month, $day, $update = NULL) {
     unset($archive[0]);
   }
   else $archive = array();
-  if (++$week == '54') {
+  if (++$week == '53') //54
+  {
     $week = '01';
     $year++;
   }
@@ -909,7 +918,7 @@ if ($auth && !$_POST['pass_str'] && strpos($_POST['name_str'], '@') && strpos($_
 if (isset($ls))
    setcookie('fprognozls', $ls);
 
-$fprognozls = isset($_COOKIE['fprognozls']) ? $_COOKIE['fprognozls'] : 'inscore';
+$fprognozls = isset($_COOKIE['fprognozls']) ? $_COOKIE['fprognozls'] : 'enetscores';
 $editable_class = '';
 
 ////////// определяем, что показывать, если нечего показывать
@@ -1118,19 +1127,22 @@ else if ($m == 'text') {
   if (isset($t))
     $tt = $cca == 'UEFA' ? 'c'.$t : $t;
 
-  switch ($ref) {
-    case 'news': $f = 'news'; break;
-    case 'itog': $t = lcfirst($t);
-    case 'it'  : $f = isset($t) ? 'publish/'.$league.'it'.$tt : 'it.tpl'; break;
-    case 'itc' : $f = isset($t) ? 'publish/'.$league.'it'.$tt : 'itc.tpl'; break;
-    case 'prog': $t = lcfirst($t);
-    case 'p'   : $f = isset($t) ? ($a == 'sfp-team' ? 'programs/'.$l : 'publish/p').$t  : 'p.tpl'; break;
-    case 'pc'  : $f = isset($t) ? 'publish/p'.$t  : 'pc.tpl'; break;
-    case 'rev' : $t = lcfirst($t);
-    case 'r'   : $f = isset($t) ? 'publish/'.$league.'r'.$tt  : 'header'; break;
+  if (isset($ref))
+  {
+    switch ($ref) {
+      case 'news': $f = 'news'; break;
+      case 'itog': $t = lcfirst($t);
+      case 'it'  : $f = isset($t) ? 'publish/'.$league.'it'.$tt : 'it.tpl'; break;
+      case 'itc' : $f = isset($t) ? 'publish/'.$league.'it'.$tt : 'itc.tpl'; break;
+      case 'prog': $t = lcfirst($t);
+      case 'p'   : $f = isset($t) ? ($a == 'sfp-team' ? 'programs/'.$l : 'publish/p').$t  : 'p.tpl'; break;
+      case 'pc'  : $f = isset($t) ? 'publish/p'.$t  : 'pc.tpl'; break;
+      case 'rev' : $t = lcfirst($t);
+      case 'r'   : $f = isset($t) ? 'publish/'.$league.'r'.$tt  : 'header'; break;
+    }
+    $content = is_file($season_dir . $f) ? file_get_contents($season_dir . $f) : 'файл не найден';
+    $editable_class = ' class="monospace w-100"';
   }
-  $content = is_file($season_dir . $f) ? file_get_contents($season_dir . $f) : 'файл не найден';
-  $editable_class = ' class="monospace w-100"';
 }
 if (isset($content) && trim($content) && !strpos($content, '</p>') && !strpos($content, '<br'))
   $editable_class = ' class="monospace w-100"'; // text, но если всё удалить, должно разрешить ввести html
@@ -1454,7 +1466,7 @@ else if ($a == 'world' || $a == 'sfp-20') { // сбор туров Мирово�
                     <ul class="collapse list-unstyled'.($code == 'UNL' ? '' : ' show').'" id="'.$code.'Submenu">';
       $dir = scandir($s_dir.'programs', 1);
       foreach ($dir as $prog)
-        if ($prog[0] != '.' && $code != 'UFT' && $prog < 'UNL12') {
+        if ($prog[0] != '.' && $code != 'UFT' && ($prog < 'UNL12' || $prog > 'UNL94')) {
           $tt = substr($prog, 3);
           $to = $tt;
           $prefix = '<a href="?a='.$aa.'&amp;s='.$s.'&amp;t='.$to;
@@ -1580,25 +1592,25 @@ else {
 
     <title><?=$title?></title>
 
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link href="/css/fp.css?ver=270" rel="stylesheet">
-    <link href="/css/comments.css?ver=2" rel="stylesheet">
+    <link href="/css/comments.css?ver=7" rel="stylesheet">
     <link href="/js/croppic/croppic.css" rel="stylesheet">
 
-    <!--[if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script><![endif]-->
-    <script defer src="https://use.fontawesome.com/releases/v5.2.0/js/solid.js" crossorigin="anonymous"></script>
-    <script defer src="https://use.fontawesome.com/releases/v5.2.0/js/fontawesome.js" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.slim.js" integrity="sha256-RtMTraB5gGlLER0FkKBcaXCmZCQCxkKS/dXm7MSEoEY=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.6/jstz.min.js"></script>
-    <script src="https://cdn.ckeditor.com/ckeditor5/12.0.0/inline/ckeditor.js"></script>
-    <script src="https://cdn.ckeditor.com/ckeditor5/12.0.0/inline/translations/ru.js"></script>
+    <!--[if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js" integrity="sha256-3Jy/GbSLrg0o9y5Z5n1uw0qxZECH7C6OQpVBgNFYa0g=" crossorigin="anonymous"></script><![endif]-->
+    <script defer src="https://use.fontawesome.com/releases/v5.12.1/js/solid.js" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.12.1/js/fontawesome.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.slim.js" integrity="sha256-Dul4c09cdrWKXVtallPxF558lwxMwCC8dXJdZ0PVW54=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha256-/ijcOLwFf26xEYAjW75FizKVo5tnTYiQddPZoLUHHZ8=" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.7/jstz.min.js" integrity="sha256-bt5sKtbHgPbh+pz59UcZPl0t3VrNmD8NUbPu8lF4Ilc=" crossorigin="anonymous"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/16.0.0/inline/ckeditor.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/16.0.0/inline/translations/ru.js"></script>
     <script src="/js/jquery-ui/jquery-ui.min.js"></script>
     <script src="/js/jquery-ui/jquery.ui.touch-punch.min.js"></script>
     <script src="/js/croppic/croppic-3.0.min.js"></script>
-    <script src="/js/fp.js?ver=194"></script>
+    <script src="/js/fp.js?ver=220"></script>
 </head>
 
 <body>
@@ -1615,7 +1627,7 @@ else {
 echo '
         <nav id="sidebar">
             <div class="sidebar-header">
-                <a href="/?m=vacancy"><h5>Свободные команды:</h5>в ФП Германии и Украины</a><br><br>
+                <a href="/?a=world&s=2020&t=01&m=prognoz"><h5>Лига Наций:&nbsp;&nbsp;1-й тур</h5><h5>Лига Сайтов: 1-й тур</h5></a><br>
                 <a href="/?m=news&s=2019-20"><h6>Новости SFP - ФИФА</h6></a>
             </div>
 
@@ -1711,7 +1723,7 @@ if ($cc != 'UNL') // временно не показываем
                 </li-->
                 <p></p>
                 <li id="funZone" data-tpl="'.$fcfg.'"><a id="toggleFunZone" href="javascript:void(0)">Показ фан-зоны &nbsp; <span id="funZoneIndicator"><img src="images/'.$gb_status.'.gif" border = "0" alt="'.$gb_status.'" /></span></a></li>
-                <li><a id="change_pass" href="?m=pass'.($token ? '&token='.$token : '').'"'.(isset($data['ts']) ? ' data-ts="'.$data['ts'].'" onClick="newPassword()"' : (isset($_POST['pass_str']) ? ' data-ts="'.time().'" onClick="newPassword()"' : '')).'>Смена пароля</a></li>
+                <li><a id="change_pass" href="?m=pass'.(isset($token) && $token ? '&token='.$token : '').'"'.(isset($data['ts']) ? ' data-ts="'.$data['ts'].'" onClick="newPassword()"' : (isset($_POST['pass_str']) ? ' data-ts="'.time().'" onClick="newPassword()"' : '')).'>Смена пароля</a></li>
                 <li><a href="?m=api">API</a></li>
                 <li><a href="?logout=1">Выход</a></li>
                 <p></p>';
@@ -1777,8 +1789,8 @@ if ($cc != 'UNL') // временно не показываем
                         <div id="postForm" class="navbar-btn-icon" title="Редактировать"><i class="fas fa-edit"></i></div>
                     </button>';
   }
-  else if (isset($content) &&
-    ($role == 'president' || $role == 'pressa' && (in_array($m, ['news', 'pres']) || $m == 'text' && $ref == 'r'))) {
+  else if (isset($content) && ($role == 'president' || $role == 'pressa' && (in_array($m, ['news', 'pres']) || $m == 'text' && $ref == 'r')))
+  {
     $data_cfg = ['cmd' => 'save_file', 'author' => $_SESSION['Coach_name'], 'a' => $a, 's' => $s, 'm' => $m];
     if (isset($l)) $data_cfg['l'] = $l;
     if (isset($ref)) $data_cfg['ref'] = $ref;
@@ -1896,12 +1908,15 @@ if ($cc != 'UNL') // временно не показываем
       echo '
                     <h4>Пресс-релиз'.(count($pr) > 1 ? 'ы' : '').'</h4>';
       $collapsed = false;
-      foreach ($pr as $file) {
+      foreach ($pr as $file)
+      {
         $ts = substr($file, -10);
+        $text = file_get_contents($file);
+        list($text, $subj) = explode(':Subj:', $text.':Subj:');
         echo '
-                    <div class="pressrelease-title">'.date('Y-m-d H:i', $ts).'</div>
+                    <div class="pressrelease-title">'.date('Y-m-d H:i', $ts).' - '.$subj.'</div>
                     <div id="'.$ts.'" class="pressrelease"'.($collapsed ? ' style="display:none"' : '').'>
-'.file_get_contents($file).'
+'.$text.'
                     </div>';
         $collapsed = true;
       }
@@ -1993,7 +2008,6 @@ if ($cc != 'UNL') // временно не показываем
     <footer class="footer">
         <p>
             <img src="/images/sfp-88x31.png" width="88" height="31" alt="SFP Button" title="SFP Button" />
-            <a href="http://www.livescore.in/" title="Livescore.in" target="_blank"><img src="https://advert.livescore.in/livescore_in_88x31a.gif" width="88" height="31" border="0" alt="LIVESCORE.in"></a>
             <a href="http://profi-prognoza.ru/" target="_blank"><img src="images/bannerprofi.gif" border="0" width="88" height="31" alt="Сайт cпортивного прогнозирования &laquo;Профессионалы прогноза&raquo;"></a>
             <a href="http://primegang.ru/" target="_blank"><img src="images/primegang.gif" border="0" width="88" height="31" alt="Клуб футбольных прогнозистов PrimeGang" /></a>
             <?=(false && $is_redis ? '<img src="https://redis.io/images/redis-small.png" border="0" alt="Redis" title="Powered by Redis" />':'')?>

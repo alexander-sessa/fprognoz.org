@@ -43,13 +43,16 @@ sudo systemctl reload nginx
 
 # Creating user and installing the site
 sudo useradd -m -U fp
-sudo install -g fp -o fp -d /var/www/fprognoz.org
-sudo ln -s /var/www/fprognoz.org /home/fp/fprognoz.org
+sudo install -g fp -o fp -d /var/www/site
+sudo ln -s /var/www/site /home/fp/fprognoz.org
 su -c 'cd ~fp
-composer require google/recaptcha
-composer require phpmailer/phpmailer
-composer require mpdf/mpdf
-composer require phpoffice/phpspreadsheet
+
+# Uncomment or install manually if you need this (composer required vb.memory = "1024"):
+#composer require google/recaptcha
+#composer require phpmailer/phpmailer
+#composer require mpdf/mpdf
+#composer require phpoffice/phpspreadsheet
+
 tar -xzf /vagrant/data.tgz
 git config --global user.name "Your Name"
 git config --global user.email "your@e-mail"

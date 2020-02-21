@@ -65,12 +65,13 @@ function get_results($lastdate) {
   $fyear = $year;
   $base = array();
   $week = date('W', strtotime($fyear.'-'.$date));
-  if ($date == '01-02')
-    $fyear = $year - 1;
+  if (in_array($date, ['12-31'])) $week = '01';
+  if (in_array($date, ['12-26'])) $fyear = $year - 1;
 
   $fname = $fyear.'.'.$week;
   $archive = is_file($online_dir . 'results/'.$fname) ? file($online_dir . 'results/'.$fname, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) : [];
-  if (++$week == '54') {
+  if (++$week == '53') //54
+  {
     $week = '01';
     $fyear++;
   }

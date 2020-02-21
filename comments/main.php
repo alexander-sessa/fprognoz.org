@@ -1,25 +1,4 @@
 <?php
-function send_comment_by_email($from, $name, $email, $subj, $body) {
-  $email = str_replace(',', ' ', $email);
-  $amail = explode(' ', $email);
-  foreach ($amail as $email) if (strpos($email, '@')) {
-    $email = trim($email);
-    if (trim($from) && trim($subj) && trim($body))
-      @mail("$name <$email>",
-'=?UTF-8?B?'.base64_encode($subj).'?=',
-str_replace("\r", '', $body).'
-',
-'From: '.$from.'
-Reply-To: '.$from.'
-MIME-Version: 1.0
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: FP Informer 3.07.170321');
-  }
-}
-
 function c_register_user($nicknm) {
   global $redis;
   global $role;
@@ -31,7 +10,6 @@ function c_register_user($nicknm) {
     'status' => $status,
   ]);
 }
-
 function c_make_form($prefix, $id, $hidden) {
   global $redis;
   global $coach_name;
@@ -42,8 +20,8 @@ function c_make_form($prefix, $id, $hidden) {
     $redis->hset('c_user:' . $coach_name, 'status', 0);            // срок блока истёк, меняем статус на нормальный
   }
   $c_form = '
-  <div id="%FORMID%" class="c-form"%HIDDEN%>
-    <form action="#comment" method="POST">
+  <div id="%FORMID%" class="w-100 pb-3"%HIDDEN%>
+    <form id="%FORMID%_form" action="#comment" method="POST">
     <input type="hidden" name="parent" value="%PARENT%" />
     <input type="hidden" name="userid" value="%USERID%" />
     <aside class="c-croppic-cnt">';
@@ -58,22 +36,22 @@ function c_make_form($prefix, $id, $hidden) {
 
   $c_form .= '
     </aside>
-    <main class="c-text-cnt">';
+    <main class="shadow">';
   $c_form .= '
       <textarea id="ta_%CKEDID%" name="c_text" hidden></textarea>
-      <div id="%CKEDID%" name="c_text" class="c-textarea"></div>
+      <div id="%CKEDID%" class="border border-1 border-dark" name="c_text"></div>
     </main>
-    <footer class="c-submit-cnt">
-      <div class="c-submit-left">';
+    <footer class="d-flex justify-content-between mt-2">
+      <div>';
 //  if (!isset($c_user['nicknm']) || $c_user['nicknm'] == '') { // если в базе redis не указан ник
     $c_form .= '
-        Укажите ваш ник для комментариев:
+        &nbsp;Укажите ваш ник для комментариев:
         <input type="text" style="height: 2rem; width: 250px; padding: 4px; border-radius: 4px" name="nicknm" value="'.(isset($c_user['nicknm']) && $c_user['nicknm'] ? $c_user['nicknm'] : '').'" placeholder=" не обязательно"><br />';
 //  }
   $c_form .= '
       </div>
-      <div class="c-submit">
-        <button class="c-button" onClick="$(\'#ta_%CKEDID%\').val($(\'#%CKEDID%\').html())">Комментировать</button>
+      <div>
+        <button class="btn btn-secondary shadow-sm" onClick="$(\'#ta_%CKEDID%\').val($(\'#%CKEDID%\').html())">Комментировать</button>
       </div>
     </footer>
     </form>' . ($hidden ? '' : '
@@ -94,19 +72,12 @@ function c_vote_comment($id) {
   $rate_yes = $redis->zcount('voting:' . $id, 1, 1);
   $rate_no = $redis->zcount('voting:' . $id, -1, -1);
   return '
-        <span class="c-comment-vote">
-          <span class="c-comment-null">Разделяете мнение?</span>
-          <span class="c-comment-good">да</span>
-          <a onClick="changeRating(' . $id . ',' . ($rate_yes + 1) . ',' . $rate_no . ',1);return false;">
-            <i class="fas fa-thumbs-up c-comment-like" aria-hidden="true"></i> 
-          </a>
-          <span id="r_yes' . $id . '" class="c-comment-yes" title="согласен">' . ($rate_yes ? $rate_yes : ' ') . '</span>
-          <span class="c-comment-bad">нет</span>
-          <a class="material-icons md-18 c-comment-dislike" onClick="changeRating(' . $id  . ',' . $rate_yes . ',' . ($rate_no + 1) . ',0);return false;">
-            <i class="fas fa-thumbs-down c-comment-dislike" aria-hidden="true"></i> 
-          </a>
-          <span id="r_no' . $id . '" class="c-comment-no" title="не согласен">' . ($rate_no ? $rate_no : ' ') . '</span>
-        </span>
+          <span>Разделяете мнение?</span>
+          <span class="text-success">да</span>&nbsp;<a onClick="changeRating(' . $id . ',' . ($rate_yes + 1) . ',' . $rate_no . ',1);return false;" class="fas fa-thumbs-up c-comment-like" aria-hidden="true"></a> 
+          <span id="r_yes' . $id . '" class="text-success px-1" title="согласен">' . ($rate_yes ? $rate_yes : ' ') . '</span>
+          <span class="text-danger">нет</span>&nbsp;
+          <a onClick="changeRating(' . $id  . ',' . $rate_yes . ',' . ($rate_no + 1) . ',0);return false;" class="fas fa-thumbs-down c-comment-dislike" aria-hidden="true"></a> 
+          <span id="r_no' . $id . '" class="text-danger px-1" title="не согласен">' . ($rate_no ? $rate_no : ' ') . '</span>
 ';
 }
 
@@ -116,7 +87,7 @@ function c_inline_editor($id, $text, $owner) {
         <script>contentHTML[' . $id . ']="' . strtr($text, $escape_chars) . '";</script>
         &nbsp;
         <a id="toggle' . $id . '" style="cursor:pointer" onClick="toggleEditor(' . $id . ');"><i class="fas fa-edit" aria-hidden="true"></i> Исправить</a>
-        <a id="reset' . $id . '" style="display:none;cursor:pointer" onClick="this.style.display=' . "'none'" . ';content' . $id . '.innerHTML=contentHTML[' . $id . '];saveContent(' . $id . ',contentHTML[' . $id . ']);"><i class="fas fa-undo c-undo" aria-hidden="true"></i> <span class="c-undo">Отмена</span></a>';
+        <a id="reset' . $id . '" style="display:none;cursor:pointer" onClick="this.style.display=' . "'none'" . ';content' . $id . '.innerHTML=contentHTML[' . $id . '];saveContent(' . $id . ',contentHTML[' . $id . ']);"><i class="fas fa-undo text-danger" aria-hidden="true"></i> <span class="c-undo">Отмена</span></a>';
 }
 
 function c_moderation($id, $status) {
@@ -143,48 +114,57 @@ function c_out_comments($id, $level, $pid) {
   if (!$author) $author = $c_hash['userid'];
 
   $out = '
-  <div id="c_block' . $id . '" class="c-comment">
-    <aside style="position:relative;padding-left:' . (min($level, 5) * 48) . 'px">';
+  <div id="c_block' . $id . '" class="d-flex pb-3 w-100">
+    <aside style="padding-left:' . (min($level, 5) * 48) . 'px">';
   if (isset($c_user['avatar']) && trim($c_user['avatar']))
     $out .= '
-      <img src="/images/avatars/96/' . $c_user['avatar'] .'" width="48px" height="48px" alt="' . $initials . '" />';
+      <img src="/images/avatars/96/' . $c_user['avatar'] .'" width="48px" height="48px" alt="' . $initials . '"  class="rounded-lg">';
   else
     $out .= '
-      <div class="c-comment-icon' . ($c_user['status'] == 2 ? ' bg_gold' : '') . '">' . $initials . '</div>';
+      <div class="c-comment-icon' . ($c_user['status'] == 2 ? ' bg-gold' : '') . '">' . $initials . '</div>';
   $out .= '
     </aside>
-    <div class="c-comment-info" style="position:relative;padding-left:' . (60 + min($level, 5) * 48) . 'px" commentid="' . $id . '">
+    <div class="ml-1 w-100" commentid="' . $id . '">
       <header>
         <a name="comment-' . $id . '"></a>
-        <span class="c-comment-author ' . (isset($c_user['status']) && $c_hash['status'] == 2 ? ' c-moderator' : '')
-          . '">' . $author . '</span>
-        <span class="c-comment-date">' . date_tz('j-m-Y G:i', '', $c_hash['tstamp'], $_COOKIE['TZ']) . '</span>
-        <i onClick="$(\'#share' . $id . '\').toggle();share' . $id . '.select();return false;" class="fas fa-share-alt" aria-hidden="true" style="cursor:pointer;color:#b0b0b0" title="поделиться"> </i>
-        <input type="text" id="share' . $id . '" style="display:none;width:350px;height:15px;font-size:12px;" value="' . $this_site . '/' . $uri . '#comment-' . $id . '" />
+        <strong class="c-comment-author px-2 text-' . (isset($c_user['status']) && $c_hash['status'] == 2 ? 'gold' : 'dark') . '">' . $author . '</strong>
+        <span class="c-comment-date text-secondary small">' . date_tz('j-m-Y G:i', '', $c_hash['tstamp'], $_COOKIE['TZ']) . '</span>
+        <a href="javascript:;" onClick="$(\'#share' . $id . '\').toggle();share' . $id . '.select();return false;" class="fas fa-share-alt" aria-hidden="true" style="cursor:pointer" title="поделиться"> </a>
+        <input type="text" id="share' . $id . '" class="small" style="display:none;width:350px;height:15px;font-size:12px;" value="' . $this_site . '/' . $uri . '#comment-' . $id . '">
       </header>
 
-      <main id="content' . $id .'">
+      <main id="content' . $id .'" class="c-content p-2 border border-light">
         ';
   $out .= ($c_hash['status'] != 2) ? strip_tags($c_hash['c_text'], '<p><a><strong><em><ol><ul><li><blockquote><sub><sup>') : $c_hash['c_text']; // резать теги, если не модер
-  $out .= '      </main>
+  $out .= '
+      </main>';
 
-      <footer>';
   if (isset($coach_name)) {                          // кнопки ответа на коммент
     $out .= '
-        <a onClick=\'if(!isEditorEnabled('.$id.'))InlineEditor.create(document.querySelector("#cke'.$id.'"),cke_config).then(function(editor){cke["'.$id.'"]=editor});$("#comment'.$id.'").toggle()\' style="cursor:pointer"><i class="fas fa-reply" aria-hidden="true"></i> Ответить</a>
-        &nbsp; <a onClick=\'if(isEditorEnabled('.$id.')){editor=cke['.$id.'];editor.destroy()}c_quote('.$id.',"");InlineEditor.create(document.querySelector("#cke'.$id.'"),cke_config).then(function(editor){cke["'.$id.'"]=editor});$("#comment'.$id.'").show()\' style="cursor:pointer"><i class="fas fa-quote-right" aria-hidden="true"></i> Цитировать</a>';
+      <footer class="d-flex justify-content-between">
+        <div class="text-secondary">
+          <sup>
+            <a onClick=\'if(!isEditorEnabled('.$id.'))InlineEditor.create(document.querySelector("#cke'.$id.'"),cke_config).then(function(editor){cke["'.$id.'"]=editor});$("#comment'.$id.'").toggle()\' style="cursor:pointer"><i class="fas fa-reply" aria-hidden="true"></i> Ответить</a>
+            &nbsp;
+            <a onClick=\'if(isEditorEnabled('.$id.')){editor=cke['.$id.'];editor.destroy()}c_quote('.$id.',"");InlineEditor.create(document.querySelector("#cke'.$id.'"),cke_config).then(function(editor){cke["'.$id.'"]=editor});$("#comment'.$id.'").show()\' style="cursor:pointer"><i class="fas fa-quote-right" aria-hidden="true"></i> Цитировать</a>';
     if ($role == 'president' || ($coach_name == $c_hash['userid'] && !$redis->exists('comment:' . $id)))
       $out .= c_inline_editor($id, $c_hash['c_text'], $coach_name); // кнопки редактирования коммента
 
     if ($role == 'president')
       $out .= c_moderation($id, $c_hash['status']); // кнопки модерирования
 
-    $out .= c_vote_comment($id);                    // оценка полезности отзыва
+    $out .= '
+          </sup>
+        </div>
+        <div class="text-secondary text-right">
+          <sup>
+            ' . c_vote_comment($id) . '
+          </sup>
+        </div>
+      </footer>';                    // оценка полезности отзыва
   }
-  $out .= '
-      </footer>
-    </div>' .
-    c_make_form('comment', $id, true) . '
+  $out .= c_make_form('comment', $id, true) . '
+    </div>
   </div>';
 
   $comment_c_list = array_reverse($redis->lrange('comment:' . $id, 0, -1));
@@ -245,20 +225,25 @@ if (isset($coach_name) && isset($parent) && ($c_text = trim($c_text))) {
 
     // комментарии обычного пользователя, а также требующие ответа, отправляются модератору
     if ($status == 0)
-      send_comment_by_email ($comments_email,
+      send_email ($comments_email,
 'Fprognoz.Org Moderator', 'alexander.sessa@gmail.com',
 'Новый комментарий', '
+<!DOCTYPE html>
+<html>
+<body>
 На страницу <a href="' . $this_site . '/' . $uri . '#comment">' . $this_site . '/' . $uri . '#comment</a>
 юзером ' . $coach_name . ' добавлен комментарий следующего содержания:
-<hr />
+<hr>
 ' . $c_text . '
-<hr />
+<hr>
 Выполните одно из действий:<ul>
 <li><a href ="' . $modurl . $key . '&status=1">Проверен модератором</a></li>
 <li><a href ="' . $this_site . '/' . $uri . '#comment">Ответить</a></li>
 <li><a href ="' . $modurl . $key . '&status=-1">Скрыть комментарий</a></li>
 <li><a href ="' . $modurl . $key . '&status=6">Блокировать юзера</a></li>
 </ul>
+</body>
+</html>
 ');
   }
 }
@@ -271,8 +256,8 @@ if (!isset($c_from))
 {
   echo '
 <a name="comment"></a>
-<div id="comment" style="background:white;margin-top:10px;padding-top:5px;text-align:left;width:100%">
-  <div style="text-align:center">
+<div id="comment" class="bg-white mt-2 w-100">
+  <div class="text-center">
     <h5>ФАН-ЗОНА. ' . ($coach_name ? 'Здесь Вы можете оставить свой комментарий' : 'Для полного доступа необходимо авторизоваться на сайте') . '</h5>
   </div>'
 . c_make_form($redis_prefix, $id, false) . '
@@ -286,7 +271,7 @@ foreach ($comments_list as $c_id)
   echo c_out_comments($c_id, 0, $id);
 
 if ($c_to > 0 && $redis->lrange($redis_prefix . ':' . $id, $c_to, $c_to))
-  echo '<div id="more_comments" class="w-100">
-  <center><button style="width:400px" onClick=\'moreComments("'.$coach_name.'","'.$a.'","'.$s.'",'.$c_to.')\'> показать ещё </button></center>
+  echo '<div id="more_comments" class="w-100 text-center">
+  <button style="width:400px" onClick=\'moreComments("'.$coach_name.'","'.$a.'","'.$s.'",'.$c_to.')\'> показать ещё </button></center>
 </div>';
 ?>

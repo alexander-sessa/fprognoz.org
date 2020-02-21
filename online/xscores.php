@@ -62,21 +62,25 @@ for ($day=-1; $day<=13; $day++) {
   if (sizeof($arr) > 1)
   {
       for ($i = 0; $i <= 1; $i++)
-          if ($cut = strpos($arr[$i], '<div id="1'))
+          if ($cut = strpos($arr[$i], '<a id="1'))
+//was          if ($cut = strpos($arr[$i], '<div id="1'))
               $data .= substr($arr[$i], $cut);
 
   }
   else
-      $data .= substr($arr[0], strpos($arr[0], '<div id="1'));
+      $data .= substr($arr[0], strpos($arr[0], '<a id="1'));
+//was      $data .= substr($arr[0], strpos($arr[0], '<div id="1'));
 
-  $matches = explode('<div id="1', $data);
+  $matches = explode('<a id="1', $data);
+//was  $matches = explode('<div id="1', $data);
   foreach($matches as $match) if (strpos($match, ' data-') && !strpos($match, '(W)') && !strpos($match, '(U17)') && !strpos($match, '(U19)') && !strpos($match, '(U21)')) {
     $match = strtr($match, array('<b>' => '', '</b>' => ''));
     $i = '1'.substr($match, 0, 6);
     $ev = substr($match, strpos($match, ' data-') + 6);
     $ev = substr($ev, 0, strpos($ev, '>')).';';
     $ev = '$'.str_replace(' data_', ';$', strtr($ev, ['-' => '_']));
-    $ev = strtr($ev, [' "' => ' \"', '" ' => '\" ', '".' => '\".']);
+    $ev = strtr($ev, [' "' => ' \"', '" ' => '\" ']);//, '".' => '\".']);
+    //$ev = strtr($ev, [' "' => ' \"', '" ' => '\" ', '".' => '\".']);
     eval($ev);
     $g = $country_name.'#'.$league_short;
     if (isset($groups[$g])) {

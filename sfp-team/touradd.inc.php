@@ -75,8 +75,8 @@ $cal_tran = [
  'October' => 'октября',
  'November' => 'ноября',
  'December' => 'декабря',
- 'Januar' => 'января',
- 'Februar' => 'февраля',
+ 'January' => 'января',
+ 'February' => 'февраля',
  'March' => 'марта',
  'April' => 'апреля',
  'May' => 'мая',
@@ -90,6 +90,7 @@ $cc = [
   'Нидерланды' => 'Гол',
   'Испания' => 'Исп',
   'Италия' => 'Ита',
+  'Португалия' => 'Пор',
   'Франция' => 'Фра',
   'Турция' => 'Тур',
   'Греция' => 'Гри',
@@ -151,7 +152,7 @@ switch ($l)
 ';
     break;
   case 'FFP':
-    $url = 'http://www.kfp.ru/fest/ffp'.date('Y').'/tur2009.php?tur='.$next_tour.'&ref=0';
+    $url = 'http://www.kfp.ru/fest/ffp'.(date('Y') - 1).'/tur2009.php?tur='.$next_tour.'&ref=0';
     $html = file_get_contents($url);
     $html = iconv('windows-1251', 'utf-8', $html);
     $html = substr($html, strpos($html, 'Последний срок приема прогнозов: ') + 61);
@@ -250,7 +251,8 @@ http://fprognoz.org/?a=sfp-team&amp;s=2019-20&amp;l=SPR&amp;m=prognoz&amp;t=' . 
     $content = substr($content, 0, strpos($content, '</div>'));
     $tours = explode("<a href = '/tour.php?id=", $content);
     foreach($tours as $tline)
-      if (strpos($tline, 'Групповой турнир. ' . $next_tour . ' '))
+//      if (strpos($tline, 'Групповой турнир. ' . $next_tour . ' '))
+      if (strpos($tline, 'Финальный турнир (1 стадия). ' . ($next_tour - 5) . ' '))
       {
         $tid = substr($tline, 0, 4);
         $deadline = substr($tline, strpos($tline, ' &lt;До ') + 10, 19) . ' Europe/Moscow';
@@ -293,6 +295,23 @@ http://fprognoz.org/?a=sfp-team&amp;s=2019-20&amp;l=TOR&amp;m=prognoz&amp;t=' . 
     $program .= '
  |---+---------------------------------------------+-----|
  | Контрольный срок отправки                  ' . date_tz('d.m H:i', '', $timestamp - 600, 'Europe/Berlin') . '|
+
+Vitya - ?
+SlavKo - ?
+Niggah - ?
+AnDrusha - ?
+Gleb - ?
+vlad_ezh - ?
+AlexTar77 - ?
+Villarreal - ?
+maku - ?
+Joker - ?
+shmeihel - ?
+GOLKA - ?
+Sessa - ?
+KOKOC - ?
+skripka_av - ?
+Orphan - ?
 ';
     break;
   case 'FWD':

@@ -107,8 +107,11 @@ function build_search_map($file) {
 }
 
 // специфика хостинга на AWS - на других серверах не использовать
-function send_email($from, $name, $email, $subj, $body) {
+function send_email($from, $name, $email, $subj, $body, $altbody=NULL) {
   $params = ['token' => 'FPrognoz.Org', 'from' => $from, 'name' => $name, 'email' => $email, 'subj' => $subj, 'body' => $body];
+  if ($altbody)
+    $params['altbody'] = $altbody;
+
   $context = stream_context_create(array(
     'http' => array(
       'method' => 'POST',
@@ -204,7 +207,8 @@ function build_access() {
     foreach ($codes as $line) if (trim($line)) {
       list($code, $cmd, $name, $email) = explode("\t", $line);
       $email = trim($email);
-      $code = trim($code, '- ');
+// не надо минус резать!     $code = trim($code, '- ');
+      $code = trim($code);
       if ($ccc == 'UNL')
         $name = $code; // здесь имена могут дублироваться, поэтому только код!
 
@@ -225,6 +229,23 @@ function build_access() {
     }
   }
   file_put_contents($data_dir . 'auth/.access', $access);
+}
+
+if ($fn = $_FILES['upload']['name'])
+{
+  // проверка на графический формат файла
+  $finfo = finfo_open(FILEINFO_MIME_TYPE);
+  $mtype = finfo_file($finfo, $_FILES['upload']['tmp_name']);
+  if (substr($mtype, 0, 6) != 'image/')
+    exit('{"error":{"message":"Допускается загрузка только изображений."}}');
+
+  $ext = substr($fn, strrpos($fn, '.'));
+  $path = 'images/upload/' . time() . $ext;
+  if (move_uploaded_file($_FILES['upload']['tmp_name'], '../'.$path))
+    exit('{"url": "https://fprognoz.org/' . $path . '"}');
+  else
+    exit('{"error":{"message":"Не удалось загрузить файл изображения."}}');
+
 }
 
 $iv = substr(hash('sha256', 'iv'.$salt), 0, 16);
@@ -459,8 +480,12 @@ $club_edit = '.(isset($_POST['club_edit']) ? 'true' : 'false').';
           }
         }
       }
-      else if ($cca == 'FIFA' || $cca == 'UNL')
-      {
+      else if ($cca == 'UNL')
+      { // рассылка по списку, формируемого getmails.php из каталога сезона
+        $email = implode(',', file($data_dir . 'online/UNL/'.date('Y').'/emails', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
+      }
+      else if ($cca == 'FIFA')
+      { // рассылка всем, у кого есть аккаунты
         $amail = [];
         $map = explode(';', file_get_contents($data_dir . 'auth/.map'));
         foreach ($map as $mail)
@@ -493,9 +518,9 @@ $club_edit = '.(isset($_POST['club_edit']) ? 'true' : 'false').';
         }
       }
       if (!isset($data['t']) && !isset($_POST['p']))
-        file_put_contents($online_dir . $cca . '/' . $data['s'] . '/publish/'.time(), $_POST['text']);
+        file_put_contents($online_dir . $cca . '/' . $data['s'] . '/publish/'.time(), $_POST['text'] . ':Subj:' . $_POST['subj']);
 
-      $ret = send_email($data['a'].' <'.strtolower($cca).'@'.$_SERVER['HTTP_HOST'].'>', $data['author'], $email, $_POST['subj'], $_POST['text']);
+      $ret = send_email($data['a'].' <'.strtolower($cca).'@'.$_SERVER['HTTP_HOST'].'>', '', $email, $_POST['subj'], $_POST['text'], $_POST['altbody'] ?? NULL);
     }
     echo $ret;
   }
@@ -552,8 +577,9 @@ $club_edit = '.(isset($_POST['club_edit']) ? 'true' : 'false').';
       if (isset($_POST['team']))
       { // состав на 1 тайм: team, ['players'], ['predicts']
         // проверка полномочий
+        $team = urldecode($_POST['team']);
         $coach = '';
-        $codes = file($season_dir . '/' . $_POST['team'] . '.csv', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        $codes = file($season_dir . '/' . $team . '.csv', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
         foreach ($codes as $line)
           if (!$coach && ($cut = strpos($line, $coach_mail)) && substr($line, $cut + 1 + strlen($coach_mail), 5) == 'coach')
             $coach = substr($line, 0, $cut - 1);
@@ -562,7 +588,7 @@ $club_edit = '.(isset($_POST['club_edit']) ? 'true' : 'false').';
         { // вероятно, был упрощенный файл состава команды, проверим в codes
           $codes = file($season_dir . '/codes.tsv', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
           foreach ($codes as $line)
-            if (!$coach && ($cut = strpos($line, $_POST['team'])))
+            if (!$coach && ($cut = strpos($line, $team)))
               if (strpos($line, $coach_mail) && strpos($line, '	coach'))
                 $coach = substr($line, 0, $cut - 1);
 
@@ -572,11 +598,11 @@ $club_edit = '.(isset($_POST['club_edit']) ? 'true' : 'false').';
         }
         $out = '';
         $all_predicts = [];
-        $main_size = strlen($_POST['team']) != 3 || $_POST['team'] == 'SFP' || $tour > 'UNL11' ? 5 : 4; // size-1
+        $main_size = strlen($team) != 3 || $team == 'SFP' || ($tour > 'UNL11' && $tour < 'UNL95') ? 5 : 4; // size-1
         $log = 'состав первого тайма:<br>';
-        if (is_file($prognoz_dir.'/'.$_POST['team']))
+        if (is_file($prognoz_dir.'/'.$team))
         {
-          $lines =  file($prognoz_dir.'/'.$_POST['team']);
+          $lines =  file($prognoz_dir.'/'.$team);
           foreach ($lines as $line) if (trim($line))
           {
             list($name, $predict, $ts, $rest) = explode(';', trim($line));
@@ -608,9 +634,9 @@ $club_edit = '.(isset($_POST['club_edit']) ? 'true' : 'false').';
             $log .= " $name:$predict";
 
         }
-        file_put_contents($prognoz_dir.'/'.$_POST['team'], $out);
+        file_put_contents($prognoz_dir.'/' . $team, $out);
         $pr_saved = true;
-        $hisfile = fopen($prognoz_dir.'/.'.$_POST['team'], 'a');
+        $hisfile = fopen($prognoz_dir.'/.' . $team, 'a');
         fwrite($hisfile, "$coach;$log;" . time() . "\n");
         fclose($hisfile);
         echo '<i class="fas fa-check text-success"></i> Состав команды записан.<br>';

@@ -15,4 +15,5 @@ if ($hash == crypt($user, $salt)) {
 }
 
 $redis->close();
+exit();
 ?>

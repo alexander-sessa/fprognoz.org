@@ -1256,7 +1256,7 @@ $("#sortable").sortable()
       $tour = ltrim($t, '0');
       $stor = str_replace('-', '/', $season);
       if ($tour <= 7) $head = '<b>Групповой этап Лиги КСП «Торпедо»" - ' . $stor . '. Тур №' . $tour . '</b><br />';
-      elseif ($tour <= 20) $head = '<b>Лига КСП «Торпедо»" - 2018/19. 1 стадия финального этапа. ' . ($tour - 7) . ' тур</b><br />';
+      elseif ($tour <= 20) $head = '<b>Лига КСП «Торпедо»" - 2019/20. 1 стадия финального этапа. ' . ($tour - 5) . ' тур</b><br />';
       break;
     }
   }
@@ -1323,7 +1323,6 @@ if (isset($updates))
 else
   echo '
 <!--link href="css/prognoz.css?ver=625" rel="stylesheet"-->
-<script type="text/javascript" src="js/jquery/jquery.ui.touch-punch.min.js"></script>
 <script>//<![CDATA[
 var '.date_tz('\h\o\u\r\s=G,\m\i\n\u\t\e\s=i,\s\e\c\o\n\d\s=s', '', time(), $_COOKIE['TZ'] ?? 'Europe/Berlin').',sendfp=true,base=[],mom=[]
 ' . $id_arr . '

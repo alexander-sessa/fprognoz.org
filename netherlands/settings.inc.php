@@ -7,6 +7,6 @@ $cur_year = '2019-20';
 $president = 'Кирилл Голощёков';
 $vice = 'Serge Vasiliev';
 $pressa = '';
-$coach = 'Serge Vasiliev';
+$coach = 'Serge Vasiliev, Михаил Сирота';
 $club_edit = true;
 ?>
