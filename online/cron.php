@@ -270,17 +270,22 @@ function parse_cal_and_gen($program) {
   return [$cal, $gen];
 }
 
+// возвращет NULL или прогноз, в котором дубли заменены нулями
 function pr_validate($pr) {
-  $valid = true;
+  $invalid = NULL;
   $t = [];
   $t[1] = substr($pr, 0, 9);
   $t[2] = substr($pr, 9);
   for ($i = 1; $i < 3; $i++)
-    if (strlen(count_chars($t[$i], 3)) != 9) {
-      $valid = false;
-    }
+    if (strlen(count_chars($t[$i], 3)) != 9)
+      foreach (count_chars($t[$i], 1) as $c => $n)
+        if ($n > 1)
+          $t[$i] = strtr($t[$i], [chr($c) => '0']);
 
-  return $valid;
+  if (($t[1] . $t[2]) != $pr)
+    $invalid = $t[1].$t[2];
+
+  return $invalid;
 }
 
 function SwissStanding($cal_file) {
@@ -400,17 +405,13 @@ function build_prognozlist($country_code, $season, $tour) {
     foreach ($predicts as $code => $predict)
     {
       $predict = strtr($predict, [' ' => '']);
-      if (pr_validate($predict))
+      if ($new_pr = pr_validate($predict))
       {
-        if (isset($players[$code]))
-          $all_predicts[$players[$code]][$code] = $predict;
-
-        if (isset($players_unl[$code]))
-          $all_predicts[$players_unl[$code]][$code] = $predict;
-
+        $prognozlist .= "Ошибка в прогнозе от $code: $predict, прогноз изменён: $new_pr\n";
+        $predict = $new_pr;
       }
-      else
-        $prognozlist .= "Ошибка в прогнозе от $code: $predict\n";
+      if (isset($players[$code]))
+        $all_predicts[$players[$code]][$code] = $predict;
 
     }
     $generators = [];
@@ -460,15 +461,12 @@ function build_prognozlist($country_code, $season, $tour) {
           }
           else
           {
-            if (pr_validate($predict))
-              $cc_predicts[$code] = $predict;
-            else
+            if (trim($predict) && ($new_pr = pr_validate($predict)))
             {
-              $cc_predicts[$code] = '';
-              if (trim($predict))
-                $prognozlist .= "Ошибка в прогнозе от $code: $predict\n";
-
+              $prognozlist .= "Ошибка в прогнозе от $code: $predict, прогноз изменён: $new_pr\n\n";
+              $predict = $new_pr;
             }
+            $cc_predicts[$code] = $predict;
           }
 
       }

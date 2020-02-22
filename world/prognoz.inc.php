@@ -1497,6 +1497,7 @@ var '.date_tz('\h\o\u\r\s=G,\m\i\n\u\t\e\s=i,\s\e\c\o\n\d\s=s', '', time(), $_CO
 function newpredict(){var p="";m=$("#pl").data("view")?6:18;for(i=1;i<=m;i++)p+=(ps=$("#dice"+i).val())?ps:"=";$("#prognoz_str").val(p);}
 function predict(id,dice){$("#"+id).val(dice);newpredict()}
 function post_predicts(){
+  $("#send_predict").attr("disabled", true)
   str=$("#prognoz_str").val();nicks=$("#single_code").length?$("#single_code").val():$("#team_codes option:selected").val();
   t=[];t[0]=str.substring(0,9);t[1]=str.substring(9);
   e="";for(i=0;i<2;i++)for(j=1;j<=9;j++)if(t[i].split(j).length!=2)e+="в"+(i?"о":"")+" "+(i+1)+"-м тайме кол-во ставок \""+j+"\" не равно 1\n";

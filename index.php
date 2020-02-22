@@ -1617,7 +1617,7 @@ else {
     <script src="/js/jquery-ui/jquery-ui.min.js"></script>
     <script src="/js/jquery-ui/jquery.ui.touch-punch.min.js"></script>
     <script src="/js/croppic/croppic-3.0.min.js"></script>
-    <script src="/js/fp.js?ver=220"></script>
+    <script src="/js/fp.js?ver=221"></script>
 </head>
 
 <body>

@@ -101,7 +101,6 @@ function last_season($cca) {
 }
 $names = [
   'Andrey_Vedeneev' => 'Andrey Vedeneev',
-  'антон' => 'Евгений',
 ];
 $imap = imap_open($mail_server, $mail_user, $mail_password);
 if (!$imap)
@@ -118,6 +117,11 @@ else {
       foreach ($predicts as $line) {
         $log .= ' ' . trim($line);
         list($team, $predict, $tstamp, $pena) = explode(';', $line);
+        if ($cca == 'UNL')
+        {
+            $predict = strtr($predict . $pena, [' ' => '']);
+            $pena = '';
+        }
         if (isset($names[$team]))
         { // дублирование имён для некоторых...
             $line1 = $names[$team] . ';' . $predict . ';' . $tstamp . ';' . $pena;
