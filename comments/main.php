@@ -110,8 +110,9 @@ function c_out_comments($id, $level, $pid) {
   $temp = explode(' ', $c_hash['userid']);
   $initials = mb_substr($temp[0], 0,1);
   if (count($temp) > 1) $initials .= mb_substr($temp[1], 0,1);
-  $author = $c_user['nicknm'];
-  if (!$author) $author = $c_hash['userid'];
+  $author = $c_user['nicknm'] ?? '';
+  if (!$author)
+    $author = $c_hash['userid'];
 
   $out = '
   <div id="c_block' . $id . '" class="d-flex pb-3 w-100">
@@ -121,7 +122,7 @@ function c_out_comments($id, $level, $pid) {
       <img src="/images/avatars/96/' . $c_user['avatar'] .'" width="48px" height="48px" alt="' . $initials . '"  class="rounded-lg">';
   else
     $out .= '
-      <div class="c-comment-icon' . ($c_user['status'] == 2 ? ' bg-gold' : '') . '">' . $initials . '</div>';
+      <div class="c-comment-icon' . (isset($c_user['status']) && $c_user['status'] == 2 ? ' bg-gold' : '') . '">' . $initials . '</div>';
   $out .= '
     </aside>
     <div class="ml-1 w-100" commentid="' . $id . '">

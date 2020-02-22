@@ -163,7 +163,7 @@ echo '<p class="title text15b">&nbsp;&nbsp;&nbsp;Тренерская Лиги �
 
           $order[$code] = isset($_POST['pos'.$i]) ? $_POST['pos'.$i] : $i;
           $squad[$code] = $code.'	'.$teamname.'	'.$player.'	'.$email.'	'
-          . (in_array($code, [trim($_POST['coach1']), trim($_POST['coach2'])]) ? 'coach' : $_POST['prog'.$i]) . '	
+          . (in_array($code, [trim($_POST['coach1']), trim($_POST['coach2'])]) ? 'coach' : ($_POST['prog'.$i]) ?? '') . '	
 ';
           if ($email)
             make_passwd($code, $player, $email);
@@ -181,7 +181,9 @@ echo '<p class="title text15b">&nbsp;&nbsp;&nbsp;Тренерская Лиги �
         }
       }
       $codes_out .= $squad[$_POST['coach1']];
-      $codes_out .= $squad[$_POST['coach2']];
+      if ($_POST['coach2'])
+        $codes_out .= $squad[$_POST['coach2']];
+
       asort($order);
       $csv = '';
       foreach ($order as $code => $pos)
@@ -240,7 +242,8 @@ else
     list($code, $team, $name, $email, $role) = explode('	', $line);
     $role = trim($role);
     $player[$team][$code] = ['code' => $code, 'name' => $name, 'email' => $email, 'role' => $role];
-    if ($role == 'coach' && ($name == $_POST['coach1'] || (isset($_SESSION['Coach_name']) && $name == $_SESSION['Coach_name']))) {
+    if ($role == 'coach' && ((isset($_POST['coach1']) && $name == $_POST['coach1']) || (isset($_SESSION['Coach_name']) && $name == $_SESSION['Coach_name'])))
+    {
       $team_name = $team;
       $closed = false;
     }
@@ -312,7 +315,7 @@ label.file-upload input[type=file]{display:block;position:absolute;top:0;right:0
   <div class="form-group row">
     <label for="coach2" class="col-sm-2 col-form-label">Второй тренер</label>
     <div class="col-sm-8">
-      <input type="text" class="form-control" id="coach2" name="coach2" placeholder="не обязательно" value="'.$coach[1]['code'].'">
+      <input type="text" class="form-control" id="coach2" name="coach2" placeholder="не обязательно" value="'.($coach[1]['code'] ?? '').'">
     </div>
   </div>
   <div class="form-group row">

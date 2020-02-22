@@ -34,12 +34,6 @@ function HighlightedScanLine($team, $prognoz, $rprognoz, $warn) {
   return mb_sprintf('%-21s' . $highlighted . '  %-3s', $team, $warn);
 }
 
-if (count($_POST)) {
-  $logfile = fopen($online_dir . 'log/post-raw.log', 'a');
-  fwrite($logfile, date('Y-m-d H:i:s') . ' ' . var_export($_POST, true) . "\n");
-  fclose($logfile);
-}
-
 if (!isset($l)) $l = '';
 ($cca == 'UEFA') ? $tour = $l . strtoupper($t) : $tour = $cca . strtoupper($t);
 $season_dir = $online_dir . $cca . '/' . $s . '/';
@@ -202,7 +196,7 @@ if ($addfile) {
         $line = '';
       }
       if (!$publish && ($team != $teams[$team_code])) $prognoz = $hidden;
-      if (is_numeric($line[0])) $warn = '     ';
+      if (isset($line[0]) && is_numeric($line[0])) $warn = '     ';
       else {
         $wln = (mb_strlen($line) > 4 && $line[4] == ' ') ? 5 : 4;
         $warn = strtr(mb_substr($line, 0, $wln), array('K' => 'К', 'а' => 'a', 'о' => 'o', 'с' => 'c'));

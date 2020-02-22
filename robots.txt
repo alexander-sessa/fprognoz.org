@@ -1,2 +1,8 @@
 User-agent: *
 Disallow: /online/
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /

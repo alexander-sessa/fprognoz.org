@@ -416,22 +416,27 @@ function lock($lock, $timer) {
 function send_predict($country_code, $season, $team_code, $tour, $prognoz, $enemy_str, $ip) {
   global $ccn;
   global $data_dir;
+
   $time = time();
   $email = '';
   $cca_home = $data_dir . 'online/' . $country_code . '/';
   $acodes = file($cca_home . $season .'/codes.tsv');
-  foreach ($acodes as $scode) if ($scode[0] != '#') {
+  foreach ($acodes as $scode) if ($scode[0] != '#')
+  {
     $ateams = explode('	', $scode);
-    if (trim($ateams[0]) == $team_code) {
+    if (trim($ateams[0]) == $team_code || trim($ateams[1]) == $team_code)
+    {
       $name = trim($ateams[2]);
       $email = trim($ateams[3]);
     }
   }
   $replyto = $email ? "\nReply-To: $email" : '';
   $mlist = $email;
-  if (is_file($cca_home . 'emails')) {
+  if (is_file($cca_home . 'emails'))
+  {
     $atemp = file($cca_home . 'emails');
-    foreach ($atemp as $line) {
+    foreach ($atemp as $line)
+    {
       list($pmail, $pcode) = explode(':', trim($line));
       if ($pcode != $enemy_str) $mlist .= ($mlist ? ', ' : '') . $pmail;
     }
@@ -444,9 +449,11 @@ function send_predict($country_code, $season, $team_code, $tour, $prognoz, $enem
   isset($pena) ? $pena = strtoupper(trim($pena)) : $pena = '';
   $tour_dir = $cca_home . $season . '/prognoz/' . $tour;
   if (!is_dir($tour_dir)) mkdir($tour_dir, 0755, true);
-  if (is_file($tour_dir . '/mail')) {
+  if (is_file($tour_dir . '/mail'))
+  {
     $lock = $tour_dir.'/lock';
-    if (lock($lock, 5000)) {
+    if (lock($lock, 5000))
+    {
       $content = file_get_contents($tour_dir . '/mail');
       file_put_contents($tour_dir . '/mail', $content . "$team_code;$prognoz;$time;$pena\n");
       unlink($lock);
@@ -973,9 +980,9 @@ foreach ($access as $access_str) {
   list($code, $as_code, $team, $name, $mail, $pwd, $rol) = explode(';', $access_str);
   $cmd_db[$as_code][$code] = ['ccn' => $as_code, 'cmd' => $team, 'usr' => $name, 'eml' => $mail, 'rol' => $rol];
   if ($auth || isset($_POST['submitnewpass'])) { // аутентификация или контрольная проверка пароля
-    if (($pwd == '' || $hash == $pwd || $hash == $SuperPWD || ($data['cmd'] == 'auth_token' && $data['ts'] > time()))
+    if (($pwd == '' || $hash == $pwd || $hash == $SuperPWD || (isset($data) && $data['cmd'] == 'auth_token' && $data['ts'] > time()))
       && ($name_str == mb_strtoupper($code) || $name_str == mb_strtoupper($name)
-        || $name_str == strtoupper($mail) || strtoupper($_SESSION['Coach_mail']) == strtoupper($mail)))
+        || $name_str == strtoupper($mail) || (isset($_SESSION['Coach_mail']) && strtoupper($_SESSION['Coach_mail']) == strtoupper($mail))))
     {
       $passed = true;
       if (isset($_POST['submitnewpass'])) {
@@ -1517,7 +1524,7 @@ else if ($a == 'world' || $a == 'sfp-20') { // сбор туров Мирово�
 
       if (is_file($s_dir.'codes.tsv'))
         $sidebar .= '
-                <li><a href="?a='.$aa.'&amp;s='.$s.'&amp;m=player'.($suffix != '_unl' ? '&amp;l='.$suffix[2] : '').'">Участники</a></li>';
+                <li><a href="?a='.$aa.'&amp;s='.$s.'&amp;m=player'.($suffix != '_unl' ? '&amp;l='.($suffix[2] ?? 's') : '').'">Участники</a></li>';
 
       if ($code == 'MSL')
         $sidebar .= '
@@ -1988,7 +1995,8 @@ if ($cc != 'UNL') // временно не показываем
     echo $content;
   }
   else
-    include ($a . '/' . $m . '.inc.php');
+    if (is_file($a . '/' . $m . '.inc.php'))
+      include ($a . '/' . $m . '.inc.php');
 
   echo '
                 </div>

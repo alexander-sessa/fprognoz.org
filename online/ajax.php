@@ -231,7 +231,7 @@ function build_access() {
   file_put_contents($data_dir . 'auth/.access', $access);
 }
 
-if ($fn = $_FILES['upload']['name'])
+if (isset($_FILES['upload']['name']) && ($fn = $_FILES['upload']['name']))
 {
   // проверка на графический формат файла
   $finfo = finfo_open(FILEINFO_MIME_TYPE);
@@ -343,7 +343,7 @@ if (isset($data['cmd'])) {
 ');
 //С помощью этой ссылки Вы можете сменить пароль без необходимости указания действующего пароля.
 //Внимание: смена пароля возможна только со страницы, на которую ведёт временная ссылка.
-    echo ($ret[0] == r ? 0 : 1);
+    echo ($ret[0] == 'o' ? 0 : 1);
   }
 
   // запись файла

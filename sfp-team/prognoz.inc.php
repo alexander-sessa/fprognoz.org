@@ -583,7 +583,8 @@ $("#sortable").sortable()
       }
       elseif ($l != 'PRO' || $i < 5) {
         if ($i == 5) $prognozColored .= '.';
-        if (isset($prognozh[$i])) ($prognozh[$i] == $rprognoz[$i]) ?
+        if (isset($prognozh[$i]) && isset($rprognoz[$i]))
+          ($prognozh[$i] == $rprognoz[$i]) ?
              $prognozColored .= '<span style="background-color: lime; font-weight: bold;">'.$prognozh[$i].'</span>' :
              $prognozColored .= $prognozh[$i];
         else $prognozColored .= ' ';
@@ -647,11 +648,12 @@ $("#sortable").sortable()
       }
       elseif ($l != 'PRO' || $i < 5) {
         if ($i == 5) $prognozColored .= '.';
-        if(isset ($prognoza[$i])) ($prognoza[$i] == $rprognoz[$i]) ?
+        if(isset ($prognoza[$i]) && isset($rprognoz[$i]))
+          ($prognoza[$i] == $rprognoz[$i]) ?
              $prognozColored .= '<span style="background-color: lime; font-weight: bold;">'.$prognoza[$i].'</span>' :
              $prognozColored .= $prognoza[$i];
         else $prognozColored .= ' ';
-        if ($rprognoz[$i] != '?') {
+        if (isset($rprognoz[$i]) && $rprognoz[$i] != '?') {
           if (isset($prognozh[$i]) && $rprognoz[$i] == $prognozh[$i]) {
             $hith++;
             $hh = 1;

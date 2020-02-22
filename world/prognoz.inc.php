@@ -692,7 +692,7 @@ function ball_form($nm, $match, $home, $away, $prognoz_half, $prognoz_array) {
     <ul id="time1-unused" class="sortable-list-1 container">
 ';
     for ($i = 1; $i <= 9; ++$i)
-      if (strpos($prognoz_half[0], (string)$i) === false)
+      if ($prognoz_half && strpos($prognoz_half[0], (string)$i) === false)
         $out .= li_ball($i);
 
     $out .= '
@@ -933,16 +933,21 @@ $base = get_results_by_date(date('m', $day_before), date('d', $day_before), $upd
     ((isset($config[0]['нумерация']) && $config[0]['нумерация'] == 'поэтапная') ? $t - $pre_etaps_tours : $t) .
     (isset($etap['постфикс']) ? $etap['постфикс'] : '');
 */
+$head = '';
 $tt = $t - 1;
-$head = '<a href="/?a=world&s='.$s.'&t='.($tt < 10 ? '0' : '').$tt.'&m=prognoz" title="предыдущий тур"><i class="fas fa-arrow-circle-left"></i></a> ';
+if (is_dir($season_dir . 'UNL'.($tt < 10 ? '0' : '').$tt))
+  $head .= '<a href="/?a=world&s='.$s.'&t='.($tt < 10 ? '0' : '').$tt.'&m=prognoz" title="предыдущий тур"><i class="fas fa-arrow-circle-left"></i></a> ';
+
 if ($t < 12)
   $head .= 'Лиги Сайтов и Наций '.$s.'. Тур '.ltrim($t, '0');
 else if ($t < 17)
   $head .= 'Финальный Турнир '.$s.'. Тур '.($t - 11);
 else if ($t > 95)
   $head .= 'Лига Наций '.$s.'. Пробный тур '.($t - 95);
-//if (is_file())
-$head .= ' <a href="/?a=world&s='.$s.'&t='.($tt < 8 ? '0' : '').($tt+2).'&m=prognoz" title="следующий тур"><i class="fas fa-arrow-circle-right"></i></a>';
+
+$tt = $t + 1;
+if (is_dir($season_dir . 'UNL'.($tt < 10 ? '0' : '').$tt))
+  $head .= ' <a href="/?a=world&s='.$s.'&t='.($tt < 10 ? '0' : '').$tt.'&m=prognoz" title="следующий тур"><i class="fas fa-arrow-circle-right"></i></a>';
 
 $head .= '<br>';
 if (count($teamCodes) && !$closed)

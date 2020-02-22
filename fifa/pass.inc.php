@@ -50,8 +50,8 @@ if (!$ok) {
 
   echo ' заполните поля ввода на этой странице и нажмите кнопку "сменить".<br />
 Пароль будет изменен для доступа ко всем вашим командам.</p>
-<form action="?m=pass'.($token ? '&token='.$token : '').'" method="post" onSubmit="return show_alert(this);">
-'.($token ? '' : '<p>старый пароль: <input type="password" name="pass_str" value="" size="20"></p>').'
+<form action="?m=pass'.(isset($token) ? '&token='.$token : '').'" method="post" onSubmit="return show_alert(this);">
+'.(isset($token) ? '' : '<p>старый пароль: <input type="password" name="pass_str" value="" size="20"></p>').'
 <p>новый пароль : <input type="password" name="new_passwd" value="" size="20">
 <input type="submit" name="submitnewpass" value=" сменить "></p>
 </form>
