@@ -181,8 +181,13 @@ $("#sortable").sortable()
   require_once('online/tournament.inc.php');
   include script_from_cache('online/realteam.inc.php');
   list($last_day, $last_month) = explode('.', $lastdate);
+  $year = substr($s, 0, 4);
+  // для сезонов вида 2019-20, прибавляем год для программок со сроком в январе...июне
+  if ($last_month < 7 && strlen($s) > 6)
+    $year++;
+
   if (!isset($updates)) $updates = NULL;
-  $base = get_results_by_date($last_month, $last_day, $updates);
+  $base = get_results_by_date($last_month, $last_day, $updates, $year);
   $mdp = array();
   $program_table = '<table class="p-table">
 <thead>

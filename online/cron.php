@@ -437,6 +437,11 @@ function build_prognozlist($country_code, $season, $tour) {
     }
     foreach ($participants as $cc)
     {
+      $team_name = array_search($cc, $ccarr);
+      if (!$team_name)
+        $team_name = $cc;
+
+      $prognozlist .= $team_name."\n\n";
       $cc_predicts = [];
       $new = false;
 
@@ -523,7 +528,7 @@ function build_prognozlist($country_code, $season, $tour) {
         }
 
       file_put_contents($prognoz_dir . $cc, $out);
-      $prognozlist .= "$cc\n\n$out\n";
+      $prognozlist .= $out."\n";
     }
 
     // код "Валерий Лобановский (Old Stars)"

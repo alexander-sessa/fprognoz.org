@@ -915,7 +915,7 @@ list($program_matches, $lastdate, $lasttm, $program) = parse_program($program_fi
 list($last_day, $last_month) = explode('.', $lastdate);
 $dm = "$last_day.$last_month";
 $day_before = strtotime("-1 day $last_month/$last_day");
-$base = get_results_by_date(date('m', $day_before), date('d', $day_before), $updates ?? NULL);
+$base = get_results_by_date(date('m', $day_before), date('d', $day_before), $updates ?? NULL, $s);
 
 // заголовок тура
 /* это не работает - надо неспешно починить!!!
@@ -935,7 +935,7 @@ $base = get_results_by_date(date('m', $day_before), date('d', $day_before), $upd
 */
 $head = '';
 $tt = $t - 1;
-if (is_dir($season_dir . 'UNL'.($tt < 10 ? '0' : '').$tt))
+if (is_dir($season_dir . '/prognoz/UNL'.($tt < 10 ? '0' : '').$tt))
   $head .= '<a href="/?a=world&s='.$s.'&t='.($tt < 10 ? '0' : '').$tt.'&m=prognoz" title="предыдущий тур"><i class="fas fa-arrow-circle-left"></i></a> ';
 
 if ($t < 12)
@@ -946,7 +946,7 @@ else if ($t > 95)
   $head .= 'Лига Наций '.$s.'. Пробный тур '.($t - 95);
 
 $tt = $t + 1;
-if (is_dir($season_dir . 'UNL'.($tt < 10 ? '0' : '').$tt))
+if (is_dir($season_dir . '/prognoz/UNL'.($tt < 10 ? '0' : '').$tt))
   $head .= ' <a href="/?a=world&s='.$s.'&t='.($tt < 10 ? '0' : '').$tt.'&m=prognoz" title="следующий тур"><i class="fas fa-arrow-circle-right"></i></a>';
 
 $head .= '<br>';

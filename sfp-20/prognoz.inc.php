@@ -513,7 +513,7 @@ if (is_file($program_file)) {
   include ('online/tournament.inc.php');
   list($last_day, $last_month) = explode('.', $lastdate);
   $dm = $last_day . '.' . $last_month;
-  $base = get_results_by_date($last_month, $last_day, $updates);
+  $base = get_results_by_date($last_month, $last_day, $updates, $s);
   if ($renew)
     touch($online_dir.'schedule/task/renew.IST'.$t);
 

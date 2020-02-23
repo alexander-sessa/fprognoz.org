@@ -2,7 +2,7 @@
 $last_month = 8;
 $last_day = 30;
 if (!isset($updates)) $updates = NULL;
-$base = get_results_by_date($last_month, $last_day, $updates);
+$base = get_results_by_date($last_month, $last_day, $updates, '2019');
 $rprognoz = '';
 $publish = true;
 $tour = 'KONK37';
@@ -150,7 +150,8 @@ for ($i=0; $i<$nm; $i++) {
   if ($mdp[$i+1]['hits'] == 1)
     foreach ($sprognoz as $teamn => $progn)
       if ($progn[$i] == $rprognoz[$i]) $mdp[$i+1]['plyr'] = $teamn;
-  if (count($aprognoz) - $mdp[$i+1]['hits'] == 1)
+
+  if (count($aprognoz) - (int)$mdp[$i+1]['hits'] == 1)
     foreach ($sprognoz as $teamn => $progn)
       if (($progn[$i] != '=') && ($progn[$i] != $rprognoz[$i]))
         $mdp[$i+1]['plyr'] = $teamn;

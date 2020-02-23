@@ -740,11 +740,13 @@ function load_archive($fname, $updates) {
   return $archive;
 }
 
-function get_results_by_date($month, $day, $update = NULL) {
+function get_results_by_date($month, $day, $update=NULL, $year=NULL) {
   global $online_dir;
   $updates = json_decode(stripslashes($update), true);
   $date = sprintf('%02d-%02d', trim($month), trim($day));
-  $year = date('Y');
+  if (!$year)
+    $year = date('Y');
+
 //  if ($month > 7) $year--;
   $base = array();
   $week = date('W', strtotime($year.'-'.$date));
@@ -1473,7 +1475,7 @@ else if ($a == 'world' || $a == 'sfp-20') { // сбор туров Мирово�
                     <ul class="collapse list-unstyled'.($code == 'UNL' ? '' : ' show').'" id="'.$code.'Submenu">';
       $dir = scandir($s_dir.'programs', 1);
       foreach ($dir as $prog)
-        if ($prog[0] != '.' && $code != 'UFT' && ($prog < 'UNL12' || $prog > 'UNL94')) {
+        if ($prog[0] != '.' && $code != 'UFT' && ($prog < 'UNL12')) {//  || $prog > 'UNL94')) {
           $tt = substr($prog, 3);
           $to = $tt;
           $prefix = '<a href="?a='.$aa.'&amp;s='.$s.'&amp;t='.$to;
@@ -1634,7 +1636,8 @@ else {
 echo '
         <nav id="sidebar">
             <div class="sidebar-header">
-                <a href="/?a=world&s=2020&t=01&m=prognoz"><h5>Лига Наций:&nbsp;&nbsp;1-й тур</h5><h5>Лига Сайтов: 1-й тур</h5></a><br>
+                <a href="/?a=world&s=2020&t=02&m=prognoz"><h5>Лига Наций/Сайтов:</h5><h6>подача прогнозов на 2 тур</h6></a>
+                <a href="/?a=world&s=2020&t=01&m=prognoz"><h6>"живые" результаты 1 тура</h6></a><br>
                 <a href="/?m=news&s=2019-20"><h6>Новости SFP - ФИФА</h6></a>
             </div>
 

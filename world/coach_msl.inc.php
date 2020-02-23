@@ -44,9 +44,9 @@ $escape_chars = [
 $closed = true;
 $ac_head = '';
 echo '<p class="title text15b">&nbsp;&nbsp;&nbsp;Тренерская Лиги Сайтов</p>
-<hr size="1" width="98%">';
-//Закрыто. Если ваша команда пробилась в Финальный турнир, Вам <a href="/?a=world&m=coach_uft">сюда</a>';
-//exit;
+<hr size="1" width="98%">
+Закрыто. Если ваша команда пробьётся в Финальный турнир, Вам <a href="/?a=world&m=coach_uft">сюда</a>';
+exit;
 
   $s = $cur_year;
   $codes = file($online_dir.'UNL/'.$s.'/codes.tsv');

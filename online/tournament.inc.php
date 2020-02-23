@@ -1,6 +1,7 @@
 <?php
 $tourname = array(
 'Пор' => 'Portugal: Primeira Liga',
+'Прт' => 'Portugal: Primeira Liga',
 'PRT' => 'Portugal: Primeira Liga',
 'cPRT' => 'Portugal: Cup',
 'ЧА' => 'England: Premier League',

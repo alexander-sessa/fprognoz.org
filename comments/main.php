@@ -129,7 +129,7 @@ function c_out_comments($id, $level, $pid) {
       <header>
         <a name="comment-' . $id . '"></a>
         <strong class="c-comment-author px-2 text-' . (isset($c_user['status']) && $c_hash['status'] == 2 ? 'gold' : 'dark') . '">' . $author . '</strong>
-        <span class="c-comment-date text-secondary small">' . date_tz('j-m-Y G:i', '', $c_hash['tstamp'], $_COOKIE['TZ']) . '</span>
+        <span class="c-comment-date text-secondary small">' . date_tz('j-m-Y G:i', '', $c_hash['tstamp'], $_COOKIE['TZ'] ?? NULL) . '</span>
         <a href="javascript:;" onClick="$(\'#share' . $id . '\').toggle();share' . $id . '.select();return false;" class="fas fa-share-alt" aria-hidden="true" style="cursor:pointer" title="поделиться"> </a>
         <input type="text" id="share' . $id . '" class="small" style="display:none;width:350px;height:15px;font-size:12px;" value="' . $this_site . '/' . $uri . '#comment-' . $id . '">
       </header>
