@@ -53,7 +53,7 @@ $subjects = array(
 'SUI' => 'ФП. Швейцария.',
 'UEFA' => 'ФП. Лиги УЕФА.',
 'SFP' => 'ФП. Сборная SFP.',
-'ULN' => 'ФП. Лига Наций.',
+'UNL' => 'ФП. Лига Наций.',
 'WL' => 'ФП. Мировая Лига.',
 'IST' => 'ФП. Турнир "SFP - 20 ЛЕТ!"',
 );
@@ -180,7 +180,7 @@ function send_to_all($country_code, $subj, $body) {
 'SUI' => '"Swiss FPA" <sui@fprognoz.org>',
 'FIN' => '"AFL of Finland" <fin@fprognoz.org>',
 'SFP' => '"SFP-Team" <sfp@fprognoz.org>',
-'UNL' => '"Nations League" <uln@fprognoz.org>',
+'UNL' => '"Nations League" <unl@fprognoz.org>',
 'WL' => '"World League" <wl@fprognoz.org>',
 'IST' => '"SFP - 20!" <sfp@fprognoz.org>',
 );
@@ -412,6 +412,9 @@ function build_prognozlist($country_code, $season, $tour) {
       }
       if (isset($players[$code]))
         $all_predicts[$players[$code]][$code] = $predict;
+
+      if (isset($players_unl[$code]))
+        $all_predicts[$players_unl[$code]][$code] = $predict;
 
     }
     $generators = [];

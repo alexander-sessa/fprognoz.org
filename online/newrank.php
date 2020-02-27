@@ -110,10 +110,12 @@ if (!is_file($ranking . 'ECR' . $year . '.xls') || remote_file_size($url) != fil
 
 // national team rank
   $url = "http://www.eloratings.net/World.tsv";
-  if ($content = file_get_contents($url)) {
+  if ($content = HTTP_CURL($url, 'http://www.eloratings.net'))
+  {
     $ccfile = file('en.teams.tsv');
     $cc = array();
-    foreach ($ccfile as $line) {
+    foreach ($ccfile as $line)
+    {
       list($code, $country) = explode('	', trim($line), 2);
       if ($cut = strpos($country, '	'))
         $country = substr($country, 0, $cut);
