@@ -399,12 +399,12 @@ function build_prognozlist($country_code, $season, $tour) {
     foreach ($mail as $line)
     {
       list($code, $predict, $rest) = explode(';', $line, 3);
-      $predicts[trim($code)] = $predict;
+      $predicts[trim($code)] = strtr($predict, [' ' => '', '	' => '']);
     }
     $all_predicts = [];
     foreach ($predicts as $code => $predict)
     {
-      $predict = strtr($predict, [' ' => '']);
+      $predict = strtr($predict, [' ' => '', '	' => '']);
       if ($new_pr = pr_validate($predict))
       {
         $prognozlist .= "Ошибка в прогнозе от $code: $predict, прогноз изменён: $new_pr\n";

@@ -126,7 +126,7 @@ else {
         }
         if (isset($names[$team]))
         { // дублирование имён для некоторых...
-            $line1 = $names[$team] . ';' . $predict . ';' . $tstamp . ';' . $pena;
+            $line1 = $names[$team] . ';' . $predict . ';' . $tstamp . ';' . $pena . "\n";
             $new .= $line1;
             $log .= ' ' . trim($line1) . ' received;';
         }

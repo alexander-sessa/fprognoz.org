@@ -18,7 +18,7 @@ function SwissDraw($games, $teams, $verbose=false) {
   {
     $nbGames = ceil($countTeams / 2);
     $hasDummy = $countTeams % 2;
-    if (count($games['SFP']) == 0) {
+    if (count($games[key($games)]) == 0) {
       $error = 'Начальное распределение команд.';
       for ($i = 0; $i < $nbGames - $hasDummy; $i++)
         $newRounds[] = $teams[$i].' - '.$teams[$nbGames - $hasDummy + $i];

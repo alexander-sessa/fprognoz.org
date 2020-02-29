@@ -1636,8 +1636,8 @@ else {
 echo '
         <nav id="sidebar">
             <div class="sidebar-header">
-                <a href="/?a=world&s=2020&t=02&m=prognoz"><h5>Лига Наций/Сайтов:</h5><h6>подача прогнозов на 2 тур</h6></a>
-                <a href="/?a=world&s=2020&t=01&m=prognoz"><h6>"живые" результаты 1 тура</h6></a><br>
+                <a href="/?a=world&s=2020&t=02&m=prognoz"><h5>Лига Наций/Сайтов:</h5><h6>страница 2 тура</h6></a>
+                <a href="/?a=world&s=2020&t=01&m=prognoz"><h6>итоги 1 тура</h6></a><br>
                 <a href="/?m=news&s=2019-20"><h6>Новости SFP - ФИФА</h6></a>
             </div>
 
