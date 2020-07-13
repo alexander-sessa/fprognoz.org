@@ -87,7 +87,7 @@
 '825453' => 'Russia: 1. Division Promotion Playoff',
 '825454' => 'Russia: 1. Division Relegation Playoff',
 
-'BELARUS#PR' => 'Belarus: Premier Division',
+'BELARUS#PR' => 'Беларусь: Вышэйшая ліга',
 'BELARUS#QF' => 'Belarus: Cup',
 'BELARUS#SF' => 'Belarus: Cup',
 'BELARUS#R8' => 'Belarus: Cup',
@@ -97,7 +97,7 @@
 '833113' => 'Belarus: Premier League Championship Group',
 '833114' => 'Belarus: Premier League Relegation Group',
 
-'UKRAINE#PR' => 'Ukraine: Premier League',
+'UKRAINE#PR' => 'Україна: Прем’єр-ліга',
 'UKRAINE#R16' => 'Ukraine: Cup',
 'UKRAINE#QF' => 'Ukraine: Cup',
 'UKRAINE#SF' => 'Ukraine: Cup',
@@ -108,6 +108,8 @@
 'GREECE#SL' => 'Greece: Super League',
 'SWITZERLAND#SL' => 'Switzerland: Super League',
 'SWITZERLAND#FINAL' => 'Switzerland: FA Cup',
+'TURKEY#SL' => 'Turkey: Süper Lig',
+'AUSTRIA#BL' => 'Austria: Bundesliga',
 
 'EUROPE (UEFA)#A' => 'International: UEFA Nations League',
 'EUROPE (UEFA)#B' => 'International: UEFA Nations League',

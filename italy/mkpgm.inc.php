@@ -91,10 +91,10 @@ function IntervalsTable() {
   $out = '
   <thead>
     <tr>
-      <th colspan="3">игровые дни</th>
+      <th colspan="2">&nbsp; Игровые интервалы</th>
       <th>всего</th>';
   foreach ($ccs as $cc => $country)
-    if ($cc != 'SUI')
+    //if ($cc != 'SUI')
       $out .= '
       <th>'.$cc.'</th>';
 
@@ -123,7 +123,7 @@ if ($day1 == '12-31')
     $day5 = date('m-d', $time + 604800);
     $s1 = $s2 = '';
     $t1 = $t2 = 0;
-    foreach ($ccs as $cc => $country) if ($cc != 'SUI1')
+    foreach ($ccs as $cc => $country)// if ($cc != 'SUI')
     {
       foreach ($suffix as $tournament)
         if (is_file($online_dir . "fixtures/$year/$week/$cc$tournament"))
@@ -191,9 +191,8 @@ if ($day1 == '12-31')
 
       $out .= "
 <tr>
-<td><a href='?a=$a&m=mkpgm&cc=$ccc&d=$day1&add=$uadd#tour'>вт $day1</a> &nbsp;-</td>
-<td><a href='?a=$a&m=mkpgm&cc=$ccc&d=$day1&add=$uadd#tour'>чт $day2</a></td>
-<td><a href='?a=$a&m=mkpgm&cc=$ccc&d=$day1+$day3&add=$uadd#tour'> + </a></td>
+<td style='text-align:left'><a href='?a=$a&m=mkpgm&cc=$ccc&d=$day1&add=$uadd#tour'>Вт $day1 - чт&nbsp; $day2</a></td>
+<td style='text-align:left'><a href='?a=$a&m=mkpgm&cc=$ccc&d=$day1+$day3&add=$uadd#tour'><b>+ </b></a></td>
 <td>$t1</td>$s1</tr>";
     }
     if ($t2 > 0)
@@ -203,9 +202,8 @@ if ($day1 == '12-31')
 
       $out .= "
 <tr>
-<td><a href='?a=$a&m=mkpgm&cc=$ccc&d=$day3&add=$uadd#tour'>пт $day3</a> &nbsp;-</td>
-<td><a href='?a=$a&m=mkpgm&cc=$ccc&d=$day3&add=$uadd#tour'>пн $day4</a></td>
-<td><a href='?a=$a&m=mkpgm&cc=$ccc&d=$day3+$day5&add=$uadd#tour'>+</a></td>
+<td style='text-align:left'><a href='?a=$a&m=mkpgm&cc=$ccc&d=$day3&add=$uadd#tour'>Пт $day3 - пн $day4</a></td>
+<td style='text-align:left'><a href='?a=$a&m=mkpgm&cc=$ccc&d=$day3+$day5&add=$uadd#tour'><b>+ </b></a></td>
 <td>$t2</td>$s2</tr>";
     }
     $day3p = $day3;
@@ -368,7 +366,7 @@ function SortableMatchesList($ddd, $add) {
   rsort($mrated);
   $r10 = $mrated[9];
   $r15 = $mrated[14];
-  $r20 = (sizeof($mrated) > 20) ? max(10, $mrated[99]) : 0; // $r20 = max(30, $mrated[39])
+  $r20 = (sizeof($mrated) > 20) ? max(1, $mrated[99]) : 0; // $r20 = max(30, $mrated[39])
   $list .= SortableMatchesSublist($r10, 999, $ccc);
   $list .= '<li class="sortable_module" id="hline-1"><hr></li>';
   $list .= SortableMatchesSublist($r15, $r10, $ccc);

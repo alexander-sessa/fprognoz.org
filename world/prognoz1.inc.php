@@ -54,11 +54,6 @@ function rewrite_cal($prognoz_dir, $scorez) {
     else
       $group = $n == 1 ? 'Финальный турнир' : ($n == 4 ? 'Товарищеские матчи' : '');
 
-    if (in_array($match, ['АФК-Кузбасс - Отряд ZidanClub']))
-    {
-      $score[0] = '3';
-      $score[2] = '0';
-    }
     $cal .= "$match;;$group;$score\n";
     $n++;
   }
@@ -812,9 +807,6 @@ function prognozlist_head($rprognoz) {
 
 // конфигурация
 $season_dir = $online_dir . $cca . '/' . $s;
-if (strlen($t) == 1)
-  $t = '0'.$t;
-
 $tour = $cca . $t;
 $program_file = $season_dir . '/programs/' . $tour;
 $prognoz_dir = $season_dir. '/prognoz/' . $tour;
@@ -1388,13 +1380,6 @@ auto_comment($position, $newposition, $min_diff, ball('home', $i, $size), ball('
   <div class="col-8"><a href="javascript:void(0)" onClick="showTab('.$matchn.')">'.short_name($teams['home']['team']).' - '.short_name($teams['away']['team']).'</a></div>
   <div class="col-4">'.$score.'</div>
 </li>';
-
-      if (in_array($teams['home']['team'].' - '.$teams['away']['team'], ['АФК-Кузбасс - Отряд ZidanClub']))
-      {
-        $score[0] = '3';
-        $score[2] = '0';
-      }
-
       if (!isset($prognoz_str) && $scorez[$teams['home']['team'].' - '.$teams['away']['team']] != $score)
       {
         $scorez[$teams['home']['team'].' - '.$teams['away']['team']] = $score;
@@ -1538,8 +1523,8 @@ if (isset($matches))       // REST responce on event 'matches'
   echo '[' . $id_json . ']';
 else if (isset($updates)) // REST responce on event 'FT'
   echo '[{"id":"#dynamic","html":"' . rawurlencode('
-	<div class="col order-2">Матчи тура:' . $cal . '</div>
-	<div id="pl" class="col order-1" tabindex="-1" style="min-width:576px;">' . $prognozlist . '</div>
+	<div>Матчи тура:' . $cal . '</div>
+	<div id="pl" class="" tabindex="-1" style="min-width:576px;>' . $prognozlist . '</div>
 ') . '"}]';
 else
 {

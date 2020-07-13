@@ -183,7 +183,7 @@ $("#sortable").sortable()
   list($last_day, $last_month) = explode('.', $lastdate);
   $year = substr($s, 0, 4);
   // для сезонов вида 2019-20, прибавляем год для программок со сроком в январе...июне
-  if ($last_month < 7 && strlen($s) > 6)
+  if ($last_month < 8 && strlen($s) > 6)
     $year++;
 
   if (!isset($updates)) $updates = NULL;

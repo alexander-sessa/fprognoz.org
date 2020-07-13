@@ -22,15 +22,15 @@ function c_make_form($prefix, $id, $hidden) {
   $c_form = '
   <div id="%FORMID%" class="w-100 pb-3"%HIDDEN%>
     <form id="%FORMID%_form" action="#comment" method="POST">
-    <input type="hidden" name="parent" value="%PARENT%" />
-    <input type="hidden" name="userid" value="%USERID%" />
+    <input type="hidden" name="parent" value="%PARENT%">
+    <input type="hidden" name="userid" value="%USERID%">
     <aside class="c-croppic-cnt">';
 
   if (!$hidden) { // в главной форме показываем блок с аватаром
     $c_form .= '
       <div id="cropContainerModal" class="c-croppic" style="width:96px;height:96px;">';
     (isset($c_user['avatar']) && trim($c_user['avatar']))
-      ? $c_form .= '<img src="images/avatars/96/' . $c_user['avatar'] .'" /></div>'
+      ? $c_form .= '<img src="images/avatars/96/' . $c_user['avatar'] .'"></div>'
       : $c_form .= '<i class="fas fa-camera" aria-hidden="true"></i> &nbsp;загрузите &nbsp;аватар</div>';
   }
 
@@ -46,7 +46,7 @@ function c_make_form($prefix, $id, $hidden) {
 //  if (!isset($c_user['nicknm']) || $c_user['nicknm'] == '') { // если в базе redis не указан ник
     $c_form .= '
         &nbsp;Укажите ваш ник для комментариев:
-        <input type="text" style="height: 2rem; width: 250px; padding: 4px; border-radius: 4px" name="nicknm" value="'.(isset($c_user['nicknm']) && $c_user['nicknm'] ? $c_user['nicknm'] : '').'" placeholder=" не обязательно"><br />';
+        <input type="text" style="height: 2rem; width: 250px; padding: 4px; border-radius: 4px" name="nicknm" value="'.(isset($c_user['nicknm']) && $c_user['nicknm'] ? $c_user['nicknm'] : '').'" placeholder=" не обязательно"><br>';
 //  }
   $c_form .= '
       </div>

@@ -101,6 +101,7 @@ function last_season($cca) {
 }
 $names = [
   'Andrey_Vedeneev' => 'Andrey Vedeneev',
+  'Andriy Vyedyeneyev' => 'Andrey Vedeneev',
   'Микола Вербовський' => 'Nick777',
   'AnDrusha' => 'Андрей Вышинский',
 ];
@@ -126,12 +127,12 @@ else {
         }
         if (isset($names[$team]))
         { // дублирование имён для некоторых...
-            $line1 = $names[$team] . ';' . $predict . ';' . $tstamp . ';' . $pena . "\n";
+            $line1 = $names[$team] . ';' . trim($predict) . ';' . $tstamp . ';' . $pena . "\n";
             $new .= $line1;
             $log .= ' ' . trim($line1) . ' received;';
         }
         if (strpos($content, $line) === false) {
-          $line1 = $team . ';' . $predict . ';' . ($tstamp - 1) . ';' . $pena;
+          $line1 = $team . ';' . trim($predict) . ';' . ($tstamp - 1) . ';' . $pena;
           if (strpos($content, $line1) === false) {
             $new .= $line;
             $log .= ' received;';

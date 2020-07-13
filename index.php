@@ -161,7 +161,7 @@ function current_season($y, $m, $cc) {
 //  else if ($cc == 'RUS' || $cc == 'FRA')
 //    return '2018-19';
   else
-    if ($m < 7) $y--;
+    if ($m < 9) $y--;
 
   return $y . '-' . (substr($y, 2) + 1);
 }
@@ -323,7 +323,7 @@ function build_personal_nav() {
         }
       }
     }
-//if ($_SESSION['Coach_name'] == 'Александр Сесса') echo var_export($tudb, false)."<br />\n";
+//if ($_SESSION['Coach_name'] == 'Александр Сесса') echo var_export($tudb, false)."<br>\n";
     if ($tout)
       $out .= '
                             <li class="nav-item">' . $tout .'
@@ -462,7 +462,7 @@ function send_predict($country_code, $season, $team_code, $tour, $prognoz, $enem
 
     }
     else
-      echo 'В течение минуты прогноз должен появиться в списке полученных.<br />
+      echo 'В течение минуты прогноз должен появиться в списке полученных.<br>
 ';
   }
   else
@@ -957,7 +957,7 @@ if (isset($token)) { // вход по ссылке
   }
   else
     $notification = '
-ссылка для входа<br />
+ссылка для входа<br>
 не действительна';
 
 }
@@ -1058,7 +1058,7 @@ else { // restored session
 
 if (isset($_SESSION['Coach_name'])) {
   $apikey = rtrim(base64_encode(openssl_encrypt( json_encode(['cmd' => 'send_by_api', 'email' => $_SESSION['Coach_mail']]), 'AES-256-CBC', $key, 0, $iv )), '=');
-  if (strtotime('7/8') < time() && time() <= strtotime('8/31')
+  if (strtotime('8/1') < time() && time() <= strtotime('9/11')
    && !is_file($data_dir.'personal/'.$coach_name.'/'.date('Y'))) {
     $a = 'fifa';
     $m = 'confirm'; // кампания сбора подтверждений с 8 июля по 31 августа
@@ -1601,25 +1601,25 @@ else {
 
     <title><?=$title?></title>
 
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link href="/css/fp.css?ver=270" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link href="/css/fp.css?ver=284" rel="stylesheet">
     <link href="/css/comments.css?ver=7" rel="stylesheet">
     <link href="/js/croppic/croppic.css" rel="stylesheet">
 
     <!--[if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js" integrity="sha256-3Jy/GbSLrg0o9y5Z5n1uw0qxZECH7C6OQpVBgNFYa0g=" crossorigin="anonymous"></script><![endif]-->
-    <script defer src="https://use.fontawesome.com/releases/v5.12.1/js/solid.js" crossorigin="anonymous"></script>
-    <script defer src="https://use.fontawesome.com/releases/v5.12.1/js/fontawesome.js" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.13.0/js/solid.js" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.13.0/js/fontawesome.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.slim.js" integrity="sha256-Dul4c09cdrWKXVtallPxF558lwxMwCC8dXJdZ0PVW54=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha256-/ijcOLwFf26xEYAjW75FizKVo5tnTYiQddPZoLUHHZ8=" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.7/jstz.min.js" integrity="sha256-bt5sKtbHgPbh+pz59UcZPl0t3VrNmD8NUbPu8lF4Ilc=" crossorigin="anonymous"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/16.0.0/inline/ckeditor.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/16.0.0/inline/translations/ru.js"></script>
     <script src="/js/jquery-ui/jquery-ui.min.js"></script>
     <script src="/js/jquery-ui/jquery.ui.touch-punch.min.js"></script>
     <script src="/js/croppic/croppic-3.0.min.js"></script>
-    <script src="/js/fp.js?ver=221"></script>
+    <script src="/js/fp.js?ver=222"></script>
 </head>
 
 <body>
@@ -1636,18 +1636,18 @@ else {
 echo '
         <nav id="sidebar">
             <div class="sidebar-header">
-                <a href="/?a=world&s=2020&t=02&m=prognoz"><h5>Лига Наций/Сайтов:</h5><h6>страница 2 тура</h6></a>
-                <a href="/?a=world&s=2020&t=01&m=prognoz"><h6>итоги 1 тура</h6></a><br>
+                <a href="/?a=world&s=2020&t=10&m=prognoz"><h5>Лига Наций/Сайтов:</h5><h6>страница 10-го тура</h6></a>
+                <a href="/?a=world&s=2020&t=09&m=result"><h6>итоги 9-го тура</h6></a><br>
                 <a href="/?m=news&s=2019-20"><h6>Новости SFP - ФИФА</h6></a>
             </div>
 
             <ul class="list-unstyled components">
                 <li class="active">
-                    <a href="#assocSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><img src="images/63x42/'.($a == 'sfp-20' ? 'world' : $a).'.png" class="flag" />'.($a == 'sfp-20' ? 'Лига Наций' : $fa[$a]).' (выбор)</a>
+                    <a href="#assocSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><img src="images/63x42/'.($a == 'sfp-20' ? 'world' : $a).'.png" class="flag">'.($a == 'sfp-20' ? 'Лига Наций' : $fa[$a]).' (выбор)</a>
                     <ul class="collapse list-unstyled" id="assocSubmenu">';
 foreach ($fa as $ae => $ar)
   echo '
-                        <li><a href="?a='.$ae.'"><img src="images/63x42/'.$ae.'.png" class="flag" />'.$ar.'</a></li>';
+                        <li><a href="?a='.$ae.'"><img src="images/63x42/'.$ae.'.png" class="flag">'.$ar.'</a></li>';
 echo '
                     </ul>
                 </li>
@@ -1680,9 +1680,9 @@ echo '
     $tcfg = rtrim(base64_encode(openssl_encrypt( json_encode($data_cfg), 'AES-256-CBC', $key, 0, $iv )), '=');
     echo '
                 <form id="l_form" method="POST" data-tpl="'.$tcfg.'">
-                    <p><input type="text" id="name_str" name="name_str" data-tpl="'.$ncfg.'" placeholder="имя, e-mail или код" /></p>
-                    <p><input type="password" id="pass_str" name="pass_str" data-tpl="'.$pcfg.'" placeholder="пароль"/></p>
-                    <p id="valid_name"><input type="submit" name="login" value="Вход" /></p>
+                    <p><input type="text" id="name_str" name="name_str" data-tpl="'.$ncfg.'" placeholder="имя, e-mail или код"></p>
+                    <p><input type="password" id="pass_str" name="pass_str" data-tpl="'.$pcfg.'" placeholder="пароль"></p>
+                    <p id="valid_name"><input type="submit" name="login" value="Вход"></p>
                 </form>';
     if ($notification)
       echo '
@@ -1732,7 +1732,8 @@ if ($cc != 'UNL') // временно не показываем
                     <!--/ul>
                 </li-->
                 <p></p>
-                <li id="funZone" data-tpl="'.$fcfg.'"><a id="toggleFunZone" href="javascript:void(0)">Показ фан-зоны &nbsp; <span id="funZoneIndicator"><img src="images/'.$gb_status.'.gif" border = "0" alt="'.$gb_status.'" /></span></a></li>
+                <li><a id="viber_bot" href="viber://pa?chatURI=fprognoz-org&context='.$_SESSION['Coach_mail'].'">Открыть Viber Bot</a></li>
+                <li id="funZone" data-tpl="'.$fcfg.'"><a id="toggleFunZone" href="javascript:void(0)">Показ фан-зоны &nbsp; <span id="funZoneIndicator"><img src="images/'.$gb_status.'.gif" border = "0" alt="'.$gb_status.'"></span></a></li>
                 <li><a id="change_pass" href="?m=pass'.(isset($token) && $token ? '&token='.$token : '').'"'.(isset($data['ts']) ? ' data-ts="'.$data['ts'].'" onClick="newPassword()"' : (isset($_POST['pass_str']) ? ' data-ts="'.time().'" onClick="newPassword()"' : '')).'>Смена пароля</a></li>
                 <li><a href="?m=api">API</a></li>
                 <li><a href="?logout=1">Выход</a></li>
@@ -1941,41 +1942,41 @@ if ($cc != 'UNL') // временно не показываем
                     <h4>Редактирование настроек сезона</h4>
                     <form id="season_settings" action="" method="POST">
                         <ul>
-                            <li><div>Название ФП-ассоциации: </div><input type="text" name="description" value="'.$description.'" /></li>
-                            <li><div>html-заголовок ассоциации: </div><input type="text" name="title" value="'.$title.'" /></li>
-                            <li><div>Заголовок новостных страниц: </div><input type="text" name="main_header" value="'.$main_header.'" /></li>
-                            <li><div>Название текущего сезона: </div><input id="cur_year" type="text" name="cur_year" value="'.$cur_year.'" /></li>
-                            <li><div>Президент: </div><input id="president" type="text" name="president" value="'.$president.'" /></li>
-                            <li><div>Вице-президент(ы): </div><input id="vice" type="text" name="vice" value="'.$vice.'" placeholder="нет; можно несколько имен через запятую" /></li>
-                            <li><div>Пресс-атташе: </div><input id="pressa" type="text" name="pressa" value="'.$pressa.'" placeholder="нет; можно несколько имен через запятую" /></li>';
+                            <li><div>Название ФП-ассоциации: </div><input type="text" name="description" value="'.$description.'"></li>
+                            <li><div>html-заголовок ассоциации: </div><input type="text" name="title" value="'.$title.'"></li>
+                            <li><div>Заголовок новостных страниц: </div><input type="text" name="main_header" value="'.$main_header.'"></li>
+                            <li><div>Название текущего сезона: </div><input id="cur_year" type="text" name="cur_year" value="'.$cur_year.'"></li>
+                            <li><div>Президент: </div><input id="president" type="text" name="president" value="'.$president.'"></li>
+                            <li><div>Вице-президент(ы): </div><input id="vice" type="text" name="vice" value="'.$vice.'" placeholder="нет; можно несколько имен через запятую"></li>
+                            <li><div>Пресс-атташе: </div><input id="pressa" type="text" name="pressa" value="'.$pressa.'" placeholder="нет; можно несколько имен через запятую"></li>';
     if ($a != 'world')
         echo '
-                            <li><div>Тренер(ы) сборной: </div><input id="coach" type="text" name="coach" value="'.$coach.'" placeholder="нет; можно несколько имен через запятую" /></li>
-                            <li><div>Разрешено редактировать составы: </div><input id="club_edit" type="checkbox" name="club_edit"'.($club_edit ? ' checked="checked"' : '').' /></li>';
+                            <li><div>Тренер(ы) сборной: </div><input id="coach" type="text" name="coach" value="'.$coach.'" placeholder="нет; можно несколько имен через запятую"></li>
+                            <li><div>Разрешено редактировать составы: </div><input id="club_edit" type="checkbox" name="club_edit"'.($club_edit ? ' checked="checked"' : '').'></li>';
     echo '
-                            <li><h5>Турниры: <div class="add_tournament" data-id="tournament-'.(count($config) - 1).'"><button class="fas fa-plus-circle" title="добавить турнир" /></button></div></h5>';
+                            <li><h5>Турниры: <div class="add_tournament" data-id="tournament-'.(count($config) - 1).'"><button class="fas fa-plus-circle" title="добавить турнир"></button></div></h5>';
     if (isset($config[0]['format']))
       foreach ($config as $n => $tournament)
       {
         $stages = count($config[0]['format']);
         echo '
                                 <ul id="tournament-'.$n.'">
-                                    <li><div>Название турнира: </div><input type="text" name="tournament['.$n.']" value="'.(isset($tournament['tournament']) ? $tournament['tournament'] : '').'" placeholder="не обязательно" /> <div class="delete_stage" data-id="tournament-'.$n.'"><button class="fas fa-trash" title="удалить турнир"></button></div></li>
-                                    <li><div>Префикс кода тура: </div><input type="text" name="prefix['.$n.']" value="'.(isset($tournament['prefix']) ? $tournament['prefix'] : '').'" placeholder="по умолчанию - код ассоциации" /></li>
+                                    <li><div>Название турнира: </div><input type="text" name="tournament['.$n.']" value="'.(isset($tournament['tournament']) ? $tournament['tournament'] : '').'" placeholder="не обязательно"> <div class="delete_stage" data-id="tournament-'.$n.'"><button class="fas fa-trash" title="удалить турнир"></button></div></li>
+                                    <li><div>Префикс кода тура: </div><input type="text" name="prefix['.$n.']" value="'.(isset($tournament['prefix']) ? $tournament['prefix'] : '').'" placeholder="по умолчанию - код ассоциации"></li>
                                     <li><div>Схема розыгрыша: </div><select name="type['.$n.']"><option value="chm">чемпионат (круговой турнир)</option><option value="cup" '.(isset($tournament['type']) && $tournament['type'] == 'cup' ? ' selected="selected"' : '').'>кубок (турнир с выбыванием)</option><option value="com" '.(isset($tournament['type']) && $tournament['type'] == 'com' ? ' selected="selected"' : '').'>комбинированный (группы + плей-офф)</option></select></li>
                                     <li><div>Нумерация туров: </div><select name="numeration['.$n.']"><option value="stage">поэтапная (каждый этап начинается туром 1)</option><option value="toend" '.(isset($tournament['nume']) && $tournament['nume'] == 'toend' ? ' selected="selected"' : '').'>сквозная (без сброса номера, как в еврокубках)</option></select></li>
-                                    <li><h6>Этапы: <div class="add_stage" data-id="trn-'.$n.'-st-'.($stages - 1).'"><button class="fas fa-plus-circle" title="добавить этап" /></button></div></h6>';
+                                    <li><h6>Этапы: <div class="add_stage" data-id="trn-'.$n.'-st-'.($stages - 1).'"><button class="fas fa-plus-circle" title="добавить этап"></button></div></h6>';
         foreach ($tournament['format'] as $e => $stage)
         {
           echo '
                                         <ul id="trn-'.$n.'-st-'.$e.'">
-                                            <li><div>Название этапа: </div><input type="text" name="stage['.$n.']['.$e.']" value="'.(isset($stage['stage']) ? $stage['stage'] : '').'" placeholder="не обязательно" /> <div class="delete_stage" data-id="trn-'.$n.'-st-'.$e.'"><button class="fas fa-trash" title="удалить этап"></button></div></li>
-                                            <li><div>Суффикс кода тура: </div><input type="text" name="suffix['.$n.']['.$e.']" value="'.(isset($stage['suffix']) ? $stage['suffix'] : '').'" placeholder="по умолчанию нет" /></li>
-                                            <li><div>Файл календаря: </div><input type="text" name="cal['.$n.']['.$e.']" value="'.(isset($stage['cal']) ? $stage['cal'] : '').'" placeholder="по умолчанию cal" /></li>
-                                            <li><div>Количество групп (лиг): </div><input type="text" name="groups['.$n.']['.$e.']" value="'.(isset($stage['groups']) ? $stage['groups'] : '').'" placeholder="по умолчанию 1" /></li>
-                                            <li><div>Количество туров: </div><input type="text" name="tourn['.$n.']['.$e.']" value="'.(isset($stage['tourn']) ? $stage['tourn'] : 1 + $stage['tours'][1] - $stage['tours'][0]).'" /></li>
-                                            <li><div>Количество кругов: </div><input type="text" name="round['.$n.']['.$e.']" value="'.(isset($stage['round']) ? $stage['round'] : '').'" placeholder="по умолчанию 2" /></li>
-                                            <li><div>Префикс названия тура: </div><input type="text" name="nprefix['.$n.']['.$e.']" value="'.(isset($stage['nprefix']) ? $stage['nprefix'] : '').'" placeholder="по умолчанию Тур: " /></li>
+                                            <li><div>Название этапа: </div><input type="text" name="stage['.$n.']['.$e.']" value="'.(isset($stage['stage']) ? $stage['stage'] : '').'" placeholder="не обязательно"> <div class="delete_stage" data-id="trn-'.$n.'-st-'.$e.'"><button class="fas fa-trash" title="удалить этап"></button></div></li>
+                                            <li><div>Суффикс кода тура: </div><input type="text" name="suffix['.$n.']['.$e.']" value="'.(isset($stage['suffix']) ? $stage['suffix'] : '').'" placeholder="по умолчанию нет"></li>
+                                            <li><div>Файл календаря: </div><input type="text" name="cal['.$n.']['.$e.']" value="'.(isset($stage['cal']) ? $stage['cal'] : '').'" placeholder="по умолчанию cal"></li>
+                                            <li><div>Количество групп (лиг): </div><input type="text" name="groups['.$n.']['.$e.']" value="'.(isset($stage['groups']) ? $stage['groups'] : '').'" placeholder="по умолчанию 1"></li>
+                                            <li><div>Количество туров: </div><input type="text" name="tourn['.$n.']['.$e.']" value="'.(isset($stage['tourn']) ? $stage['tourn'] : 1 + $stage['tours'][1] - $stage['tours'][0]).'"></li>
+                                            <li><div>Количество кругов: </div><input type="text" name="round['.$n.']['.$e.']" value="'.(isset($stage['round']) ? $stage['round'] : '').'" placeholder="по умолчанию 2"></li>
+                                            <li><div>Префикс названия тура: </div><input type="text" name="nprefix['.$n.']['.$e.']" value="'.(isset($stage['nprefix']) ? $stage['nprefix'] : '').'" placeholder="по умолчанию Тур: "></li>
                                         </ul>
                                         <div id="div-trn-'.$n.'-st-'.($stages - 1).'" class="stage-div"></div>';
         }
@@ -2018,10 +2019,10 @@ if ($cc != 'UNL') // временно не показываем
 
     <footer class="footer">
         <p>
-            <img src="/images/sfp-88x31.png" width="88" height="31" alt="SFP Button" title="SFP Button" />
+            <img src="/images/sfp-88x31.png" width="88" height="31" alt="SFP Button" title="SFP Button">
             <a href="http://profi-prognoza.ru/" target="_blank"><img src="images/bannerprofi.gif" border="0" width="88" height="31" alt="Сайт cпортивного прогнозирования &laquo;Профессионалы прогноза&raquo;"></a>
-            <a href="http://primegang.ru/" target="_blank"><img src="images/primegang.gif" border="0" width="88" height="31" alt="Клуб футбольных прогнозистов PrimeGang" /></a>
-            <?=(false && $is_redis ? '<img src="https://redis.io/images/redis-small.png" border="0" alt="Redis" title="Powered by Redis" />':'')?>
+            <a href="http://primegang.ru/" target="_blank"><img src="images/primegang.gif" border="0" width="88" height="31" alt="Клуб футбольных прогнозистов PrimeGang"></a>
+            <?=(false && $is_redis ? '<img src="https://redis.io/images/redis-small.png" border="0" alt="Redis" title="Powered by Redis">':'')?>
         </p>
         <p>
             Design and code: Alexander Sessa. Elapsed time <?=round(microtime(true) - $time_start, 3)?> sec

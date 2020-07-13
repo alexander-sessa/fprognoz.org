@@ -122,6 +122,7 @@ $translate = array(
 "Obolon'-Brovar" => 'Оболонь',
 'Naftovyk-Ukrnafta' => 'Нефтяник',
 'Poltava' => 'Полтава',
+'Minai' => 'Минай',
 'Partizan Minsk' => 'Партизан Минск',
 'Vitebsk' => 'Витебск',
 'Naftan' => 'Нафтан',
@@ -143,6 +144,7 @@ $translate = array(
 'Krumkachy' => 'Крумкачы',
 'Gorodeya' => 'Городея',
 'Isloch' => 'Ислочь',
-'Energetyk-BDU' => 'Энергетик-БГУ',
+'Energetyk-BGU' => 'Энергетик-БГУ',
+'Ruh Brest' => 'Рух Брест',
 );
 ?>
