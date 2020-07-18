@@ -27,8 +27,8 @@ $ccodes = array(
 
 'ENG.PL'  => [  8 => [53145]],
 'ENG.D1'  => [ 70 => [53782, 53781, 53780]],
-'GER.PL'  => [  9 => [53499],
-              931 => [54069]],
+'GER.PL'  => [  9 => [58871],
+              931 => []],
 'ITA.PL'  => [ 13 => [54890]],
 'ESP.PL'  => [  7 => [53502]],
 'ESP.D1'  => [ 12 => [54949, 54948]],
@@ -45,22 +45,23 @@ $ccodes = array(
 'AUT.PL'  => [ 49 => [54162, 54163, 54165, 54161]],
 'SUI.PL'  => [ 27 => [54327]],
 
-'ENG.CUP' => [ 93 => [53387, 53383],
-               95 => [57589, 57590, 57592, 57593, 57591]],
-'GER.CUP' => [104 => [53846]],
+'ENG.CUP' => [ 93 => [53387, 53383], // FA Cup
+               95 => [57589, 57590, 57592, 57593, 57591]], // League Cup
+'GER.CUP' => [104 => [58915, 58916, 58918, 58919, 58917]],
 'ITA.CUP' => [135 => []],
 'ESP.CUP' => [138 => [53583]],
-'FRA.CUP' => [105 => [52204],
-              177 => [54029]],
+'FRA.CUP' => [105 => [52204],  // Coupe de la Ligue
+              177 => [54029]], // Coupe de France
 'NLD.CUP' => [103 => [57851, 57852, 57954, 57855, 57853]],
 'RUS.CUP' => [190 => [53608, 53606]],
-'PRT.CUP' => [102 => [53861],
-              640 => [57122, 57124, 57125, 57123]],
-'SCO.CUP' => [175 => [53839, 53840, 53841, 53838]],
+'PRT.CUP' => [102 => [53861],  // Taça de Portugal
+              640 => [57122, 57124, 57125, 57123]], // Taça da Liga
+'SCO.CUP' => [175 => [53839, 53840, 53841, 53838],  // FA Cup
+              176 => [56801, 56799, 56802, 56803, 56800]], // League Cup
 'UEL.CUP' => [ 18 => [54013, 54014, 54009]],
-'UCL.CUP' => [ 10 => [54146, 54147, 54141]],
+'UCL.CUP' => [ 10 => [54146, 54147, 54141, 59012, 59013, 59014, 59015, 59016, 59017, 59018, 59019, 59020, 59021, 59022]],
 'BLR.CUP' => [200 => [54063]],
-'UKR.CUP' => [188 => [53237, 53238, 53236]],
+'UKR.CUP' => [188 => [58945, 58948, 58950, 58951, 58949]],
 'BEL.CUP' => [126 => [52764]],
 
 'ENG.SC'  => [173 => []],
@@ -94,46 +95,43 @@ $out = [];
 foreach ($ccodes as $cc => $competitions)
     foreach ($competitions as $competition => $rounds)
         foreach ($rounds as $round_id)
-{
-    $has_next_page = 1;
-    $tournament = explode('.', $cc)[1];
-    for ($page = 0; $page < 8 && $has_next_page == 1; $page++)
-    {
-        $date = date('Y-m-d', strtotime("+$page week"));
-        $url = 'https://int.soccerway.com/a/block_competition_matches_summary?block_id=page_competition_1_block_competition_matches_summary_6&callback_params=%7B%22page%22%3A%220%22%2C%22block_service_id%22%3A%22competition_summary_block_competitionmatchessummary%22%2C%22round_id%22%3A%22'.$round_id.'%22%2C%22outgroup%22%3A%22%22%2C%22view%22%3A%222%22%2C%22competition_id%22%3A'.$competition.'%7D&action=changeView&params=%7B%22date%22%3A%22'.$date.'%22%2C"view"%3A2%7D';
-        if ($sw = file_get_contents($url))
         {
+            $tournament = explode('.', $cc)[1];
+            $sw = file_get_contents('https://int.soccerway.com/a/block_competition_matches_full?block_id=page_competition_1_block_competition_matches_full_7&callback_params=%7B%22block_service_id%22%3A%22competition_summary_block_competitionmatchesfull%22%2C%22round_id%22%3A'.$round_id.'%2C%22outgroup%22%3Afalse%2C%22view%22%3A1%2C%22competition_id%22%3A'.$competition.'%7D&action=changeView&params=%7B%22view%22%3A2%7D');
             $decoded = json_decode($sw, true);
             $sw = $decoded['commands'][0]['parameters']['content'];
-            //$has_next_page = $decoded['commands'][1]['parameters']['attributes']['has_next_page'];
-            $amonth = explode('page_competition_1_block_competition_matches_summary_6_match', $sw);
-            unset($amonth[0]);
-            foreach ($amonth as $match)
-                if (strpos($match, 'PSTP') === false)
+            $aweek = explode('class="no-date-repetition-new "', $sw);
+            unset($aweek[0]);
+            foreach ($aweek as $match)
+            {
+                if (strpos($match, 'PSTP'))
+                    continue;
+
+                $fr = strpos($match, "data-format='dd/mm/yyyy'>") + 25;
+                $str = substr($match, $fr, 10);
+                list($day, $month, $year) = explode('/', $str);
+                if ($year.$month.$day < date('Ymd', strtotime('monday')))
+                    continue;
+
+                $home = parse_team_name($match, 'team-a');
+                $away = parse_team_name($match, 'team-b');
+                if ($fr = strpos($match, "'HH:MM'>"))
                 {
-                    $fr = strpos($match, 'href="/matches/') + 15;
-                    $str = substr($match, $fr, 10);
-                    list($year, $month, $day) = explode('/', $str);
-                    $home = parse_team_name($match, 'team-a');
-                    $away = parse_team_name($match, 'team-b');
-                    if ($fr = strpos($match, "'HH:MM'>"))
-                    {
-                        $time = substr($match, $fr + 8);
-                        $time = str_replace(' ', '', substr($time, 0, strpos($time, '<')));
-                    }
-                    else
-                        $time = '19:00';
-
-                    $mtime = strtotime("$year/$month/$day");
-                    $week = date('W', $mtime);
-                    if (strpos($time, ':'))
-                        $out["$year/$week"][$cc][] = "$home,$away,".date('m-d', $mtime).",$time,$tournament\n";
-
+                    $time = substr($match, $fr + 8);
+                    $time = str_replace(' ', '', substr($time, 0, strpos($time, '<')));
                 }
+                else
+                    $time = '19:00';
 
+                $mtime = strtotime("$year/$month/$day");
+                $week = date('W', $mtime);
+                if (strpos($time, ':'))
+                    $out["$year/$week"][$cc][] = "$home,$away,".date('m-d', $mtime).",$time,$tournament\n";
+
+            }
         }
-    }
-}
+
+
 foreach ($out as $dir => $tournaments)
 {
     if (!is_dir("$fixtures/$dir"))
