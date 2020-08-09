@@ -1260,9 +1260,9 @@ if (in_array($cca, $classic_fa)) { // сбор туров сезона для к
                 <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=player">Игроки</a></li>';
 
   }
-//  if ($cca == 'UKR')
-//    $sidebar .= '
-//                <li><a href="?a='.$a.'&amp;m=register">Выбор команды</a></li>';
+  if ($cca == 'ENG')
+      $sidebar .= '
+                <li><a href="?a='.$a.'&amp;m=register">Выбор команды</a></li>';
 
   $sidebar .= '
                 <li><a href="?a='.$a.'&amp;m=hq">Президиум</a></li>
@@ -1636,8 +1636,8 @@ else {
 echo '
         <nav id="sidebar">
             <div class="sidebar-header">
-                <a href="/?a=world&s=2020&t=10&m=prognoz"><h5>Лига Наций/Сайтов:</h5><h6>страница 10-го тура</h6></a>
-                <a href="/?a=world&s=2020&t=09&m=result"><h6>итоги 9-го тура</h6></a><br>
+                <a href="/?a=world&s=2020&t=11&m=prognoz"><h5>Лига Наций/Сайтов:</h5><h6>итоги 11-го тура</h6></a>
+                <!--a href="/?a=world&s=2020&t=10&m=result"><h6>итоги 11-го тура</h6></a--><br>
                 <a href="/?m=news&s=2019-20"><h6>Новости SFP - ФИФА</h6></a>
             </div>
 

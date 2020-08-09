@@ -42,11 +42,11 @@ $escape_chars = [
 ];
 
 $ccf = array(
-'ЛФОП-ГУРУ' => 'ЛФОП-ГУРУ',
-'Fprognoz.com' => 'Fprognoz.com',
-'SEclub.org' => 'SEclub.org',
-'NLD' => 'Голландия',
-'ITA' => 'Италия',
+'Чемпионат Прогнозов' => 'Чемпионат Прогнозов',
+'liga1.ru' => 'liga1.ru',
+'SaSiSa' => 'SaSiSa',
+'GER' => 'Германия',
+'FRA' => 'Франция',
 'BLR' => 'Беларусь',
 );
 
@@ -77,7 +77,7 @@ echo '<p class="title text15b">&nbsp;&nbsp;&nbsp;Тренерская участ
     }
   }
 
-$closed = true;
+//$closed = true;
 
   if (isset($_POST['teamname'])) {
 
@@ -200,7 +200,7 @@ if ($closed)
 {
   echo '
 Дверь в Тренерскую заперта. Изнутри не слышно ни звука.<br>
-На двери висит табличка <strong>"Регистрация в турнир откроется в мае 2020 г."</strong>.';
+На двери висит табличка <strong>"Регистрация в турнир откроется в июле 2020 г."</strong>.';
 }
 else
 {

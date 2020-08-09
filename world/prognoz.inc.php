@@ -54,7 +54,7 @@ function rewrite_cal($prognoz_dir, $scorez) {
     else
       $group = $n == 1 ? 'Финальный турнир' : ($n == 4 ? 'Товарищеские матчи' : '');
 
-    if (in_array($match, ['АФК-Кузбасс - Отряд ZidanClub']))
+    if (in_array($match, ['Франция - Россия']))
     {
       $score[0] = '3';
       $score[2] = '0';
@@ -1389,7 +1389,7 @@ auto_comment($position, $newposition, $min_diff, ball('home', $i, $size), ball('
   <div class="col-4">'.$score.'</div>
 </li>';
 
-      if (in_array($teams['home']['team'].' - '.$teams['away']['team'], ['АФК-Кузбасс - Отряд ZidanClub']))
+      if (in_array($teams['home']['team'].' - '.$teams['away']['team'], ['Франция - Россия']))
       {
         $score[0] = '3';
         $score[2] = '0';

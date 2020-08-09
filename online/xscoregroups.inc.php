@@ -98,6 +98,7 @@
 '833114' => 'Belarus: Premier League Relegation Group',
 
 'UKRAINE#PR' => 'Україна: Прем’єр-ліга',
+'UKRAINE#ELPSF' => 'Україна: Прем’єр-ліга',
 'UKRAINE#R16' => 'Ukraine: Cup',
 'UKRAINE#QF' => 'Ukraine: Cup',
 'UKRAINE#SF' => 'Ukraine: Cup',
@@ -105,7 +106,9 @@
 'UKRAINE#SC' => 'Ukraine: SuperCup',
 
 'BELGIUM#1A' => 'Belgium: First Division A',
+'BELGIUM#FINAL' => 'Belgium: Fa Cup',
 'GREECE#SL' => 'Greece: Super League',
+'GREECE#FINAL' => 'Ελλάδα: Κύπελλο',
 'SWITZERLAND#SL' => 'Switzerland: Super League',
 'SWITZERLAND#FINAL' => 'Switzerland: FA Cup',
 'TURKEY#SL' => 'Turkey: Süper Lig',
