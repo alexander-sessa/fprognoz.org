@@ -45,7 +45,7 @@ $closed = true;
 $ac_head = '';
 echo '<p class="title text15b">&nbsp;&nbsp;&nbsp;Тренерская Лиги Сайтов</p>
 <hr size="1" width="98%">
-Закрыто. Если ваша команда пробьётся в Финальный турнир, Вам <a href="/?a=world&m=coach_uft">сюда</a>';
+Закрыто. На двери висит табличка <strong>"Регистрация в турнир откроется 28 ноября 2020 г."</strong>';
 exit;
 
   $s = $cur_year;

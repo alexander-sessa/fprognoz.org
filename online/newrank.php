@@ -5,8 +5,7 @@ use \PhpOffice\PhpSpreadsheet\Reader\Xls;
 
 $ranking = '/home/fp/data/online/ranking/';
 include 'realteam.inc.php';
-$year = 2020;
-// rank 2019
+$year = 2021;
 
 function remote_file_size($url) {
     stream_context_set_default(['http' => ['method' => 'HEAD']]);
@@ -62,10 +61,11 @@ function write_year_ranking($year) {
 
   }
 
-// Gil Vicente
+/* Gil Vicente
   if ($year == 2019)
     $out .= 'Gil Vicente,PRT,20
 ';
+*/
 
   file_put_contents($ranking . 'rank.' . $year, $out);
   return $log;
@@ -102,7 +102,7 @@ if (!is_file($ranking . 'ECR' . $year . '.xls') || remote_file_size($url) != fil
   $ateams = array();
   foreach ($teams as $tn => $at) {
     $ateams['tn'][] = $tn;
-    $ateams['cc'][] = $at['cc'] == 'WAL' ? 'ENG' : $at['cc'];
+    $ateams['cc'][] = $at['cc'] == 'WAL' ? 'ENG' : $at['cc'] == 'LIE' ? 'SUI' : $at['cc'];
     $ateams['r'][] = round($at['r'], 2);
   }
   array_multisort($ateams['r'], SORT_DESC, $ateams['tn'], $ateams['cc']);

@@ -1,6 +1,6 @@
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');ga('create', 'UA-92920347-1', 'auto');ga('send', 'pageview');
 $.browser={};$.browser.mozilla=/mozilla/.test(navigator.userAgent.toLowerCase())&&!/webkit/.test(navigator.userAgent.toLowerCase());$.browser.webkit=/webkit/.test(navigator.userAgent.toLowerCase());$.browser.opera=/opera/.test(navigator.userAgent.toLowerCase());$.browser.msie=/msie/.test(navigator.userAgent.toLowerCase())
-var fg=0,ti=[],si=[],tz=jstz.determine();document.cookie="TZ="+tz.name()+";path=/"
+var fg=0,ti=[],si=[],tz=jstz.determine();document.cookie="TZ="+tz.name()+";path=/;SameSite=Strict"
 class UploadAdapter{
         constructor(loader){this.loader = loader;}
         upload(){

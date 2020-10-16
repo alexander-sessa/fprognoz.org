@@ -999,6 +999,7 @@ function Today($year, $m, $d, $dayofweek, $minute) {
       }
     }
     else $seq = $old_seq;
+///// куда-то пропало обновление минут
   }
   if (lock($online_dir . 'log/results.lock', 10000)) {
     $out = $seq . "\n";

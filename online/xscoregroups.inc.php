@@ -9,7 +9,7 @@
 'ENGLAND#SF' => 'England: FA Cup',
 'ENGLAND#CFINAL' => 'England: FA Cup',
 'ENGLAND#CS' => 'England: Community Shield',
-'ENGLAND#FINAL' => 'England: Championship Playoff',
+'ENGLAND#FINAL' => 'England: Community Shield',
 
 'GERMANY#BL' => 'Germany: 1. Bundesliga',
 'GERMANY#R16' => 'Germany: DFB Pokal',
@@ -50,13 +50,15 @@
 
 'SCOTLAND#PR' => 'Scotland: Premier League',
 'SCOTLAND#SPL' => 'Scotland: Premier League',
+'SCOTLAND#GS' => 'Scotland: League Cup',
+'SCOTLAND#2R' => 'Scotland: League Cup',
 'SCOTLAND#4R' => 'Scotland: Tennents Scottish Cup',
 'SCOTLAND#5R' => 'Scotland: Tennents Scottish Cup',
 'SCOTLAND#QF' => 'Scotland: Tennents Scottish Cup',
 'SCOTLAND#SF' => 'Scotland: Tennents Scottish Cup',
 'SCOTLAND#FINAL' => 'Scotland: Tennents Scottish Cup',
 
-'NETHERLANDS#ERD' => 'Netherlands: Eredivisie',
+'NETHERLANDS#ERE' => 'Netherlands: Eredivisie',
 'NETHERLANDS#2R' => 'Netherlands: KNVB Cup',
 'NETHERLANDS#QF' => 'Netherlands: KNVB Cup',
 'NETHERLANDS#SF' => 'Netherlands: KNVB Cup',

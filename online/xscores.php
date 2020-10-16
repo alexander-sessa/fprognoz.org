@@ -20,7 +20,7 @@ $teamerr = '';
 $time_start1 = microtime(true);
 $ret = lock($online_dir . 'log/results.lock', 20000);
 if ($ret === false) $log .= '!!! LOCK !!! '.(microtime(true) - $time_start1).' '; // ignore lock
-for ($day=-1; $day<=13; $day++) {
+for ($day=-1; $day<=14; $day++) {
 //  $offset = 3600 + $day * 86400;
   $offset = $day * 86400;
   $year = date('Y', time() + $offset);

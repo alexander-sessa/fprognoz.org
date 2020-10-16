@@ -25,79 +25,77 @@ $ccs = array(
 'FRA' => array('Франция', 'France'),
 'SCO' => array('Шотландия', 'Scotland'),
 );
-$teams = array();
-$coach = array();
-$table = array();
-$lnames = array();
+$teams = $coach = $table = $lnames = [];
 $stat = array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0);
-$maxteam = 0;
-$maxcoach = 0;
-$maxlname = 0;
-foreach ($ccs as $country_code => $country_name) {
-  $dir = scandir($online_dir . $country_code);
-  $season = '';
-  foreach ($dir as $subdir)
-    if ($subdir[0] == '2')
-      $season = $subdir;
+$maxteam = $maxcoach = $maxlname = 0;
+foreach ($ccs as $country_code => $country_name)
+{
+    $dir = scandir($online_dir . $country_code);
+    $season = '';
+    foreach ($dir as $subdir)
+        if ($subdir[0] == '2')
+            $season = $subdir;
 
-  $acodes = file($online_dir . $country_code . '/' . $season . '/codes.tsv');
-  foreach ($acodes as $scode) if (($scode[0] != '-') && ($scode[0] != '#') && ($scode = trim($scode))) {
-    list($team_code, $team_name, $coach_name, $coach_mail, $long_name, $confirm) = explode('	', $scode);
-    $t = $country_code.':'.$team_code;
-    $teams[$t] = $team_name;
-    $maxteam = max($maxteam, strlen($team_name));
-    $coach[$coach_name]['teams'][] = "$team_name ($country_code)";
-    $maxcoach = max($maxcoach, strlen($coach_name));
-    if (trim($long_name)) {
-      $lnames[$team_name] = $long_name;
-      $maxlname = max($maxlname, strlen($long_name));
-    }
-  }
+    $acodes = file($online_dir . $country_code . '/' . $season . '/codes.tsv');
+    foreach ($acodes as $pos => $scode)
+        if (($scode[0] != '-') && ($scode[0] != '#') && ($scode = trim($scode)))
+        {
+            list($team_code, $team_name, $coach_name, $coach_mail, $long_name, $confirm) = explode('	', $scode);
+            $t = $country_code.':'.$team_code;
+            $teams[$t] = $team_name;
+            $maxteam = max($maxteam, strlen($team_name));
+            if ($pos < 32 || sizeof($acodes) < 42) // исключаем команды 3-х лиг
+                $coach[$coach_name]['teams'][] = $team_name.' ('.$country_code.')';
+            else
+                $coach[$coach_name]['teams'][] = $team_name.' ('.$country_code.'*)';
+
+            $maxcoach = max($maxcoach, strlen($coach_name));
+            if (trim($long_name))
+            {
+                $lnames[$team_name] = $long_name;
+                $maxlname = max($maxlname, strlen($long_name));
+            }
+        }
+
 }
 $qb = file($online_dir . 'QUOTAS/qb');
-foreach ($qb as $line) if ($line = trim($line)) {
-  $ac = explode(',', $line);
-  $c = $ac[0];
-  unset($ac[0]);
-  $coach[$c]['qc'] = sizeof($ac);
-  foreach ($ac as $qb)
-    $coach[$c]['qb'][] = $qb;
+foreach ($qb as $line) if ($line = trim($line))
+{
+    $ac = explode(',', $line);
+    $c = $ac[0];
+    unset($ac[0]);
+    $coach[$c]['qc'] = sizeof($ac);
+    foreach ($ac as $qb)
+        $coach[$c]['qb'][] = $qb;
 
 }
-foreach ($coach as $c => $ac) if ($c != 'вакансия' && $c = trim($c)) {
-  $r0 = 0;
-  $rN = 0;
-  if (isset($ac['teams']))
-    foreach ($ac['teams'] as $n) {
-      if (strpos($n, '(ESP)')
-       || strpos($n, '(ENG)')
-       || strpos($n, '(ITA)')
-       || strpos($n, '(GER)')
-       || strpos($n, '(NLD)')
-       || strpos($n, '(PRT)')
-       || strpos($n, '(FRA)')
-       || strpos($n, '(SCO)'))
-        $r0++;
+foreach ($coach as $c => $ac)
+    if ($c != 'вакансия' && $c = trim($c))
+    {
+        $r0 = $rN = $r3 = 0;
+        if (isset($ac['teams']))
+            foreach ($ac['teams'] as $n)
+            {
+                if (strpos($n, '(ESP)') || strpos($n, '(ENG)') || strpos($n, '(ITA)') || strpos($n, '(GER)') || strpos($n, '(NLD)') || strpos($n, '(PRT)') || strpos($n, '(FRA)') || strpos($n, '(SCO)'))
+                    $r0++;
 
-      if (strpos($n, '(BLR)')
-       || strpos($n, '(RUS)')
-       || strpos($n, '(UKR)'))
-      {
-        if ($rN)
-          $r0++;
-        else
-          $rN++;
-      }
-      if ($n == 'Hamburger SV (GER)') {
-        $rN++;
-        $r0--;
-      }
+                if (strpos($n, '*)'))
+                    $r3++;
+
+                if (strpos($n, '(BLR)') || strpos($n, '(RUS)') || strpos($n, '(UKR)'))
+                {
+                    if ($rN)
+                        $r0++;
+                    else
+                        $rN++;
+                }
+            }
+
+        $stat[$r0 + $rN + $r3]++;
+        $qc = (isset($ac['qc'])) ? 2 + $ac['qc'] : 2;
+        $table[] = array('c' => $c, 'rn' => $r0 + $rN + $r3, 'rl' => $r0, 'qc' => $qc);
     }
 
-  $stat[$r0 + $rN]++;
-  $qc = (isset($ac['qc'])) ? 2 + $ac['qc'] : 2;
-  $table[] = array('c' => $c, 'rn' => $r0 + $rN, 'rl' => $r0, 'qc' => $qc);
-}
 echo '<table class="table w100">
   <tr>
     <th><a href="?m=quota">игрок</a></th>
@@ -109,17 +107,19 @@ echo '<table class="table w100">
   </tr>
 ';
 $tmp = array();
-if (!isset($_GET['sort'])) {
-  $order = SORT_ASC;
-  foreach($table as $ma)
-    $tmp[] = $ma['c'];
+if (!isset($_GET['sort']))
+{
+    $order = SORT_ASC;
+    foreach($table as $ma)
+        $tmp[] = $ma['c'];
 
 }
-else switch($_GET['sort']) {
-  case '0': $order = SORT_DESC; foreach($table as $ma) $tmp[] = $ma['rn']; break;
-  case '1': $order = SORT_DESC; foreach($table as $ma) $tmp[] = $ma['rl']; break;
-  case 'q': $order = SORT_DESC; foreach($table as $ma) $tmp[] = $ma['qc']; break;
-  default : $order = SORT_ASC; foreach($table as $ma) $tmp[] = $ma['c']; break;
+else switch($_GET['sort'])
+{
+    case '0': $order = SORT_DESC; foreach($table as $ma) $tmp[] = $ma['rn']; break;
+    case '1': $order = SORT_DESC; foreach($table as $ma) $tmp[] = $ma['rl']; break;
+    case 'q': $order = SORT_DESC; foreach($table as $ma) $tmp[] = $ma['qc']; break;
+    default : $order = SORT_ASC;  foreach($table as $ma) $tmp[] = $ma['c'];  break;
 }
 array_multisort($tmp, $order, $table);
 foreach ($table as $ac) if ($c = trim($ac['c'])) {
@@ -155,6 +155,7 @@ foreach ($table as $ac) if ($c = trim($ac['c'])) {
 ';
 }
 echo '</table>
+<p>* - команды третьих лиг не учитываются в квоте</p>
 <p class="title text15b">Статистика по количеству команд у игроков:</p>
 <table><tr><td>команд</td><td>игроков</td><td> % </td><td>&nbsp;</td></tr>
 ';

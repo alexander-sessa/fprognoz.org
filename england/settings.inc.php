@@ -3,10 +3,10 @@ $cca = 'ENG';
 $description = 'Футбол-Прогнозная ассоциация Англии';
 $title = 'ФП Англии';
 $main_header = 'Новости ФП Англии';
-$cur_year = '2019-20';
+$cur_year = '2020-21';
 $president = 'Eugene (Joker) Plugin';
 $vice = 'Александр Сесса';
 $pressa = '';
-$coach = 'Semion Vasserman, Konstantin Nadelin';
-$club_edit = false;
+$coach = 'Konstantin Nadelin';
+$club_edit = true;
 ?>

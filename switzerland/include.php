@@ -45,6 +45,9 @@ $teams = array(
 "8784" => "TUGGEN",
 "15796" => "WETTSWIL",
 "8776" => "OLDBOTS",
+"2200" => "DELEMONT",
+"13698" => "FCLS2",
+"15786" => "VEVEY",
 );
 
 $names = array(
@@ -91,5 +94,8 @@ $names = array(
 "8784" => "Tuggen",
 "15796" => "Wettswil-Bonstetten",
 "8776" => "Old Boys",
+"2200" => "Delémont",
+"13698" => "Lausanne Sport II",
+"15786" => "Vevey Sports",
 );
 ?>

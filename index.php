@@ -157,7 +157,7 @@ function mb_vsprintf($format, $argv, $encoding=null) {
 
 function current_season($y, $m, $cc) {
   if ($cc == 'SUI')
-    return '2020-1';
+    return '2020-2';
 //  else if ($cc == 'RUS' || $cc == 'FRA')
 //    return '2018-19';
   else
@@ -372,7 +372,7 @@ function build_personal_nav() {
 //  $currentSeason = '2019-4';
 //else 
 if ($countryCode == 'SUI')
-  $currentSeason = '2020-1';
+  $currentSeason = '2020-2';
 
 
           if ($ll != '&' && ($status != 0 || $countryCode != 'SFP'))
@@ -538,7 +538,7 @@ function get_results($lastdate) {
   $year = date('Y', time());
 //  $month = date('m', time());
 //  (trim($atemp[1]) > ($month + 1) && $lastdate != '31.12') ? $fyear = $year - 1 : $fyear = $year;
-//  ($month > 7) ? $fyear = $year - 1 : $fyear = $year;
+  ($month > 10) ? $fyear = $year - 1 : $fyear = $year;
   $fyear = $year;
   $base = array();
   $week = date('W', strtotime($fyear.'-'.$date));
@@ -925,7 +925,7 @@ if ($auth && !$_POST['pass_str'] && strpos($_POST['name_str'], '@') && strpos($_
   $email_ok = false;
 }
 if (isset($ls))
-   setcookie('fprognozls', $ls);
+   setcookie('fprognozls', $ls, ['SameSite' => 'Strict']);
 
 $fprognozls = isset($_COOKIE['fprognozls']) ? $_COOKIE['fprognozls'] : 'enetscores';
 $editable_class = '';
@@ -1058,7 +1058,7 @@ else { // restored session
 
 if (isset($_SESSION['Coach_name'])) {
   $apikey = rtrim(base64_encode(openssl_encrypt( json_encode(['cmd' => 'send_by_api', 'email' => $_SESSION['Coach_mail']]), 'AES-256-CBC', $key, 0, $iv )), '=');
-  if (strtotime('8/1') < time() && time() <= strtotime('9/11')
+  if (strtotime('8/1') < time() && time() <= strtotime('9/18')
    && !is_file($data_dir.'personal/'.$coach_name.'/'.date('Y'))) {
     $a = 'fifa';
     $m = 'confirm'; // кампания сбора подтверждений с 8 июля по 31 августа
@@ -1102,7 +1102,7 @@ if (!isset($m)) { // если не запрошен контент, надо п�
     $m = 'main';                        // информация об ассоциации
     if ($a == 'fifa')
       if (!isset($_COOKIE['fprognozmain']))
-        setcookie('fprognozmain', '1'); // один раз покажем информацию о сайте
+        setcookie('fprognozmain', '1', ['SameSite' => 'Strict']); // один раз покажем информацию о сайте
       else {
         $s = $cur_year;                 // потом всегда показывать свежие новости
         $m = 'news';
@@ -1260,10 +1260,11 @@ if (in_array($cca, $classic_fa)) { // сбор туров сезона для к
                 <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=player">Игроки</a></li>';
 
   }
+/*
   if ($cca == 'ENG')
       $sidebar .= '
                 <li><a href="?a='.$a.'&amp;m=register">Выбор команды</a></li>';
-
+*/
   $sidebar .= '
                 <li><a href="?a='.$a.'&amp;m=hq">Президиум</a></li>
                 <li><a href="?a='.$a.'&amp;m=hof">ЗАЛ СЛАВЫ</a></li>';
@@ -1605,6 +1606,7 @@ else {
     <link href="/css/fp.css?ver=284" rel="stylesheet">
     <link href="/css/comments.css?ver=7" rel="stylesheet">
     <link href="/js/croppic/croppic.css" rel="stylesheet">
+    <link href="/js/jquery-ui/jquery-ui.min.css" rel="stylesheet">
 
     <!--[if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js" integrity="sha256-3Jy/GbSLrg0o9y5Z5n1uw0qxZECH7C6OQpVBgNFYa0g=" crossorigin="anonymous"></script><![endif]-->
     <script defer src="https://use.fontawesome.com/releases/v5.13.0/js/solid.js" crossorigin="anonymous"></script>
@@ -1619,7 +1621,7 @@ else {
     <script src="/js/jquery-ui/jquery-ui.min.js"></script>
     <script src="/js/jquery-ui/jquery.ui.touch-punch.min.js"></script>
     <script src="/js/croppic/croppic-3.0.min.js"></script>
-    <script src="/js/fp.js?ver=222"></script>
+    <script src="/js/fp.js?ver=223"></script>
 </head>
 
 <body>
@@ -1636,9 +1638,7 @@ else {
 echo '
         <nav id="sidebar">
             <div class="sidebar-header">
-                <a href="/?a=world&s=2020&t=11&m=prognoz"><h5>Лига Наций/Сайтов:</h5><h6>итоги 11-го тура</h6></a>
-                <!--a href="/?a=world&s=2020&t=10&m=result"><h6>итоги 11-го тура</h6></a--><br>
-                <a href="/?m=news&s=2019-20"><h6>Новости SFP - ФИФА</h6></a>
+                <a href="/?m=news&s=2020-21"><h5>Новости SFP - ФИФА</h5></a>
             </div>
 
             <ul class="list-unstyled components">

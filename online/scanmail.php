@@ -28,6 +28,9 @@ function scan_mail($imap) {
         $msg = strip_tags(str_ireplace('<br', "\n<br", $msg));
 
     }
+    else if (strpos($msg, 'FP_Prognoz') === false)
+        $msg = imap_base64($msg);
+
     $msg = str_ireplace('fp_prognoz@', '', $msg);
     $msg = str_ireplace('            ', "\n", $msg);
     $msg = str_ireplace('&#8232;', '', $msg);
@@ -100,10 +103,11 @@ function last_season($cca) {
   return $season;
 }
 $names = [
-  'Andrey_Vedeneev' => 'Andrey Vedeneev',
-  'Andriy Vyedyeneyev' => 'Andrey Vedeneev',
-  'Микола Вербовський' => 'Nick777',
-  'AnDrusha' => 'Андрей Вышинский',
+//  'Andrey_Vedeneev' => 'Andrey Vedeneev',
+//  'Andrey Morozov' => 'Foxiter',
+//  'Andriy Vyedyeneyev' => 'Andrey Vedeneev',
+//  'Микола Вербовський' => 'Nick777',
+//  'AnDrusha' => 'Андрей Вышинский',
 ];
 $imap = imap_open($mail_server, $mail_user, $mail_password);
 if (!$imap)

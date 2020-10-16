@@ -362,8 +362,8 @@ function players_table($array, $side, $coach, $rprognoz, $half1, $half2, $size) 
           if ($half2)
             $prognozColored .= '&nbsp; <input type="checkbox" disabled="disabled" '.($repl ? 'checked="checked"' : '').'> &nbsp; ';
           else if ($coach)
-// здесь для товарищеских матчей надо не включать класс bench
-            $prognozColored .= '&nbsp; <input type="checkbox" '.($p >= $size && false ? 'class="bench" ' : '').'name="'.rawurlencode($name).'" '.($repl ? 'checked="checked"' : '').' data-size="'.$size.'"> &nbsp; ';
+///// здесь для товарищеских матчей надо не включать класс bench
+            $prognozColored .= '&nbsp; <input type="checkbox" '.($p >= $size ? 'class="bench" ' : '').'name="'.rawurlencode($name).'" '.($repl ? 'checked="checked"' : '').' data-size="'.$size.'"> &nbsp; ';
           else
             $prognozColored .= '&nbsp; <input type="checkbox" disabled="disabled" '.($p < $size ? 'checked="checked"' : '').'> &nbsp; ';
         }
@@ -849,14 +849,17 @@ if (isset($_SESSION['Coach_name'])) {
   if ($tour > 'UNL11' && $tour < 'UNL95')
     switch ($_SESSION['Coach_name'])
     {
-      case 'Андрей Новиков': $teamCodes['n'] = 'Севас'; break;
+//      case 'Андрей Новиков': $teamCodes['n'] = 'Севас'; break;
       case 'andrey tumanovich': $teamCodes['n'] = 'kipelov1234'; break;
+      case 'Андрей Новиков': $teamCodes['s'] = 'Андрей Новиков'; break;
       case 'ВитЬя Барановский': $teamCodes['s'] = 'ВитЬя Барановский'; break;
       case 'Вячеслав Ковалевский': $teamCodes['s'] = 'Вячеслав Ковалевский'; break;
       case 'Serge Vasiliev': $teamCodes['s'] = 'Serge Vasiliev'; break;
       case 'Максим Кузнецов': $teamCodes['s'] = 'Максим Кузнецов'; break;
       case 'Александр Сесса': $teamCodes['s'] = 'Александр Сесса'; break;
       case 'Кирилл Голощёков': $teamCodes['s'] = 'Кирилл Голощёков'; break;
+      case 'Gleb Arsatov': $teamCodes['s'] = 'Gleb Arsatov'; break;
+      case 'Михаил Сирота': $teamCodes['s'] = 'Михаил Сирота'; break;
     }
 
   if (count($teamCodes))

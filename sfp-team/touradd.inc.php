@@ -149,6 +149,18 @@ switch ($l)
 
 В турнире участвуют:
 
+Niggah
+Orphan
+Gleb
+vlad_ezh
+Villarreal
+maku
+Vitya
+KOKOC
+AnDrusha
+SlavKo
+AlexTar77
+Vano Opulsky
 ';
     break;
   case 'FFP':
@@ -196,7 +208,8 @@ switch ($l)
 ';
     break;
   case 'SPR':
-    $html = HTTP_CURL('http://sportgiant.net/championships/xiii-spartakiada-2019' . ($next_tour > 9 ? '-final' : '') . '/calendar?locale=en');
+    //$html = HTTP_CURL('http://sportgiant.net/championships/xiv-spartakiada-2020' . ($next_tour > 9 ? '-final' : '') . '/calendar?locale=en');
+    $html = HTTP_CURL('http://sportgiant.net/championships/xiv-spartakiada-gruppa-a/calendar?locale=en');
     $html = substr($html, strpos($html, 'Tour ' . ($next_tour > 9 ? $next_tour - 9 : $next_tour) . ' '));
     $cut = strpos($html, '- ') + 2;
     $deadline = substr($html, $cut, strpos($html, '</h3>') - $cut);
@@ -204,9 +217,9 @@ switch ($l)
     $timestamp = strtotime($deadline);
     $program = '
 Прогнозы на ' . $next_tour . '-й тур делать на этой странице:
-http://sportgiant.net/championships/xiii-spartakiada-2019-gruppa-c/tours/' . $next_tour . '.0
+http://sportgiant.net/championships/xiv-spartakiada-gruppa-a/tours/' . $next_tour . '.0
 или же на странице нашего сайта:
-http://fprognoz.org/?a=sfp-team&amp;s=2019-20&amp;l=SPR&amp;m=prognoz&amp;t=' . $next_tour . '
+http://fprognoz.org/?a=sfp-team&amp;s=2020-21&amp;l=SPR&amp;m=prognoz&amp;t=' . $next_tour . '
 Последний срок: '. strtr(date_tz('l j F в H:i', '', $timestamp - 600, 'Europe/Moscow'), $cal_tran) .' по Москве.
 
 Программка для тех, кто отправляет прогнозы емейлом:
@@ -241,20 +254,39 @@ http://fprognoz.org/?a=sfp-team&amp;s=2019-20&amp;l=SPR&amp;m=prognoz&amp;t=' . 
 Для всех 10 матчей программки надо угадывать исход.
 На 2 матча надо сделать дополнительный прогноз.
 Строка прогноза должна выглядеть примерно так: 010120(1)1012(0)
+
+В турнире участвуют:
+
+Vitya - ?
+SlavKo - ?
+Niggah - ?
+AnDrusha - ?
+Gleb - ?
+vlad_ezh - ?
+AlexTar77 - ?
+Villarreal - ?
+Joker - ?
+Vano Opulsky - ?
+GOLKA - ?
+Sessa - ?
+maku - ?
+KOKOC - ?
+Orphan - ?
+Saintov - ?
 ';
     break;
   case 'TOR':
     // получить список туров и выбрать из него нужный
-    $url = 'http://www.torpedoru.com/table.php?championat_id=103';
+    $url = 'http://www.torpedoru.com/table.php?championat_id=111';
     $content = file_get_contents($url);
     $content = substr($content, strpos($content, 'js-nav-tours js-nav-container'));
     $content = substr($content, 0, strpos($content, '</div>'));
     $tours = explode("<a href = '/tour.php?id=", $content);
     foreach($tours as $tline)
-//      if (strpos($tline, 'Групповой турнир. ' . $next_tour . ' '))
+      if (strpos($tline, 'Групповой турнир. ' . $next_tour . ' '))
 //      if (strpos($tline, 'Финальный турнир (1 стадия). ' . ($next_tour - 5) . ' '))
 //      if (strpos($tline, 'Финальный турнир (1 стадия). ' . ($next_tour - 5) . ' тур. Рестарт'))
-      if (strpos($tline, 'Финальный турнир (2 стадия). ' . ($next_tour - 16) . ' '))
+//      if (strpos($tline, 'Финальный турнир (2 стадия). ' . ($next_tour - 16) . ' '))
       {
         $tid = substr($tline, 0, 4);
         $deadline = substr($tline, strpos($tline, ' &lt;До ') + 10, 19) . ' Europe/Moscow';
@@ -264,7 +296,7 @@ http://fprognoz.org/?a=sfp-team&amp;s=2019-20&amp;l=SPR&amp;m=prognoz&amp;t=' . 
 
     $program = '
 Прогнозы на ' . $next_tour . '-й тур делать на этой странице:
-http://fprognoz.org/?a=sfp-team&amp;s=2019-20&amp;l=TOR&amp;m=prognoz&amp;t=' . $next_tour . '
+http://fprognoz.org/?a=sfp-team&amp;s=2020-21&amp;l=TOR&amp;m=prognoz&amp;t=' . $next_tour . '
 Последний срок: '. strtr(date_tz('l j F в H:i', '', $timestamp - 600, 'Europe/Moscow'), $cal_tran) .' по Москве.
 
 Обращаю внимание на то, что из 13-ти матчей надо поставить только на 10.
@@ -298,6 +330,9 @@ http://fprognoz.org/?a=sfp-team&amp;s=2019-20&amp;l=TOR&amp;m=prognoz&amp;t=' . 
  |---+---------------------------------------------+-----|
  | Контрольный срок отправки                  ' . date_tz('d.m H:i', '', $timestamp - 600, 'Europe/Berlin') . '|
 
+Наша команда вступит в игру с финального этапа.
+';
+/*
 Vitya - ?
 SlavKo - ?
 Niggah - ?
@@ -314,7 +349,7 @@ Sessa - ?
 KOKOC - ?
 skripka_av - ?
 Orphan - ?
-';
+*/
     break;
   case 'FWD':
     break;

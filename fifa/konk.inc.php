@@ -1,5 +1,5 @@
 <?php
-$tour = (isset($t) && $t) ? 'KONK' . $t : 'KONK37';
+$tour = (isset($t) && $t) ? 'KONK' . $t : 'KONK38';
 echo '    <h4 class="text-center">&nbsp;&nbsp;&nbsp;Форма отправки заявок на конкурс ' . $tour . '</h4>
 ';
 
@@ -38,7 +38,7 @@ if (isset($_POST['submitpredict']))
   $prognoz = trim($_POST['prognoz_str']);
 }
 if (!isset($teamsin)) $teamsin = '';
-if (isset($_POST['submitpredict']) && $prognoz && $name && $pemail) { // отправка прогноза
+if (isset($_POST['submitpredict']) && $prognoz && $name && $pemail && strlen($prognoz) >= 30) { // отправка прогноза
   if ($pemail) {
     send_email('FPrognoz.org <fp@fprognoz.org>', $name, $pemail, "Konkurs", "FP_Prognoz\n$name\n$tour\n$prognoz\n- $teamsout\n+ $teamsin\n");
     echo "<h3>Прогноз принят. Копия прогноза отправлена на адрес $pemail<br></h3>";
