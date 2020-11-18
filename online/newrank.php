@@ -38,7 +38,7 @@ function write_year_ranking($year) {
   global $realteam;
   $out = $log = '';
   $reader = new Xls();
-  $spreadsheet = $reader->load($ranking . 'ECR' . $year . '.xls');
+  $spreadsheet = $reader->load($ranking . 'ECR-' . $year . '.xls');
   $sheet = $spreadsheet->getSheet(0);
   $col = 'B'; // в последнем ECR2019.xls A1 = 2019, что плохо
   while ($sheet->getCell($col.'1') != (string)$year)
@@ -71,9 +71,9 @@ function write_year_ranking($year) {
   return $log;
 }
 
-$url = 'http://www.european-football-statistics.co.uk/ecr/ECR' . $year . '.xls';
-if (!is_file($ranking . 'ECR' . $year . '.xls') || remote_file_size($url) != filesize($ranking . 'ECR' . $year . '.xls')) {
-  file_put_contents($ranking . 'ECR' . $year . '.xls', HTTP_CURL($url, 'http://www.european-football-statistics.co.uk/ecr/ecr01-20.htm'));
+$url = 'http://www.european-football-statistics.co.uk/ecr/ECR-' . $year . '.xls';
+if (!is_file($ranking . 'ECR-' . $year . '.xls') || remote_file_size($url) != filesize($ranking . 'ECR-' . $year . '.xls')) {
+  file_put_contents($ranking . 'ECR-' . $year . '.xls', HTTP_CURL($url, 'http://www.european-football-statistics.co.uk/ecr/ecr01-20.htm'));
   $log = write_year_ranking($year);
   $log .= write_year_ranking($year - 1);
   // merge rankings

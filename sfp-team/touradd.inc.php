@@ -146,7 +146,8 @@ switch ($l)
     $program .= '
  |---+---------------------------------------------+-----|
  | Контрольный срок отправки                  ' . date_tz('d.m H:i', '', $timestamp - 600, 'Europe/Berlin') . '|
-
+';
+/*
 В турнире участвуют:
 
 Niggah
@@ -162,9 +163,10 @@ SlavKo
 AlexTar77
 Vano Opulsky
 ';
+*/
     break;
   case 'FFP':
-    $url = 'http://www.kfp.ru/fest/ffp'.(date('Y') - 1).'/tur2009.php?tur='.$next_tour.'&ref=0';
+    $url = 'http://www.kfp.ru/fest/ffp'.date('Y').'/tur2009.php?tur='.$next_tour.'&ref=0';
     $html = file_get_contents($url);
     $html = iconv('windows-1251', 'utf-8', $html);
     $html = substr($html, strpos($html, 'Последний срок приема прогнозов: ') + 61);
@@ -205,6 +207,24 @@ Vano Opulsky
  | Контрольный срок отправки                  ' . date_tz('d.m H:i', '', $timestamp - 600, 'Europe/Berlin') . '|
 
 Для всех 11 матчей программки надо угадывать исход.
+
+В этом турнире играют
+
+Sessa - ?
+Niggah - ?
+Vitya - ?
+SlavKo - ?
+Joker - ?
+GOLKA - ?
+AnDrusha - ?
+Saintov - ?
+vlad_ezh - ?
+Gleb - ?
+AlexTar77 - ?
+Villarreal - ?
+Orphan - ?
+maku - ?
+Vano Opulsky - ?
 ';
     break;
   case 'SPR':

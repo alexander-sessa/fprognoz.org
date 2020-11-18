@@ -18,7 +18,12 @@ function scan_mail($imap) {
     $time = $header->udate;
     $str = imap_fetchstructure($imap, $m);
     $msg = imap_fetchbody($imap, $m, 1);
-    if (isset($str->parts)) {
+    if (strpos($msg, 'base64'))
+    {
+      $msg = substr($msg, strpos($msg, "\r\n\r\n") + 4);
+      $msg = strip_tags(imap_base64(substr($msg, 0, strpos($msg, "\n--"))));
+    }
+    else if (isset($str->parts)) {
       switch ($str->parts[0]->encoding) {
         case  3: $msg = imap_base64($msg); break;
         case  4: $msg = imap_qprint($msg); break;
@@ -28,8 +33,8 @@ function scan_mail($imap) {
         $msg = strip_tags(str_ireplace('<br', "\n<br", $msg));
 
     }
-    else if (strpos($msg, 'FP_Prognoz') === false)
-        $msg = imap_base64($msg);
+    else
+        $msg = strip_tags(imap_base64($msg));
 
     $msg = str_ireplace('fp_prognoz@', '', $msg);
     $msg = str_ireplace('            ', "\n", $msg);

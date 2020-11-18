@@ -944,14 +944,14 @@ function Today($year, $m, $d, $dayofweek, $minute) {
           default     : $s = $minute;
         }
         if (!strpos($match, '<div class="scoreh_ft score_cell centerTXT"> </div>') && ($cut = strpos($match, 'scoreh_ft'))) {
-          $r = substr($match, $cut + 32);
+          $r = substr($match, $cut + 34);
           $r = substr($r, 0, strpos($r, '</div>
 </div>'));
           $r = str_replace('</div>
 <div class="scorea_ft score_cell centerTXT">', ':', $r);
           $r = strtr($r, ' ', '-');
           if ($cut = strpos($match, 'scoreh_et')) {
-            $e = substr($match, $cut + 32);
+            $e = substr($match, $cut + 34);
             $e = substr($e, 0, strpos($e, '</div>
 </div>'));
             $e = str_replace('</div>
@@ -1176,7 +1176,7 @@ https://fprognoz.org/?a=' . $ccn[$cca] . ($tour[4] == 'L' ? '&l='.substr($tour, 
         else {                                      // ни один матч не начат, значит, надо создать новое событие для
           if ($e1 == 2147483647)                    // начала первого матча
             $events[] = strtotime('tomorrow 8:00'); // если не известно начало, дежурное событие на завтра, 8:00
-          else if ($e1 < time())                    // первый матч уже должен начаться:
+          else if ($e1 <= time())                   // первый матч уже должен начаться:
             $events[] = $time + 60;                 // ожидание его начала с проверкой каждую минуту
           else
             $events[] = $e1;                        // начало первого матча из программки

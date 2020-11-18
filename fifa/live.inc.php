@@ -1,6 +1,6 @@
 <center>
-<a href="/?m=live&amp;ls=livescore.bz"><img src="https://www.livescore.bz/img/logoY.png" height="32" border="0" alt="livescore.bz" class="bg-secondary"></a>
-<a href="/?m=live&amp;ls=xscores.com"><img src="https://www.xscores.com/image/logosred_site.png" height="32" border="0" alt="xscores.com"></a>
+<a href="/?m=live&amp;ls=livescore.bz"><img src="https://www.livescore.bz/img/logoY.png" height="32" border="0" alt="livescore.bz" class="bg-secondary"></a> &nbsp;
+<a href="/?m=live&amp;ls=xscores.com"><img src="https://www.xscores.com/image/logosred_site.png" height="32" border="0" alt="xscores.com"></a> &nbsp;
 <a href="/?m=live&amp;ls=enetscores"><img src="https://www.enetscores.com/img/client/enet_logo.png" height="34" border="0" alt="enetscores"></a>
 <?php
 $ls = $ls ?? 'enetscores';

@@ -134,14 +134,14 @@ for ($day=-1; $day<=14; $day++) {
         default     : $s = $minute;
       }
       if (!strpos($match, '<div class="scoreh_ft score_cell centerTXT"> </div>') && ($cut = strpos($match, 'scoreh_ft'))) {
-        $r = substr($match, $cut + 32);
+        $r = substr($match, $cut + 34);
         $r = substr($r, 0, strpos($r, '</div>
 </div>'));
         $r = str_replace('</div>
 <div class="scorea_ft score_cell centerTXT">', ':', $r);
         $r = strtr($r, ' ', '-');
         if ($cut = strpos($match, 'scoreh_et')) {
-          $e = substr($match, $cut + 32);
+          $e = substr($match, $cut + 34);
           $e = substr($e, 0, strpos($e, '</div>
 </div>'));
           $e = str_replace('</div>

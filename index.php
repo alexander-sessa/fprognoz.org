@@ -157,7 +157,7 @@ function mb_vsprintf($format, $argv, $encoding=null) {
 
 function current_season($y, $m, $cc) {
   if ($cc == 'SUI')
-    return '2020-2';
+    return '2020-3';
 //  else if ($cc == 'RUS' || $cc == 'FRA')
 //    return '2018-19';
   else
@@ -202,8 +202,8 @@ function build_personal_nav() {
           $currentSeason = current_season($startYear, $startMonth, $countryCode);
 
 
-//if (in_array($tourCode, ['SUI09']))
-//  $currentSeason = '2019-4';
+if (in_array($tourCode, ['SUIG1']))
+  $currentSeason = '2020-2';
 
 
 // World
@@ -335,8 +335,8 @@ function build_personal_nav() {
       $currentSeason = current_season($startYear, $startMonth, $countryCode);
 
 
-//if (in_array($tourCode, ['SUI09']))
-//  $currentSeason = '2019-4';
+if (in_array($tourCode, ['SUIG1']))
+  $currentSeason = '2020-2';
 
 
       $tout = '';
@@ -368,11 +368,11 @@ function build_personal_nav() {
             $linktext = 'text&ref=it';
 
 
-//if (in_array($tcode, ['SUI09']))
-//  $currentSeason = '2019-4';
-//else 
-if ($countryCode == 'SUI')
+if (in_array($tcode, ['SUIG1']))
   $currentSeason = '2020-2';
+else 
+if ($countryCode == 'SUI')
+  $currentSeason = '2020-3';
 
 
           if ($ll != '&' && ($status != 0 || $countryCode != 'SFP'))

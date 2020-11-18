@@ -1,9 +1,9 @@
 <?php
 function rewrite_cal($prognoz_dir, $line0, $score0, $score) {
-  $cal = file_get_contents($prognoz_dir.'/cal');
-  $line9 = str_replace(';'.$score0."\n", ';'.$score, $line0);
-  $cal = str_replace($line0, $line9, $cal);
-  file_put_contents($prognoz_dir.'/cal', $cal);
+    $cal = file_get_contents($prognoz_dir.'/cal');
+    $line9 = str_replace(';'.$score0."\n", ';'.$score, $line0);
+    $cal = str_replace($line0, $line9, $cal);
+    file_put_contents($prognoz_dir.'/cal', $cal);
 }
 
 $season = $s;
@@ -16,60 +16,63 @@ $hidden = 'прогноз не показан';
 $stat = false;
 
 if (isset($_POST['do_task']))
-{
-  touch($online_dir.'schedule/task/'.$_POST['do_task'].'.'.$tour);
-}
+    touch($online_dir.'schedule/task/'.$_POST['do_task'].'.'.$tour);
 
 $acodes = file($online_dir.'SFP/'.$s.'/codes.tsv');
-if (isset($_SESSION['Coach_name'])) {
-  foreach ($acodes as $scode) if ($scode[0] != '#') {
-    list($code, $team_code, $name, $email) = explode('	', ltrim($scode, '-'));
-    if ($name == $_SESSION['Coach_name'])
-      break;
+if (isset($_SESSION['Coach_name']))
+{
+    foreach ($acodes as $scode) if ($scode[0] != '#')
+    {
+        list($code, $team_code, $name, $email) = explode('	', ltrim($scode, '-'));
+        if ($name == $_SESSION['Coach_name'])
+            break;
 
-  }
-  if (($name == 'Михаил Сирота' || $name == 'Александр Сесса') && isset($_POST['player'])) {
-    $squad = '';
-    foreach ($_POST['player'] as $player)
-      $squad .= $player."\n";
+    }
+    if (($name == 'Михаил Сирота' || $name == 'Александр Сесса') && isset($_POST['player']))
+    {
+        $squad = '';
+        foreach ($_POST['player'] as $player)
+            $squad .= $player."\n";
 
-    file_put_contents($online_dir.'SFP/'.$s.'/squad.'.$l, $squad);
-    touch($online_dir . 'schedule/task/post.' . $tour);
-  }
+        file_put_contents($online_dir.'SFP/'.$s.'/squad.'.$l, $squad);
+        touch($online_dir . 'schedule/task/post.' . $tour);
+    }
 }
-if (is_file($program_file)) {
+if (is_file($program_file))
+{   // парсинг программки
+    $program = file_get_contents($program_file);
+    $program = substr($program, strpos($program, "\n", strpos($program, $tour.' ')) + 1);
+    $fr = strpos($program, 'Контрольный с');
+    $program_matches = explode("\n", substr($program, 0, $fr));
+    switch ($l)
+    {
+        case 'PRE':
+        case 'SUP': $imax = 20; break;
+        case 'PRO': $imax = 15; break;
+        case 'FWD': $imax = 12; break;
+        default   : $imax = count($program_matches) - 3;
+    }
+    //$imax = ($l == 'PRE' || $l == 'SUP') ? 20 : ($l == 'PRO' ? 15 : count($program_matches) - 3);
+    $program = substr($program, $fr);
+    $fr = strpos($program, '.');
+    $lastdate = trim(substr($program, $fr - 2, 5));
+    $lasttm = ($fr1 = strpos($program, ':', $fr)) && ($fr1 - $fr < 50) ? trim(substr($program, $fr1 - 2, 5)) : '';
 
-  // парсинг программки
-  $program = file_get_contents($program_file);
-  $program = substr($program, strpos($program, "\n", strpos($program, $tour.' ')) + 1);
-  $fr = strpos($program, 'Контрольный с');
-  $program_matches = explode("\n", substr($program, 0, $fr));
-  switch ($l) {
-    case 'PRE':
-    case 'SUP': $imax = 20; break;
-    case 'PRO': $imax = 15; break;
-    case 'FWD': $imax = 12; break;
-    default   : $imax = count($program_matches) - 3;
-  }
-  //$imax = ($l == 'PRE' || $l == 'SUP') ? 20 : ($l == 'PRO' ? 15 : count($program_matches) - 3);
-  $program = substr($program, $fr);
-  $fr = strpos($program, '.');
-  $lastdate = trim(substr($program, $fr - 2, 5));
-  $lasttm = ($fr1 = strpos($program, ':', $fr)) && ($fr1 - $fr < 50) ? trim(substr($program, $fr1 - 2, 5)) : '';
+    // парсинг матчей тура (для примитивного варианта)
+    $calfp = explode("\n", $program);
+    $cal = '';
+    foreach ($calfp as $line)
+        if (strpos($line, ' - '))
+            $cal .= trim($line)."\n";
 
-  // парсинг матчей тура (для примитивного варианта)
-  $calfp = explode("\n", $program);
-  $cal = '';
-  foreach ($calfp as $line)
-    if (strpos($line, ' - '))
-      $cal .= trim($line)."\n";
-
-  // отправка прогноза
-  if ($team_code && isset($_POST['submitpredict']) && ($prognoz = trim($_POST['prognoz_str'])))
-    send_predict('SFP', $season, $team_code, $tour, $prognoz, '', $ip);
-
-  $publish = is_file($prognoz_dir.'/published');
-  $closed = is_file($prognoz_dir.'/closed');
+    // отправка прогноза
+    if ($team_code && isset($_POST['submitpredict']) && ($prognoz = trim($_POST['prognoz_str'])))
+    {
+        send_predict('SFP', $season, $team_code, $tour, $prognoz, '', $ip);
+        touch($online_dir . 'schedule/task/post.' . $tour);
+    }
+    $publish = is_file($prognoz_dir.'/published');
+    $closed = is_file($prognoz_dir.'/closed');
 
   // выборка матчей тура (расширенный вариант)
   $pro = false;
