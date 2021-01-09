@@ -202,8 +202,8 @@ function build_personal_nav() {
           $currentSeason = current_season($startYear, $startMonth, $countryCode);
 
 
-if (in_array($tourCode, ['SUIG1']))
-  $currentSeason = '2020-2';
+//if (in_array($tourCode, ['SUIG1']))
+//  $currentSeason = '2020-2';
 
 
 // World
@@ -335,8 +335,8 @@ if (in_array($tourCode, ['SUIG1']))
       $currentSeason = current_season($startYear, $startMonth, $countryCode);
 
 
-if (in_array($tourCode, ['SUIG1']))
-  $currentSeason = '2020-2';
+//if (in_array($tourCode, ['SUIG1']))
+//  $currentSeason = '2020-2';
 
 
       $tout = '';
@@ -368,9 +368,9 @@ if (in_array($tourCode, ['SUIG1']))
             $linktext = 'text&ref=it';
 
 
-if (in_array($tcode, ['SUIG1']))
-  $currentSeason = '2020-2';
-else 
+//if (in_array($tcode, ['SUIG1']))
+//  $currentSeason = '2020-2';
+//else 
 if ($countryCode == 'SUI')
   $currentSeason = '2020-3';
 
@@ -530,6 +530,7 @@ function script_from_cache($file) {
   return $file;
 }
 
+/* больше не используется
 function get_results($lastdate) {
   global $online_dir;
 
@@ -546,7 +547,7 @@ function get_results($lastdate) {
   if (in_array($date, ['12-26'])) $fyear = $year - 1;
   $fname = $fyear.'.'.$week;
   is_file($online_dir . 'results/'.$fname) ? $archive = file($online_dir . 'results/'.$fname) : $archive = array();
-  if (++$week == '53') //54
+  if (++$week == '54') //53
   {
     $week = '01';
     $fyear++;
@@ -562,6 +563,7 @@ function get_results($lastdate) {
   }
   return $base;
 }
+*/
 
 function bz_matches($json) {
   global $online_dir;
@@ -750,7 +752,7 @@ function get_results_by_date($month, $day, $update=NULL, $year=NULL) {
 //  if ($month > 7) $year--;
   $base = array();
   $week = date('W', strtotime($year.'-'.$date));
-  if (in_array($date, ['12-31'])) $week = '01';
+//  if (in_array($date, ['12-31'])) $week = '01';
   if (in_array($date, ['12-26'])) $year--;
   $fname = $year.'.'.$week;
   $seq = 0;
@@ -1476,7 +1478,7 @@ else if ($a == 'world' || $a == 'sfp-20') { // сбор туров Мирово�
                     <ul class="collapse list-unstyled'.($code == 'UNL' ? '' : ' show').'" id="'.$code.'Submenu">';
       $dir = scandir($s_dir.'programs', 1);
       foreach ($dir as $prog)
-        if ($prog[0] != '.' && $code != 'UFT' && ($prog < 'UNL12')) {//  || $prog > 'UNL94')) {
+        if ($prog[0] != '.' && $code != 'UFT' && ($prog < 'UNL12' || $prog > 'UNL94')) {//  || $prog > 'UNL94')) {
           $tt = substr($prog, 3);
           $to = $tt;
           $prefix = '<a href="?a='.$aa.'&amp;s='.$s.'&amp;t='.$to;
@@ -1635,10 +1637,13 @@ else {
 
 ////////// меню навигации (левое)
 // с этим разобраться, и вообще - надо ли? '.($sidebar_show ? ' class="active"' : '').'
+//                <a href="/?a=world&m=coach_msl"><h5 style="letter-spacing: -0.08em;">Лига Сайтов: регистрация</h5></a><br>
 echo '
         <nav id="sidebar">
             <div class="sidebar-header">
-                <a href="/?m=news&s=2020-21"><h5>Новости SFP - ФИФА</h5></a>
+                <a href="/?a=world&m=coach_msl"><h5>Лига Наций / Сайтов:</h5><h6>Регистрация в ЛС</h6></a>
+                <a href="/?a=world&s=2021&t=96&m=prognoz"><h6>Пробный тур 96</h6></a><br>
+                <a href="/?m=news&s=2020-21"><h6>Новости ФП ФИФА</h6></a>
             </div>
 
             <ul class="list-unstyled components">

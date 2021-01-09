@@ -110,12 +110,14 @@ function IntervalsTable() {
     $year = date('Y', $time);
 
     if ($week == '01')
-      $year = 2020;
+      $year = 2021;
 
     $day1 = date('m-d', $time);
+    if ($day1 == '12-29')
+      $week = '53';
 
-if ($day1 == '12-31')
-  $day1 = '01-01'; // fix 2020
+//if ($day1 == '12-29')
+//  $day1 = '01-01'; // fix 2020
 
     $day2 = date('m-d', $time + 172800);
     $day3 = date('m-d', $time + 259200);
@@ -126,9 +128,12 @@ if ($day1 == '12-31')
     foreach ($ccs as $cc => $country)// if ($cc != 'SUI')
     {
       foreach ($suffix as $tournament)
-        if (is_file($online_dir . "fixtures/$year/$week/$cc$tournament"))
+        if (is_file($online_dir . "fixtures/$year/$week/$cc$tournament") || is_file($online_dir . 'fixtures/'.($year+1)."/$week/$cc$tournament"))
         {
           $ac = file($online_dir . "fixtures/$year/$week/$cc$tournament", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+          if ($week == '53')
+            $ac = array_merge($ac, file($online_dir . 'fixtures/'.($year+1)."/$week/$cc$tournament", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
+
           foreach ($ac as $line)
           {
             list($home, $away, $date, $kick, $tnmt) = explode(',', trim($line));
@@ -160,15 +165,18 @@ if ($day1 == '12-31')
               }
 */
             }
-            if ($date > date('m-d') || $date[0] == '0') // fix 2020
+            if ($date > date('m-d') || $date[0] == '0') // fix начала года
             {
+/*
               if ($date < $day1 && $date > '01-00')
               {
                 if (isset($day3p))
                   $matches[$day3p][$cc][$home.' - '.$away] = [trim($home),trim($away),$date,$kick,$tnmt];
 
               }
-              else if ($date < $day3)
+              else 
+*/
+              if ($date < $day3 || ($day3 == '01-01' && $date[0] == '1'))
                 $matches[$day1][$cc][$home.' - '.$away] = [trim($home),trim($away),$date,$kick,$tnmt];
               else
                 $matches[$day3][$cc][$home.' - '.$away] = [trim($home),trim($away),$date,$kick,$tnmt];

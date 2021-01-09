@@ -31,9 +31,9 @@ $ccr = array(
 eval('$sites = '.file_get_contents($online_dir.'UNL/'.$s.'/sites.inc'));
 $ac_head = '';
 echo '<p class="title text15b">&nbsp;&nbsp;&nbsp;Тренерская Лиги Наций</p>
-<hr size="1" width="98%">
-Закрыто. Если ваша команда пробьётся в Финальный турнир, Вам <a href="/?a=world&m=coach_uft">сюда</a>';
-exit;
+<hr size="1" width="98%">';
+//Закрыто. Если ваша команда пробьётся в Финальный турнир, Вам <a href="/?a=world&m=coach_uft">сюда</a>';
+//exit;
 if (isset($_SESSION['Coach_name']) && !isset($_POST['teamname'])) {
 
 
@@ -102,7 +102,7 @@ if (isset($_SESSION['Coach_name']) && !isset($_POST['teamname'])) {
 
       }
 
-    $season = (strlen($s) == 7) ? $s : (($ac == 'SUI') ? '2019-4' : '2019-20');
+    $season = (strlen($s) == 7) ? $s : (($ac == 'SUI') ? '2020-3' : '2020-21');
     $codes = file($online_dir.'UNL/'.$s.'/'.$ac.'.csv');
     $col_height = count($codes) * 24 + 144; //24
     $coach_col = '';
@@ -178,7 +178,7 @@ else if (isset($ac) && strlen($ac) == 3) {
       $player[$name] = $mail;
 
   }
-  $season = (strlen($s) == 7) ? $s : (($ac == 'SUI') ? '2019-4' : '2019-20');
+  $season = (strlen($s) == 7) ? $s : (($ac == 'SUI') ? '2020-3' : '2020-21');
   $codes = file($online_dir.$ac.'/'.$season.'/codes.tsv');
   if (!isset($col_height))
     $col_height = count($codes) * 24;
@@ -193,6 +193,7 @@ else if (isset($ac) && strlen($ac) == 3) {
       <input type="submit" value="исключить" name="'.base64_encode($name.';'.$mail).'" /> '.$name.' </br>';
 
   }
+/*
   if (count($team) < 11) {
     $player_col .= '
       <p>Вы можете призвать игрока в сборную:</p>';
@@ -204,6 +205,7 @@ else if (isset($ac) && strlen($ac) == 3) {
 
     }
   }
+*/
 //  echo '
 //    </div>
 //  </div>';

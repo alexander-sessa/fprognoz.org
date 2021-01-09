@@ -229,15 +229,15 @@ Vano Opulsky - ?
     break;
   case 'SPR':
     //$html = HTTP_CURL('http://sportgiant.net/championships/xiv-spartakiada-2020' . ($next_tour > 9 ? '-final' : '') . '/calendar?locale=en');
-    $html = HTTP_CURL('http://sportgiant.net/championships/xiv-spartakiada-gruppa-a/calendar?locale=en');
-    $html = substr($html, strpos($html, 'Tour ' . ($next_tour > 9 ? $next_tour - 9 : $next_tour) . ' '));
+    $html = HTTP_CURL('http://sportgiant.net/championships/xiv-spartakiada-2-etap-c/calendar?locale=en');
+    $html = substr($html, strpos($html, 'Tour ' . ($next_tour > 7 ? $next_tour - 7 : $next_tour) . ' '));
     $cut = strpos($html, '- ') + 2;
     $deadline = substr($html, $cut, strpos($html, '</h3>') - $cut);
     //$deadline = strtr($deadline, ['сентября' => 'September', 'октября' => 'October', 'ноября' => 'November', 'декабря' => 'December']);
     $timestamp = strtotime($deadline);
     $program = '
 Прогнозы на ' . $next_tour . '-й тур делать на этой странице:
-http://sportgiant.net/championships/xiv-spartakiada-gruppa-a/tours/' . $next_tour . '.0
+http://sportgiant.net/championships/xiv-spartakiada-2-etap-c/tours/' . ($next_tour > 7 ? $next_tour - 7 : $next_tour) . '.0
 или же на странице нашего сайта:
 http://fprognoz.org/?a=sfp-team&amp;s=2020-21&amp;l=SPR&amp;m=prognoz&amp;t=' . $next_tour . '
 Последний срок: '. strtr(date_tz('l j F в H:i', '', $timestamp - 600, 'Europe/Moscow'), $cal_tran) .' по Москве.

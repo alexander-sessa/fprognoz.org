@@ -2,17 +2,17 @@
 $res = true;
 if (isset($_SESSION['Coach_name'])) {
   $coach_name = $_SESSION['Coach_name'];
-  if (!is_file($data_dir . 'personal/'.$coach_name.'/team.2019')) {
+  if (!is_file($data_dir . 'personal/'.$coach_name.'/team.2021')) {
     if (isset($_POST['register'])) {
       if ($_POST['register'] == 'не хочу в сборную') {
-        touch($data_dir . 'personal/'.$coach_name.'/team.2019');
+        touch($data_dir . 'personal/'.$coach_name.'/team.2021');
         echo '
 <br>
 Очень жаль... Ну может быть в следующем году?';
       }
       else {
-        file_put_contents($data_dir . 'personal/'.$coach_name.'/team.2019', $_POST['assoc']);
-        $codesf = fopen($online_dir . 'UNL/2019/'.$_POST['assoc'].'.csv', 'a');
+        file_put_contents($data_dir . 'personal/'.$coach_name.'/team.2021', $_POST['assoc']);
+        $codesf = fopen($online_dir . 'UNL/2021/'.$_POST['assoc'].'.csv', 'a');
         fwrite($codesf, $coach_name.';'.$_SESSION['Coach_mail'].";;\n");
         fclose($codesf);
         echo '
@@ -26,7 +26,7 @@ if (isset($_SESSION['Coach_name'])) {
     else {
       $usr_assocs = [];
       foreach (['BLR', 'ENG', 'ESP', 'FRA', 'GER', 'ITA', 'NLD', 'PRT', 'RUS', 'SCO', 'SUI', 'UKR'] as $usr_cc) {
-        $codes = file_get_contents($online_dir . 'UNL/2019/'.$usr_cc.'.csv');
+        $codes = file_get_contents($online_dir . 'UNL/2021/'.$usr_cc.'.csv');
         foreach ($cmd_db[$usr_cc] as $team)
           if ($team['usr'] == $coach_name) {
             if (substr_count($codes, "\n") >= 11)
@@ -42,7 +42,7 @@ if (isset($_SESSION['Coach_name'])) {
       if (count($usr_assocs) && ($res === false)) {
 //<div id="mwin" class="popup">
         echo '
-<p>10 февраля завершается формирование сборных ФП-ассоциаций для участия в турнире "Лига Наций 2019".<br>
+<p>31 января завершается формирование сборных ФП-ассоциаций для участия в турнире "Лига Наций 2021".<br>
 Пожалуйста, выберите команду, в которой хотите сыграть.<br>
 Количество мест в сборных ограничено (11), поэтому не откладывайте решение.<br>
 Лучше сделать это сейчас, поставив отметку перед названием страны:</p>
