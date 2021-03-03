@@ -146,7 +146,7 @@ $(".delete_stage").click(function(){$("#"+$(this).data("id")).remove();$("#div-"
 $("#season_settings").change(function(){console.log('y');$("#ConfigEditor").show();$("#saveCfgIcon").css("background","orangered")})
 $("#ConfigEditor").click(function(){$.ajax({type:"POST",url:"/online/ajax.php",data:"data="+encodeURIComponent($("#saveCfgIcon").data("tpl"))+'&'+$("#season_settings").serialize(),success:function(r){$("#saveCfgIcon").css("background","green")}})})
 $("#MainForm").change(function(){$("#SubmitForm").show()})
-$(".pressrelease-title").click(function(){console.log("click"+$(this).html());$(".pressrelease").hide();$(this).next(".pressrelease").show();$("html,body").scrollTop(0)})
+$(".pressrelease-title").click(function(){show=$("#"+$(this).data("pr")).is(":hidden");$(".pressrelease").hide();if(show)$("#"+$(this).data("pr")).show();$("html,body").scrollTop(0)})
 $("#mailIcon").click(function(){$("#sendIcon").show();$("#mailIcon").hide();replaceEditable($(this).data("mode"))})
 $("#sendIcon").click(function(){$(".overlay").fadeTo("slow",0.65);$(".overlay").html('<div class="loaderP"><div class="loaderB">');
 if($("div[name='text']").length)$("#theMail").append("<textarea name='text' hidden>"+$("div[name='text']").html()+"</textarea>")

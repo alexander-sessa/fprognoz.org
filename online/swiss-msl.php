@@ -1,38 +1,36 @@
 <?php
 include ('swiss.inc.php');
 
-if (is_file('/home/fp/data/online/UNL/2020/games.inc'))
-  eval('$games = ' . file_get_contents('/home/fp/data/online/UNL/2020/games.inc') . ';');
+if (is_file('/home/fp/data/online/UNL/2021/games.inc'))
+  eval('$games = ' . file_get_contents('/home/fp/data/online/UNL/2021/games.inc') . ';');
 else
   $games = [
-'АФК-Кузбасс' => [],
-'ФК Форвард' => [],
-'SEclub' => [],
-'VOON.RU' => [],
-'Профессионалы прогноза' => [],
-'ОЛФП' => [],
-'Спартанцы IT' => [],
-'Fprognoz.com' => [],
-'SaSiSa' => [],
 'Мегаспорт' => [],
-'Чемпионат Прогнозов' => [],
+'Студия Прогнозист' => [],
+'КСП "Торпедо" им. Эдуарда Стрельцова' => [],
+'Спартанцы IT' => [],
 'SFP' => [],
+'Профессионалы прогноза' => [],
+'ФК Форвард' => [],
+'Чемпионат Прогнозов' => [],
 'Жемчужина Кузбасса' => [],
 'liga1.ru' => [],
-'АСП "Погоня"' => [],
-'Эксперты IВUрrоg' => [],
-'Onedivision' => [],
-'КЛФП "Харьков"' => [],
-'КСП "Торпедо" им. Эдуарда Стрельцова' => [],
-'7-40' => [],
-'Red Anfield' => [],
-'PrimeGang' => [],
-'Студия Прогнозист' => [],
-'ЛФОП.ГУРУ' => [],
-'eurocups.ru' => [],
 'Kings Forecasts' => [],
-'МоbiSport24' => [],
-'Отряд ZidanClub' => []
+'PrimeGang' => [],
+'КЛФП "Харьков"' => [],
+'АФК-Кузбасс' => [],
+'Хищники' => [],
+'SaSiSa' => [],
+'Fprognoz.com' => [],
+'Prognoz.org.ua' => [],
+'ОЛФП' => [],
+'VOON.RU' => [],
+'SEclub' => [],
+'Red Anfield' => [],
+'FunkySouls' => [],
+'ЛФОП.ГУРУ' => [],
+'#МS24#' => [],
+'Sport Contest' => [],
 ];
 
 $teams = [];

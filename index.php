@@ -157,7 +157,7 @@ function mb_vsprintf($format, $argv, $encoding=null) {
 
 function current_season($y, $m, $cc) {
   if ($cc == 'SUI')
-    return '2020-3';
+    return '2021-1';
 //  else if ($cc == 'RUS' || $cc == 'FRA')
 //    return '2018-19';
   else
@@ -202,8 +202,8 @@ function build_personal_nav() {
           $currentSeason = current_season($startYear, $startMonth, $countryCode);
 
 
-//if (in_array($tourCode, ['SUIG1']))
-//  $currentSeason = '2020-2';
+if (in_array($tourCode, ['SUIG1']))
+  $currentSeason = '2020-3';
 
 
 // World
@@ -335,8 +335,8 @@ function build_personal_nav() {
       $currentSeason = current_season($startYear, $startMonth, $countryCode);
 
 
-//if (in_array($tourCode, ['SUIG1']))
-//  $currentSeason = '2020-2';
+if (in_array($tourCode, ['SUIG1']))
+  $currentSeason = '2020-3';
 
 
       $tout = '';
@@ -368,11 +368,11 @@ function build_personal_nav() {
             $linktext = 'text&ref=it';
 
 
-//if (in_array($tcode, ['SUIG1']))
-//  $currentSeason = '2020-2';
-//else 
-if ($countryCode == 'SUI')
+if (in_array($tcode, ['SUIG1']))
   $currentSeason = '2020-3';
+else 
+if ($countryCode == 'SUI')
+  $currentSeason = '2021-1';
 
 
           if ($ll != '&' && ($status != 0 || $countryCode != 'SFP'))
@@ -502,7 +502,7 @@ function build_access() {
       if ($ccc == 'UNL')
         $name = $code; // здесь имена могут дублироваться, поэтому только код!
 
-      if ($code[0] != '#' && $name && $email && (!strpos($code, '@') || $cc = 'SFP')) {
+      if (($code[0] != '#' || $code == '#MS24#') && $name && $email && (!strpos($code, '@') || $cc = 'SFP')) {
         if (is_file($online_dir . $ccc . '/passwd/' . $code)) {
           list($hash, $role) = explode(':', file_get_contents($online_dir . $ccc . '/passwd/' . $code));
           $role = trim($role);
@@ -784,10 +784,21 @@ function get_results_by_date($month, $day, $update=NULL, $year=NULL) {
   foreach ($archive as $line) {
     $data = explode(',', trim($line));
     $match = $data[0].' - '.$data[1];
-    if (!isset($data[8])) $data[8] = '';
-if (!isset($base[$match]))
-    $base[$match] = array($data[0],$data[1],$data[2],$data[3],$data[4],$data[5],$data[8],$data[6]);
-    $base[$match.'/'.$data[6]] = array($data[0],$data[1],$data[2],$data[3],$data[4],$data[5],$data[8],$data[6]);
+    if (!isset($data[8]))
+      $data[8] = '';
+
+    $mdate = substr($data[2], 0, 5);
+    $mm = substr($mdate, 0, 2);
+    if ($month == 12 && $mm == '01')
+      $mdate = '13-'.substr($mdate, 3);
+
+    if ($mdate > $month.'-'.$day)
+    {
+      if (!isset($base[$match]))
+        $base[$match] = array($data[0],$data[1],$data[2],$data[3],$data[4],$data[5],$data[8],$data[6]);
+
+      $base[$match.'/'.$data[6]] = array($data[0],$data[1],$data[2],$data[3],$data[4],$data[5],$data[8],$data[6]);
+    }
   }
   return $base;
 }
@@ -1478,7 +1489,7 @@ else if ($a == 'world' || $a == 'sfp-20') { // сбор туров Мирово�
                     <ul class="collapse list-unstyled'.($code == 'UNL' ? '' : ' show').'" id="'.$code.'Submenu">';
       $dir = scandir($s_dir.'programs', 1);
       foreach ($dir as $prog)
-        if ($prog[0] != '.' && $code != 'UFT' && ($prog < 'UNL12' || $prog > 'UNL94')) {//  || $prog > 'UNL94')) {
+        if ($prog[0] != '.' && $code != 'UFT' && ($prog < 'UNL12')) {//  || $prog > 'UNL94')) {
           $tt = substr($prog, 3);
           $to = $tt;
           $prefix = '<a href="?a='.$aa.'&amp;s='.$s.'&amp;t='.$to;
@@ -1623,7 +1634,7 @@ else {
     <script src="/js/jquery-ui/jquery-ui.min.js"></script>
     <script src="/js/jquery-ui/jquery.ui.touch-punch.min.js"></script>
     <script src="/js/croppic/croppic-3.0.min.js"></script>
-    <script src="/js/fp.js?ver=223"></script>
+    <script src="/js/fp.js?ver=231"></script>
 </head>
 
 <body>
@@ -1641,8 +1652,9 @@ else {
 echo '
         <nav id="sidebar">
             <div class="sidebar-header">
-                <a href="/?a=world&m=coach_msl"><h5>Лига Наций / Сайтов:</h5><h6>Регистрация в ЛС</h6></a>
-                <a href="/?a=world&s=2021&t=96&m=prognoz"><h6>Пробный тур 96</h6></a><br>
+                <a href="/?a=world&s=2021&t=05&m=prognoz"><h5>Лига Наций / Сайтов:
+                страница 5-го тура</h5></a>
+                <a href="/?a=world&s=2021&t=04&m=prognoz"><h6>онлайн 4-го тура</h6></a><br>
                 <a href="/?m=news&s=2020-21"><h6>Новости ФП ФИФА</h6></a>
             </div>
 
@@ -1923,14 +1935,25 @@ if ($cc != 'UNL') // временно не показываем
       rsort($pr);
       echo '
                     <h4>Пресс-релиз'.(count($pr) > 1 ? 'ы' : '').'</h4>';
-      $collapsed = false;
+      $collapsed = isset($t) ? true : false;
+      $uri = $_SERVER['REQUEST_URI'];
+      if ($cut = strpos($uri, '&t='))
+          $uri = substr($uri, 0, $cut);
+
       foreach ($pr as $file)
       {
         $ts = substr($file, -10);
+        if (isset($t) && $t == $ts)
+            $collapsed = false;
+
         $text = file_get_contents($file);
         list($text, $subj) = explode(':Subj:', $text.':Subj:');
         echo '
-                    <div class="pressrelease-title">'.date('Y-m-d H:i', $ts).' - '.$subj.'</div>
+                    <p>
+                      <span class="pressrelease-title" data-pr="'.$ts.'">'.date('Y-m-d H:i', $ts).' - '.$subj.'</span>
+                      <a href="javascript:;" onClick="$(\'#share' . $ts . '\').toggle();share' . $ts . '.select();return false;" class="fas fa-share-alt small text-info" aria-hidden="true" style="cursor:pointer" title="поделиться"> </a>
+                      <input type="text" id="share' . $ts . '" class="small" style="display:none;width:25.5rem;height:1.4rem;" value="' . $this_site . $uri . '&t=' . $ts . '">
+                    </p>
                     <div id="'.$ts.'" class="pressrelease"'.($collapsed ? ' style="display:none"' : '').'>
 '.$text.'
                     </div>';

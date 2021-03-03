@@ -525,7 +525,7 @@ function build_prognozlist($country_code, $season, $tour) {
               $g = 0;
 */
             $prognoz_gen = rtrim($generators[$g++], ' *');
-            $prognoz_gen[0] = '0';
+            $prognoz_gen[0] = $prognoz_gen[1] = $prognoz_gen[2] = '0';
             $out .= "$code *;$prognoz_gen;;1\n";
           }
         }
@@ -951,7 +951,7 @@ function Today($year, $m, $d, $dayofweek, $minute) {
 <div class="scorea_ft score_cell centerTXT">', ':', $r);
           $r = strtr($r, ' ', '-');
           if ($cut = strpos($match, 'scoreh_et')) {
-            $e = substr($match, $cut + 34);
+            $e = substr($match, $cut + 32);
             $e = substr($e, 0, strpos($e, '</div>
 </div>'));
             $e = str_replace('</div>

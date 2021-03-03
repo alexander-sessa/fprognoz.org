@@ -1237,7 +1237,7 @@ $("#sortable").sortable()
       $sffp = str_replace('-', '/', $season);
 //      elseif ($tour == 10) $head = '<b>ФФП-' . $sffp . '. Квалификация в плей-офф/доп.матч за 5 место в группе D (' . $tour . ' тур)</b><br />';
 //      elseif ($tour == 11) $head = '<b>ФФП-' . $sffp . '. Квалификация в плей-офф (' . $tour . ' тур)</b><br />';
-      if ($tour <= 8) $head = '<b>ФФП-' . $sffp . '. 1 этап, ' . $tour . ' тур</b><br />';
+      if ($tour <= 9) $head = '<b>ФФП-' . $sffp . '. 1 этап, ' . $tour . ' тур</b><br />';
 //      else if ($tour <= 10) $head = '<b>ФФП-' . $sffp . '. 2 этап, ' . ($tour - 5) . ' тур (' . $tour . ' тур)</b><br />';
 //      elseif ($tour <= 15) $head = '<b>ФФП-' . $sffp . '. 1/8 финала, ' . ($tour - 11) . ' матч (' . $tour . ' тур)</b><br />';
 //      elseif ($tour <= 20) $head = '<b>ФФП-' . $sffp . '. 1/4 финала, ' . ($tour - 17) . ' матч (' . $tour . ' тур)</b><br />';
@@ -1258,9 +1258,9 @@ $("#sortable").sortable()
       break;
      case 'SPR':
       $tour = ltrim($t, '0');
-      if ($tour <= 9) $head = '<b>XII Спартакиада-2019. Этап 1. Тур ' . $tour . '</b><br />';
-//      elseif ($tour <= 10) $head = '<b>XII Спартакиада-2018. Этап 2 Тур ' . ($tour - 5) . '</b><br />';
-      else $head = '<b>XII Спартакиада-2019. Финал. Тур ' . ($tour - 9) . '</b><br />';
+      if ($tour <= 9) $head = '<b>XIV Спартакиада-2020. Этап 1. Тур ' . $tour . '</b><br />';
+      elseif ($tour <= 10) $head = '<b>XIV Спартакиада-2020. Этап 2 Тур ' . ($tour - 7) . '</b><br />';
+      else $head = '<b>XIV Спартакиада-2020. Финал. Тур ' . ($tour - 13) . '</b><br />';
       break;
      case 'TOR':
       $tour = ltrim($t, '0');
@@ -1332,7 +1332,6 @@ if (isset($updates))
   echo $prognozlist; // REST responce on event 'FT'
 else
   echo '
-<!--link href="css/prognoz.css?ver=625" rel="stylesheet"-->
 <script>//<![CDATA[
 var '.date_tz('\h\o\u\r\s=G,\m\i\n\u\t\e\s=i,\s\e\c\o\n\d\s=s', '', time(), $_COOKIE['TZ'] ?? 'Europe/Berlin').',sendfp=true,base=[],mom=[]
 ' . $id_arr . '
@@ -1421,7 +1420,7 @@ mdetails=function(tmpd,id,pos1,pos2){
 socket=io.connect("//www.score2live.net:1998",{"reconnect":true,"reconnection delay":500,"max reconnection attempts":20,"secure":true})
 socket.on("connect",function(){socket.emit("hellothere")})
 socket.on("hellobz",function(){socket.emit("getscores","football(soccer)","today")})
-socket.on("scoredatas",function(d){if(sendfp){$.post("'.$this_site.'",{matches:JSON.stringify(d.data.matches),a:"sfp-team",m:"prognoz",l:"'.$l.'",s:"'.$s.'",t:"'.$t.'"},function(json){$.each(JSON.parse(json),function(idx,obj){base.push(obj.id);base[obj.id]=obj.d})})}$("#statusline").css("display","none")})
+//socket.on("scoredatas",function(d){if(sendfp){$.post("'.$this_site.'",{matches:JSON.stringify(d.data.matches),a:"sfp-team",m:"prognoz",l:"'.$l.'",s:"'.$s.'",t:"'.$t.'"},function(json){$.each(JSON.parse(json),function(idx,obj){base.push(obj.id);base[obj.id]=obj.d})})}$("#statusline").css("display","none")})
 socket.on("footdetails",function(data){data=data[0];if ($(".p-table").find("tr[did="+data.id+"]").length)mdetails(data.mdetay,data.id,data.pos1,data.pos2)})
 socket.on("guncelleme",function(d){var json="";$.each(d.updates,function(index,ux){if(base[ux.idx]!==undefined){if(ux.s==4&&base[ux.idx][3]!="FT")json+=(json.length?",":"")+JSON.stringify(ux);scorefix(ux)}});if(json.length)$.post("'.$this_site.'",{updates:"["+json+"]",a:"sfp-team",m:"prognoz",l:"'.$l.'",s:"'.$s.'",t:"'.$t.'"'.(isset($n)?',n:"'.$n.'"':'').'},function(html){$("#pl").html(html)})})
 //]]></script>

@@ -13,14 +13,14 @@
     float: left;
     cursor: move;
 }
-.ball1 {background: radial-gradient(circle at 50% 120%, #807d80, #f7f6e7 80%, #fff6f6 100%);}
-.ball3 {background: radial-gradient(circle at 50% 120%, #1b12ff, #9810b0 80%, #110aff 100%);}
-.ball4 {background: radial-gradient(circle at 50% 120%, #80f880, #0030ff 80%, #804000 100%);}
-.ball5 {background: radial-gradient(circle at 50% 120%, #148009, #a7f715 80%, #9fff4d 100%);}
-.ball6 {background: radial-gradient(circle at 50% 120%, #f8f800, #f7f314 80%, #807c0b 100%);}
-.ball7 {background: radial-gradient(circle at 50% 120%, #f89d10, #f77c02 80%, #806109 100%);}
-.ball8 {background: radial-gradient(circle at 50% 120%, #ff0000, #f73302 80%, #804000 100%);}
-.ball9 {background: radial-gradient(circle at 50% 120%, #80272c, #f72f29 80%, #ff1320 100%);}
+.ball1 {background: radial-gradient(circle at 50% 120%, #f8f800, #f7f314 80%, #807c0b 100%);}
+.ball2 {background: radial-gradient(circle at 50% 120%, #80f880, #0030ff 80%, #804000 100%);}
+.ball3 {background: radial-gradient(circle at 50% 120%, #ff0000, #f73302 80%, #804000 100%);}
+.ball4 {background: radial-gradient(circle at 50% 120%, #1b12ff, #9810b0 80%, #110aff 100%);}
+.ball5 {background: radial-gradient(circle at 50% 120%, #f89d10, #f77c02 80%, #806109 100%);}
+.ball6 {background: radial-gradient(circle at 50% 120%, #148009, #a7f715 80%, #9fff4d 100%);}
+.ball7 {background: radial-gradient(circle at 50% 120%, #80272c, #f72f29 80%, #ff1320 100%);}
+.ball9 {background: radial-gradient(circle at 50% 120%, #807d80, #f7f6e7 80%, #fff6f6 100%);}
 .ball1:before, .ball2:before, .ball3:before, .ball4:before, .ball5:before, .ball6:before, .ball7:before, .ball8:before, .ball9:before {
     content: "";
     position: absolute;

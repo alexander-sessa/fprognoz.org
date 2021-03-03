@@ -7,6 +7,6 @@ $cur_year = '2020-21';
 $president = 'Serge Shibaev';
 $vice = 'Александр Сесса';
 $pressa = '';
-$coach = 'Serge Shibaev';
+$coach = 'Ярославец, Serge Shibaev';
 $club_edit = true;
 ?>

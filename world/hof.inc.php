@@ -10,4 +10,7 @@
 <tr><td>2019</td><td>Лига Наций</td><td>Голландия</td><td>Италия</td><td>Беларусь</td></tr>
 <tr><td>2019</td><td>Лига Сайтов</td><td>ЛФОП-ГУРУ</td><td>Fprognoz.com</td><td>SEclub.org</td></tr>
 <tr><td>2019</td><td>Финальный Турнир</td><td>Fprognoz.com</td><td>SEclub.org</td><td>Беларусь</td></tr>
+<tr><td>2020</td><td>Лига Наций</td><td>Германия</td><td>Франция</td><td>Беларусь</td></tr>
+<tr><td>2020</td><td>Лига Сайтов</td><td>Чемпионат Прогнозов</td><td>liga1.ru</td><td>SaSiSa</td></tr>
+<tr><td>2020</td><td>Финальный Турнир</td><td>Германия</td><td>Беларусь</td><td>SaSiSa</td></tr>
 </table>

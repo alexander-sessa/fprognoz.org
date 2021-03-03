@@ -2,76 +2,81 @@
 <?php
 $time_start = microtime(true);
 date_default_timezone_set('Europe/Berlin');
-//setlocale(LC_ALL, 'ru_RU.utf8');
-$online_dir = '/home/fp/data/online/';
-
-function lock($lock, $timeout) {
-  $timer = 0;
-  while (is_file($lock) && $timer++ < $timeout) time_nanosleep(0, 1000);
-  touch($lock);
-  return ($timer < $timeout);
-}
 require_once('xscoregroups.inc.php');
 require_once('realteam.inc.php');
-$realteam1 = array();
+
+function lock($lock, $timeout) {
+    $timer = 0;
+    while (is_file($lock) && $timer++ < $timeout)
+        time_nanosleep(0, 1000);
+
+    touch($lock);
+    return ($timer < $timeout);
+}
+
 $log = '';
-foreach ($realteam as $tn1 => $tn2) $realteam1[strtoupper($tn1)] = $tn2;
+$online_dir = '/home/fp/data/online/';
+$realteam1 = [];
+foreach ($realteam as $tn1 => $tn2)
+    $realteam1[strtoupper($tn1)] = $tn2;
+
 $teamerr = '';
 $time_start1 = microtime(true);
 $ret = lock($online_dir . 'log/results.lock', 20000);
-if ($ret === false) $log .= '!!! LOCK !!! '.(microtime(true) - $time_start1).' '; // ignore lock
-for ($day=-1; $day<=14; $day++) {
-//  $offset = 3600 + $day * 86400;
-  $offset = $day * 86400;
-  $year = date('Y', time() + $offset);
-  $d = date('d', time() + $offset);
-  $m = date('m', time() + $offset);
-//  $date = date('m-d', time() + $offset);
-  $date = "$m-$d";
-  $week = date('W', strtotime("$year-$date") - 86400);
-  ($week == '53' && $m == '01') ? $fname = ($year - 1).'.'.$week : $fname = $year.'.'.$week;
-  $fname = $online_dir . 'results/' . $fname;
-  if (is_file($fname)) {
-    $archive = file($fname);
-    $seq = $archive[0];
-    unset($archive[0]); // remove old seq
-  }
-  else
-    $archive = array();
+if ($ret === false)
+   $log .= '!!! LOCK !!! '.(microtime(true) - $time_start1).' '; // ignore lock
 
-  $base = array();
-  foreach ($archive as $line) {
-    $data = explode(',', trim($line));
-    $base[$data[0].' - '.$data[1].'/'.$data[6]] = $data;
-  }
-  $url = "http://www.xscores.com/soccer/livescores/$d-$m";
-  $ctx = stream_context_create(['http' => [
+$ctx = stream_context_create(['http' => [
     'method'  => 'GET',
     'timeout' => 25, // таймаут получения результатов, сек
     'header'  => "Accept-language: en\r\nCookie: regionName=Europe/Amsterdam;countryLocation=NL\r\n"
-  ]]);
-  $content = file_get_contents($url, 0, $ctx);
-  $out = strpos($content, 'seq = ') ? substr($content, 6 + strpos($content, 'seq = '), 8) . "\n" : $seq; // seq
-  //$content = substr($content, strpos($content, '<div class="score_pen score_cell">PN</div>'));
-  $content = substr($content, strpos($content, '<div class="country_header_txt">GAMES</div>'));
-  $content = substr($content, 0, strpos($content, "<div class='ad-line-hide gameList_ad_bottom'>"));
-  $content = str_replace('&nbsp;', ' ', $content);
-  $content = str_replace("\r", '', $content);
-  $arr = explode('<div id="midbannerdiv">', $content);
-  $data = '';
-  if (sizeof($arr) > 1)
-  {
-      for ($i = 0; $i <= 1; $i++)
-          if ($cut = strpos($arr[$i], '<a id="1'))
-//was          if ($cut = strpos($arr[$i], '<div id="1'))
-              $data .= substr($arr[$i], $cut);
+]]);
+for ($day=-1; $day<=14; $day++)
+{
+    $offset = 3600 + $day * 86400;
+    $year = date('Y', time() + $offset);
+    $d = date('d', time() + $offset);
+    $m = date('m', time() + $offset);
+    $date = "$m-$d";
+    $week = date('W', strtotime("$year-$date") - 86400);
+    $fname = $online_dir . 'results/' . (($week == '53' && $m == '01') ? ($year - 1).'.'.$week : $year.'.'.$week);
+    if (is_file($fname))
+    {
+        $archive = file($fname);
+        $seq = $archive[0];
+        unset($archive[0]); // remove old seq
+    }
+    else
+        $archive = [];
 
-  }
-  else
-      $data .= substr($arr[0], strpos($arr[0], '<a id="1'));
+    $base = [];
+    foreach ($archive as $line)
+    {
+        $data = explode(',', trim($line));
+        $base[$data[0].' - '.$data[1].'/'.$data[6]] = $data;
+    }
+    $url = "http://www.xscores.com/soccer/livescores/$d-$m";
+    $content = file_get_contents($url, 0, $ctx);
+    $out = strpos($content, 'seq = ') ? substr($content, 6 + strpos($content, 'seq = '), 8) . "\n" : $seq; // seq
+    $content = substr($content, strpos($content, '<div class="country_header_txt">GAMES</div>'));
+    $content = substr($content, 0, strpos($content, "<div class='ad-line-hide gameList_ad_bottom'>"));
+    $content = str_replace('&nbsp;', ' ', $content);
+    $content = str_replace("\r", '', $content);
+    $arr = explode('<div id="midbannerdiv">', $content);
+    $data = '';
+    if (sizeof($arr) > 1)
+    {
+        for ($i = 0; $i <= 1; $i++)
+            if ($cut = strpos($arr[$i], '<a id="1'))
+//was          if ($cut = strpos($arr[$i], '<div id="1'))
+                $data .= substr($arr[$i], $cut);
+
+    }
+    else
+        $data .= substr($arr[0], strpos($arr[0], '<a id="1'));
 //was      $data .= substr($arr[0], strpos($arr[0], '<div id="1'));
 
-  $matches = explode('<a id="1', $data);
+    $matches = explode('<a id="1', $data);
 //was  $matches = explode('<div id="1', $data);
   foreach($matches as $match) if (strpos($match, ' data-') && !strpos($match, '(W)') && !strpos($match, '(U17)') && !strpos($match, '(U19)') && !strpos($match, '(U21)')) {
     $match = strtr($match, array('<b>' => '', '</b>' => ''));
@@ -141,7 +146,7 @@ for ($day=-1; $day<=14; $day++) {
 <div class="scorea_ft score_cell centerTXT">', ':', $r);
         $r = strtr($r, ' ', '-');
         if ($cut = strpos($match, 'scoreh_et')) {
-          $e = substr($match, $cut + 34);
+          $e = substr($match, $cut + 32);
           $e = substr($e, 0, strpos($e, '</div>
 </div>'));
           $e = str_replace('</div>
@@ -158,8 +163,15 @@ for ($day=-1; $day<=14; $day++) {
     }
   }
   foreach ($base as $match => $data)
-    $out .= $data[0].','.$data[1].','.$data[2].','.$data[3].','.$data[4].','.$data[5].','.$data[6].','.$data[7].','.$data[8]."\n";
+  {
+    if ($data[0] == 'Levante' && $data[2] == '02-26 21:00')
+        continue;
 
+    if ($data[0] == 'Celtic' && $data[2] == '02-27 16:00')
+        continue;
+
+    $out .= $data[0].','.$data[1].','.$data[2].','.$data[3].','.$data[4].','.$data[5].','.$data[6].','.$data[7].','.$data[8]."\n";
+  }
   file_put_contents($fname, $out);
   file_put_contents($online_dir . 'log/teamerr', $teamerr);
 }

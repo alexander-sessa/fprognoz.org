@@ -125,7 +125,7 @@ foreach ($ccodes as $cc => $competitions)
                     $time = '19:00';
 
                 $mtime = strtotime("$year/$month/$day");
-                $week = date('W', $mtime);
+                $week = date('W', $mtime - 86400);      // наша "неделя" начинается во вторник!
                 if (strpos($time, ':'))
                     $out["$year/$week"][$cc][] = "$home,$away,".date('m-d', $mtime).",$time,$tournament\n";
 

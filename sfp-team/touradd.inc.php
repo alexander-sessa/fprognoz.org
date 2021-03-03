@@ -166,14 +166,15 @@ Vano Opulsky
 */
     break;
   case 'FFP':
-    $url = 'http://www.kfp.ru/fest/ffp'.date('Y').'/tur2009.php?tur='.$next_tour.'&ref=0';
+    $url = 'http://www.kfp.ru/fest/ffp'.(date('Y') - 1).'/tur2009.php?tur='.$next_tour.'&ref=0';
     $html = file_get_contents($url);
     $html = iconv('windows-1251', 'utf-8', $html);
     $html = substr($html, strpos($html, 'Последний срок приема прогнозов: ') + 61);
     $html = substr($html, 0, strpos($html, '</table>'));
     $timestamp = strtotime(strtr(substr($html, 0, strpos($html, ' по')), [' в' => '.' . date('Y'), '-' => ':']) . ' Europe/Moscow');
     $table = explode('</td></tr><tr><td><b>', $html);
-    unset($table[1]);
+
+//    unset($table[1]);
     unset($table[0]);
     $program = '
 Прогнозы на ' . $next_tour . '-й тур делать на этой странице:
@@ -229,15 +230,16 @@ Vano Opulsky - ?
     break;
   case 'SPR':
     //$html = HTTP_CURL('http://sportgiant.net/championships/xiv-spartakiada-2020' . ($next_tour > 9 ? '-final' : '') . '/calendar?locale=en');
-    $html = HTTP_CURL('http://sportgiant.net/championships/xiv-spartakiada-2-etap-c/calendar?locale=en');
-    $html = substr($html, strpos($html, 'Tour ' . ($next_tour > 7 ? $next_tour - 7 : $next_tour) . ' '));
+    //$html = HTTP_CURL('http://sportgiant.net/championships/xiv-spartakiada-2-etap-c/calendar?locale=en');
+    $html = HTTP_CURL('http://sportgiant.net/championships/xiv-spartakiada-final/calendar?locale=en');
+    $html = substr($html, strpos($html, 'Tour ' . ($next_tour > 13 ? $next_tour - 13 : $next_tour) . ' '));
     $cut = strpos($html, '- ') + 2;
     $deadline = substr($html, $cut, strpos($html, '</h3>') - $cut);
     //$deadline = strtr($deadline, ['сентября' => 'September', 'октября' => 'October', 'ноября' => 'November', 'декабря' => 'December']);
     $timestamp = strtotime($deadline);
     $program = '
 Прогнозы на ' . $next_tour . '-й тур делать на этой странице:
-http://sportgiant.net/championships/xiv-spartakiada-2-etap-c/tours/' . ($next_tour > 7 ? $next_tour - 7 : $next_tour) . '.0
+http://sportgiant.net/championships/xiv-spartakiada-final/tours/' . ($next_tour > 13 ? $next_tour - 13 : $next_tour) . '.0
 или же на странице нашего сайта:
 http://fprognoz.org/?a=sfp-team&amp;s=2020-21&amp;l=SPR&amp;m=prognoz&amp;t=' . $next_tour . '
 Последний срок: '. strtr(date_tz('l j F в H:i', '', $timestamp - 600, 'Europe/Moscow'), $cal_tran) .' по Москве.
@@ -275,24 +277,6 @@ http://fprognoz.org/?a=sfp-team&amp;s=2020-21&amp;l=SPR&amp;m=prognoz&amp;t=' . 
 На 2 матча надо сделать дополнительный прогноз.
 Строка прогноза должна выглядеть примерно так: 010120(1)1012(0)
 
-В турнире участвуют:
-
-Vitya - ?
-SlavKo - ?
-Niggah - ?
-AnDrusha - ?
-Gleb - ?
-vlad_ezh - ?
-AlexTar77 - ?
-Villarreal - ?
-Joker - ?
-Vano Opulsky - ?
-GOLKA - ?
-Sessa - ?
-maku - ?
-KOKOC - ?
-Orphan - ?
-Saintov - ?
 ';
     break;
   case 'TOR':
@@ -303,8 +287,8 @@ Saintov - ?
     $content = substr($content, 0, strpos($content, '</div>'));
     $tours = explode("<a href = '/tour.php?id=", $content);
     foreach($tours as $tline)
-      if (strpos($tline, 'Групповой турнир. ' . $next_tour . ' '))
-//      if (strpos($tline, 'Финальный турнир (1 стадия). ' . ($next_tour - 5) . ' '))
+//      if (strpos($tline, 'Групповой турнир. ' . $next_tour . ' '))
+      if (strpos($tline, 'Финальный турнир (1 стадия). ' . ($next_tour - 7) . ' '))
 //      if (strpos($tline, 'Финальный турнир (1 стадия). ' . ($next_tour - 5) . ' тур. Рестарт'))
 //      if (strpos($tline, 'Финальный турнир (2 стадия). ' . ($next_tour - 16) . ' '))
       {
@@ -350,7 +334,24 @@ http://fprognoz.org/?a=sfp-team&amp;s=2020-21&amp;l=TOR&amp;m=prognoz&amp;t=' . 
  |---+---------------------------------------------+-----|
  | Контрольный срок отправки                  ' . date_tz('d.m H:i', '', $timestamp - 600, 'Europe/Berlin') . '|
 
-Наша команда вступит в игру с финального этапа.
+В этом турнире играют
+
+Sessa - ?
+Niggah - ?
+Vitya - ?
+SlavKo - ?
+shmeihel - ?
+Joker - ?
+GOLKA - ?
+AnDrusha - ?
+Saintov - ?
+vlad_ezh - ?
+Gleb - ?
+AlexTar77 - ?
+Villarreal - ?
+Orphan - ?
+maku - ?
+Vano Opulsky - ?
 ';
 /*
 Vitya - ?
