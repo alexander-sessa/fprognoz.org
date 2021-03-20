@@ -157,7 +157,7 @@ function mb_vsprintf($format, $argv, $encoding=null) {
 
 function current_season($y, $m, $cc) {
   if ($cc == 'SUI')
-    return '2021-1';
+    return '2021-2';
 //  else if ($cc == 'RUS' || $cc == 'FRA')
 //    return '2018-19';
   else
@@ -202,8 +202,8 @@ function build_personal_nav() {
           $currentSeason = current_season($startYear, $startMonth, $countryCode);
 
 
-if (in_array($tourCode, ['SUIG1']))
-  $currentSeason = '2020-3';
+if (in_array($tourCode, ['SUI09']))
+  $currentSeason = '2021-1';
 
 
 // World
@@ -335,8 +335,8 @@ if (in_array($tourCode, ['SUIG1']))
       $currentSeason = current_season($startYear, $startMonth, $countryCode);
 
 
-if (in_array($tourCode, ['SUIG1']))
-  $currentSeason = '2020-3';
+if (in_array($tourCode, ['SUI09']))
+  $currentSeason = '2021-1';
 
 
       $tout = '';
@@ -368,11 +368,11 @@ if (in_array($tourCode, ['SUIG1']))
             $linktext = 'text&ref=it';
 
 
-if (in_array($tcode, ['SUIG1']))
-  $currentSeason = '2020-3';
+if (in_array($tcode, ['SUI09']))
+  $currentSeason = '2021-1';
 else 
 if ($countryCode == 'SUI')
-  $currentSeason = '2021-1';
+  $currentSeason = '2021-2';
 
 
           if ($ll != '&' && ($status != 0 || $countryCode != 'SFP'))
@@ -1284,16 +1284,34 @@ if (in_array($cca, $classic_fa)) { // сбор туров сезона для к
 }
 
 else if ($a == 'switzerland') { // сбор туров сезона Швейцарии
+  $tournaments = ['R' => [], 'G' => [], 'C' => [], 'S' => []];
+  $tnames = ['R' => 'Чемпионат', 'G' => 'Золотой матч', 'C' => 'Кубок', 'S' => 'Суперкубок'];
+  $cclen = 3;
+  if (isset($t))
+    $tour_type = is_numeric($t[0]) ? 'R' : ucfirst($t[0]);
+  else
+    $tour_type = '';
+
   if (is_dir($season_dir.'programs')) {
     $ttours = [];
     $dir = scandir($season_dir.'programs');
     unset($dir[1], $dir[0]);
-    foreach ($dir as $prog)
-      $ttours[] = substr($prog, 3);
+    foreach ($dir as $prog) {
+      $tour = substr($prog, $cclen);
+      if (is_numeric($tour[0]))
+        $tournaments['R'][] = $tour; // регулярный чемпионат
+      else
+        $tournaments[$tour[0]][] = substr($tour, 1); // прочие турниры с буквенным модификатором
+
+    }
+    foreach ($tournaments as $tindex => $ttours)
+//    foreach ($dir as $prog)
+//      $ttours[] = substr($prog, 3);
 
     if (count($ttours)) {
       rsort($ttours, SORT_NUMERIC);
-      $tname = 'Чемпионат';
+//      $tname = 'Чемпионат';
+      $tname = ($tindex == 'G' && count($ttours) > 1) ? 'Золотой турнир' : $tnames[$tindex];
 // сезон в Швейцарии короткий, поэтому легко показываются все туры
 //      $sidebar .= '
 //                <li class="active">
@@ -1305,6 +1323,9 @@ else if ($a == 'switzerland') { // сбор туров сезона Швейца
                     <ul class="collapse list-unstyled show" id="SUISubmenu">';
       foreach ($ttours as $to) {
         $tt = ' ' . ltrim($to, '0');
+        if ($tindex != 'R')
+          $to = strtolower($tindex) . $to;
+
         $prefix = '<a href="?a='.$a.'&amp;s='.$s.'&amp;t='.$to;
         $sidebar .= '
                         <li>
@@ -1652,9 +1673,9 @@ else {
 echo '
         <nav id="sidebar">
             <div class="sidebar-header">
-                <a href="/?a=world&s=2021&t=05&m=prognoz"><h5>Лига Наций / Сайтов:
-                страница 5-го тура</h5></a>
-                <a href="/?a=world&s=2021&t=04&m=prognoz"><h6>онлайн 4-го тура</h6></a><br>
+                <a href="/?a=world&s=2021&t=08&m=prognoz"><h5>Лига Наций / Сайтов:
+                страница 8-го тура</h5></a>
+                <a href="/?a=world&s=2021&t=07&m=prognoz"><h6>онлайн 7-го тура</h6></a><br>
                 <a href="/?m=news&s=2020-21"><h6>Новости ФП ФИФА</h6></a>
             </div>
 

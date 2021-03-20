@@ -289,7 +289,7 @@ function pr_validate($pr) {
 }
 
 function SwissStanding($cal_file) {
-  if ($cal_file == false || !is_file($cal_file))
+  if ($cal_file[-1] == '1' || !is_file($cal_file))
   { // если нет календаря, используем порядок команд из codes.tsv
     $cal_file = substr($cal_file, 0, -2) . 'odes.tsv';
     $codes = file($cal_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
@@ -748,7 +748,7 @@ function build_prognozlist($country_code, $season, $tour) {
   if ($country_code == 'SUI') {
     // составление виртуальных матчей на основе швейцарской жеребьёвки
     // для первого тура будет использован порядок команды в codes.tsv
-    $cal_file = $tour == 'SUI01' ? false : $online_dir . "$country_code/$season/cal";
+    $cal_file = $online_dir . $country_code.'/'.$season.'/ca'.($tour == 'SUI01' ? '1' : 'l');
     list($games, $allteams) = SwissStanding($cal_file);
     $teams = [];
     foreach ($allteams as $team)

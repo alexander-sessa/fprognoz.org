@@ -47,7 +47,7 @@ if ($cca == 'UEFA') {
 elseif ($tour[3] == 'C') {
   $cal_file = $season_dir . $l . '/calc';
   $gen_file = $season_dir . $l . '/genc';
-  if ($tour[4] % 2 == 0 || $tour[4] >= 7 || strlen($tour) == 6) $show_pen_col = true;
+  if ($tour[4] % 2 == 0 || $tour[4] >= 7 || strlen($tour) == 6 || $cca == 'SUI') $show_pen_col = true;
 }
 elseif ($tour[3] == 'S') {
   $cal_file = $season_dir . '/cals';

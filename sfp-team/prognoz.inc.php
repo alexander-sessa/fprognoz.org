@@ -189,8 +189,11 @@ $("#sortable").sortable()
   if ($last_month < 8 && strlen($s) > 6)
     $year++;
 
+  // получение контрольной даты на день раньше для выборки результатов
+  $month = date('m', strtotime($year.'/'.$last_month.'/'.$last_day) - 86400);
+  $day = date('d', strtotime($year.'/'.$last_month.'/'.$last_day) - 86400);
   if (!isset($updates)) $updates = NULL;
-  $base = get_results_by_date($last_month, $last_day, $updates, $year);
+  $base = get_results_by_date($month, $day, $updates, $year);
   $mdp = array();
   $program_table = '<table class="p-table">
 <thead>
