@@ -31,7 +31,8 @@ $ctx = stream_context_create(['http' => [
     'timeout' => 25, // таймаут получения результатов, сек
     'header'  => "Accept-language: en\r\nCookie: regionName=Europe/Amsterdam;countryLocation=NL\r\n"
 ]]);
-for ($day=-1; $day<=14; $day++)
+//for ($day=-1; $day<=14; $day++)
+for ($day=2; $day<=3; $day++)
 {
     $offset = 3600 + $day * 86400;
     $year = date('Y', time() + $offset);
@@ -76,11 +77,13 @@ for ($day=-1; $day<=14; $day++)
         $data .= substr($arr[0], strpos($arr[0], '<a id="1'));
 //was      $data .= substr($arr[0], strpos($arr[0], '<div id="1'));
 
-    $matches = explode('<a id="1', $data);
+    $matches = explode('
+
+<a id="', $data);
 //was  $matches = explode('<div id="1', $data);
   foreach($matches as $match) if (strpos($match, ' data-') && !strpos($match, '(W)') && !strpos($match, '(U17)') && !strpos($match, '(U19)') && !strpos($match, '(U21)')) {
     $match = strtr($match, array('<b>' => '', '</b>' => ''));
-    $i = '1'.substr($match, 0, 6);
+    $i = substr($match, 0, 7);
     $ev = substr($match, strpos($match, ' data-') + 6);
     $ev = substr($ev, 0, strpos($ev, '>')).';';
     $ev = '$'.str_replace(' data_', ';$', strtr($ev, ['-' => '_']));

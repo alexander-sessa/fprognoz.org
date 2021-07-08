@@ -288,9 +288,9 @@ http://fprognoz.org/?a=sfp-team&amp;s=2020-21&amp;l=SPR&amp;m=prognoz&amp;t=' . 
     $tours = explode("<a href = '/tour.php?id=", $content);
     foreach($tours as $tline)
 //      if (strpos($tline, 'Групповой турнир. ' . $next_tour . ' '))
-      if (strpos($tline, 'Финальный турнир (1 стадия). ' . ($next_tour - 7) . ' '))
+//      if (strpos($tline, 'Финальный турнир (1 стадия). ' . ($next_tour - 7) . ' '))
 //      if (strpos($tline, 'Финальный турнир (1 стадия). ' . ($next_tour - 5) . ' тур. Рестарт'))
-//      if (strpos($tline, 'Финальный турнир (2 стадия). ' . ($next_tour - 16) . ' '))
+      if (strpos($tline, 'Финальный турнир (2 стадия). ' . ($next_tour - 18) . ' '))
       {
         $tid = substr($tline, 0, 4);
         $deadline = substr($tline, strpos($tline, ' &lt;До ') + 10, 19) . ' Europe/Moscow';

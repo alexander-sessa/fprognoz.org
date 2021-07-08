@@ -46,7 +46,7 @@ var cke_config={extraPlugins:[UploadAdapterPlugin],language:"ru"},editable=null,
 function c_quote(cid,inf){com=$("[commentid=\""+cid+"\"]");c_text=$("main",com).html();var begin=1+c_text.indexOf(">"),end=c_text.lastIndexOf("<");c_text=c_text.substr(begin,end-begin);var c_date=$(".c-comment-date",com).html(),sStr="<blockquote><p><sub>"+$(".c-comment-author",com).html()+" <em>писал"+inf+" "+c_date.split(" ").join(" в ")+"</em></sub></p><p>&bdquo;"+c_text+"&ldquo;</p></blockquote><p></p>";$("#cke"+cid).html($("#cke"+cid).html()+sStr)}
 function changeRating(id,rate_yes,rate_no,vote){$("#r_yes"+id).html(rate_yes?rate_yes:"");$("#r_no"+id).html(rate_no?rate_no:"");$.get("comments/vote.php",{user:$("#comments_wrapper").data("name"),id:id,vote:vote,hash:$("#comments_wrapper").data("hash")})}
 function saveContent(id,c_text){$.post("comments/save.php",{user:$("#comments_wrapper").data("name"),id:id,c_text:encodeURIComponent(c_text),hash:$("#comments_wrapper").data("hash")})}
-function modComment(id,man,status){$.get("comments/mod.php",{key:"content:"+id,man:man,status:status});$("#"+(status>0?"approve":"c_block")+id).hide()}
+function modComment(id,man,status){$.get("comments/mod.php",{key:"content:"+id,man:man,status:status});$("#"+(status>0?"approve":"c_block")+id).remove()}
 function isEditorEnabled(id){if(cke[id])return true;else cke[id]=1;return false}
 function toggleEditor(id) {
 	var reset=document.getElementById("reset"+id),toggle=document.getElementById("toggle"+id),content=document.getElementById("content"+id)

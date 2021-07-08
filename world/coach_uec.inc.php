@@ -41,22 +41,34 @@ $escape_chars = [
 '|' => '_',
 ];
 
-$ccf = array(
-'Чемпионат Прогнозов' => 'Чемпионат Прогнозов',
-'FunkySouls' => 'FunkySouls',
-'ОЛФП' => 'ОЛФП',
+$ccr = array(
+'ENG' => 'Англия',
+'BLR' => 'Беларусь',
 'GER' => 'Германия',
-'UKR' => 'Украина',
+'NLD' => 'Голландия',
+'ESP' => 'Испания',
 'ITA' => 'Италия',
+'PRT' => 'Португалия',
+'RUS' => 'Россия',
+'UKR' => 'Украина',
+'FRA' => 'Франция',
+'SUI' => 'Швейцария',
+'SCO' => 'Шотландия',
 );
+
+eval('$cce = array('.file_get_contents($online_dir.'UNL/'.$s.'/cce').');');
 
 $closed = true;
 $ac_head = '';
-echo '<p class="title text15b">&nbsp;&nbsp;&nbsp;Тренерская участников Финального турнира Лиги Наций</p>
+echo '<p class="title text15b">&nbsp;&nbsp;&nbsp;Тренерская участников Турнира ЧЕ 2021</p>
 <hr size="1" width="98%">
 ';
   $s = $cur_year;
   $codes = file($online_dir.'UNL/'.$s.'/codes.tsv');
+
+if ($_SESSION['Coach_name'] == 'Андрей Новиков')
+    $_SESSION['Coach_name'] = 'Севас';
+
   foreach ($codes as $line) {
     list($code, $team, $name, $email, $role) = explode('	', $line);
     $role = trim($role);
@@ -69,15 +81,12 @@ echo '<p class="title text15b">&nbsp;&nbsp;&nbsp;Тренерская участ
        )
     {
       $team_name = $team;
-      if (isset($ccf[$team_name]))
-      {
-        $closed = false;
-        break;
-      }
+      $closed = false;
+      break;
     }
   }
 
-$closed = true;
+//$closed = true;
 
   if (isset($_POST['teamname'])) {
 
@@ -149,7 +158,7 @@ $closed = true;
           $squad[$code] = $code.'	'.$teamname.'	'.$player.'	'.$email.'	'
           . (in_array($code, [trim($_POST['coach1']), trim($_POST['coach2'])]) ? 'coach' : $_POST['prog'.$i]) . '	
 ';
-          if ($teamname == $ccf[$teamname] && $email)
+          if ($teamname == $cce[$teamname] && $email)
             make_passwd($code, $player, $email);
 
         }
@@ -179,12 +188,17 @@ $closed = true;
           $codes_out .= $squad[$code];
 
       }
-      if ($teamname == $ccf[$teamname])
+      $name = $ccr[$teamname] ?? $teamname;
+      if ($teamname == $name)
       {
         file_put_contents($online_dir.'UNL/'.$s.'/codes.tsv', $codes_out);
         build_access();
       }
       file_put_contents($online_dir.'UNL/'.$s.'/'.$teamname.'.csv', $csv);
+
+      $fcce = fopen($online_dir.'UNL/'.$s.'/cce', 'a');
+      fwrite($fcce, "'$teamname' => '$name',\n");
+      fclose($fcce);
 
       if (isset($_SESSION['Coach_name']))
         echo '<p style="font-weight:bold">Изменения сохранены. Участникам команды, у которых добавился или изменился e-mail, высланы сгенерированные пароли.</p>';
@@ -199,8 +213,8 @@ $closed = true;
 if ($closed)
 {
   echo '
-Дверь в Тренерскую заперта. Изнутри не слышно ни звука.<br>
-На двери висит табличка <strong>"Регистрация в турнир откроется в апреле 2022 г."</strong>.';
+Дверь в Тренерскую заперта.<br>
+На двери висит табличка <strong>"Вход только для тренерского состава."</strong>.';
 }
 else
 {
@@ -219,7 +233,7 @@ else
       $closed = false;
     }
   }
-  $team_name = $ccf[$team_code];
+  $team_name = $cce[$team_code];
   eval('$sites = '.file_get_contents($online_dir.'UNL/'.$s.'/sites.inc'));
   if (isset($sites[$team_name]) && $sites[$team_name]) {
     $logo = $sites[$team_name];

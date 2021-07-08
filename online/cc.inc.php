@@ -28,6 +28,7 @@ $suffix = array(
 '.FIN',
 '.SC',
 '.FRI',
+'.EC',
 '.ECQ',
 '.WCQ',
 '.CA',

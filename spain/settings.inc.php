@@ -3,10 +3,10 @@ $cca = 'ESP';
 $description = 'Футбол-Прогнозная ассоциация Испании';
 $title = 'ФП Испании';
 $main_header = 'Новости ФП Испании';
-$cur_year = '2020-21';
+$cur_year = '2021-22';
 $president = 'Serge Shibaev';
 $vice = 'Александр Сесса';
 $pressa = '';
-$coach = 'Ярославец, Serge Shibaev';
+$coach = 'Serge Shibaev';
 $club_edit = true;
 ?>

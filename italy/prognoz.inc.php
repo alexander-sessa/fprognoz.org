@@ -57,7 +57,7 @@ elseif ($tour[3] == 'S') {
 elseif ($tour[3] == 'P') {
   $cal_file = $season_dir . '/calp';
   $gen_file = $season_dir . '/genp';
-  if ($tour[4] == 2) $show_pen_col = true;
+  if ($tour[4] > 1 || $cca == 'ITA') $show_pen_col = true;
 }
 elseif ($tour[3] == 'G') {
   $cal_file = $season_dir . '/cal';

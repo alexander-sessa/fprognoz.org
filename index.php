@@ -202,8 +202,8 @@ function build_personal_nav() {
           $currentSeason = current_season($startYear, $startMonth, $countryCode);
 
 
-if (in_array($tourCode, ['SUI09']))
-  $currentSeason = '2021-1';
+//if (in_array($tourCode, ['SUI09']))
+//  $currentSeason = '2021-1';
 
 
 // World
@@ -251,7 +251,7 @@ if (in_array($tourCode, ['SUI09']))
             elseif (!isset($tudb[$team_str][$tourCode])) { // первое упоминание тура
               $content = file_get_contents($online_dir.$countryCode.'/'.$currentSeason.'/programs/'.$tourCode);
               $content = substr($content, strpos($content, 'Контрольный с'));
-              if ($countryCode != 'SUI' && !strpos($content, $cmd_db[$countryCode][$code]['cmd'])) {
+              if (($countryCode != 'SUI' || $tourCode[3] == 'C' || $tourCode[3] == 'S') && !strpos($content, $cmd_db[$countryCode][$code]['cmd'])) {
                 if ($tourCode[4] != 'L')
                   $tudb[$team_str][$tourCode] = 0; // 0 - неучастие
 
@@ -335,8 +335,8 @@ if (in_array($tourCode, ['SUI09']))
       $currentSeason = current_season($startYear, $startMonth, $countryCode);
 
 
-if (in_array($tourCode, ['SUI09']))
-  $currentSeason = '2021-1';
+//if (in_array($tourCode, ['SUI09']))
+//  $currentSeason = '2021-1';
 
 
       $tout = '';
@@ -368,9 +368,9 @@ if (in_array($tourCode, ['SUI09']))
             $linktext = 'text&ref=it';
 
 
-if (in_array($tcode, ['SUI09']))
-  $currentSeason = '2021-1';
-else 
+//if (in_array($tcode, ['SUI09']))
+//  $currentSeason = '2021-1';
+//else 
 if ($countryCode == 'SUI')
   $currentSeason = '2021-2';
 
@@ -1274,7 +1274,7 @@ if (in_array($cca, $classic_fa)) { // сбор туров сезона для к
 
   }
 /*
-  if ($cca == 'ENG')
+  if ($cca == 'ITA')
       $sidebar .= '
                 <li><a href="?a='.$a.'&amp;m=register">Выбор команды</a></li>';
 */
@@ -1496,12 +1496,12 @@ else if ($a == 'sfp-team') { // сбор туров сезона для SFP
 }
 
 else if ($a == 'world' || $a == 'sfp-20') { // сбор туров Мировой Лиги и Лиги Наций + юбилейный турнир
-  $tnames = ['MSL' => 'Лига Сайтов', 'UNL' => 'Лига Наций', 'UFT' => 'Финальный турнир', 'WL' => 'Мировая Лига', 'IST' => 'Турнир SFP-20!'];
+  $tnames = ['MSL' => 'Лига Сайтов', 'UNL' => 'Лига Наций', 'UFT' => 'Финальный турнир', 'UEC' => 'Турнир ЧЕ 2021', 'WL' => 'Мировая Лига', 'IST' => 'Турнир SFP-20!'];
   foreach ($tnames as $code => $tname) {
-    $s_dir = $online_dir . ($code == 'MSL' || $code == 'UFT' ? 'UNL' : $code) . '/' . $s . '/';
+    $s_dir = $online_dir . ($code == 'MSL' || $code == 'UFT' || $code == 'UEC' ? 'UNL' : $code) . '/' . $s . '/';
     $aa = $code == 'IST' ? 'sfp-20' : 'world';
-    $suffix = ($code != 'UFT' && $code != 'UNL' && $code != 'MSL' || substr($s, 0, 4) < '2018') ? '' : '_' . strtolower($code);
-    if (($code != 'UFT' && $code != 'UNL' && $code != 'MSL' || substr($s, 0, 4) > '2018') && is_dir($s_dir.'programs')) {
+    $suffix = ($code != 'UEC' && $code != 'UFT' && $code != 'UNL' && $code != 'MSL' || substr($s, 0, 4) < '2018') ? '' : '_' . strtolower($code);
+    if (($code != 'UEC' && $code != 'UFT' && $code != 'UNL' && $code != 'MSL' || substr($s, 0, 4) > '2018') && is_dir($s_dir.'programs')) {
 //                    <a href="#SUISubmenu" data-toggle="collapse" aria-expanded="'.(isset($t) ? 'true' : 'false').'" class="dropdown-toggle">'.$tname.'</a>
 //                    <ul class="collapse list-unstyled'.(isset($t) ? ' show' :'').'" id="SUISubmenu">';
       $sidebar .= '
@@ -1510,7 +1510,7 @@ else if ($a == 'world' || $a == 'sfp-20') { // сбор туров Мирово�
                     <ul class="collapse list-unstyled'.($code == 'UNL' ? '' : ' show').'" id="'.$code.'Submenu">';
       $dir = scandir($s_dir.'programs', 1);
       foreach ($dir as $prog)
-        if ($prog[0] != '.' && $code != 'UFT' && ($prog < 'UNL12')) {//  || $prog > 'UNL94')) {
+        if ($prog[0] != '.' && $code != 'UEC' && $code != 'UFT' && ($prog < 'UNL12')) {//  || $prog > 'UNL94')) {
           $tt = substr($prog, 3);
           $to = $tt;
           $prefix = '<a href="?a='.$aa.'&amp;s='.$s.'&amp;t='.$to;
@@ -1532,6 +1532,25 @@ else if ($a == 'world' || $a == 'sfp-20') { // сбор туров Мирово�
           $tt = substr($prog, 3);
           $to = $tt;
           $tt -= 11;
+          $prefix = '<a href="?a='.$aa.'&amp;s='.$s.'&amp;t='.$to;
+          $sidebar .= '
+                        <li>
+                            <div class="tlinks">
+                            '.$prefix.'&amp;m=text&amp;ref=p">тур <span>'.$tt.':</span></a>';
+          if (is_file($s_dir . 'publish/it' . $to))
+            $sidebar .= $prefix.'&amp;m=result">итоги,</a>'.
+                        $prefix.'&amp;m=stat&amp;l='.$suffix[2].'">стат.</a>';
+          else
+            $sidebar .= $prefix.'&amp;m=prognoz"> &nbsp; прогнозы</a>';
+
+          $sidebar .= '
+                            </div>
+                        </li>';
+        }
+        else if ($prog[0] != '.' && $code == 'UEC' && $prog > 'UNL16' && $prog < 'UNL23') {
+          $tt = substr($prog, 3);
+          $to = $tt;
+          $tt -= 16;
           $prefix = '<a href="?a='.$aa.'&amp;s='.$s.'&amp;t='.$to;
           $sidebar .= '
                         <li>
@@ -1577,6 +1596,7 @@ else if ($a == 'world' || $a == 'sfp-20') { // сбор туров Мирово�
                 <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=gen">Генераторы</a></li>';
 
   $sidebar .= '
+                <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=teamroom">Комната команды</a></li>
                 <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=pres">Пресс-релизы</a></li>
                 <li><a href="?a='.$a.'&amp;s='.$s.'&amp;m=reglament">Регламент</a></li>
                 <li><a href="?a='.$a.'&amp;m=hq">Президиум</a></li>
@@ -1655,7 +1675,7 @@ else {
     <script src="/js/jquery-ui/jquery-ui.min.js"></script>
     <script src="/js/jquery-ui/jquery.ui.touch-punch.min.js"></script>
     <script src="/js/croppic/croppic-3.0.min.js"></script>
-    <script src="/js/fp.js?ver=231"></script>
+    <script src="/js/fp.js?ver=232"></script>
 </head>
 
 <body>
@@ -1673,9 +1693,9 @@ else {
 echo '
         <nav id="sidebar">
             <div class="sidebar-header">
-                <a href="/?a=world&s=2021&t=08&m=prognoz"><h5>Лига Наций / Сайтов:
-                страница 8-го тура</h5></a>
-                <a href="/?a=world&s=2021&t=07&m=prognoz"><h6>онлайн 7-го тура</h6></a><br>
+                <a href="/?a=world&s=2021&t=22&m=prognoz"><h5>Лига Наций, ЧЕ 2021:</h5>
+                <h6>страница 6-го тура</h6></a>
+                <a href="/?a=world&s=2021&t=21&m=result"><h6>итоги 5-го тура</h6></a><br>
                 <a href="/?m=news&s=2020-21"><h6>Новости ФП ФИФА</h6></a>
             </div>
 

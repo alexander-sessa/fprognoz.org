@@ -252,6 +252,9 @@ if (isset($coach_name) && isset($parent) && ($c_text = trim($c_text))) {
 // выдача контента
 if (!isset($s)) $s = $cur_year;
 $id = $a . ':' . $s;
+if ($m == 'teamroom')
+    $id .= ':'.$myteam;
+
 $redis_prefix = 'page';
 if (!isset($c_from))
 {

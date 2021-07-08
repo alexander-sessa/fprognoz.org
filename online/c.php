@@ -892,13 +892,11 @@ function Today($year, $m, $d, $dayofweek, $minute) {
 //was      if ($cut = strpos($arr[$i], '<div id="1'))
         $data .= substr($arr[$i], $cut);
 
-    $matches = explode('
-
-<a id="', $data);
+    $matches = explode('<a id="1', $data);
 //was    $matches = explode('<div id="1', $data);
     foreach($matches as $match) if (strpos($match, ' data-') && !strpos($match, '(W)') && !strpos($match, '(U17)') && !strpos($match, '(U19)') && !strpos($match, '(U21)')) {
       $match = strtr($match, array('<b>' => '', '</b>' => ''));
-      $i = substr($match, 0, 7);
+      $i = '1'.substr($match, 0, 6);
       $ev = substr($match, strpos($match, ' data-') + 6);
       $ev = substr($ev, 0, strpos($ev, '>')).';';
       $ev = '$'.str_replace(' data_', ';$', strtr($ev, ['-' => '_']));
@@ -1003,11 +1001,10 @@ function Today($year, $m, $d, $dayofweek, $minute) {
           else if ($stat == 'Abd' || $stat == 'Canc') $s = 'CAN';
           else if ($stat == '1 HF' || $stat == '1HF') $s = max(0, min($min, 44));
           else if ($stat == '2 HF' || $stat == '2HF') $s = max(45, min($min - 18, 89));
-          $f = str_replace('-', ':', $score);
-          if ($f == ':') $f = '-:-';
-          if (!in_array($stat, array('Fin', 'E/T', 'Pen', 'FT', 'ET', 'E/T.', 'PEN.'))) $r = $f;
-          $base[$i] = array($h,$a,$d,$s,$f,$r,$g,$i,$z);
-          if ($d > $starttime) $today[$h.','.$a] = array($h,$a,$d,$s,$f,$r);
+          $r = str_replace('-', ':', $score);
+          if ($r == ':') $r = '-:-';
+          $base[$i] = array($h,$a,$d,$s,$r,$r,$g,$i,$z);
+          if ($d > $starttime) $today[$h.','.$a] = array($h,$a,$d,$s,$r,$r);
         }
       }
     }
@@ -1041,8 +1038,8 @@ $time_start = microtime(true);
 
 //$time_scanm =  microtime(true);
 
-if (is_dir($online_dir . "schedule/$year/$month/$day")) {
-//if (true) {
+//if (is_dir($online_dir . "schedule/$year/$month/$day")) {
+if (true) {
   date('J', $time) < 23 ? $minute = date('i', $time) : $minute = 1;
   $base = Today($year, $month, $day, date('N', $time), $minute);
   $time_parse =  microtime(true);
@@ -1274,4 +1271,6 @@ if (strlen($log) > 35) {
   fwrite($logfile, $log . ' finished ' . (microtime(true) - $time_start) . "\n");
   fclose($logfile);
 }
+build_prognozlist('SUI', '2021-2', 'SUIC3');
+
 ?>
