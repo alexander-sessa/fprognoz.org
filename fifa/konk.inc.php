@@ -119,17 +119,32 @@ echo '<form name="tform" action="/?m=konk&t=' . $t . '" enctype="multipart/form-
 
     echo '<br />
 <style>
+.bet {
+    width: 1.4em;
+    height: 1.4em;
+    vertical-align: middle;
+    margin-bottom: 0.4em;
+    color: whitesmoke;
+    font-weight: bold;
+    border: 1px solid black;
+    border-radius: 50%;
+}
+.bet:active {
+    border: 2px solid black;
+    border-radius: 50%;
+}
 .pr_str {
-    font-size: 1em;
-    width: 0.9em;
+    font-size: 1.2em;
+    font-weight: bold;
+    width: 0.8em;
     height: 1.1em;
     box-sizing: content-box;
 }
 </style>
-<table class="table-condensed table-striped mx-auto">
+<table class="table table-sm table-condensed table-striped p-table mx-auto">
 ';
     echo '<thead class="text-center"><tr><th>№</th><th width="65%">матч</th><th>страна</th><th>дата</th><th width="15%">прогноз</th></tr></thead>
-<tbody>
+<tbody style="line-height:1em">
 ';
     foreach ($matches as $line) if ($line = trim($line)) {
       if ($line[0] == '|') {
@@ -147,13 +162,17 @@ echo '<form name="tform" action="/?m=konk&t=' . $t . '" enctype="multipart/form-
 	  else
 	    $t = '&nbsp;';
 
-	  echo '<tr><td class="tdn">'.$n.'</td><td align="left" width="288">'.$ho.' - '.$aw.'</td><td align="center">'.$t.'</td><td align="center">'.$d.'</td>';
 	  echo '
-    <td align="center">
-      <a href="#" onclick="predict('."'dice$n','1'".'); return false;">1</a>
-      <a href="#" onclick="predict('."'dice$n','X'".'); return false;">X</a>
-      <a href="#" onclick="predict('."'dice$n','2'".'); return false;">2</a>
-      <input type="text" name="'."dice$n".'" value="" id="'."dice$n".'" class="pr_str" onchange="newpredict();" />
+  <tr>
+    <td class="text-end pt-2">'.$n.'</td>
+    <td class="pt-2">'.$ho.' - '.$aw.'</td>
+    <td class="text-center pt-2">'.$t.'</td>
+    <td class="text-center pt-2">'.$d.'</td>
+    <td>
+      <button class="bet bg-primary" onClick="predict('."'dice$n','1'".'); return false" title="хозяева">1</button>
+      <button class="bet bg-success" onClick="predict('."'dice$n','X'".'); return false" title="ничья">X</button>
+      <button class="bet bg-danger"  onClick="predict('."'dice$n','2'".'); return false" title="гости">2</button>
+      <input type="text" name="'."dice$n".'" value="" id="'."dice$n".'" class="pr_str" onchange="newpredict();">
     </td>
   </tr>
 ';
