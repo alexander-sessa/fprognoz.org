@@ -125,7 +125,7 @@ function c_out_comments($id, $level, $pid) {
       <div class="c-comment-icon' . (isset($c_user['status']) && $c_user['status'] == 2 ? ' bg-gold' : '') . '">' . $initials . '</div>';
   $out .= '
     </aside>
-    <div class="ml-1 w-100" commentid="' . $id . '">
+    <div class="ms-1 w-100" commentid="' . $id . '">
       <header>
         <a name="comment-' . $id . '"></a>
         <strong class="c-comment-author px-2 text-' . (isset($c_user['status']) && $c_hash['status'] == 2 ? 'gold' : 'dark') . '">' . $author . '</strong>
@@ -262,7 +262,7 @@ if (!isset($c_from))
 <a name="comment"></a>
 <div id="comment" class="bg-white mt-2 w-100">
   <div class="text-center">
-    <h5>ФАН-ЗОНА. ' . ($coach_name ? 'Здесь Вы можете оставить свой комментарий' : 'Для полного доступа необходимо авторизоваться на сайте') . '</h5>
+    <h5>' . ($coach_name ? 'Здесь Вы можете оставить свой комментарий' : 'Для полного доступа необходимо авторизоваться') . '</h5>
   </div>'
 . c_make_form($redis_prefix, $id, false) . '
 </div>'; // prefix, id, hidden - главная форма

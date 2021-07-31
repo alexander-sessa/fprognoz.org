@@ -1,5 +1,5 @@
 <?php
-$tour = (isset($t) && $t) ? 'KONK' . $t : 'KONK38';
+$tour = (isset($t) && $t) ? 'KONK' . $t : 'KONK39';
 echo '    <h4 class="text-center">&nbsp;&nbsp;&nbsp;Форма отправки заявок на конкурс ' . $tour . '</h4>
 ';
 
@@ -118,6 +118,14 @@ echo '<form name="tform" action="/?m=konk&t=' . $t . '" enctype="multipart/form-
 ';
 
     echo '<br />
+<style>
+.pr_str {
+    font-size: 1em;
+    width: 0.9em;
+    height: 1.1em;
+    box-sizing: content-box;
+}
+</style>
 <table class="table-condensed table-striped mx-auto">
 ';
     echo '<thead class="text-center"><tr><th>№</th><th width="65%">матч</th><th>страна</th><th>дата</th><th width="15%">прогноз</th></tr></thead>
