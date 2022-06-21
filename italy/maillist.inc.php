@@ -227,8 +227,8 @@ function MakeRealmatch($program)
     else
       $lasttm = '';
 
-    require_once('online/tournament.inc.php');
-    include script_from_cache('online/realteam.inc.php');
+    require_once ('online/tournament.inc.php');
+    include ('online/realteam.inc.php');
     $base = get_results($lastdate);
 /*
     $atemp = explode('.', $lastdate);

@@ -176,8 +176,9 @@ function c_out_comments($id, $level, $pid) {
 }
 
 // обработчик
+foreach ($_POST as $k => $v)
+    $$k = $v;
 
-while(list($k,$v)=each($_POST)) $$k=$v;
 $modurl = $this_site . '/comments/mod.php?key=';
 $comments_email = 'SFP Comment System <scs@fprognoz.org>';
 
@@ -252,7 +253,7 @@ if (isset($coach_name) && isset($parent) && ($c_text = trim($c_text))) {
 // выдача контента
 if (!isset($s)) $s = $cur_year;
 $id = $a . ':' . $s;
-if ($m == 'teamroom')
+if (isset($m) && $m == 'teamroom')
     $id .= ':'.$myteam;
 
 $redis_prefix = 'page';

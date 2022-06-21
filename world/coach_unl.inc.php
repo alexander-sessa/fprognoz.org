@@ -1,5 +1,5 @@
 <?php
-$closed = true;
+$closed = false;
 $cci = array(
 'ENG' => 'Англия',
 'BLR' => 'Беларусь',

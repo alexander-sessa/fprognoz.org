@@ -1,5 +1,6 @@
 <?php
 $tourname = array(
+'КАФ' => 'Кубок Африканских Наций',
 'Пор' => 'Portugal: Primeira Liga',
 'Прт' => 'Portugal: Primeira Liga',
 'PRT' => 'Portugal: Primeira Liga',
@@ -36,12 +37,11 @@ $tourname = array(
 'СкИ' => 'Italy: Super Cup',
 'ЧФ' => 'France: Ligue 1',
 'Фра' => 'France: Ligue 1',
+'кФра' => 'France: FA Cup',
 'ЧФра' => 'France: Ligue 1',
 'FRA' => 'France: Ligue 1',
-'КФЛ' => 'France: League Cup',
-'cFRA' => 'France: League Cup',
+'cFRA' => 'France: FA Cup',
 'КФ' => 'France: FA Cup',
-'CupFR' => 'France: FA Cup',
 'ЧИс' => 'Spain: LaLiga',
 'Исп' => 'Spain: LaLiga',
 'ЧИсп' => 'Spain: LaLiga',
@@ -91,6 +91,8 @@ $tourname = array(
 'Швц' => 'Switzerland: Super League',
 'Грц' => 'Ελλάδα: Κύπελλο',
 'Гри' => 'Greece: Super League',
+'AUT' => 'Austria: Bundesliga',
+'Авт' => 'Austria: Bundesliga',
 'ТМ' => 'International: Friendlies',
 'КЛЧ' => 'International: Champions League Qualification',
 'UCL' => 'International: Champions League',
@@ -99,6 +101,7 @@ $tourname = array(
 'UEL' => 'International: Europa League',
 'ЛЕвр' => 'International: Europa League',
 'ЛЕ' => 'International: Europa League',
+'UEC' => 'International: Conference League',
 'КИТ' => 'International: UI Cup',
 'СКУЕФА' => 'International: UEFA Supercup',
 'УЕФА' => 'International: UEFA Cup',
@@ -107,6 +110,7 @@ $tourname = array(
 'ОЧЕ' => 'International: Euro Qualification',
 'ЧМ' => 'International: World Cup',
 'INT' => 'International: Friendlies',
+'ЧЕ' => 'Чемпионат Европы',
 );
 //'INT' => 'International: World Cup Qualification',
 ?>

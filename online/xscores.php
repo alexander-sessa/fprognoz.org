@@ -31,8 +31,8 @@ $ctx = stream_context_create(['http' => [
     'timeout' => 25, // таймаут получения результатов, сек
     'header'  => "Accept-language: en\r\nCookie: regionName=Europe/Amsterdam;countryLocation=NL\r\n"
 ]]);
-//for ($day=-1; $day<=14; $day++)
-for ($day=2; $day<=3; $day++)
+//for ($day=8; $day<=8; $day++)
+for ($day=-1; $day<=14; $day++)
 {
     $offset = 3600 + $day * 86400;
     $year = date('Y', time() + $offset);
@@ -61,27 +61,28 @@ for ($day=2; $day<=3; $day++)
     $out = strpos($content, 'seq = ') ? substr($content, 6 + strpos($content, 'seq = '), 8) . "\n" : $seq; // seq
     $content = substr($content, strpos($content, '<div class="country_header_txt">GAMES</div>'));
     $content = substr($content, 0, strpos($content, "<div class='ad-line-hide gameList_ad_bottom'>"));
-    $content = str_replace('&nbsp;', ' ', $content);
-    $content = str_replace("\r", '', $content);
+    $content = strtr($content, ['&nbsp;' => ' ', "\r" => '', "\t" => '']);
     $arr = explode('<div id="midbannerdiv">', $content);
     $data = '';
     if (sizeof($arr) > 1)
     {
         for ($i = 0; $i <= 1; $i++)
-            if ($cut = strpos($arr[$i], '<a id="1'))
+            if ($cut = strpos($arr[$i], '<a id="'))
 //was          if ($cut = strpos($arr[$i], '<div id="1'))
                 $data .= substr($arr[$i], $cut);
 
     }
     else
-        $data .= substr($arr[0], strpos($arr[0], '<a id="1'));
+        $data .= substr($arr[0], strpos($arr[0], '<a id="'));
 //was      $data .= substr($arr[0], strpos($arr[0], '<div id="1'));
 
     $matches = explode('
 
 <a id="', $data);
 //was  $matches = explode('<div id="1', $data);
-  foreach($matches as $match) if (strpos($match, ' data-') && !strpos($match, '(W)') && !strpos($match, '(U17)') && !strpos($match, '(U19)') && !strpos($match, '(U21)')) {
+  foreach($matches as $match)
+   if (strpos($match, ' data-') && !strpos($match, '(W)') && !strpos($match, '(U17)') && !strpos($match, '(U19)') && !strpos($match, '(U21)'))
+   {
     $match = strtr($match, array('<b>' => '', '</b>' => ''));
     $i = substr($match, 0, 7);
     $ev = substr($match, strpos($match, ' data-') + 6);
@@ -164,14 +165,15 @@ for ($day=2; $day<=3; $day++)
       $z = (isset($base[$h.' - '.$a.'/'.$g][8])) ? $base[$h.' - '.$a.'/'.$g][8] : '';
       if ($i && $d && $h && $a) $base[$h.' - '.$a.'/'.$g] = array($h,$a,$d,$s,$e,$r,$g,$i,$z);
     }
-  }
+   }
+
   foreach ($base as $match => $data)
   {
-    if ($data[0] == 'Levante' && $data[2] == '02-26 21:00')
-        continue;
+//    if ($data[0] == 'Levante' && $data[2] == '02-26 21:00')
+//        continue;
 
-    if ($data[0] == 'Celtic' && $data[2] == '02-27 16:00')
-        continue;
+//    if ($data[0] == 'Celtic' && $data[2] == '02-27 16:00')
+//        continue;
 
     $out .= $data[0].','.$data[1].','.$data[2].','.$data[3].','.$data[4].','.$data[5].','.$data[6].','.$data[7].','.$data[8]."\n";
   }

@@ -41,7 +41,7 @@ $escape_chars = [
 ':' => '_',
 '|' => '_',
 ];
-$closed = true;
+$closed = false;
 $ac_head = '';
 echo '<p class="title text15b">&nbsp;&nbsp;&nbsp;Тренерская Лиги Сайтов</p>
 <hr size="1" width="98%">';
@@ -229,9 +229,9 @@ else
 Она будет выслана, если Вы при входе укажете e-mail с пустым полем пароля и кликните по "войти без пароля?".<br>
 Вы сможете задать новый пароль, если после входа по полученной ссылке сразу перейдёте на страницу "Смена пароля" в личном кабинете (правая панель навигации).<br>
 Если ваша проблема с доступом к своей сборной не решается, свяжитесь с <a href="/?a=world&m=hq">Президиумом Лиги</a>.</p>
-<p>Последний срок открытой регистрации - 31 января.<br>
-Турнир Лиги Сайтов пройдёт с 6 февраля по 19 апреля.<br>
-До его начала будут проведены 4 пробных тура - 9, 16, 23 и 30 января.</p>
+<p>Последний срок открытой регистрации - 17 января.<br>
+Турнир Лиги Сайтов пройдёт с 22 января по 8 мая.<br>
+До его начала будут проведены 3 пробных тура - 1, 8 и 15 января.</p>
 ';
   else
     echo '<p>Вниманию тренеров: у нас есть "фан-зоны" для обсуждения турниров.<br>
@@ -346,8 +346,8 @@ label.file-upload input[type=file]{display:block;position:absolute;top:0;right:0
     <div class="col-sm-1">№</div>
     <div class="col-sm-3">игровое имя участника</div>
     <div class="col-sm-3 hidden">имя, или повтор ника</div>
-    <div class="col-sm-5">e-mail, не обязательно</div>
-    <div class="col-sm-1" title="высылать материалы турнира"><i class="fas fa-envelope"></i></div>
+    <div class="col-sm-3">e-mail, не обязательно</div>
+    <div class="col-sm-2 text-left" title="высылать материалы турнира"><i class="fas fa-envelope"></i></div>
   </div>
 ';
   $squad = isset($team_name) ?  file($online_dir.'UNL/'.$s.'/'.$team_name.'.csv') : [];
@@ -377,8 +377,13 @@ label.file-upload input[type=file]{display:block;position:absolute;top:0;right:0
     <div class="col-sm-1"><input type="text" class="form-control" name="pos' . $i . '" value="'.$i.'"></div>
     <div class="col-sm-3"><input type="text" class="form-control" id="code' . $i . '" name="code' . $i . '" placeholder="игровое имя участника" value="'.$players[$i]['code'].'"></div>
     <div class="col-sm-3 hidden"><input type="text" class="form-control" id="player' . $i . '" name="player' . $i . '" placeholder="имя участника" value="'.$players[$i]['name'].'"></div>
-    <div class="col-sm-5"><input type="text" class="form-control" id="email' . $i . '" name="email' . $i . '" placeholder="e-mail, не обязательно" value="'.$players[$i]['mail'].'"></div>
-    <label for="email' . $i . '" class="fpgrid-1">&nbsp;&nbsp;&nbsp;<input type="checkbox" class="form-check-input" name="prog' . $i . '"' . $prog . $disabled.'></label>
+    <div class="col-sm-5 d-flex">
+      <div>
+        <input type="text" class="form-control" id="email' . $i . '" name="email' . $i . '" placeholder="e-mail, не обязательно" value="'.$players[$i]['mail'].'">
+      </div>
+      <div>
+        <label for="email' . $i . '" class="fpgrid-1"><input type="checkbox" class="form-check-input" name="prog' . $i . '"' . $prog . $disabled.'></label></div>
+      </div>
   </div>';
   }
   echo '

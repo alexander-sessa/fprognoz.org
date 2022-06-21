@@ -40,7 +40,7 @@ blockquote p sub {
 blockquote p sub em {
   font-size: 11px;
 }
-.c-croppic-cnt{position:relative;float:left;}
+.c-croppic-cnt{background-color:white;position:relative;float:left;}
 .c-croppic{float:left;height:100px;width:100px;border-radius:3px;-webkit-border-radius:3px;-moz-border-radius:3px}
 .c-comment-dislike{vertical-align:bottom;cursor:pointer;color:#b0b0b0}
 .c-comment-dislike:hover{color:#f73131}

@@ -40,16 +40,16 @@ foreach ($ccs as $country_code => $country_name)
     foreach ($acodes as $pos => $scode)
         if (($scode[0] != '-') && ($scode[0] != '#') && ($scode = trim($scode)))
         {
-            list($team_code, $team_name, $coach_name, $coach_mail, $long_name, $confirm) = explode('	', $scode);
+            list($team_code, $team_name, $player_name, $coach_mail, $long_name, $confirm) = explode('	', $scode);
             $t = $country_code.':'.$team_code;
             $teams[$t] = $team_name;
             $maxteam = max($maxteam, strlen($team_name));
             if ($pos < 32 || sizeof($acodes) < 42) // исключаем команды 3-х лиг
-                $coach[$coach_name]['teams'][] = $team_name.' ('.$country_code.')';
+                $coach[$player_name]['teams'][] = $team_name.' ('.$country_code.')';
             else
-                $coach[$coach_name]['teams'][] = $team_name.' ('.$country_code.'*)';
+                $coach[$player_name]['teams'][] = $team_name.' ('.$country_code.'*)';
 
-            $maxcoach = max($maxcoach, strlen($coach_name));
+            $maxcoach = max($maxcoach, strlen($player_name));
             if (trim($long_name))
             {
                 $lnames[$team_name] = $long_name;
@@ -122,45 +122,56 @@ else switch($_GET['sort'])
     default : $order = SORT_ASC;  foreach($table as $ma) $tmp[] = $ma['c'];  break;
 }
 array_multisort($tmp, $order, $table);
-foreach ($table as $ac) if ($c = trim($ac['c'])) {
-  $out = '    <td align="left">'.$c.'</td>
+foreach ($table as $ac)
+    if ($c = trim($ac['c']))
+    {
+        $out = '    <td align="left">'.$c.'</td>
     <td>';
-  if (isset($coach[$c]['teams']))
-    foreach ($coach[$c]['teams'] as $n)
-      $out .= $n.'<br>';
+        if (isset($coach[$c]['teams']))
+            foreach ($coach[$c]['teams'] as $n)
+                $out .= $n.'<br>';
 
-  $out .= '</td>
+        $out .= '</td>
     <td align="center">'.$ac['rn'].'</td>
     <td align="center">'.$ac['rl'].'</td>
     <td align="center">'.$ac['qc'].'</td>
 ';
-  $qb = "";
-  if (isset($coach[$c]['qb']))
-    foreach ($coach[$c]['qb'] as $q)
-      $qb .= $q.'<br>';
+        $qb = "";
+        if (isset($coach[$c]['qb']))
+            foreach ($coach[$c]['qb'] as $q)
+                $qb .= $q.'<br>';
 
-  if (!$qb)
-    $qb = '&nbsp;';
+        if (!$qb)
+            $qb = '&nbsp;';
 
-  $out .= '    <td>'.$qb.'</td>
+        $out .= '    <td>'.$qb.'</td>
 ';
-  if ($ac['qc'] < $ac['rl'])
-    $color = 'pink';
-  else if ($ac['qc'] == $ac['rl'])
-    $color = 'yellow';
-  else
-    $color = 'lightgreen';
+        if ($ac['qc'] < $ac['rl'])
+            $color = 'pink';
+        else if ($ac['qc'] == $ac['rl'])
+            $color = 'yellow';
+        else
+            $color = 'lightgreen';
 
-  echo '  <tr bgcolor="'.$color.'">'.$out.'</tr>
+        echo '  <tr bgcolor="'.$color.'">'.$out.'</tr>
 ';
-}
+    }
+
 echo '</table>
 <p>* - команды третьих лиг не учитываются в квоте</p>
 <p class="title text15b">Статистика по количеству команд у игроков:</p>
-<table><tr><td>команд</td><td>игроков</td><td> % </td><td>&nbsp;</td></tr>
-';
+<table>
+  <tr><td>команд</td><td>игроков</td><td> % </td><td>&nbsp;</td></tr>';
 foreach ($stat as $n => $r)
-  echo '<tr><td>'.$n.'</td><td>'.$r.'</td><td>'.round(100 * $r / sizeof($coach)).'</td><td>'.str_repeat('<img src="/images/redcard.gif" alt="" />', $r).'</td></tr>
-';
-?>
+    if ($n)
+        echo '
+  <tr>
+    <td>'.$n.'</td>
+    <td>'.$r.'</td>
+    <td>'.round(100 * $r / (sizeof($coach) - $stat[0])).'</td>
+    <td>'.str_repeat('<img src="/images/redcard.gif" alt="" />', $r).'</td>
+  </tr>';
+
+echo '
 </table>
+';

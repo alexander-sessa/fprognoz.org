@@ -181,8 +181,8 @@ $("#sortable").sortable()
   }
 
   // таблица программки тура
-  require_once('online/tournament.inc.php');
-  include script_from_cache('online/realteam.inc.php');
+  require_once ('online/tournament.inc.php');
+  include ('online/realteam.inc.php');
   list($last_day, $last_month) = explode('.', $lastdate);
   $year = substr($s, 0, 4);
   // для сезонов вида 2019-20, прибавляем год для программок со сроком в январе...июне
@@ -764,7 +764,7 @@ $("#sortable").sortable()
           if (!$thith) $teama = min(3, $teama);
           if (!$thita) $teamh = min(3, $teamh);
           $match_title .= '  '.$teamh.':'.$teama.' ('.$thith.'-'.$thita.')</b>';
-          if (isset($link) && trim($link)) $match_title .= ' &nbsp; <a href="http://kfp.ru/fest/ffp2019/matchcenter.php?'.$link.'" target="_blank">Матч-центр на KFP.RU</a>';
+          if (isset($link) && trim($link)) $match_title .= ' &nbsp; <a href="http://kfp.ru/fest/ffp2021/matchcenter.php?'.$link.'" target="_blank">Матч-центр на KFP.RU</a>';
           if (isset($renew))
             rewrite_cal($prognoz_dir, $line0, $score0, $teamh.':'.$teama.' ('.$thith.'-'.$thita.')'."\n");
 
@@ -1246,7 +1246,7 @@ $("#sortable").sortable()
 //      elseif ($tour <= 20) $head = '<b>ФФП-' . $sffp . '. 1/4 финала, ' . ($tour - 17) . ' матч (' . $tour . ' тур)</b><br />';
 //      elseif ($tour <= 22) $head = '<b>ФФП-' . $sffp . '. 1/2 финала, ' . ($tour - 20) . ' матч (' . $tour . ' тур)</b><br />';
 //      else $head = '<b>ФФП-' . $sffp . '. Финал и серия за 3 место, ' . ($tour - 22) . ' матч (' . $tour . ' тур)</b><br />';
-      else $head = '<b>ФФП-' . $sffp . '. Финальный турнир, ' . ($tour - 8) . ' тур (' . $tour . ' тур)</b><br />';
+      else $head = '<b>ФФП-' . $sffp . '. Финальный турнир, ' . ($tour - 10) . ' тур (' . $tour . ' тур)</b><br />';
       break;
      case 'PRO':
       $tour = ltrim($t, '0');
@@ -1261,16 +1261,16 @@ $("#sortable").sortable()
       break;
      case 'SPR':
       $tour = ltrim($t, '0');
-      if ($tour <= 9) $head = '<b>XIV Спартакиада-2020. Этап 1. Тур ' . $tour . '</b><br />';
-      elseif ($tour <= 10) $head = '<b>XIV Спартакиада-2020. Этап 2 Тур ' . ($tour - 7) . '</b><br />';
-      else $head = '<b>XIV Спартакиада-2020. Финал. Тур ' . ($tour - 13) . '</b><br />';
+      if ($tour <= 7) $head = '<b>XV Спартакиада-2021. Этап 1. Тур ' . $tour . '</b><br />';
+      elseif ($tour <= 13) $head = '<b>XV Спартакиада-2021. Этап 2 Тур ' . ($tour - 7) . '</b><br />';
+      else $head = '<b>XV Спартакиада-2021. Финал. Тур ' . ($tour - 13) . '</b><br />';
       break;
      case 'TOR':
       $tour = ltrim($t, '0');
       $stor = str_replace('-', '/', $season);
-      if ($tour <= 7) $head = '<b>Групповой этап Лиги КСП «Торпедо» - ' . $stor . '. Тур №' . $tour . '</b><br />';
-      elseif ($tour <= 18) $head = '<b>Лига КСП «Торпедо» - 2020/21. 1 стадия финального этапа. ' . ($tour - 7) . ' тур</b><br />';
-      else $head = '<b>Лига КСП «Торпедо» - 2020/21. Суперфинал. ' . ($tour - 18) . ' тур</b><br />';
+      if ($tour <= 9) $head = '<b>Групповой этап Лиги КСП «Торпедо» - ' . $stor . '. Тур №' . $tour . '</b><br />';
+      elseif ($tour <= 20) $head = '<b>Лига КСП «Торпедо» - 2021/22. 1 стадия финального этапа. ' . ($tour - 9) . ' тур</b><br />';
+      else $head = '<b>Лига КСП «Торпедо» - 2021/22. Суперфинал. ' . ($tour - 20) . ' тур</b><br />';
       break;
     }
   }
@@ -1439,8 +1439,8 @@ socket.on("guncelleme",function(d){var json="";$.each(d.updates,function(index,u
 <div class="h6 text-center">' . $hint . '</div>
 <h5>' . $match_title . '</h5>
 <div class="d-flex">
-	<div id="pl" class="monospace w-100">' . $prognozlist . '</div>
-	<div'.($closed ? ' id="mt"' : ' style="width: 700px;"').'>'.(in_array($coach_name, $admin) ? '<form id="renew_form" method="POST"><input type="hidden" name="do_task" value="'.($publish ? 'renew' : 'parse').'"><button class="small bg-danger rounded-circle text-white">R</button> Матчи тура:</form>' : 'Матчи тура:').'<br><br>' . $cal . '</div>
+	<div id="pl" class="monospace w-100" style="min-width: 708px;">' . $prognozlist . '</div>
+	<div'.($closed ? ' id="mt"' : ' style="width: 360px;"').'>'.(in_array($coach_name, $admin) ? '<form id="renew_form" method="POST"><input type="hidden" name="do_task" value="'.($publish ? 'renew' : 'parse').'"><button class="small bg-danger rounded-circle text-white">R</button> Матчи тура:</form>' : 'Матчи тура:').'<br><br>' . $cal . '</div>
 </div>
 ';
 }

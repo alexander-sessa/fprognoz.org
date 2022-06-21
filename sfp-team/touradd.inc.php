@@ -146,24 +146,22 @@ switch ($l)
     $program .= '
  |---+---------------------------------------------+-----|
  | Контрольный срок отправки                  ' . date_tz('d.m H:i', '', $timestamp - 600, 'Europe/Berlin') . '|
-';
-/*
+
 В турнире участвуют:
 
-Niggah
-Orphan
-Gleb
 vlad_ezh
+Niggah
 Villarreal
-maku
-Vitya
-KOKOC
-AnDrusha
-SlavKo
+Gleb
 AlexTar77
+Orphan
+maku
 Vano Opulsky
+Saintov
+SlavKo
+Vitya
+AnDrusha
 ';
-*/
     break;
   case 'FFP':
     $url = 'http://www.kfp.ru/fest/ffp'.(date('Y') - 1).'/tur2009.php?tur='.$next_tour.'&ref=0';
@@ -173,7 +171,6 @@ Vano Opulsky
     $html = substr($html, 0, strpos($html, '</table>'));
     $timestamp = strtotime(strtr(substr($html, 0, strpos($html, ' по')), [' в' => '.' . date('Y'), '-' => ':']) . ' Europe/Moscow');
     $table = explode('</td></tr><tr><td><b>', $html);
-
 //    unset($table[1]);
     unset($table[0]);
     $program = '
@@ -216,7 +213,7 @@ Niggah - ?
 Vitya - ?
 SlavKo - ?
 Joker - ?
-GOLKA - ?
+shmeihel - ?
 AnDrusha - ?
 Saintov - ?
 vlad_ezh - ?
@@ -229,19 +226,24 @@ Vano Opulsky - ?
 ';
     break;
   case 'SPR':
+    //$html = HTTP_CURL('http://sportgiant.net/championships/xv-spartakiada-2021-gruppa-a/calendar?locale=en');
     //$html = HTTP_CURL('http://sportgiant.net/championships/xiv-spartakiada-2020' . ($next_tour > 9 ? '-final' : '') . '/calendar?locale=en');
-    //$html = HTTP_CURL('http://sportgiant.net/championships/xiv-spartakiada-2-etap-c/calendar?locale=en');
-    $html = HTTP_CURL('http://sportgiant.net/championships/xiv-spartakiada-final/calendar?locale=en');
+    //$html = HTTP_CURL('http://sportgiant.net/championships/xv-spartakiada-2021-etap-2-a/calendar?locale=en');
+    $html = HTTP_CURL('http://sportgiant.net/championships/xv-spartakiada-2021-final/calendar?locale=en');
+//    $html = substr($html, strpos($html, 'Tour ' . ($next_tour > 7 ? $next_tour - 7 : $next_tour) . ' '));
     $html = substr($html, strpos($html, 'Tour ' . ($next_tour > 13 ? $next_tour - 13 : $next_tour) . ' '));
+    //$html = substr($html, strpos($html, 'Tour 1'));
     $cut = strpos($html, '- ') + 2;
     $deadline = substr($html, $cut, strpos($html, '</h3>') - $cut);
     //$deadline = strtr($deadline, ['сентября' => 'September', 'октября' => 'October', 'ноября' => 'November', 'декабря' => 'December']);
     $timestamp = strtotime($deadline);
+// . ($next_tour > 13 ? $next_tour - 13 : $next_tour) . '.0
+//http://sportgiant.net/championships/xv-spartakiada-2021-gruppa-a/tours/1.0
     $program = '
 Прогнозы на ' . $next_tour . '-й тур делать на этой странице:
-http://sportgiant.net/championships/xiv-spartakiada-final/tours/' . ($next_tour > 13 ? $next_tour - 13 : $next_tour) . '.0
+http://sportgiant.net/championships/xv-spartakiada-2021-etap-2-a/tours/1.0
 или же на странице нашего сайта:
-http://fprognoz.org/?a=sfp-team&amp;s=2020-21&amp;l=SPR&amp;m=prognoz&amp;t=' . $next_tour . '
+http://fprognoz.org/?a=sfp-team&amp;s=2021-22&amp;l=SPR&amp;m=prognoz&amp;t=' . $next_tour . '
 Последний срок: '. strtr(date_tz('l j F в H:i', '', $timestamp - 600, 'Europe/Moscow'), $cal_tran) .' по Москве.
 
 Программка для тех, кто отправляет прогнозы емейлом:
@@ -276,21 +278,41 @@ http://fprognoz.org/?a=sfp-team&amp;s=2020-21&amp;l=SPR&amp;m=prognoz&amp;t=' . 
 Для всех 10 матчей программки надо угадывать исход.
 На 2 матча надо сделать дополнительный прогноз.
 Строка прогноза должна выглядеть примерно так: 010120(1)1012(0)
-
 ';
+/*
+В этом туре играют
+
+Sessa - ?
+Niggah - ?
+Vitya - ?
+SlavKo - ?
+Joker - ?
+shmeihel - ?
+AnDrusha - ?
+Saintov - ?
+vlad_ezh - ?
+Gleb - ?
+AlexTar77 - ?
+Villarreal - ?
+Orphan - ?
+maku - ?
+Vano Opulsky - ?
+KOKOC - ?
+';
+*/
     break;
   case 'TOR':
     // получить список туров и выбрать из него нужный
-    $url = 'http://www.torpedoru.com/table.php?championat_id=111';
+    $url = 'http://www.torpedoru.com/table.php?championat_id=120';
     $content = file_get_contents($url);
     $content = substr($content, strpos($content, 'js-nav-tours js-nav-container'));
     $content = substr($content, 0, strpos($content, '</div>'));
     $tours = explode("<a href = '/tour.php?id=", $content);
     foreach($tours as $tline)
 //      if (strpos($tline, 'Групповой турнир. ' . $next_tour . ' '))
-//      if (strpos($tline, 'Финальный турнир (1 стадия). ' . ($next_tour - 7) . ' '))
+      if (strpos($tline, 'Финальный турнир (1 стадия). ' . ($next_tour - 9) . ' '))
 //      if (strpos($tline, 'Финальный турнир (1 стадия). ' . ($next_tour - 5) . ' тур. Рестарт'))
-      if (strpos($tline, 'Финальный турнир (2 стадия). ' . ($next_tour - 18) . ' '))
+//      if (strpos($tline, 'Финальный турнир (2 стадия). ' . ($next_tour - 18) . ' '))
       {
         $tid = substr($tline, 0, 4);
         $deadline = substr($tline, strpos($tline, ' &lt;До ') + 10, 19) . ' Europe/Moscow';
@@ -300,7 +322,7 @@ http://fprognoz.org/?a=sfp-team&amp;s=2020-21&amp;l=SPR&amp;m=prognoz&amp;t=' . 
 
     $program = '
 Прогнозы на ' . $next_tour . '-й тур делать на этой странице:
-http://fprognoz.org/?a=sfp-team&amp;s=2020-21&amp;l=TOR&amp;m=prognoz&amp;t=' . $next_tour . '
+http://fprognoz.org/?a=sfp-team&amp;s=2021-22&amp;l=TOR&amp;m=prognoz&amp;t=' . $next_tour . '
 Последний срок: '. strtr(date_tz('l j F в H:i', '', $timestamp - 600, 'Europe/Moscow'), $cal_tran) .' по Москве.
 
 Обращаю внимание на то, что из 13-ти матчей надо поставить только на 10.
@@ -342,8 +364,8 @@ Vitya - ?
 SlavKo - ?
 shmeihel - ?
 Joker - ?
-GOLKA - ?
 AnDrusha - ?
+skripka_av - ?
 Saintov - ?
 vlad_ezh - ?
 Gleb - ?
@@ -354,6 +376,8 @@ maku - ?
 Vano Opulsky - ?
 ';
 /*
+В этом турнире мы играем с финального этапа';
+
 Vitya - ?
 SlavKo - ?
 Niggah - ?

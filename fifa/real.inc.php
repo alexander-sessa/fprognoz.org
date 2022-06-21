@@ -29,4 +29,5 @@
   <li><a href="http://www.european-football-statistics.co.uk/" target="_blank">European Football Statistics</a></li>
   <li><a href="https://kassiesa.net/uefa/" target="_blank">UEFA European Club Football Results and Qualification by Bert Kassies</a></li>
   <li><a href="https://www.sport-express.ru/football/" target="_blank">СПОРТ-ЭКСПРЕСС - Футбол</a></li>
+  <li><a href="http://livetv.sx/" target="_blank">LIVE TV - прямые видеотрансляции</a></li>
 </ul>

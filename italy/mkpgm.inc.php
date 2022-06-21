@@ -64,8 +64,9 @@ function Schedule($timestamp, $country_code, $tour_code, $action, $pfname) {
   file_put_contents($dir.'/'.$timestamp.'.'.$country_code.'.'.$tour_code.'.'.$action, $pfname);
   if ($country_code == 'UEFA' && $action != 'resend') {
     file_put_contents($dir.'/'.$timestamp.'.'.$country_code.'.'.str_replace('UEFA', 'CHAM', $tour_code).'.'.$action, $pfname);
-    file_put_contents($dir.'/'.($timestamp-1).'.'.$country_code.'.'.str_replace('UEFA', 'GOLD', $tour_code).'.'.$action, $pfname);
+    file_put_contents($dir.'/'.($timestamp - 1).'.'.$country_code.'.'.str_replace('UEFA', 'GOLD', $tour_code).'.'.$action, $pfname);
     file_put_contents($dir.'/'.$timestamp.'.'.$country_code.'.'.str_replace('UEFA', 'CUPS', $tour_code).'.'.$action, $pfname);
+    file_put_contents($dir.'/'.($timestamp + 1).'.'.$country_code.'.'.str_replace('UEFA', 'CONF', $tour_code).'.'.$action, $pfname);
   }
 }
 
@@ -88,6 +89,7 @@ function IntervalsTable() {
   global $online_dir;
   global $suffix;
   global $translate;
+  global $uadd;
   $out = '
   <thead>
     <tr>
@@ -109,12 +111,12 @@ function IntervalsTable() {
     $week = date('W', $time);
     $year = date('Y', $time);
 
-    if ($week == '01')
-      $year = 2021;
-
     $day1 = date('m-d', $time);
-    if ($day1 == '12-29')
-      $week = '53';
+    if ($day1 == '12-31')
+      $week = '00';
+
+    if ($week[0] == '0')
+      $year = 2022;
 
 //if ($day1 == '12-29')
 //  $day1 = '01-01'; // fix 2020
@@ -142,7 +144,7 @@ function IntervalsTable() {
               $home = $translate[$home];
               $away = $translate[$away];
             }
-            else if ($cc == 'UCL' || $cc == 'UEL')
+            else if ($cc == 'UCL' || $cc == 'UEL' || $cc == 'UEC')
               $tnmt = '';
             else if ($cc == 'INT')
             {
@@ -374,7 +376,7 @@ function SortableMatchesList($ddd, $add) {
   rsort($mrated);
   $r10 = $mrated[9];
   $r15 = $mrated[14];
-  $r20 = (sizeof($mrated) > 20) ? max(1, $mrated[99]) : 0; // $r20 = max(30, $mrated[39])
+  $r20 = (sizeof($mrated) > 20) ? max(1, $mrated[127]) : 0; // $r20 = max(30, $mrated[39])
   $list .= SortableMatchesSublist($r10, 999, $ccc);
   $list .= '<li class="sortable_module" id="hline-1"><hr></li>';
   $list .= SortableMatchesSublist($r15, $r10, $ccc);
@@ -587,7 +589,7 @@ if (isset($_POST['tour'])) {
       Schedule($timestamp + 43200, $ccode, $TourCode, 'monitor', $progsched);
       mkPrognozDir($timestamp, $ccode, $cur_year, $TourCode);
       if ($ccode == 'UEFA')
-        foreach (['CHAM', 'GOLD', 'CUPS'] as $l)
+        foreach (['CHAM', 'GOLD', 'CUPS', 'CONF'] as $l)
           mkPrognozDir($timestamp, $ccode, $cur_year, str_replace('UEFA', $l, $TourCode));
 
     }
@@ -600,7 +602,7 @@ if (isset($_POST['tour'])) {
 $file = file($online_dir . 'ranking/rank', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 foreach ($file as $line) {
   list($team, $code, $score) = explode(',', $line);
-  $teams[$code][$team] = $teams['UCL'][$team] = $teams['UEL'][$team] = round($score,1);
+  $teams[$code][$team] = $teams['UCL'][$team] = $teams['UEL'][$team] = $teams['UEC'][$team] = round($score,1);
 }
 
 ?>

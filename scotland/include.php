@@ -2,37 +2,36 @@
 $country = "scotland";
 
 $teams = array(
-"1914" => "ROSS",
-);
-/*
 "1908" => "ABERDEEN",
+"1926" => "ALLOA",
 "1918" => "AYR",
 "1898" => "CELTIC",
 "1903" => "DUN_UTD",
+"1907" => "DUNDEE",
 "1913" => "FALKIRK",
 "1922" => "HAMILTON",
 "1900" => "HEARTS",
 "1904" => "HIBER",
 "1911" => "INVER",
 "1906" => "KILMAR",
-"1905" => "LIVING",
-"1902" => "MOTHER",
 "1909" => "PARTICK",
+"1915" => "QUEEN",
 "1899" => "RANGERS",
-
-"1912" => "STJOHN",
+"1914" => "ROSS",
 "1916" => "STMIRREN",
 "1930" => "STRAN",
-
+);
+/*
+"1905" => "LIVING",
+"1902" => "MOTHER",
+"1912" => "STJOHN",
 "1938" => "ELGIN",
 "1910" => "CLYDE",
-"1907" => "DUNDEE",
-"1915" => "QUEENS",
 "1910" => "Clyde",
-"1915" => "Queen of the South",
 */
-$names = array(
+$names = [
 "1908" => "Aberdeen",
+"1926" => "Alloa Athletic",
 "1918" => "Ayr United",
 "1898" => "Celtic",
 "1907" => "Dundee",
@@ -47,14 +46,16 @@ $names = array(
 "1905" => "Livingston",
 "1902" => "Motherwell",
 "1909" => "Partick Thistle",
+"1915" => "Queen of the South",
 "1899" => "Rangers",
 "1914" => "Ross County",
 "1912" => "St. Johnstone",
 "1916" => "St. Mirren",
 "1930" => "Stranraer",
-);
-$swcodes = array(
+];
+$swcodes = [
 "aberdeen-fc" => "1908",
+"alloa-athletic-fc" => "1926",
 "ayr-united-fc" => "1918",
 "celtic-fc" => "1898",
 "dundee-fc" => "1907",
@@ -73,5 +74,5 @@ $swcodes = array(
 "saint-johnstone-fc" => "1912",
 "saint-mirren-fc" => "1916",
 "stranraer-fc" => "1930",
-);
+];
 ?>

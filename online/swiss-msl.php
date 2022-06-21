@@ -1,8 +1,8 @@
 <?php
 include ('swiss.inc.php');
 
-if (is_file('/home/fp/data/online/UNL/2021/games.inc'))
-  eval('$games = ' . file_get_contents('/home/fp/data/online/UNL/2021/games.inc') . ';');
+if (is_file('/home/fp/data/online/UNL/2022/games.inc'))
+  eval('$games = ' . file_get_contents('/home/fp/data/online/UNL/2022/games.inc') . ';');
 else
   $games = [
 'Мегаспорт' => [],
@@ -28,7 +28,7 @@ else
 'SEclub' => [],
 'Red Anfield' => [],
 'FunkySouls' => [],
-'ЛФОП.ГУРУ' => [],
+'Onedivision' => [],
 '#МS24#' => [],
 'Sport Contest' => [],
 ];

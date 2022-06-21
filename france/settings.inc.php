@@ -3,10 +3,10 @@ $cca = 'FRA';
 $description = 'Футбол-Прогнозная ассоциация Франции';
 $title = 'ФП Франции';
 $main_header = 'Новости ФП Франции';
-$cur_year = '2020-21';
-$president = 'Алексей Плотица';
-$vice = 'Кирилл Голощёков';
+$cur_year = '2021-22';
+$president = 'Кирилл Голощёков';
+$vice = 'Михаил Сирота';
 $pressa = 'Vladislav Ezhergin';
-$coach = '';
+$coach = 'Александр Сесса';
 $club_edit = true;
 ?>

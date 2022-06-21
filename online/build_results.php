@@ -3,9 +3,9 @@
 mb_internal_encoding('UTF-8');
 
 function mb_sprintf($format) {
-  $argv = func_get_args();
-  array_shift($argv);
-  return mb_vsprintf($format, $argv);
+    $argv = func_get_args();
+    array_shift($argv);
+    return mb_vsprintf($format, $argv);
 }
 
 function mb_vsprintf($format, $argv, $encoding=null) {
@@ -55,40 +55,41 @@ function mb_vsprintf($format, $argv, $encoding=null) {
 }
 
 function get_results($lastdate) {
-  global $online_dir;
-  list($day, $month) = explode('.', $lastdate);
-  $date = sprintf('%02d-%02d', trim($month), trim($day));
-  $year = date('Y', time());
+    global $online_dir;
+    list($day, $month) = explode('.', $lastdate);
+    $date = sprintf('%02d-%02d', trim($month), trim($day));
+    $year = date('Y', time());
 //  $month = date('m', time());
 //  (trim($atemp[1]) > ($month + 1) && $lastdate != '31.12') ? $fyear = $year - 1 : $fyear = $year;
 //  ($month > 7) ? $fyear = $year - 1 : $fyear = $year;
-  $fyear = $year;
-  $base = array();
-  $week = date('W', strtotime($fyear.'-'.$date));
-  if (in_array($date, ['12-31'])) $week = '01';
-  if (in_array($date, ['12-26'])) $fyear = $year - 1;
+    $fyear = $year;
+    $base = array();
+    $week = date('W', strtotime($fyear.'-'.$date));
+    if (in_array($date, ['12-31'])) $week = '01';
+    if (in_array($date, ['12-20', '12-26'])) $fyear = $year - 1;
 
-  $fname = $fyear.'.'.$week;
-  $archive = is_file($online_dir . 'results/'.$fname) ? file($online_dir . 'results/'.$fname, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) : [];
-  if (++$week == '53') //54
-  {
-    $week = '01';
-    $fyear++;
-  }
-  else if (strlen($week) == 1)
-    $week = '0'.$week;
-
-  $fname = $fyear.'.'.$week;
-  if (is_file($online_dir . 'results/'.$fname))
-    $archive = array_merge($archive, file($online_dir . 'results/'.$fname, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
-
-  foreach ($archive as $line)
-    if (strpos($line, ',')) {
-      $data = explode(',', $line);
-      $match = $data[0].' - '.$data[1];
-      $base[$match] = array($data[0],$data[1],$data[2],$data[3],$data[4],$data[5]);
-      $base[$match.'/'.$data[6]] = array($data[0],$data[1],$data[2],$data[3],$data[4],$data[5]);
+    $fname = $fyear.'.'.$week;
+    $archive = is_file($online_dir . 'results/'.$fname) ? file($online_dir . 'results/'.$fname, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) : [];
+    if (++$week == '53') //54
+    {
+        $week = '01';
+        $fyear++;
     }
+    else if (strlen($week) == 1)
+        $week = '0'.$week;
+
+    $fname = $fyear.'.'.$week;
+    if (is_file($online_dir . 'results/'.$fname))
+        $archive = array_merge($archive, file($online_dir . 'results/'.$fname, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
+
+    foreach ($archive as $line)
+        if (strpos($line, ','))
+        {
+            $data = explode(',', $line);
+            $match = $data[0].' - '.$data[1];
+            $base[$match] = array($data[0],$data[1],$data[2],$data[3],$data[4],$data[5]);
+            $base[$match.'/'.$data[6]] = array($data[0],$data[1],$data[2],$data[3],$data[4],$data[5]);
+        }
 
   return $base;
 }
@@ -881,7 +882,7 @@ function horse_raven($fname, $tourn, $gb, $maxcoach, $maxteam) {
     $att['c'][] = $at['c'];
     $att['f'][] = $at['f'];
     $att['p'][] = $at['p'];
-    $att['g'][] = $cca == 'UEFA' ? $gb[$tn][$at['n']]['p'] : $gb[$tn]['p'];
+    $att['g'][] = $cca == 'UEFA' ? $gb[$tn][$at['n']]['p'] ?? 0 : $gb[$tn]['p'];
     // $maxln = max($maxln, strlen($a[$tn]['s']));
   }
   array_multisort($att['c'],SORT_DESC, $att['p'],SORT_DESC, $att['f'],SORT_DESC, $att['g'],SORT_DESC, $att['t'], $att['n']);
@@ -960,16 +961,17 @@ function build_itogi($country_code, $season, $tour)
     }
     else
     {
+      $suffix = strtolower(substr(str_replace('NEW', '', $tour), -2));
       $calfname = 'cal';
       $genfname = 'gen';
       $cardsfname = 'cards';
       $itplfname = $season_dir.'it.tpl';
-      $itfname = $season_dir.'publish/it'.substr(str_replace('NEW', '', $tour), -2);
-      $rfname = $season_dir.'publish/r'.substr(str_replace('NEW', '', $tour), -2);
+      $itfname = $season_dir.'publish/it'.$suffix;
+      $rfname = $season_dir.'publish/r'.$suffix;
       $hfname = $season_dir.$tcode.'horse';
       $vfname = $season_dir.$tcode.'raven';
       $sfname = $season_dir.$tcode.'superb';
-      $bfname = $season_dir.$tcode.'bomb/b'.substr(str_replace('NEW', '', $tour), -2);
+      $bfname = $season_dir.$tcode.'bomb/b'.$suffix;
       $bsfname = $season_dir.$tcode.'BOMBSORT';
     }
     // парсинг программки
@@ -1784,7 +1786,7 @@ function build_itogi($country_code, $season, $tour)
       $tl = max(14, $maxteam);
       if (substr($tour, -2) < '07')
       { // если номер тура меньше 6, показываем групповой формат:
-        $groups = $tour[0] == 'U' ? 8 : 6;
+        $groups = $tour[0] == 'U' || $tour[3] == 'F' ? 8 : 6;
         for ($g = 0; $g < $groups; $g++ ) {
           $tpltbl['EuroResults']['1-32'][] = str_repeat(' ', $tl).'Группа '.($g + 1);
           $tpltbl['EuroResults']['1-32'][] = '';
@@ -3051,7 +3053,7 @@ $tour_code_prefix = $argv[1]; //'CHAML'; //'RUS'
 $s = $argv[2]; //'2019-20'; //
 $t = $argv[3]; //'01'; //
 chdir('/home/fp/fprognoz.org/online');
-$atourn = ['CHAML', 'GOLDL', 'CUPSL', 'UEFAL'];
+$atourn = ['CHAML', 'GOLDL', 'CUPSL', 'UEFAL', 'CONFL'];
 $acal = $ateams = [];
 if (in_array($tour_code_prefix, $atourn))
 {

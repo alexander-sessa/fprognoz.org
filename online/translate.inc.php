@@ -98,6 +98,7 @@ $translate = array(
 'Metalist' => 'Металлист',
 'Metalist 1925 Kharkiv' => 'Металлист 1925',
 'Dynamo Kyiv' => 'Динамо К',
+'Dinamo Kiev' => 'Динамо К',
 'Zorya' => 'Заря',
 'Metalurh Zaporizhya' => 'Металлург З',
 'Arsenal Kyiv' => 'Арсенал К',

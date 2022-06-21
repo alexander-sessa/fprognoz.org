@@ -67,7 +67,7 @@ function toggleEditor(id) {
                         })
         }
 }
-function moreComments(c,m,s,f){$.post("/ajax.php",{m:m,s:s,c_from:f,coach:c},function(r){$("#more_comments").replaceWith(r)})}
+function moreComments(c,m,s,f){$.post("/online/ajax.php",{a:m,s:s,c_from:f,coach:c},function(r){$("#more_comments").replaceWith(r)})}
 $(document).ready(function(){
         $(".c-content").change(function(){
                 if($("#toggle"+this.id.substr(7)+" i").hasClass("fa-edit")&&html.indexOf("img-fluid")==-1){

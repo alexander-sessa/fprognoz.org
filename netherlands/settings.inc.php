@@ -3,10 +3,10 @@ $cca = 'NLD';
 $description = 'Футбол-Прогнозная ассоциация Голландии';
 $title = 'ФП Голландии';
 $main_header = 'Новости ФП Голландии';
-$cur_year = '2020-21';
+$cur_year = '2021-22';
 $president = 'Кирилл Голощёков';
 $vice = 'Serge Vasiliev';
 $pressa = '';
-$coach = 'Serge Vasiliev, Михаил Сирота';
+$coach = 'Олег Крупич, Coachb';
 $club_edit = true;
 ?>

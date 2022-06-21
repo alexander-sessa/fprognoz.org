@@ -501,7 +501,7 @@ function build_prognozlist($country_code, $season, $tour) {
       }
 
 
-      $main_size = in_array($cc, $ccarr) && ($t < 12 || $t > 95) ? 5 : 6;
+      $main_size = in_array($cc, $ccarr) && ($t < 12 || $t > 94) ? 5 : 6;
       // дополнительная сортировка $cc_predicts: пустышки вниз
       $n = 0;
       $out = '';
@@ -888,7 +888,7 @@ function Today($year, $m, $d, $dayofweek, $minute) {
     $arr = explode('<div id="midbannerdiv">', $content);
     $data = '';
     for ($i = 0; $i <= 1; $i++)
-      if ($cut = strpos($arr[$i], '<a id="1'))
+      if ($cut = strpos($arr[$i], '<a id="'))
 //was      if ($cut = strpos($arr[$i], '<div id="1'))
         $data .= substr($arr[$i], $cut);
 
@@ -984,7 +984,7 @@ function Today($year, $m, $d, $dayofweek, $minute) {
   }
   else {
 //    $url = 'http://2admin.xscores.com:5002/stream?s=1&seq=' . $old_seq;
-    $url = 'https://newnetty1.xscores.com/stream?s=1&seq=' . $old_seq;
+    $url = 'https://newnetty2.xscores.com/stream?s=1&seq=' . $old_seq;
     $content = file_get_contents($url, 0, $ctx);
     if ($seq = substr($content, 0, 8)) {
       $matches = explode('#', $content);
@@ -1043,7 +1043,7 @@ $time_start = microtime(true);
 
 if (is_dir($online_dir . "schedule/$year/$month/$day")) {
 //if (true) {
-  date('J', $time) < 23 ? $minute = date('i', $time) : $minute = 1;
+  date('G', $time) < 23 ? $minute = date('i', $time) : $minute = 1;
   $base = Today($year, $month, $day, date('N', $time), $minute);
   $time_parse =  microtime(true);
   $absent = array();
@@ -1159,7 +1159,7 @@ https://fprognoz.org/?a=' . $ccn[$cca] . ($tour[4] == 'L' ? '&l='.substr($tour, 
             // публикация прогнозов после начала первого матча
             $prognozlist = str_replace('&lt;', '<', build_prognozlist($cca, $season, $tour));
             file_put_contents($online_dir . $cca . '/' . $season . '/publish/' . $tour, $prognozlist);
-            if (in_array($cca, $classic_fa) && !strpos($prognozlist, '*')) {
+            if ((in_array($cca, $classic_fa) || strlen($tour) == 7) && !strpos($prognozlist, '*')) {
               touch($tour_dir . 'closed');          // все прогнозы на месте - закрыли приём
               $log .= ' closed due to fullhouse';
             }
@@ -1172,7 +1172,7 @@ https://fprognoz.org/?a=' . $ccn[$cca] . ($tour[4] == 'L' ? '&l='.substr($tour, 
             touch($online_dir . 'schedule/task/start.' . $tour);
             $log .= ' publish predicts of ' . $tour . ';';
           }
-          if (in_array($cca, $classic_fa) && !is_file($tour_dir . 'closed')) {
+          if ((in_array($cca, $classic_fa) || strlen($tour) == 7) && !is_file($tour_dir . 'closed')) {
             if ($ms > 3) {
               touch($tour_dir . 'closed');          // закрытие приёма прогнозов
               touch($online_dir . 'schedule/task/close.' . $tour);

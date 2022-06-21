@@ -8,5 +8,5 @@ $president = 'Евгений Гладырь';
 $vice = 'Vano Opulsky';
 $pressa = '';
 $coach = 'Vano Opulsky';
-$club_edit = true;
+$club_edit = false;
 ?>

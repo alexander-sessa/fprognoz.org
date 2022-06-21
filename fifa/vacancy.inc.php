@@ -1,64 +1,60 @@
     <p class="title text15b">&nbsp;&nbsp;&nbsp;Форма отправки заявок на свободные команды</p>
     <hr size="1" width="98%" />
 <?php
-if (isset($_SESSION['Coach_name'])) {
-  $name = $_SESSION['Coach_name'];
-  $human = true;
+if (isset($_SESSION['Coach_name']))
+{
+    $name = $_SESSION['Coach_name'];
+    $human = true;
 }
 else
 {
-  $name = '';
-  $human = false;
+    $name = '';
+    $human = false;
 }
-if (isset($_POST['name_str'])) {
-  $name = $_POST['name_str'];
-  $pemail = $_POST['email_str'];
-  $teamsin = $_POST['teams_in'];
-  $teamsout = $_POST['teams_out'];
-  if (!$human) {
-    $params['secret'] = $recaptcha_secret2;
-    $params['response'] = $_POST['g-recaptcha-response'];
+if (isset($_POST['name_str']))
+{
+    $name = $_POST['name_str'];
+    $pemail = $_POST['email_str'] ?? '';
+    $teamsin = $_POST['teams_in'] ?? '';
+    $teamsout = $_POST['teams_out'] ?? '';
+    if (!$human)
+    {
+        $params['secret'] = $recaptcha_secret2;
+        $params['response'] = $_POST['g-recaptcha-response'];
 //    $uri = http_build_query($params);
-    $options = array(
-      'http' => array(
-        'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-        'method'  => 'POST',
-        'content' => http_build_query($params)
-      )
-    );
-    $context = stream_context_create($options);
-    $fp = file_get_contents('https://www.google.com/recaptcha/api/siteverify', false, $context);
-    $human = strpos($fp, '"success": true') ? true : false;
-  }
+        $options = [
+          'http' => [
+            'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+            'method'  => 'POST',
+            'content' => http_build_query($params)
+          ]
+        ];
+        $context = stream_context_create($options);
+        $fp = file_get_contents('https://www.google.com/recaptcha/api/siteverify', false, $context);
+        $human = strpos($fp, '"success": true') ? true : false;
+    }
 }
-if (!isset($name))
-  $name ='';
+else
+    $name = $pemail = $teamsin = $teamsout = '';
 
-if (!isset($pemail))
-  $pemail = '';
+if (isset($_POST['name_str']) && $human && $name && $pemail)
+{   // отправка вакансии
+    if ($pemail)
+    {
+        send_email('FPrognoz.org <fp@fprognoz.org>', $name, $pemail, "Vacancy", "FP_Prognoz\n$name\nVACANCY\n- $teamsout\n+ $teamsin\n");
+        echo "<h5>Заявка принята. Копия заявки отправлена на адрес $pemail<br /></h5>";
+        $email = str_replace(',', ' ', $pemail);
+        $amail = explode(' ', $email);
+        $replyto = '';
+        foreach ($amail as $email)
+            if (($email = trim($email)) && strpos($email, '@'))
+                $replyto = "$name <$email>";
 
-if (!isset($teamsin))
-  $teamsin = '';
-
-if (!isset($teamsout))
-  $teamsout = '';
-
-if (isset($_POST['name_str']) && $human && $name && $pemail) { // отправка вакансии
-  if ($pemail) {
-    send_email('FPrognoz.org <fp@fprognoz.org>', $name, $pemail, "Vacancy", "FP_Prognoz\n$name\nVACANCY\n- $teamsout\n+ $teamsin\n");
-    echo "<h5>Заявка принята. Копия заявки отправлена на адрес $pemail<br /></h5>";
-    $email = str_replace(',', ' ', $pemail);
-    $amail = explode(' ', $email);
-    $replyto = '';
-    foreach ($amail as $email)
-      if ($email = trim($email))
-        if (strpos($email, '@'))
-          $replyto = "$name <$email>";
-
-  }
-  $mlist = array('fp@fprognoz.org');
-  foreach ($mlist as $email) {
-    @mail($email, 'Vacancy', "FP_Prognoz\n$name\nVACANCY\n- $teamsout\n+ $teamsin\n$pemail\n",
+    }
+    $mlist = ['fp@fprognoz.org'];
+    foreach ($mlist as $email)
+    {
+        @mail($email, 'Vacancy', "FP_Prognoz\n$name\nVACANCY\n- $teamsout\n+ $teamsin\n$pemail\n",
 'From: '.$name.' <fp@fprognoz.org>
 Reply-To: '.$name.' <'.$pemail.'>
 MIME-Version: 1.0
@@ -68,25 +64,27 @@ Content-Transfer-Encoding: 8bit
 X-Priority: 3
 X-MSMail-Priority: Normal
 X-Mailer: FP Informer 2.00.150822-'.$ip);
-  }
-  sleep(1);
+    }
+    sleep(1);
 }
 else if (isset($_POST['submitvac']))
-   echo "<h2>Заявка не принята - проверьте заполнение полей</h2>";
+    echo '
+<h2>Заявка не принята - проверьте заполнение полей</h2>';
 
 /******/
 /* UI */
 /******/
 if (isset($_SESSION['Coach_name']) && !$pemail)
-  foreach ($cmd_db as $cca => $teams)
-    foreach ($teams as $team)
-      if (($_SESSION['Coach_name'] == $team['usr'])) {
-        $pemail = $team['eml'];
-        break 2;
-      }
+    foreach ($cmd_db as $cca => $teams)
+        foreach ($teams as $team)
+            if (($_SESSION['Coach_name'] == $team['usr']))
+            {
+                $pemail = $team['eml'];
+                break 2;
+            }
 
 else
-  echo
+    echo
 '<script src="https://www.google.com/recaptcha/api.js" async defer></script>';
 
 echo '

@@ -2,7 +2,7 @@
 mb_internal_encoding('UTF-8');
 require_once ('/home/fp/data/config.inc.php');
 $this_site = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'];
-$ccn = array(
+$ccn = [
 'SFP' => 'sfp-team',
 'ENG' => 'england',
 'BLR' => 'belarus',
@@ -23,27 +23,7 @@ $ccn = array(
 'UNL' => 'world',
 'WL'  => 'World',
 'IST' => 'sfp-20',
-);
-
-// добавление комментов
-if (isset($_POST['c_from']))
-{
-  chdir('..');
-  if ($have_redis)
-    $redis = new Redis();
-  else
-  {
-    include('comments/redis-emu.php');
-    $redis = new Redis_emu();
-  }
-  $role = 'player';
-  $a = $_POST['a'];
-  $s = $_POST['s'];
-  $c_from = $_POST['c_from'];
-  $coach_name = $_POST['coach'];
-  include('comments/main.php');
-  exit;
-}
+];
 
 function date_tz($format, $date, $time, $tz) {
   $datetime = new DateTime();
@@ -231,77 +211,114 @@ function build_access() {
   file_put_contents($data_dir . 'auth/.access', $access);
 }
 
+# добавление комментариев
+
+if (isset($_POST['c_from']))
+{
+    chdir('..');
+    if ($have_redis)
+        $redis = new Redis();
+    else
+    {
+        include('comments/redis-emu.php');
+        $redis = new Redis_emu();
+    }
+    $role = 'player';
+    $a = $_POST['a'];
+    $s = $_POST['s'];
+    $c_from = $_POST['c_from'];
+    $coach_name = $_POST['coach'];
+    include('comments/main.php');
+    exit;
+}
+
+# загрузка эмблемы
+
 if (isset($_FILES['upload']['name']) && ($fn = $_FILES['upload']['name']))
 {
-  // проверка на графический формат файла
-  $finfo = finfo_open(FILEINFO_MIME_TYPE);
-  $mtype = finfo_file($finfo, $_FILES['upload']['tmp_name']);
-  if (substr($mtype, 0, 6) != 'image/')
-    exit('{"error":{"message":"Допускается загрузка только изображений."}}');
+    // проверка на графический формат файла
+    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+    $mtype = finfo_file($finfo, $_FILES['upload']['tmp_name']);
+    if (substr($mtype, 0, 6) != 'image/')
+        exit('{"error":{"message":"Допускается загрузка только изображений."}}');
 
-  $ext = substr($fn, strrpos($fn, '.'));
-  $path = 'images/upload/' . time() . $ext;
-  if (move_uploaded_file($_FILES['upload']['tmp_name'], '../'.$path))
-    exit('{"url": "https://fprognoz.org/' . $path . '"}');
-  else
-    exit('{"error":{"message":"Не удалось загрузить файл изображения."}}');
+    $ext = substr($fn, strrpos($fn, '.'));
+    $path = 'images/upload/' . time() . $ext;
+    if (move_uploaded_file($_FILES['upload']['tmp_name'], '../'.$path))
+        exit('{"url": "https://fprognoz.org/' . $path . '"}');
+    else
+        exit('{"error":{"message":"Не удалось загрузить файл изображения."}}');
 
 }
+
+# обработка шифрованных команд
 
 $iv = substr(hash('sha256', 'iv'.$salt), 0, 16);
 $key = hash('sha256', 'pass1'.$salt);
 $data = json_decode(trim(openssl_decrypt( base64_decode($_POST['data']), 'AES-256-CBC', $key, 0, $iv )), true);
-if (isset($data['cmd'])) {
-  // проверка уникальности имени
-  if ($data['cmd'] == 'unique_check') {
+if (!isset($data['cmd']))
+    exit;
+
+# проверка уникальности имени
+
+if ($data['cmd'] == 'unique_check')
+{
     $afile = $data_dir . 'auth/.access';
     $mfile = $data_dir . 'auth/.map';
-    if (!is_file($mfile) || (filectime($afile) > filectime($mfile))) {
-      $map = build_search_map($afile); // обновление кэша имён
-      file_put_contents($mfile, $map);
+    if (!is_file($mfile) || (filectime($afile) > filectime($mfile)))
+    {
+        $map = build_search_map($afile); // обновление кэша имён
+        file_put_contents($mfile, $map);
     }
     else
-      $map = file_get_contents($mfile);  // или чтение старого
+        $map = file_get_contents($mfile);  // или чтение старого
 
     $email = strtoupper($_POST['email']);
     $keyword = mb_strtoupper($_POST['nick']);
     if (($ptr = strpos($map, ";$keyword;")) === false)
-      echo 0; // не совпало (уникально)
-    else {
-      $map = substr($map, 0, strpos($map, "\n", $ptr));
-      echo (strpos($map, ";!;$email;", $ptr - 3) ? 2 : 1); // своё/чужое
+        echo 0; // не совпало (уникально)
+    else
+    {
+        $map = substr($map, 0, strpos($map, "\n", $ptr));
+        echo (strpos($map, ";!;$email;", $ptr - 3) ? 2 : 1); // своё/чужое
     }
     exit;
-  }
+}
 
-  if ($data['cmd'] == 'password_check') {
+# проверка пароля
+
+if ($data['cmd'] == 'password_check')
+{
     $sendpwd = [];
     $access = file($data_dir . 'auth/.access');
     $hash = md5($_POST['pswd']);
     $name_str = $_POST['nick'];
     $name_up = mb_strtoupper($name_str);
-    foreach ($access as $access_str) {
-      list($code, $as_code, $team, $name, $mail, $pwd, $rol) = explode(';', $access_str);
-      if (($hash == $pwd || $hash == $SuperPWD) && ($name_up == mb_strtoupper($code) || $name_up == mb_strtoupper($name) || $name_up == strtoupper($mail))) {
-        $logfile = fopen($online_dir . 'log/auth.log', 'a');
-        fwrite($logfile, date('Y-m-d H:i:s').' '.$name_str."\n");
-        fclose($logfile);
-        echo 1; // комбинация совпала
-        exit;
-      }
-      if (!$pwd && $mail && $_POST['pswd'] == $code && $name_str == $name)
-        $sendpwd = [$as_code, $mail]; // выполнилось условие отправки первого пароля
+    foreach ($access as $access_str)
+    {
+        list($code, $as_code, $team, $name, $mail, $pwd, $rol) = explode(';', $access_str);
+        if (($hash == $pwd || $hash == $SuperPWD) && ($name_up == mb_strtoupper($code) || $name_up == mb_strtoupper($name) || $name_up == strtoupper($mail)))
+        {
+            $logfile = fopen($online_dir . 'log/auth.log', 'a');
+            fwrite($logfile, date('Y-m-d H:i:s').' '.$name_str."\n");
+            fclose($logfile);
+            echo 1; // комбинация совпала
+            exit;
+        }
+        if (!$pwd && $mail && $_POST['pswd'] == $code && $name_str == $name)
+            $sendpwd = [$as_code, $mail]; // выполнилось условие отправки первого пароля
 
     }
-    if (count($sendpwd)) {
-      // генерируем и высылаем пароль
-      $gp = '';
-      $mix = '23456789qwertyuiopasdfghjkzxcvbnmQWERTYUPASDFGHJKLZXCVBNM';
-      for ($i=0; $i<8; $i++)
-        $gp .= $mix[rand(0,56)];
+    if (count($sendpwd))
+    {
+        // генерируем и высылаем пароль
+        $gp = '';
+        $mix = '23456789qwertyuiopasdfghjkzxcvbnmQWERTYUPASDFGHJKLZXCVBNM';
+        for ($i=0; $i<8; $i++)
+            $gp .= $mix[rand(0,56)];
 
-      file_put_contents($online_dir.$sendpwd[0].'/passwd/'.$_POST['pswd'], md5($gp).':player');
-      send_email('FPrognoz.org <fp@fprognoz.org>', $name_str, $sendpwd[1], 'ФП. Пароль для сайта ' . $this_site,
+        file_put_contents($online_dir.$sendpwd[0].'/passwd/'.$_POST['pswd'], md5($gp).':player');
+        send_email('FPrognoz.org <fp@fprognoz.org>', $name_str, $sendpwd[1], 'ФП. Пароль для сайта ' . $this_site,
 'Вы получили случайно-сгенерированный пароль для доступа на сайт ' . $this_site . '
 
 '.$gp.'
@@ -312,23 +329,26 @@ if (isset($data['cmd'])) {
 
 Пароль можно сменить на странице '.$this_site.'/?m=pass
 ');
-      build_access();
-      echo 2;
+        build_access();
+        echo 2;
     }
     else
-      echo 0; // комбинация не совпала
+        echo 0; // комбинация не совпала
 
     exit;
-  }
+}
 
-  // отправка токена
-  if ($data['cmd'] == 'send_token') {
+# отправка токена
+
+if ($data['cmd'] == 'send_token')
+{
     $access = file($data_dir . 'auth/.access');
     $email = $_POST['nick'];
-    foreach ($access as $access_str) {
-      list($code, $as_code, $team, $name, $mail, $pwd, $rol) = explode(';', $access_str);
-      if (strcasecmp($mail, $email) == 0)
-        break;
+    foreach ($access as $access_str)
+    {
+        list($code, $as_code, $team, $name, $mail, $pwd, $rol) = explode(';', $access_str);
+        if (strcasecmp($mail, $email) == 0)
+            break;
 
     }
     $data_cfg = array('cmd' => 'auth_token', 'name' => $name, 'mail' => $mail, 'ts' => (time() + 600));
@@ -344,46 +364,58 @@ if (isset($data['cmd'])) {
 //С помощью этой ссылки Вы можете сменить пароль без необходимости указания действующего пароля.
 //Внимание: смена пароля возможна только со страницы, на которую ведёт временная ссылка.
     echo ($ret[0] == 'o' ? 0 : 1);
-  }
+}
 
-  // запись файла
-  if ($data['cmd'] == 'save_file') {
+# запись файла
+
+if ($data['cmd'] == 'save_file')
+{
     include ('../' . $data['a'] . '/settings.inc.php');
-    if ($data['author'] == $president || $data['author'] == $vice || $data['author'] == $pressa || in_array($data['author'], $admin)) {
-      if ($data['m'] == 'text') {
-        switch ($data['ref']) {
-          case 'it'  : $f = isset($data['t']) ? (isset($data['l']) ? 'publish/'.$data['l'].'/itc'.$data['t'] : 'publish/it'.$data['t']) : 'it.tpl'; break;
-          case 'itc' : $f = 'itc.tpl'; break;
-          case 'p'   : $f = isset($data['t']) ? 'publish/p'.$data['t']  : 'p.tpl'; break;
-          case 'pc'  : $f = 'pc.tpl'; break;
-          case 'r'   : $f = isset($data['t']) ? 'publish/r'.$data['t']  : 'header'; break;
+    if (isset($data['t']))
+        $data['t'] = strtolower($data['t']);
+
+    if ($data['author'] == $president || $data['author'] == $vice || $data['author'] == $pressa || in_array($data['author'], $admin))
+    {
+        if ($data['m'] == 'text')
+        {
+            switch ($data['ref'])
+            {
+                case 'it'  : $f = isset($data['t']) ? (isset($data['l']) ? 'publish/'.$data['l'].'/itc'.$data['t'] : 'publish/it'.$data['t']) : 'it.tpl'; break;
+                case 'itc' : $f = 'itc.tpl'; break;
+                case 'p'   : $f = isset($data['t']) ? 'publish/p'.$data['t']  : 'p.tpl'; break;
+                case 'pc'  : $f = 'pc.tpl'; break;
+                case 'r'   : $f = isset($data['t']) ? 'publish/r'.$data['t']  : 'header'; break;
+            }
+            $file = $data_dir . 'online/' . $cca . '/' . $data['s'] . '/' . $f;
         }
-        $file = $data_dir . 'online/' . $cca . '/' . $data['s'] . '/' . $f;
-      }
-      else if ($data['m'] == 'main')
-        $file = $data_dir . 'online/' . $cca . '/news';
-      else
-        $file = $data_dir . 'online/' . $cca . '/' . $data['s'] . '/' . $data['m'];
-      copy($file, $file . '.' . time());
-      $text = urldecode($_POST['text']);
-      if (strpos($text, '</p>')) {
-        $tidy = new tidy;
-        $tidy->parseString($text, ['indent' => true, 'show-body-only' => true, 'wrap' => 200], 'utf8');
-        $tidy->cleanRepair();
-        $text = $tidy->value;
-      }
-      $text = rtrim($text)."\n\n";
-      file_put_contents($file, $text);
+        else if ($data['m'] == 'main')
+            $file = $data_dir . 'online/' . $cca . '/news';
+        else
+            $file = $data_dir . 'online/' . $cca . '/' . $data['s'] . '/' . $data['m'];
+
+        copy($file, $file . '.' . time());
+        $text = urldecode($_POST['text']);
+        if (strpos($text, '</p>'))
+        {
+            $tidy = new tidy;
+            $tidy->parseString($text, ['indent' => true, 'show-body-only' => true, 'wrap' => 200], 'utf8');
+            $tidy->cleanRepair();
+            $text = $tidy->value;
+        }
+        $text = rtrim($text)."\n\n";
+        file_put_contents($file, $text);
     }
     echo 1;
-  }
+}
 
-  // запись конфигурационных файлов
-  if ($data['cmd'] == 'save_config') {
+# запись конфигурационных файлов
+
+if ($data['cmd'] == 'save_config')
+{
     include ('../' . $data['a'] . '/settings.inc.php');
-    if ($data['author'] == $president || $data['author'] == $vice || in_array($data['author'], $admin)) {
-      // settings.inc.php
-      $settings = '<?php
+    if ($data['author'] == $president || $data['author'] == $vice || in_array($data['author'], $admin))
+    {   // settings.inc.php
+        $settings = '<?php
 $cca = \''.$cca.'\';
 $description = \''.$_POST['description'].'\';
 $title = \''.$_POST['title'].'\';
@@ -396,53 +428,57 @@ $coach = \''.$_POST['coach'].'\';
 $club_edit = '.(isset($_POST['club_edit']) ? 'true' : 'false').';
 ?>
 ';
-      file_put_contents('../'.$data['a'].'/settings.inc.php', $settings);
+        file_put_contents('../'.$data['a'].'/settings.inc.php', $settings);
 
-      if ($_POST['cur_year'] > $data['s']) { // создать структуру нового сезона
-        $old = $online_dir.$cca.'/'.$data['s'].'/';
-        $new = $online_dir.$cca.'/'.$_POST['cur_year'].'/';
-        mkdir($new.'bomb', 0755, true);
-        mkdir($new.'bombc', 0755, true);
-        mkdir($new.'bombs', 0755, true);
-        mkdir($new.'prognoz', 0755, true);
-        mkdir($new.'programs', 0755, true);
-        mkdir($new.'publish', 0755, true);
-        copy($old.'codes.tsv', $new.'codes.tsv');
-        copy($old.'bombers',   $new.'bombers');
-        copy($old.'header',   $new.'header');
-        copy($old.'news',   $new.'news');
-        copy($old.'p.tpl',     $new.'p.tpl');
-        copy($old.'it.tpl',    $new.'it.tpl');
-        copy($old.'pc.tpl',    $new.'pc.tpl');
-        copy($old.'itc.tpl',   $new.'itc.tpl');
-      }
-      // fp.cfg
-      $fpcfg = [];
-      for ($t = 0; $t < count($_POST['tournament']); $t++) {
-        if ($_POST['tournament'][$t]) $fpcfg[$t]['tournament'] = $_POST['tournament'][$t];
-        if ($_POST['type'][$t]) $fpcfg[$t]['type'] = $_POST['type'][$t];
-        if ($_POST['numeration'][$t]) $fpcfg[$t]['numeration'] = $_POST['numeration'][$t];
-        if ($_POST['prefix'][$t]) $fpcfg[$t]['prefix'] = $_POST['prefix'][$t];
-        for ($e = 0; $e < count($_POST['stage']); $e++)
-          if (isset($_POST['tourn'][$t][$e])) {
-            if ($_POST['stage'][$t][$e]) $fpcfg[$t]['format'][$e]['stage'] = $_POST['stage'][$t][$e];
-            if ($_POST['suffix'][$t][$e]) $fpcfg[$t]['format'][$e]['suffix'] = $_POST['suffix'][$t][$e];
-            if ($_POST['cal'][$t][$e]) $fpcfg[$t]['format'][$e]['cal'] = $_POST['cal'][$t][$e];
-            if ($_POST['groups'][$t][$e]) $fpcfg[$t]['format'][$e]['groups'] = $_POST['groups'][$t][$e];
-            if ($_POST['tourn'][$t][$e]) $fpcfg[$t]['format'][$e]['tourn'] = $_POST['tourn'][$t][$e];
-            if ($_POST['round'][$t][$e]) $fpcfg[$t]['format'][$e]['round'] = $_POST['round'][$t][$e];
-            if ($_POST['nprefix'][$t][$e]) $fpcfg[$t]['format'][$e]['nprefix'] = $_POST['nprefix'][$t][$e];
-          }
+        if ($_POST['cur_year'] > $data['s'])
+        {   // создать структуру нового сезона
+            $old = $online_dir.$cca.'/'.$data['s'].'/';
+            $new = $online_dir.$cca.'/'.$_POST['cur_year'].'/';
+            mkdir($new.'bomb', 0755, true);
+            mkdir($new.'bombc', 0755, true);
+            mkdir($new.'bombs', 0755, true);
+            mkdir($new.'prognoz', 0755, true);
+            mkdir($new.'programs', 0755, true);
+            mkdir($new.'publish', 0755, true);
+            copy($old.'codes.tsv', $new.'codes.tsv');
+            copy($old.'bombers',   $new.'bombers');
+            copy($old.'header',   $new.'header');
+            copy($old.'news',   $new.'news');
+            copy($old.'p.tpl',     $new.'p.tpl');
+            copy($old.'it.tpl',    $new.'it.tpl');
+            copy($old.'pc.tpl',    $new.'pc.tpl');
+            copy($old.'itc.tpl',   $new.'itc.tpl');
+        }
+        // fp.cfg
+        $fpcfg = [];
+        for ($t = 0; $t < count($_POST['tournament']); $t++)
+        {
+            if ($_POST['tournament'][$t]) $fpcfg[$t]['tournament'] = $_POST['tournament'][$t];
+            if ($_POST['type'][$t]) $fpcfg[$t]['type'] = $_POST['type'][$t];
+            if ($_POST['numeration'][$t]) $fpcfg[$t]['numeration'] = $_POST['numeration'][$t];
+            if ($_POST['prefix'][$t]) $fpcfg[$t]['prefix'] = $_POST['prefix'][$t];
+            for ($e = 0; $e < count($_POST['stage']); $e++)
+                if (isset($_POST['tourn'][$t][$e]))
+                {
+                    if ($_POST['stage'][$t][$e]) $fpcfg[$t]['format'][$e]['stage'] = $_POST['stage'][$t][$e];
+                    if ($_POST['suffix'][$t][$e]) $fpcfg[$t]['format'][$e]['suffix'] = $_POST['suffix'][$t][$e];
+                    if ($_POST['cal'][$t][$e]) $fpcfg[$t]['format'][$e]['cal'] = $_POST['cal'][$t][$e];
+                    if ($_POST['groups'][$t][$e]) $fpcfg[$t]['format'][$e]['groups'] = $_POST['groups'][$t][$e];
+                    if ($_POST['tourn'][$t][$e]) $fpcfg[$t]['format'][$e]['tourn'] = $_POST['tourn'][$t][$e];
+                    if ($_POST['round'][$t][$e]) $fpcfg[$t]['format'][$e]['round'] = $_POST['round'][$t][$e];
+                    if ($_POST['nprefix'][$t][$e]) $fpcfg[$t]['format'][$e]['nprefix'] = $_POST['nprefix'][$t][$e];
+                }
 
-      }
-      $json = "prognoz\ncodes.tsv\ncal\n0\n" . json_encode($fpcfg, JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE);
-      file_put_contents($data_dir.'online/'.$cca.'/'.$_POST['cur_year'].'/fp.cfg', $json);
+        }
+        $json = "prognoz\ncodes.tsv\ncal\n0\n" . json_encode($fpcfg, JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE);
+        file_put_contents($data_dir.'online/'.$cca.'/'.$_POST['cur_year'].'/fp.cfg', $json);
     }
     echo 1;
-  }
+}
 
-  // рассылка
-  if ($data['cmd'] == 'send_mail') {
+# рассылка
+if ($data['cmd'] == 'send_mail')
+{
     $ret = 0;
     include ('../' . $data['a'] . '/settings.inc.php');
     $granted = $admin;
@@ -454,112 +490,117 @@ $club_edit = '.(isset($_POST['club_edit']) ? 'true' : 'false').';
     $team_select = '';
     if (isset($_POST['p']) && $data['a'] == 'world')
     {
-      $team_file = $data_dir.'personal/'.$data['author'].'/team.'.date('Y');
-      if (is_file($team_file))
-        $team_select = file_get_contents($team_file);
+        $team_file = $data_dir.'personal/'.$data['author'].'/team.'.date('Y');
+        if (is_file($team_file))
+            $team_select = file_get_contents($team_file);
 
     }
     if ($team_select || in_array($data['author'], $granted))
     {
-      $cca = array_search($data['a'], $ccn);
-      $email = '';
-      if (isset($_POST['p']) && $data['a'] == 'world')
-      {
-        $codes = file($online_dir.$cca.'/'.$data['s'].'/'.$team_select.'.csv');
-        $i = 0;
-        foreach ($codes as $line) if (trim($line))
+        $cca = array_search($data['a'], $ccn);
+        $email = '';
+        if (isset($_POST['p']) && $data['a'] == 'world')
         {
-          list($name, $mail, $long) = explode(';', $line);
-          if (!isset($_POST['p']) || isset($_POST['p'][$i++]))
-          {
-            $emails = explode(',', $mail);
-            foreach ($emails as $mail)
-              if (trim($mail))
-                $email .= ($email ? ',' : '') . $name . ' <' . trim($mail) . '>';
+            $codes = file($online_dir.$cca.'/'.$data['s'].'/'.$team_select.'.csv');
+            $i = 0;
+            foreach ($codes as $line) if (trim($line))
+            {
+                list($name, $mail, $long) = explode(';', $line);
+                if (!isset($_POST['p']) || isset($_POST['p'][$i++]))
+                {
+                    $emails = explode(',', $mail);
+                    foreach ($emails as $mail)
+                    if (trim($mail))
+                        $email .= ($email ? ',' : '') . $name . ' <' . trim($mail) . '>';
 
-          }
+                }
+            }
         }
-      }
-      else if ($cca == 'UNL')
-      { // рассылка по списку, формируемого getmails.php из каталога сезона
-        $email = implode(',', file($data_dir . 'online/UNL/'.date('Y').'/emails', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
-      }
-      else if ($cca == 'FIFA')
-      { // рассылка всем, у кого есть аккаунты
-        $amail = [];
-        $map = explode(';', file_get_contents($data_dir . 'auth/.map'));
-        foreach ($map as $mail)
-          if (strpos($mail, '@') && strpos($mail, '.'))
-          {
-            $emails = explode(',', strtolower($mail));
-            foreach ($emails as $mail)
-              $amail[$mail] = 1;
-          }
+        else if ($cca == 'UNL')
+        {   // рассылка по списку, формируемого getmails.php из каталога сезона
+            $email = implode(',', file($data_dir . 'online/UNL/'.date('Y').'/emails', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
+        }
+        else if ($cca == 'FIFA')
+        {   // рассылка всем, у кого есть аккаунты
+            $amail = [];
+            $map = explode(';', file_get_contents($data_dir . 'auth/.map'));
+            foreach ($map as $mail)
+                if (strpos($mail, '@') && strpos($mail, '.'))
+                {
+                    $emails = explode(',', strtolower($mail));
+                    foreach ($emails as $mail)
+                        $amail[$mail] = 1;
 
-        foreach ($amail as $mail => $tt)
-          $email .= ($email ? ',' : '') . trim($mail);
+                }
 
-      }
-      else
-      {
-        $codes = file($online_dir . $cca . '/' . $data['s'] . '/codes.tsv');
-        $i = 0;
-        foreach ($codes as $line) if (trim($line))
+            foreach ($amail as $mail => $tt)
+                $email .= ($email ? ',' : '') . trim($mail);
+
+        }
+        else
         {
-          list($code, $cmd, $name, $mail, $long) = explode("\t", $line);
-          if (!isset($_POST['p']) || isset($_POST['p'][$i++]))
-          {
-            $emails = explode(',', $mail);
-            foreach ($emails as $mail)
-              if (trim($mail))
-                $email .= ($email ? ',' : '') . $name . ' <' . trim($mail) . '>';
+            $codes = file($online_dir . $cca . '/' . $data['s'] . '/codes.tsv');
+            $i = 0;
+            foreach ($codes as $line) if (trim($line))
+            {
+                list($code, $cmd, $name, $mail, $long) = explode("\t", $line);
+                if (!isset($_POST['p']) || isset($_POST['p'][$i++]))
+                {
+                    $emails = explode(',', $mail);
+                    foreach ($emails as $mail)
+                    if (trim($mail))
+                        $email .= ($email ? ',' : '') . $name . ' <' . trim($mail) . '>';
 
-          }
+                }
+            }
         }
-      }
-      if (!isset($data['t']) && !isset($_POST['p']))
-        file_put_contents($online_dir . $cca . '/' . $data['s'] . '/publish/'.time(), $_POST['text'] . ':Subj:' . $_POST['subj']);
+        if (!isset($data['t']) && !isset($_POST['p']))
+            file_put_contents($online_dir . $cca . '/' . $data['s'] . '/publish/'.time(), $_POST['text'] . ':Subj:' . $_POST['subj']);
 
-      $ret = send_email($data['a'].' <'.strtolower($cca).'@'.$_SERVER['HTTP_HOST'].'>', '', $email, $_POST['subj'], $_POST['text'], $_POST['altbody'] ?? NULL);
+        $ret = send_email($data['a'].' <'.strtolower($cca).'@'.$_SERVER['HTTP_HOST'].'>', '', $email, $_POST['subj'], $_POST['text'], $_POST['altbody'] ?? NULL);
     }
     echo $ret;
-  }
-  // переключение фан-зоны
-  if ($data['cmd'] == 'fun_zone') {
+}
+
+# переключение фан-зоны
+if ($data['cmd'] == 'fun_zone')
+{
     $coach_name = $data['c'];
     $file = $data_dir.'personal/'.$coach_name.'/gb.inc';
     if (is_file($file))
     {
-      unlink($file);
-      echo '';
+        unlink($file);
+        echo '';
     }
-    else {
-      touch($file);
-      chdir('..');
-      if ($have_redis)
-        $redis = new Redis();
-      else
-      {
-        include('comments/redis-emu.php');
-        $redis = new Redis_emu();
-      }
-      $role = 'player';
-      $a = $data['a'];
-      $s = $data['s'];
-      include('comments/main.php');
+    else
+    {
+        touch($file);
+        chdir('..');
+        if ($have_redis)
+            $redis = new Redis();
+        else
+        {
+            include('comments/redis-emu.php');
+            $redis = new Redis_emu();
+        }
+        $role = 'player';
+        $a = $data['a'];
+        $s = $data['s'];
+        include('comments/main.php');
     }
     exit;
-  }
+}
 
-  // API отправки прогнозов, составов, замен
-  if ($data['cmd'] == 'send_by_api') {
+# API отправки прогнозов, составов, замен
+if ($data['cmd'] == 'send_by_api')
+{
     //$coach_name = $data['c'];
     $coach_mail = $data['email']; // не используется, может быть потом понадобится
     $ip = $_POST['ip'] ?? isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'];
     $tour = $_POST['tour'];
     $cca = substr($tour, 0, 3);
-    if (in_array($cca, ['UEF', 'CHA', 'CUP', 'GOL']))
-      $cca = 'UEFA';
+    if (in_array($cca, ['UEF', 'CHA', 'CUP', 'GOL', 'CON']))
+        $cca = 'UEFA';
 
     include ('../' . $ccn[$cca] . '/settings.inc.php');
     $season_dir = $online_dir . $cca . '/' . $cur_year;
@@ -569,98 +610,99 @@ $club_edit = '.(isset($_POST['club_edit']) ? 'true' : 'false').';
     // замены на 2 тайм:
 
     if ($closed)
-      echo '<i class="fas fa-times text-danger"></i> Увы, Вы опоздали - дедлайн уже наступил.<br>';
+        echo '<i class="fas fa-times text-danger"></i> Увы, Вы опоздали - дедлайн уже наступил.<br>';
     else if (!count($_POST['predicts']))
-      echo '<i class="fas fa-times text-danger"></i> Получен пустой прогноз.<br>';
+        echo '<i class="fas fa-times text-danger"></i> Получен пустой прогноз.<br>';
     else
     {
-      if (isset($_POST['team']))
-      { // состав на 1 тайм: team, ['players'], ['predicts']
-        // проверка полномочий
-        $team = urldecode($_POST['team']);
-        $coach = '';
-        $codes = file($season_dir . '/' . $team . '.csv', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        foreach ($codes as $line)
-          if (!$coach && ($cut = strpos($line, $coach_mail)) && substr($line, $cut + 1 + strlen($coach_mail), 5) == 'coach')
-            $coach = substr($line, 0, $cut - 1);
+        if (isset($_POST['team']))
+        {   // состав на 1 тайм: team, ['players'], ['predicts']
+            // проверка полномочий
+            $team = urldecode($_POST['team']);
+            $coach = '';
+            $codes = file($season_dir . '/' . $team . '.csv', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+            foreach ($codes as $line)
+                if (!$coach && ($cut = strpos($line, $coach_mail)) && substr($line, $cut + 1 + strlen($coach_mail), 5) == 'coach')
+                    $coach = substr($line, 0, $cut - 1);
 
-        if (!$coach)
-        { // вероятно, был упрощенный файл состава команды, проверим в codes
-          $codes = file($season_dir . '/codes.tsv', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-          foreach ($codes as $line)
-            if (!$coach && ($cut = strpos($line, $team)))
-              if (strpos($line, $coach_mail) && strpos($line, '	coach'))
-                $coach = substr($line, 0, $cut - 1);
+            if (!$coach)
+            {   // вероятно, был упрощенный файл состава команды, проверим в codes
+                $codes = file($season_dir . '/codes.tsv', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+                foreach ($codes as $line)
+                    if (!$coach && ($cut = strpos($line, $team)))
+                        if (strpos($line, $coach_mail) && strpos($line, '	coach'))
+                            $coach = substr($line, 0, $cut - 1);
 
-          if (!$coach)
-            die('<i class="fas fa-times text-danger"></i> Ваши полномочия не подтверждены.<br>');
+                if (!$coach)
+                    die('<i class="fas fa-times text-danger"></i> Ваши полномочия не подтверждены.<br>');
 
+            }
+            $out = '';
+            $all_predicts = [];
+            $main_size = strlen($team) != 3 || $team == 'SFP' || ($tour > 'UNL11' && $tour < 'UNL95') ? 5 : 4; // size-1
+            $log = 'состав первого тайма:<br>';
+            if (is_file($prognoz_dir.'/'.$team))
+            {
+                $lines =  file($prognoz_dir.'/'.$team);
+                foreach ($lines as $line) if (trim($line))
+                {
+                    list($name, $predict, $ts, $rest) = explode(';', trim($line));
+                    $all_predicts[$name] = $predict;
+                }
+            }
+            $added = [];
+            $i = 0;
+            $bopen = true;
+            foreach ($_POST['players'] as $pos => $name)
+            {
+                $predict = strtr($_POST['predicts'][$pos], ['‎' => '', ' ' => '']);
+                if ($predict && (!isset($all_predicts[$name]) || $all_predicts[$name] != $predict))
+                    $added[$name] = $predict;
+
+                $out .= "$name;$predict;;\n";
+                $log .= (strlen($log) > 45 ? ', ' : ' ') . ($i == 0 ? '<mark>' : '') . $name;
+                if ($i++ == $main_size)
+                {
+                    $log .= '</mark>';
+                    $bopen = false;
+                }
+            }
+            if ($bopen)
+                $log .= '</mark>';
+
+            if (count($added))
+            {
+                $log .= '<br> и при этом внёс прогноз' . (count($added) > 1 ? 'ы' : '');
+                foreach ($added as $name => $predict)
+                    $log .= " $name:$predict";
+
+            }
+            file_put_contents($prognoz_dir.'/' . $team, $out);
+            $pr_saved = true;
+            $hisfile = fopen($prognoz_dir.'/.' . $team, 'a');
+            fwrite($hisfile, "$coach;$log;" . time() . "\n");
+            fclose($hisfile);
+            echo '<i class="fas fa-check text-success"></i> Состав команды записан.<br>';
         }
-        $out = '';
-        $all_predicts = [];
-        $main_size = strlen($team) != 3 || $team == 'SFP' || ($tour > 'UNL11' && $tour < 'UNL95') ? 5 : 4; // size-1
-        $log = 'состав первого тайма:<br>';
-        if (is_file($prognoz_dir.'/'.$team))
-        {
-          $lines =  file($prognoz_dir.'/'.$team);
-          foreach ($lines as $line) if (trim($line))
-          {
-            list($name, $predict, $ts, $rest) = explode(';', trim($line));
-            $all_predicts[$name] = $predict;
-          }
+        else if (isset($_POST['team_codes']))
+        {   // подача прогнозов: ['team_codes'], ['predicts']
+            $enemy_str = ''; // потом сделать!
+            foreach ($_POST['team_codes'] as $tc)
+            {
+                $prognoz_post = trim(rtrim(current($_POST['predicts']), '='));
+                if (!next($_POST['predicts']))
+                    reset($_POST['predicts']);
+
+                if ($prognoz_post)
+                {
+                    echo '<i class="fas fa-check text-success"></i> Принят прогноз от '.$tc.' на тур '.$tour.'.<br>';
+                    send_predict($cca, $cur_year, $tc, $tour, $prognoz_post, $enemy_str, $ip);
+                }
+                else
+                    echo '<i class="fas fa-times text-danger"></i> Получен пустой прогноз.<br>';
+
+            }
         }
-        $added = [];
-        $i = 0;
-        $bopen = true;
-        foreach ($_POST['players'] as $pos => $name) {
-          $predict = strtr($_POST['predicts'][$pos], ['‎' => '', ' ' => '']);
-          if ($predict && (!isset($all_predicts[$name]) || $all_predicts[$name] != $predict))
-            $added[$name] = $predict;
-
-          $out .= "$name;$predict;;\n";
-          $log .= (strlen($log) > 45 ? ', ' : ' ') . ($i == 0 ? '<mark>' : '') . $name;
-          if ($i++ == $main_size)
-          {
-            $log .= '</mark>';
-            $bopen = false;
-          }
-        }
-        if ($bopen)
-          $log .= '</mark>';
-
-        if (count($added)) {
-          $log .= '<br> и при этом внёс прогноз' . (count($added) > 1 ? 'ы' : '');
-          foreach ($added as $name => $predict)
-            $log .= " $name:$predict";
-
-        }
-        file_put_contents($prognoz_dir.'/' . $team, $out);
-        $pr_saved = true;
-        $hisfile = fopen($prognoz_dir.'/.' . $team, 'a');
-        fwrite($hisfile, "$coach;$log;" . time() . "\n");
-        fclose($hisfile);
-        echo '<i class="fas fa-check text-success"></i> Состав команды записан.<br>';
-      }
-      else if (isset($_POST['team_codes']))
-      { // подача прогнозов: ['team_codes'], ['predicts']
-        $enemy_str = ''; // потом сделать!
-        foreach ($_POST['team_codes'] as $tc)
-        {
-          $prognoz_post = trim(rtrim(current($_POST['predicts']), '='));
-          if (!next($_POST['predicts']))
-            reset($_POST['predicts']);
-
-          if ($prognoz_post)
-          {
-            echo '<i class="fas fa-check text-success"></i> Принят прогноз от '.$tc.' на тур '.$tour.'.<br>';
-            send_predict($cca, $cur_year, $tc, $tour, $prognoz_post, $enemy_str, $ip);
-          }
-          else
-            echo '<i class="fas fa-times text-danger"></i> Получен пустой прогноз.<br>';
-
-        }
-      }
     }
-  }
 }
 ?>

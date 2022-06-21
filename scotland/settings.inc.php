@@ -7,6 +7,6 @@ $cur_year = '2021-22';
 $president = 'Вячеслав Ковалевский';
 $vice = 'ВитЬя Барановский';
 $pressa = 'Andrey Razarenov';
-$coach = 'Вячеслав Ковалевский';
+$coach = 'Вячеслав Ковалевский, grionik';
 $club_edit = true;
 ?>

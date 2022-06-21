@@ -67,6 +67,8 @@ if (!isset($l) || $l == 'n')
           file_put_contents($online_dir.'UNL/'.$s.'/'.$ccode.'.csv', str_replace($line, "$name;$mail;$role\n", $team));
         }
 
+//file_put_contents('/home/fp/data/personal/' . $name . '/team.2022', $ccode);
+
       if ($show)
         $out .= '
   <tr>
