@@ -1,8 +1,10 @@
     <p class="title text15b">&nbsp;&nbsp;&nbsp;ЗАЛ СЛАВЫ ФУТБОЛПРОГНОЗА</p>
-    <hr size="1" width="98%" />
 <table width="100%">
-<tr><th>сезон</th><th width="19%">чемпион</th><th width="19%">серебряный призер</th><th width="19%">бронзовый призер</th><th width="19%">золотая бутса</th><th width="19%">обладатель кубка</th></tr>
-<tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;Украина</td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
+<tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;<b>УКРАИНА</b></td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
+<tr><td>сезон</td><td width="19%">чемпион</td><td width="19%">серебряный призер</td><td width="19%">бронзовый призер</td><td width="19%">золотая бутса</td><td width="19%">обладатель кубка</td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
 <tr>
 <td>1997</td>
 <td>Шахтер (Макеевка)<br>Dimka Zaporozhets</td>
@@ -187,7 +189,43 @@
 <td>Igor Safontsev<br>ФК Севастополь</td>
 <td>Металлист 1925(Харьков)<br>Андрей Новиков</td>
 </tr>
-<tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;Россия</td></tr>
+<tr>
+<td>2019-2020</td>
+<td>Сталь (Каменское)<br>Михаил Сирота</td>
+<td>Металлист (Харьков)<br>Кирилл Голощёков</td>
+<td>Волынь (Луцк)<br>Микола Синиця</td>
+<td>Кирилл Голощёков<br>Металлист (Харьков)</td>
+<td>Агробизнес (Волочиск)<br>Roman77</td>
+</tr>
+<tr>
+<td>2020-2021</td>
+<td>Динамо (Киев)<br>Vano Opulsky</td>
+<td>Сталь (Каменское)<br>Михаил Сирота</td>
+<td>Металлист (Харьков)<br>Кирилл Голощёков</td>
+<td>Vano Opulsky<br>Динамо (Киев)</td>
+<td>Динамо (Киев)<br>Vano Opulsky</td>
+</tr>
+<tr>
+<td>2021-2023</td>
+<td>Динамо (Киев)<br>Vano Opulsky</td>
+<td>Колос (Ковалівка)<br>Лес-ник</td>
+<td>ФК Олександрія<br>Gleb Arsatov</td>
+<td>Vano Opulsky<br>Динамо (Киев)</td>
+<td>Динамо (Киев)<br>Vano Opulsky</td>
+</tr>
+<tr>
+<td>2023-2024</td>
+<td>Зірка (Кропивницький)<br>Vladislav Yezhergin</td>
+<td>МФК Миколаїв<br>Star</td>
+<td>Металург (Донецьк)<br>Филиппыч</td>
+<td>Vladislav Yezhergin<br>Зірка (Кропивницький)</td>
+<td>Чорноморець (Одеса)<br>Алекс-ГОЛ</td>
+</tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
+<tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;<b>РОССИЯ</b></td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
+<tr><td>сезон</td><td width="19%">чемпион</td><td width="19%">серебряный призер</td><td width="19%">бронзовый призер</td><td width="19%">золотая бутса</td><td width="19%">обладатель кубка</td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
 <tr>
 <td>1998</td>
 <td>Локомотив-2 (Санкт-Петербург)<br>Eugene Boytsov</td>
@@ -336,7 +374,43 @@
 <td>Alex Rexyard<br>Факел (Воронеж)</td>
 <td>ФК Краснодар<br>AlexTar77</td>
 </tr>
-<tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;Беларусь</td></tr>
+<tr>
+<td>2019-2020</td>
+<td>Алания (Владикавказ)<br>Alexandr Balakirev</td>
+<td>Амкар (Пермь)<br>Vano Opulsky</td>
+<td>ФК Ростов<br>Vladislav Yezhergin</td>
+<td>Oleg Mereuts<br>Ахмат (Грозный)</td>
+<td>ФК Москва<br>Nikita Segal</td>
+</tr>
+<tr>
+<td>2020-2021</td>
+<td>ФК Ростов<br>Vladislav Yezhergin</td>
+<td>Факел (Воронеж)<br>Alex Rexyard</td>
+<td>ФК Москва<br>Nikita Segal</td>
+<td>Oleg Mereuts<br>Ахмат (Грозный)</td>
+<td>ФК Ростов<br>Vladislav Yezhergin</td>
+</tr>
+<tr>
+<td>2021-2023</td>
+<td>Торпедо (Москва)<br>Artem Sakerin</td>
+<td>ФК Москва<br>Nikita Segal</td>
+<td>Торпедо (Владимир)<br>Михаил Сирота</td>
+<td>Serge Shibaev<br>Спартак (Москва)</td>
+<td>ФК Ростов<br>Vladislav Yezhergin</td>
+</tr>
+<tr>
+<td>2023-2024</td>
+<td>ФК Москва<br>Nikita Segal</td>
+<td>Торпедо (Владимир)<br>Михаил Сирота</td>
+<td>Ахмат (Грозный)<br>Minotavr</td>
+<td>Nikolay Kuznetsov<br>Рубин (Казань)</td>
+<td>Дмитрий Кузьменко<br>Комета (Калуга)</td>
+</tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
+<tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;<b>БЕЛАРУСЬ</b></td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
+<tr><td>сезон</td><td width="19%">чемпион</td><td width="19%">серебряный призер</td><td width="19%">бронзовый призер</td><td width="19%">золотая бутса</td><td width="19%">обладатель кубка</td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
 <tr>
 <td>1998-1999</td>
 <td>Гомель<br>Valery Prikhodko</td>
@@ -490,7 +564,57 @@
 <td>Витя Барановский<br>ФК Гомель</td>
 <td>Городея<br>Яўген Пудзееў</td>
 </tr>
-<tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;Англия</td></tr>
+<tr>
+<td>2019-2020</td>
+<td>Шахтёр (Солигорск)<br>Вячеслав Ковалевский</td>
+<td>Динамо (Минск)<br>Gleb Arsatov</td>
+<td>Луч (Минск)<br>Vladislav Yezhergin</td>
+<td>Витя Барановский<br>ФК Гомель</td>
+<td>ФК Гомель<br>Витя Барановский</td>
+</tr>
+<tr>
+<td>2020-2021</td>
+<td>Рух (Брест)<br>Vano Opulsky</td>
+<td>Славия (Мозырь)<br>Alex Baranovsky</td>
+<td>ФК Гомель<br>Витя Барановский</td>
+<td>Витя Барановский<br>ФК Гомель</td>
+<td>Ведрич-97 (Речица)<br>Vitaliy Tihankov</td>
+</tr>
+<tr>
+<td>2021-2023</td>
+<td>Торпедо-БелАЗ<br>azarte</td>
+<td>Славия (Мозырь)<br>Alex Baranovsky</td>
+<td>Динамо (Минск)<br>Gleb Arsatov</td>
+<td>Gleb Arsatov<br>Динамо (Минск)</td>
+<td>Ислочь<br>Михаил Сирота</td>
+</tr>
+<tr>
+<td>2023-2024</td>
+<td>Луч (Минск)<br>Vladislav Yezhergin</td>
+<td>Славия (Мозырь)<br>Alex Baranovsky</td>
+<td>ФК Гомель<br>ВитЬя Барановский</td>
+<td>Vladislav Yezhergin<br>Луч (Минск)</td>
+<td>БАТЭ (Борисов)<br>Aleks Aniskevich</td>
+</tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
+<tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;<b>ДИНОЗАВРЫ</b></td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
+<tr><td>сезон</td><td width="19%">чемпион</td><td width="19%">серебряный призер</td><td width="19%">бронзовый призер</td><td width="19%">золотая бутса</td><td width="19%">обладатель кубка</td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
+<tr>
+<td>2023-2024</td>
+<td>Benfica<br>Lesha Nilov</td>
+<td>ФК Гомель<br>ВитЬя Барановский</td>
+<td>VfL Wolfsburg<br>Vladislav Yezhergin</td>
+<td>Vladislav Yezhergin<br>VfL Wolfsburg</td>
+<td>Торпедо (Москва)<br>Artem Sakerin</td>
+</tr>
+
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
+<tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;<b>АНГЛИЯ</b></td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
+<tr><td>сезон</td><td width="19%">чемпион</td><td width="19%">серебряный призер</td><td width="19%">бронзовый призер</td><td width="19%">золотая бутса</td><td width="19%">обладатель кубка</td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
 <tr>
 <td>1998-1999</td>
 <td>Arsenal<br>Victor M.Boikov</td>
@@ -655,7 +779,43 @@
 <td>Витя Барановский<br>Newcastle United</td>
 <td>Leicester City<br>Igor Safontsev</td>
 </tr>
-<tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;Германия</td></tr>
+<tr>
+<td>2019-2020</td>
+<td>Everton<br>Nick Gahovich</td>
+<td>Leicester City<br>Igor Safontsev</td>
+<td>Derby County<br>Serge Shibaev</td>
+<td>Nikita Segal<br>Wolverhampton</td>
+<td>Manchester City<br>Alex Rexyard</td>
+</tr>
+<tr>
+<td>2020-2021</td>
+<td>West Bromwich Albion<br>Andrey Donec</td>
+<td>Brentford<br>Gleb Arsatov</td>
+<td>West Ham United<br>Lesha Nilov</td>
+<td>Oleg Mereuts<br>Sheffield Wednesday</td>
+<td>Sheffield Wednesday<br>Oleg Mereuts</td>
+</tr>
+<tr>
+<td>2021-2023</td>
+<td>Manchester City<br>Alex Rexyard</td>
+<td>Sheffield Wednesday<br>Oleg Mereuts</td>
+<td>Newcastle United<br>Витя Барановский</td>
+<td>Serge Shibaev<br>Derby County</td>
+<td>Wolverhampton<br>Nikita Segal</td>
+</tr>
+<tr>
+<td>2023-2024</td>
+<td>Sheffield Wednesday<br>Minotavr</td>
+<td>Newcastle United<br>Витя Барановский</td>
+<td>Liverpool<br>Aleks Aniskevich</td>
+<td>Sheffield Wednesday<br>Minotavr</td>
+<td>West Bromwich Albion<br>Andrey Donec</td>
+</tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
+<tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;<b>ГЕРМАНИЯ</b></td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
+<tr><td>сезон</td><td width="19%">чемпион</td><td width="19%">серебряный призер</td><td width="19%">бронзовый призер</td><td width="19%">золотая бутса</td><td width="19%">обладатель кубка</td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
 <tr>
 <td>1998-1999</td>
 <td>Вердер<br>Pavel Khotushin</td>
@@ -807,108 +967,43 @@
 <td>Nikita Segal<br>1860 München</td>
 <td>Nürnberg<br>Krasnikov Maxim</td>
 </tr>
-<tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;Голландия</td></tr>
 <tr>
-<td>1998-1999</td>
-<td>Рода<br>Anton Afonin</td>
-<td>HEK Hеймеген<br>Max Osipyuk</td>
-<td>Аякс<br>Eugeny Gladyr</td>
-<td>Serge Boubna<br>Виллем II</td>
-<td>Твенте<br>Alex Zolotov</td>
+<td>2019-2020</td>
+<td>Stuttgart<br>Gleb Arsatov</td>
+<td>Borussia Dortmund<br>Kirill Goloschekov</td>
+<td>Bayern<br>Vano Opulsky</td>
+<td>Gleb Arsatov<br>Stuttgart</td>
+<td>Holstein Kiel<br>Лес-ник</td>
 </tr>
 <tr>
-<td>1999-2000</td>
-<td>Утрехт<br>Serge Vasiliev</td>
-<td>Аякс<br>Eugeny Gladyr</td>
-<td>Хелмонд<br>Alex Saveliev</td>
-<td>Alex Zolotov<br>Твенте</td>
-<td>Рода<br>Anton Afonin</td>
+<td>2020-2021</td>
+<td>Wolfsburg<br>Vladislav Yezhergin</td>
+<td>Kaiserslautern<br>Alex Rexyard</td>
+<td>Augsburg<br>Андрей Новиков</td>
+<td>Oleg Mereuts<br>FSV Zwickau</td>
+<td>Augsburg<br>Андрей Новиков</td>
 </tr>
 <tr>
-<td>2000-2001</td>
-<td>Твенте<br>Alex Zolotov</td>
-<td>Утрехт<br>Serge Vasiliev</td>
-<td>Хелмонд<br>Alex Saveliev</td>
-<td>Vano Opulsky<br>Херенвен</td>
-<td>Волендам<br>Eugene Mironov</td>
+<td>2021-2023</td>
+<td>Wolfsburg<br>Vladislav Yezhergin</td>
+<td>Greuther Fürth<br>Serge Shibaev</td>
+<td>Borussia Monchengladbach<br>Andrei Burikov</td>
+<td>Михаил Сирота<br>FC St. Pauli</td>
+<td>1860 München<br>Nikita Segal</td>
 </tr>
 <tr>
-<td>2001-2002</td>
-<td>Фейеноорд<br>Konstantin Lounkov</td>
-<td>Утрехт<br>Serge Vasiliev</td>
-<td>Хаарлем<br>Mikhail Toporkov</td>
-<td>Alex Saveliev<br>Хелмонд</td>
-<td>Хаарлем<br>Mikhail Toporkov</td>
+<td>2023-2024</td>
+<td>FC Bayern München<br>Vano Opulsky</td>
+<td>VfL Wolfsburg<br>Vladislav Yezhergin</td>
+<td>FSV Zwickau<br>Minotavr</td>
+<td>Дмитрий К<br>Kieler SV Holstein</td>
+<td>FC Schalke 04<br>Андрей Вышинский</td>
 </tr>
-<tr>
-<td>2002-2003</td>
-<td>Бреда<br>Ivan Rodenkov</td>
-<td>Ваалвейк<br>Nikolay Goltsev</td>
-<td>ПСВ<br>Pavel Khotushin</td>
-<td>Vano Opulsky<br>Херенвен</td>
-<td>Бреда<br>Ivan Rodenkov</td>
-</tr>
-<tr>
-<td>2003-2004</td>
-<td>Эйндховен<br>Maxim Zhegachev</td>
-<td>Маастрихт<br>Alexey Plotitsa</td>
-<td>ПСВ<br>Pavel Khotushin</td>
-<td>Eugene Mironov<br>Виллем II</td>
-<td>турнир не доигран</td>
-</tr>
-<tr>
-<td>2004-2013</td>
-<td colspan="5" align="center">турниры не проводились</td>
-</tr>
-<tr>
-<td>2013-2014</td>
-<td>FC Eindhoven<br>Kirill Goloschekov</td>
-<td>Twente<br>Andrey Tolstykh</td>
-<td>PSV Eindhoven<br>Alexey Udodov</td>
-<td>Lesha Nilov<br>AZ Alkmaar</td>
-<td>FC Eindhoven<br>Kirill Goloschekov</td>
-</tr>
-<tr>
-<td>2014-2015</td>
-<td>Ajax<br>Artem Sakerin</td>
-<td>NAC Breda<br>Maxim Kuznetsov</td>
-<td>FC Eindhoven<br>Kirill Goloschekov</td>
-<td>Artem Sakerin<br>Ajax</td>
-<td>FC Eindhoven<br>Kirill Goloschekov</td>
-</tr>
-<tr>
-<td>2015-2016</td>
-<td>Cambuur<br>Eugeny Pudeev</td>
-<td>De Graafschap<br>Vitya Baranovsky</td>
-<td>FC Eindhoven<br>Kirill Goloschekov</td>
-<td>Eugeny Pudeev<br>Cambuur</td>
-<td>PEC Zwolle<br>Dmitry Pogorelov</td>
-</tr>
-<tr>
-<td>2016-2017</td>
-<td>NAC Breda<br>Maxim Kuznetsov</td>
-<td>FC Eindhoven<br>Kirill Goloschekov</td>
-<td>AZ Alkmaar<br>Lesha Nilov</td>
-<td>Vladislav Yezhergin<br>ADO Den Haag</td>
-<td>Heerenveen<br>Oleg Krupich</td>
-</tr>
-<tr>
-<td>2017-2018</td>
-<td>FC Eindhoven<br>Kirill Goloschekov</td>
-<td>FC Utrecht<br>Serge Vasiliev</td>
-<td>AZ Alkmaar<br>Lesha Nilov</td>
-<td>Vladislav Yezhergin<br>ADO Den Haag</td>
-<td>AZ Alkmaar<br>Lesha Nilov</td>
-</tr>
-<tr>
-<td>2018-2019</td>
-<td>Roda JC<br>Serge Shibaev</td>
-<td>FC Eindhoven<br>Kirill Goloschekov</td>
-<td>SC Telstar<br>Михаил Сирота</td>
-<td>Витя Барановский<br>De Graafschap</td>
-<td>SC Telstar<br>Михаил Сирота</td>
-</tr>
-<tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;Испания</td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
+<tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;<b>ИСПАНИЯ</b></td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
+<tr><td>сезон</td><td width="19%">чемпион</td><td width="19%">серебряный призер</td><td width="19%">бронзовый призер</td><td width="19%">золотая бутса</td><td width="19%">обладатель кубка</td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
 <tr>
 <td>1998-1999</td>
 <td>Реал Сосьедад<br>Denis Panov</td>
@@ -1073,7 +1168,43 @@
 <td>Вячеслав Ковалевский<br>Real Betis</td>
 <td>Granada<br>Igor Safontsev</td>
 </tr>
-<tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;Италия</td></tr>
+<tr>
+<td>2019-2020</td>
+<td>Zaragoza<br>Vladislav Yezhergin</td>
+<td>Real Betis<br>Вячеслав Ковалевский</td>
+<td>Malaga<br>ВитЬя Барановский</td>
+<td>Кирилл Голощёков<br>Deportivo La Coruna</td>
+<td>Getafe CF<br>Alexander Donec</td>
+</tr>
+<tr>
+<td>2020-2021</td>
+<td>Malaga<br>ВитЬя Барановский</td>
+<td>Getafe CF<br>Alexander Donec</td>
+<td>RCD Espanyol<br>Nick Gahovich</td>
+<td>Андрей Новиков<br>Racing Santander</td>
+<td>Zaragoza<br>Vladislav Yezhergin</td>
+</tr>
+<tr>
+<td>2021-2023</td>
+<td>Villarreal<br>Serge Shibaev</td>
+<td>Zaragoza<br>Vladislav Yezhergin</td>
+<td>Real Betis<br>Вячеслав Ковалевский</td>
+<td>Oleg Mereuts<br>UD Melilla</td>
+<td>Real Sociedad<br>Vano Opulsky</td>
+</tr>
+<tr>
+<td>2023-2024</td>
+<td>Getafe CF<br>Alexander Donec</td>
+<td>RCD Espanyol<br>Nick Gahovich</td>
+<td>UD Melilla<br>Minotavr</td>
+<td>Aleks Aniskevich<br>Almería</td>
+<td>Almería<br>Aleks Aniskevich</td>
+</tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
+<tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;<b>ИТАЛИЯ</b></td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
+<tr><td>сезон</td><td width="19%">чемпион</td><td width="19%">серебряный призер</td><td width="19%">бронзовый призер</td><td width="19%">золотая бутса</td><td width="19%">обладатель кубка</td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
 <tr>
 <td>1998-1999</td>
 <td>Фоджа<br>Sergey Myshelovka</td>
@@ -1226,7 +1357,180 @@
 <td>Alex Rexyard<br>SSC Napoli</td>
 <td>Catania<br>Михаил Сирота</td>
 </tr>
-<tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;Португалия</td></tr>
+<tr>
+<td>2019-2020</td>
+<td>Verona<br>Vano Opulsky</td>
+<td>SSC Napoli<br>Alex Rexyard</td>
+<td>Catania<br>Михаил Сирота</td>
+<td>Михаил Сирота<br>Catania</td>
+<td>SPAL<br>Andrey Razarenov</td>
+</tr>
+<tr>
+<td>2020-2021</td>
+<td>Lecce<br>Oleg Mereuts</td>
+<td>Udinese<br>Serge Shibaev</td>
+<td>Juve Stabia<br>Edward Polovoy</td>
+<td>Oleg Mereuts<br>Lecce</td>
+<td>AS Roma<br>Vladislav Yezhergin</td>
+</tr>
+<tr>
+<td>2021-2023</td>
+<td>Cesena<br>Vitaliy Tihankov</td>
+<td>Udinese<br>Serge Shibaev</td>
+<td>Bari 1908<br>Александр Сесса</td>
+<td>Serge Shibaev<br>Udinese</td>
+<td>AS Roma<br>Vladislav Yezhergin</td>
+</tr>
+<tr>
+<td>2023-2024</td>
+<td>UC Sampdoria<br>Кирилл Голощёков</td>
+<td>SSC Napoli<br>Alex Rexyard</td>
+<td>Cesena<br>Дмитрий К</td>
+<td>Дмитрий К<br>Cesena</td>
+<td>Juve Stabia<br>Edward Polovoy</td>
+</tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
+<tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;<b>НИДЕРЛАНДЫ<b></td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
+<tr><td>сезон</td><td width="19%">чемпион</td><td width="19%">серебряный призер</td><td width="19%">бронзовый призер</td><td width="19%">золотая бутса</td><td width="19%">обладатель кубка</td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
+<tr>
+<td>1998-1999</td>
+<td>Рода<br>Anton Afonin</td>
+<td>HEK Hеймеген<br>Max Osipyuk</td>
+<td>Аякс<br>Eugeny Gladyr</td>
+<td>Serge Boubna<br>Виллем II</td>
+<td>Твенте<br>Alex Zolotov</td>
+</tr>
+<tr>
+<td>1999-2000</td>
+<td>Утрехт<br>Serge Vasiliev</td>
+<td>Аякс<br>Eugeny Gladyr</td>
+<td>Хелмонд<br>Alex Saveliev</td>
+<td>Alex Zolotov<br>Твенте</td>
+<td>Рода<br>Anton Afonin</td>
+</tr>
+<tr>
+<td>2000-2001</td>
+<td>Твенте<br>Alex Zolotov</td>
+<td>Утрехт<br>Serge Vasiliev</td>
+<td>Хелмонд<br>Alex Saveliev</td>
+<td>Vano Opulsky<br>Херенвен</td>
+<td>Волендам<br>Eugene Mironov</td>
+</tr>
+<tr>
+<td>2001-2002</td>
+<td>Фейеноорд<br>Konstantin Lounkov</td>
+<td>Утрехт<br>Serge Vasiliev</td>
+<td>Хаарлем<br>Mikhail Toporkov</td>
+<td>Alex Saveliev<br>Хелмонд</td>
+<td>Хаарлем<br>Mikhail Toporkov</td>
+</tr>
+<tr>
+<td>2002-2003</td>
+<td>Бреда<br>Ivan Rodenkov</td>
+<td>Ваалвейк<br>Nikolay Goltsev</td>
+<td>ПСВ<br>Pavel Khotushin</td>
+<td>Vano Opulsky<br>Херенвен</td>
+<td>Бреда<br>Ivan Rodenkov</td>
+</tr>
+<tr>
+<td>2003-2004</td>
+<td>Эйндховен<br>Maxim Zhegachev</td>
+<td>Маастрихт<br>Alexey Plotitsa</td>
+<td>ПСВ<br>Pavel Khotushin</td>
+<td>Eugene Mironov<br>Виллем II</td>
+<td>турнир не доигран</td>
+</tr>
+<tr>
+<td>2004-2013</td>
+<td colspan="5" align="center">турниры не проводились</td>
+</tr>
+<tr>
+<td>2013-2014</td>
+<td>FC Eindhoven<br>Kirill Goloschekov</td>
+<td>Twente<br>Andrey Tolstykh</td>
+<td>PSV Eindhoven<br>Alexey Udodov</td>
+<td>Lesha Nilov<br>AZ Alkmaar</td>
+<td>FC Eindhoven<br>Kirill Goloschekov</td>
+</tr>
+<tr>
+<td>2014-2015</td>
+<td>Ajax<br>Artem Sakerin</td>
+<td>NAC Breda<br>Maxim Kuznetsov</td>
+<td>FC Eindhoven<br>Kirill Goloschekov</td>
+<td>Artem Sakerin<br>Ajax</td>
+<td>FC Eindhoven<br>Kirill Goloschekov</td>
+</tr>
+<tr>
+<td>2015-2016</td>
+<td>Cambuur<br>Eugeny Pudeev</td>
+<td>De Graafschap<br>Vitya Baranovsky</td>
+<td>FC Eindhoven<br>Kirill Goloschekov</td>
+<td>Eugeny Pudeev<br>Cambuur</td>
+<td>PEC Zwolle<br>Dmitry Pogorelov</td>
+</tr>
+<tr>
+<td>2016-2017</td>
+<td>NAC Breda<br>Maxim Kuznetsov</td>
+<td>FC Eindhoven<br>Kirill Goloschekov</td>
+<td>AZ Alkmaar<br>Lesha Nilov</td>
+<td>Vladislav Yezhergin<br>ADO Den Haag</td>
+<td>Heerenveen<br>Oleg Krupich</td>
+</tr>
+<tr>
+<td>2017-2018</td>
+<td>FC Eindhoven<br>Kirill Goloschekov</td>
+<td>FC Utrecht<br>Serge Vasiliev</td>
+<td>AZ Alkmaar<br>Lesha Nilov</td>
+<td>Vladislav Yezhergin<br>ADO Den Haag</td>
+<td>AZ Alkmaar<br>Lesha Nilov</td>
+</tr>
+<tr>
+<td>2018-2019</td>
+<td>Roda JC<br>Serge Shibaev</td>
+<td>FC Eindhoven<br>Kirill Goloschekov</td>
+<td>SC Telstar<br>Михаил Сирота</td>
+<td>Витя Барановский<br>De Graafschap</td>
+<td>SC Telstar<br>Михаил Сирота</td>
+</tr>
+<tr>
+<td>2019-2020</td>
+<td>De Graafschap<br>Витя Барановский</td>
+<td>VVV Venlo<br>Vano Opulsky</td>
+<td>PEC Zwolle<br>Dmitry Pogorelov</td>
+<td>Витя Барановский<br>De Graafschap</td>
+<td>Feyenoord<br>AlexTar77</td>
+</tr>
+<tr>
+<td>2020-2021</td>
+<td>VVV Venlo<br>Vano Opulsky</td>
+<td>De Graafschap<br>Витя Барановский</td>
+<td>NAC Breda<br>Максим Кузнецов</td>
+<td>Vladislav Yezhergin<br>ADO Den Haag</td>
+<td>ADO Den Haag<br>Vladislav Yezhergin</td>
+</tr>
+<tr>
+<td>2021-2023</td>
+<td>SC Telstar<br>Михаил Сирота</td>
+<td>AZ Alkmaar<br>Lesha Nilov</td>
+<td>VVV Venlo<br>Vano Opulsky</td>
+<td>Lesha Nilov<br>AZ Alkmaar</td>
+<td>PEC Zwolle<br>Dmitry Pogorelov</td>
+</tr>
+<tr>
+<td>2023-2024</td>
+<td>De Graafschap<br>ВитЬя Барановский</td>
+<td>ADO Den Haag<br>Vladislav Yezhergin</td>
+<td>Feyenoord<br>Serge Shibaev</td>
+<td>Vladislav Yezhergin<br>ADO Den Haag</td>
+<td>Sparta<br>Minotavr</td>
+</tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
+<tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;<b>ПОРТУГАЛИЯ</b></td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
+<tr><td>сезон</td><td width="19%">чемпион</td><td width="19%">серебряный призер</td><td width="19%">бронзовый призер</td><td width="19%">золотая бутса</td><td width="19%">обладатель кубка</td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
 <tr>
 <td>1998-1999</td>
 <td>Maritimo<br>Evgene Evlanov</td>
@@ -1347,48 +1651,43 @@
 <td>Lesha Nilov<br>Benfica</td>
 <td>Academica Coimbra<br>Alex Tarasov</td>
 </tr>
-<tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;Турция</td></tr>
 <tr>
-<td>1998-1999</td>
-<td>Анкаpагюджю<br>Vlad Dragalchuk</td>
-<td>Аданаспоp<br>Sergey Orlov</td>
-<td>Тpабзонспоp<br>Nikolay Chirkin</td>
-<td>Nikolay Chirkin<br>Тpабзонспоp</td>
-<td>Фенеpбахче<br>Serg Shashel'</td>
+<td>2019-2020</td>
+<td>Sporting Lisboa<br>Кирилл Голощёков</td>
+<td>Belenenses<br>Vano Opulsky</td>
+<td>Sporting Covilha<br>Inna Goloschekova</td>
+<td>Vano Opulsky<br>Belenenses</td>
+<td>Academica Coimbra<br>Alex Tarasov</td>
 </tr>
 <tr>
-<td>1999-2000</td>
-<td>Секерспор<br>Leonid Sementsov</td>
-<td>Ванспор<br>Stanislav Boyev</td>
-<td>Тpабзонспоp<br>Nikolay Chirkin</td>
-<td>Serg Shashel'<br>Фенеpбахче</td>
-<td>Галатасаpай<br>Michael Plakunov</td>
+<td>2020-2021</td>
+<td>Chaves<br>Vladislav Yezhergin</td>
+<td>Sporting Braga<br>Михаил Сирота</td>
+<td>Belenenses<br>Vano Opulsky</td>
+<td>Vladislav Yezhergin<br>Chaves</td>
+<td>Academica Coimbra<br>Alex Tarasov</td>
 </tr>
 <tr>
-<td>2000-2001</td>
-<td>Бешикташ<br>Andrey Grigoriev</td>
-<td>Фенеpбахче<br>Serg Shashel'</td>
-<td>Анталияспор<br>Anatoliy Bakalets</td>
-<td>Michael Plakunov<br>Галатасаpай</td>
-<td>Галатасаpай<br>Michael Plakunov</td>
+<td>2021-2023</td>
+<td>Sporting Braga<br>Михаил Сирота</td>
+<td>Benfica<br>Lesha Nilov</td>
+<td>Santa Clara<br>Алекс-ГОЛ</td>
+<td>Михаил Сирота<br>Sporting Braga</td>
+<td>Chaves<br>Vladislav Yezhergin</td>
 </tr>
 <tr>
-<td>2001-2002</td>
-<td>Аданаспоp<br>Sergey Orlov</td>
-<td>Газиантеспоp<br>Alexey Plotitsa</td>
-<td>Анталияспор<br>Anatoliy Bakalets</td>
-<td>Alexey Plotitsa<br>Газиантеспоp</td>
-<td>Карсияка<br>Dmitry Pogorelov</td>
+<td>2023-2024</td>
+<td>Arouca<br>Gleb Arsatov</td>
+<td>Sporting Clube de Portugal<br>Кирилл Голощёков</td>
+<td>Academica<br>AlexTar77</td>
+<td>Vano Opulsky<br>Belenenses</td>
+<td>Santa Clara<br>Алекс-ГОЛ</td>
 </tr>
-<tr>
-<td>2002-2003</td>
-<td>Секерспор<br>Leonid Sementsov</td>
-<td>Кайсериспор<br>Alexey Mukhin</td>
-<td>Галатасаpай<br>Michael Plakunov</td>
-<td>Leonid Sementsov<br>Секерспор</td>
-<td>Сариерспор<br>Sergey Goltsev</td>
-</tr>
-<tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;Франция</td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
+<tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;<b>ФРАНЦИЯ</b></td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
+<tr><td>сезон</td><td width="19%">чемпион</td><td width="19%">серебряный призер</td><td width="19%">бронзовый призер</td><td width="19%">золотая бутса</td><td width="19%">обладатель кубка</td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
 <tr>
 <td>1998-1999</td>
 <td>Сошо<br>Edward Polovoy</td>
@@ -1537,7 +1836,216 @@
 <td>Alex Rexyard<br>Laval</td>
 <td>Lille<br>Константин Сметанин</td>
 </tr>
-<tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;Шотландия</td></tr>
+<tr>
+<td>2019-2020</td>
+<td>Marseille<br>Nikita Segal</td>
+<td>Montpellier<br>Шкирин Валерий</td>
+<td>FC Lorient<br>Semion Vasserman</td>
+<td>Шкирин Валерий<br>Montpellier</td>
+<td>Marseille<br>Nikita Segal</td>
+</tr>
+<tr>
+<td>2020-2021</td>
+<td>Laval<br>Alex Rexyard</td>
+<td>FC Lorient<br>Oleg Mereuts</td>
+<td>Stade Malherbe Caen<br>Сергей Афанасьев</td>
+<td>Vano Opulsky<br>Monaco</td>
+<td>Cannes<br>Андрей Вышинский</td>
+</tr>
+<tr>
+<td>2021-2023</td>
+<td>Marseille<br>Nikita Segal</td>
+<td>Toulouse<br>Вячеслав Ковалевский</td>
+<td>Dijon FCO<br>Serge Shibaev</td>
+<td>Alex Rexyard<br>Laval</td>
+<td>FC Lorient<br>Oleg Mereuts</td>
+</tr>
+<tr>
+<td>2023-2024</td>
+<td>Marseille<br>Nikita Segal</td>
+<td>AS Monaco FC<br>Vano Opulsky</td>
+<td>Toulouse FC<br>Дмитрий К</td>
+<td>Minotavr<br>FC Lorient</td>
+<td>Dijon FCO<br>Serge Shibaev</td>
+</tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
+<tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;<b>ШВЕЙЦАРИЯ</b></td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
+<tr><td>сезон</td><td width="19%">чемпион</td><td width="19%">серебряный призер</td><td width="19%">бронзовый призер</td><td width="19%">золотая бутса</td><td width="19%">обладатель кубка</td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
+<tr>
+<td>2018-1</td>
+<td>FC Sion<br>Andrey Donec</td>
+<td>FC Schaffhausen<br>антон</td>
+<td>FC Sankt Gallen<br>Андрей Новиков</td>
+<td>антон<br>FC Schaffhausen</td>
+<td><br><font color="lightgrey">не проводился</font></td>
+</tr>
+<tr>
+<td>2018-2</td>
+<td>SC Kriens<br>Andrey Razarenov</td>
+<td>FC Sion<br>Andrey Donec</td>
+<td>Neuchâtel Xamax<br>Сергей Буркацкий</td>
+<td>Gleb Arsatov<br>FC Aarau</td>
+<td><br><font color="lightgrey">не проводился</font></td>
+</tr>
+<tr>
+<td>2019-1</td>
+<td>FC Chiasso<br>Vano Opulsky</td>
+<td>Grasshopper Club Zürich<br>Vladislav Yezhergin</td>
+<td>Neuchâtel Xamax<br>Сергей Буркацкий</td>
+<td>Алекс-ГОЛ<br>BSC Young Boys</td>
+<td><br><font color="lightgrey">не проводился</font></td>
+</tr>
+<tr>
+<td>2019-2</td>
+<td>FC Baden<br>Александр Сесса</td>
+<td>FC Sion II<br>Dmitry Redkin</td>
+<td>AC Bellinzona<br>Pricol84</td>
+<td>Александр Сесса<br>FC Baden</td>
+<td><br><font color="lightgrey">не проводился</font></td>
+</tr>
+<tr>
+<td>2019-3</td>
+<td>SC Kriens<br>Andrey Razarenov</td>
+<td>FC Luzern<br>Михаил Сирота</td>
+<td>BSC Young Boys<br>Алекс-ГОЛ</td>
+<td>Vano Opulsky<br>FC Basel 1893</td>
+<td><br><font color="lightgrey">не проводился</font></td>
+</tr>
+<tr>
+<td>2019-4</td>
+<td>AC Bellinzona<br>Pricol84</td>
+<td>FC Aarau<br>Gleb Arsatov</td>
+<td>SC Brühl St. Gallen<br>Микола Синиця</td>
+<td>Pricol84<br>AC Bellinzona</td>
+<td><br><font color="lightgrey">не проводился</font></td>
+</tr>
+<tr>
+<td>2020-1</td>
+<td>FC Braitenrain<br>Oleg Mereuts</td>
+<td>FC Köniz<br>Богдан Синиця</td>
+<td>FC Stade Nyonnais<br>ВитЬя Барановский</td>
+<td>Oleg Mereuts<br>FC Braitenrain</td>
+<td><br><font color="lightgrey">не проводился</font></td>
+</tr>
+<tr>
+<td>2020-2</td>
+<td>FC Wil 1900<br>Eugene (Joker) Plugin</td>
+<td>FC Lugano<br>Владимир</td>
+<td>FC Solothurn<br>Лес-ник</td>
+<td>Михаил Сирота<br>FC Luzern</td>
+<td><br><font color="lightgrey">не проводился</font></td>
+</tr>
+<tr>
+<td>2020-3</td>
+<td>FC Lugano<br>Владимир</td>
+<td>FC Basel II<br>Alexander Donec</td>
+<td>FC Echallens<br>Фаныч</td>
+<td>Vano Opulsky<br>FC Basel 1893</td>
+<td><br><font color="lightgrey">не проводился</font></td>
+</tr>
+<tr>
+<td>2021-1</td>
+<td>USV Eschen/Mauren<br>JUT</td>
+<td>Yverdon Sport FC<br>Ярославец</td>
+<td>FC Münsingen<br>сер18</td>
+<td>JUT<br>USV Eschen/Mauren</td>
+<td><br><font color="lightgrey">не проводился</font></td>
+</tr>
+<tr>
+<td>2021-2</td>
+<td>FC Stade Lausanne-Ouchy<br>Dmitry Kupesok</td>
+<td>FC Braitenrain<br>Oleg Mereuts</td>
+<td>Grasshopper Club Zürich<br>Vladislav Yezhergin</td>
+<td>Vano Opulsky<br>FC Basel 1893</td>
+<td><br><font color="lightgrey">не проводился</font></td>
+</tr>
+<tr>
+<td>2021-3</td>
+<td>USV Eschen/Mauren<br>JUT</td>
+<td>FC Basel II<br>Alexander Donec</td>
+<td>FC Linth 04<br>Viking-J</td>
+<td>Владимир<br>FC Lugano</td>
+<td>FC Bulle<br>Дмитрий Морозов</td>
+</tr>
+<tr>
+<td>2021-4</td>
+<td>FC Braitenrain<br>Oleg Mereuts</td>
+<td>Delémont<br>med1958med</td>
+<td>FC Aarau<br>Gleb Arsatov</td>
+<td>Pricol84<br>AC Bellinzona</td>
+<td>FC Wil 1900<br>Eugene (Joker) Plugin</td>
+</tr>
+<tr>
+<td>2022-1</td>
+<td>FC Braitenrain<br>Oleg Mereuts</td>
+<td>FC Zürich<br>Евгений Косарев</td>
+<td>FC Aarau<br>Gleb Arsatov</td>
+<td>Евгений Косарев<br>FC Zürich</td>
+<td>AC Bellinzona<br>Pricol84</td>
+</tr>
+<tr>
+<td>2022-2</td>
+<td>FC Schaffhausen<br>антон</td>
+<td>USV Eschen/Mauren<br>JUT</td>
+<td>FC Vaduz<br>Михаил Сирота</td>
+<td>Микола Синиця<br>SC Brühl St. Gallen</td>
+<td>AC Bellinzona<br>Pricol84</td>
+</tr>
+<tr>
+<td>2023-1</td>
+<td>FC Aarau<br>Gleb Arsatov</td>
+<td>FC Lugano<br>Владимир</td>
+<td>AC Bellinzona<br>Pricol84</td>
+<td>Евгений Косарев<br>FC Zürich</td>
+<td>FC Vaduz<br>Михаил Сирота</td>
+</tr>
+<tr>
+<td>2023-2</td>
+<td>FC Braitenrain<br>Oleg Mereuts</td>
+<td>SC Cham<br>Дмитрий К</td>
+<td>FC Gossau<br>Zenitpobedit</td>
+<td>Oleg Mereuts<br>FC Braitenrain</td>
+<td>FC Braitenrain<br>Oleg Mereuts</td>
+</tr>
+<tr>
+<td>2023-3</td>
+<td>FC Schaffhausen<br>антон</td>
+<td>SC Brühl St. Gallen<br>Микола Синиця</td>
+<td>FC Lugano<br>Владимир</td>
+<td>сер18<br>FC Münsingen</td>
+<td>SC Cham<br>Дмитрий К</td>
+</tr>
+<tr>
+<td>2023-4</td>
+<td>FC Braitenrain<br>Oleg Mereuts</td>
+<td>FC Basel 1893<br>Vano Opulsky</td>
+<td>SC Cham<br>Дмитрий К</td>
+<td>Дмитрий К<br>SC Cham</td>
+<td>FC Red Star Zürich<br>azarte</td>
+</tr>
+<tr>
+<td>2024-1</td>
+<td>FC Sankt Gallen 1879<br>Tykhon Kupesok</td>
+<td>FC Luzern<br>Шкирин Валерий</td>
+<td>FC Lugano<br>Владимир</td>
+<td>Покемон<br>FC Münsingen</td>
+<td>FC Braitenrain<br>Minotavr</td>
+</tr>
+<tr>
+<td>2024-2</td>
+<td>FC Basel 1893<br>Vano Opulsky</td>
+<td>FC Luzern<br>Шкирин Валерий</td>
+<td>FC Red Star Zürich<br>azarte</td>
+<td>Vano Opulsky<br>FC Basel 1893</td>
+<td>USV Eschen/Mauren<br>JUT</td>
+</tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
+<tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;<b>ШОТЛАНДИЯ</b></td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
+<tr><td>сезон</td><td width="19%">чемпион</td><td width="19%">серебряный призер</td><td width="19%">бронзовый призер</td><td width="19%">золотая бутса</td><td width="19%">обладатель кубка</td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
 <tr>
 <td>1998-1999</td>
 <td>Хиберниан<br>Artem Subaev</td>
@@ -1706,7 +2214,46 @@
 <td>Александр Сесса<br>Hibernian</td>
 <td>Aberdeen<br>Вячеслав Ковалевский</td>
 </tr>
-<tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;Австрия</td></tr>
+<tr>
+<td>2019-2020</td>
+<td>Stranraer<br>Andrey Vityuk</td>
+<td>Partick Thistle<br>Vano Opulsky</td>
+<td>Inverness<br>Serge Shibaev</td>
+<td>ВитЬя Барановский<br>Dundee United</td>
+<td>Ross County<br>Pricol84</td>
+</tr>
+<tr>
+<td>2020-2021</td>
+<td>Kilmarnok<br>Vladislav Yezhergin</td>
+<td>Ayr United<br>Gleb Arsatov</td>
+<td>Falkirk<br>Andrey Vedeneev</td>
+<td>Vladislav Yezhergin<br>Kilmarnok</td>
+<td>Stranraer<br>Andrey Vityuk</td>
+</tr>
+<tr>
+<td>2021-2023</td>
+<td>Hearts<br>Михаил Сирота</td>
+<td>Kilmarnok<br>Vladislav Yezhergin</td>
+<td>Partick Thistle<br>Vano Opulsky</td>
+<td>ВитЬя Барановский<br>Dundee United</td>
+<td>Dundee United<br>ВитЬя Барановский</td>
+</tr>
+<tr>
+<td>2023-2024</td>
+<td>Falkirk<br>Дмитрий К</td>
+<td>Inverness<br>Serge Shibaev</td>
+<td>Kilmarnock<br>Vladislav Yezhergin</td>
+<td>Gleb Arsatov<br>Ayr United</td>
+<td>Rangers<br>Eugene (Joker) Plugin</td>
+</tr>
+
+
+
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
+<tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;<b>АВСТРИЯ (чемпионат приостановлен)</b></td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
+<tr><td>сезон</td><td width="19%">чемпион</td><td width="19%">серебряный призер</td><td width="19%">бронзовый призер</td><td width="19%">золотая бутса</td><td width="19%">обладатель кубка</td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
 <tr>
 <td>1999-2000</td>
 <td>Рапид (Вена)<br>Vano Opulsky</td>
@@ -1767,7 +2314,11 @@
 <td>Alex Rexyard<br>Адмира Ваккер</td>
 <td>Адмира Ваккер<br>Alex Rexyard</td>
 </tr>
-<tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;Бельгия</td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
+<tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;<b>БЕЛЬГИЯ (чемпионат приостановлен)</b></td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
+<tr><td>сезон</td><td width="19%">чемпион</td><td width="19%">серебряный призер</td><td width="19%">бронзовый призер</td><td width="19%">золотая бутса</td><td width="19%">обладатель кубка</td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
 <tr>
 <td>1999-2000</td>
 <td>Беверен<br>Nikita Segal</td>
@@ -1832,7 +2383,11 @@
 <td>Eugene Plugin<br>Брюгге</td>
 <td>Монс<br>Serge Shibaev</td>
 </tr>
-<tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;Греция</td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
+<tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;<b>ГРЕЦИЯ (чемпионат приостановлен)</b></td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
+<tr><td>сезон</td><td width="19%">чемпион</td><td width="19%">серебряный призер</td><td width="19%">бронзовый призер</td><td width="19%">золотая бутса</td><td width="19%">обладатель кубка</td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
 <tr>
 <td>1999-2000</td>
 <td>Олимпиакос<br>Vano Opulsky</td>
@@ -1865,23 +2420,72 @@
 <td>Ian Milash<br>ОФИ</td>
 <td>Олимпиакос<br>Vano Opulsky</td>
 </tr>
-<tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;Еврокубки</td></tr>
-</table>
-<table width="916">
-<tr><th>сезон</th><th width="24%">Лига Чемпионов</th><th width="24%">Золотая Лига</th><th width="24%">Кубковая Лига</th><th width="24%">Лига Европы (УЕФА)</th></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
+<tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;<b>ТУРЦИЯ (чемпионат приостановлен)<b></td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
+<tr><td>сезон</td><td width="19%">чемпион</td><td width="19%">серебряный призер</td><td width="19%">бронзовый призер</td><td width="19%">золотая бутса</td><td width="19%">обладатель кубка</td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
+<tr>
+<td>1998-1999</td>
+<td>Анкаpагюджю<br>Vlad Dragalchuk</td>
+<td>Аданаспоp<br>Sergey Orlov</td>
+<td>Тpабзонспоp<br>Nikolay Chirkin</td>
+<td>Nikolay Chirkin<br>Тpабзонспоp</td>
+<td>Фенеpбахче<br>Serg Shashel'</td>
+</tr>
+<tr>
+<td>1999-2000</td>
+<td>Секерспор<br>Leonid Sementsov</td>
+<td>Ванспор<br>Stanislav Boyev</td>
+<td>Тpабзонспоp<br>Nikolay Chirkin</td>
+<td>Serg Shashel'<br>Фенеpбахче</td>
+<td>Галатасаpай<br>Michael Plakunov</td>
+</tr>
+<tr>
+<td>2000-2001</td>
+<td>Бешикташ<br>Andrey Grigoriev</td>
+<td>Фенеpбахче<br>Serg Shashel'</td>
+<td>Анталияспор<br>Anatoliy Bakalets</td>
+<td>Michael Plakunov<br>Галатасаpай</td>
+<td>Галатасаpай<br>Michael Plakunov</td>
+</tr>
+<tr>
+<td>2001-2002</td>
+<td>Аданаспоp<br>Sergey Orlov</td>
+<td>Газиантеспоp<br>Alexey Plotitsa</td>
+<td>Анталияспор<br>Anatoliy Bakalets</td>
+<td>Alexey Plotitsa<br>Газиантеспоp</td>
+<td>Карсияка<br>Dmitry Pogorelov</td>
+</tr>
+<tr>
+<td>2002-2003</td>
+<td>Секерспор<br>Leonid Sementsov</td>
+<td>Кайсериспор<br>Alexey Mukhin</td>
+<td>Галатасаpай<br>Michael Plakunov</td>
+<td>Leonid Sementsov<br>Секерспор</td>
+<td>Сариерспор<br>Sergey Goltsev</td>
+</tr>
+<tr><td colspan="6" align="center">&nbsp;</td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
+<tr><td colspan="6" align="center" class="title text15b">&nbsp;&nbsp;&nbsp;<b>ЕВРОКУБКИ</b></td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
+<tr><td>сезон</td><td width="19%">Лига Чемпионов</td><td width="19%">Золотая Лига</td><td width="19%">Кубковая Лига</td><td width="19%">Лига Европы (УЕФА)</td><td width="19%">Лига Конференций</td></tr>
+<tr><td colspan="6"><hr size="1" width="100%"/></td></tr>
 <tr>
 <td>1998-1999</td>
 <td>ФК "Черкассы"<br>Украина<br>Vladimir Ivanov</td>
 <td>Днепр<br>Украина<br>Eugeny Gladyr</td>
 <td>Десна (Чернигов)<br>Украина<br>Anatoly Kopitsa</td>
 <td>Металлург (Мариуполь)<br>Украина<br>Pavel Khotushin</td>
+<td><font color="lightgrey">не проводился</font></td>
 </tr>
 <tr>
 <td>1999-2000</td>
 <td>Хиберниан (Эдинбург)<br>Шотландия<br>Artem Subaev</td>
 <td>Сошо<br>Франция<br>Edward Polovoy</td>
-<td>Твенте (Энсхеде)<br>Голландия<br>Alex Zolotov</td>
+<td>Твенте (Энсхеде)<br>Нидерланды<br>Alex Zolotov</td>
 <td>Лейрия<br>Португалия<br>Yuri Kopchenov</td>
+<td><font color="lightgrey">не проводился</font></td>
 </tr>
 <tr>
 <td>2000-2001</td>
@@ -1889,6 +2493,7 @@
 <td>Металлург (Мариуполь)<br>Украина<br>Pavel Khotushin</td>
 <td>Олимпиакос (Пирей)<br>Греция<br>Vano Opulsky</td>
 <td>Штутгарт<br>Германия<br>Leonid Sementsov</td>
+<td><font color="lightgrey">не проводился</font></td>
 </tr>
 <tr>
 <td>2001-2002</td>
@@ -1896,6 +2501,7 @@
 <td>Берлин<br>Германия<br>Alex Pavlovich</td>
 <td>Галатасарай (Стамбул)<br>Турция<br>Michael Plakunov</td>
 <td>Ливингстон<br>Шотландия<br>Alexey Plotitsa</td>
+<td><font color="lightgrey">не проводился</font></td>
 </tr>
 <tr>
 <td>2002-2003</td>
@@ -1903,6 +2509,7 @@
 <td>Олимпиакос (Пирей)<br>Греция<br>Vano Opulsky</td>
 <td>Росс Каунти (Дингуолл)<br>Шотландия<br>Mikola Taras</td>
 <td>Айнтрахт (Франкфурт)<br>Германия<br>Eugene Plugin</td>
+<td><font color="lightgrey">не проводился</font></td>
 </tr>
 <tr>
 <td>2003-2004</td>
@@ -1910,6 +2517,7 @@
 <td>Спартанс (Эдинбург)<br>Шотландия<br>Nikolay Golcev</td>
 <td>Ренн<br>Франция<br>Andrey Hrapko</td>
 <td>Ренн<br>Франция<br>Andrey Hrapko</td>
+<td><font color="lightgrey">не проводился</font></td>
 </tr>
 <tr>
 <td>2004-2005</td>
@@ -1917,6 +2525,7 @@
 <td>Лечче<br>Италия<br>Alexander Sessa</td>
 <td>Днепр-3<br>Украина<br>Nataliya Gladyr</td>
 <td>Стандард (Льеж)<br>Бельгия<br>Konstantin Smetanin</td>
+<td><font color="lightgrey">не проводился</font></td>
 </tr>
 <tr>
 <td>2005-2006</td>
@@ -1924,6 +2533,7 @@
 <td>Арсенал (Киев)<br>Украина<br>Alexander Sessa</td>
 <td>Монс (Берген)<br>Бельгия<br>Oksana Belash</td>
 <td>Ломмель<br>Бельгия<br>Dmitry Golovachev</td>
+<td><font color="lightgrey">не проводился</font></td>
 </tr>
 <tr>
 <td>2006-2007</td>
@@ -1931,6 +2541,7 @@
 <td>Арсенал (Киев)<br>Украина<br>Alexander Sessa</td>
 <td>Хартс (Эдинбург)<br>Шотландия<br>Alexandr Panasiuk</td>
 <td>Динамо (Киев)<br>Украина<br>Vano Opulsky</td>
+<td><font color="lightgrey">не проводился</font></td>
 </tr>
 <tr>
 <td>2008</td>
@@ -1938,6 +2549,7 @@
 <td>Альбасете<br>Испания<br>Alex Rexyard</td>
 <td>Канн<br>Франция<br>Andrey Vishinski</td>
 <td>Динамо (Киев)<br>Украина<br>Vano Opulsky</td>
+<td><font color="lightgrey">не проводился</font></td>
 </tr>
 <tr>
 <td>2008-2009</td>
@@ -1945,6 +2557,7 @@
 <td>Волга (Тверь)<br>Россия<br>Sergey Lavrentiev</td>
 <td>Alemannia (Aachen)<br>Германия<br>Dmitry Kuzmenko</td>
 <td>Foggia<br>Италия<br>Vano Opulsky</td>
+<td><font color="lightgrey">не проводился</font></td>
 </tr>
 <tr>
 <td>2009-2010</td>
@@ -1952,6 +2565,7 @@
 <td>Schalke 04 (Gelsenkirchen)<br>Германия<br>Andrey Vishinski</td>
 <td>Lecce<br>Италия<br>Roman Anpilogov</td>
 <td>Витебск<br>Беларусь<br>Alexandr Dashkevich</td>
+<td><font color="lightgrey">не проводился</font></td>
 </tr>
 <tr>
 <td>2010-2011</td>
@@ -1959,6 +2573,7 @@
 <td>1860 Munchen<br>Германия<br>Nikita Segal</td>
 <td>Athletic (Bilbao)<br>Испания<br>Alexander Sessa</td>
 <td>Ross County (Ross-shire)<br>Шотландия<br>Mikola Taras</td>
+<td><font color="lightgrey">не проводился</font></td>
 </tr>
 <tr>
 <td>2011-2012</td>
@@ -1966,6 +2581,7 @@
 <td>Stranraer<br>Шотландия<br>Andrey Vityuk</td>
 <td>Sunderland<br>Англия<br>Inna Sessa</td>
 <td>Campomaiorense (Campo Maior)<br>Португалия<br>Aleksander Lokalenkov</td>
+<td><font color="lightgrey">не проводился</font></td>
 </tr>
 <tr>
 <td>2012-2013</td>
@@ -1973,6 +2589,7 @@
 <td>West Ham United (London)<br>Англия<br>Lesha Nilov</td>
 <td>Estrela (Amadora)<br>Португалия<br>Andrey Teslin</td>
 <td>Wolfsburg<br>Германия<br>Vladislav Yezhergin</td>
+<td><font color="lightgrey">не проводился</font></td>
 </tr>
 <tr>
 <td>2013-2014</td>
@@ -1980,13 +2597,15 @@
 <td>West Ham United (London)<br>Англия<br>Lesha Nilov</td>
 <td>ФК Гомель<br>Беларусь<br>Vitya Baranovsky</td>
 <td>Dundee United<br>Шотландия<br>Vitya Baranovsky</td>
+<td><font color="lightgrey">не проводился</font></td>
 </tr>
 <tr>
 <td>2014-2015</td>
-<td>FC Eindhoven<br>Голландия<br>Kirill Goloschekov</td>
+<td>FC Eindhoven<br>Нидерланды<br>Kirill Goloschekov</td>
 <td>1860 München<br>Германия<br>Nikita Segal</td>
-<td>AZ Alkmaar<br>Голландия<br>Lesha Nilov</td>
+<td>AZ Alkmaar<br>Нидерланды<br>Lesha Nilov</td>
 <td>Cannes<br>Франция<br>Andrey Vishinski</td>
+<td><font color="lightgrey">не проводился</font></td>
 </tr>
 <tr>
 <td>2015-2016</td>
@@ -1994,6 +2613,7 @@
 <td>Laval<br>Франция<br>Alex Rexyard</td>
 <td>Ротор (Волгоград)<br>Россия<br>Taras Lobko</td>
 <td>AS Roma<br>Италия<br>Vladislav Yezhergin</td>
+<td><font color="lightgrey">не проводился</font></td>
 </tr>
 <tr>
 <td>2016-2017</td>
@@ -2001,6 +2621,7 @@
 <td>Металлист (Харьков)<br>Украина<br>Kirill Goloschekov</td>
 <td>ФК Минск<br>Беларусь<br>Alex Tarasov</td>
 <td>Hellas Verona<br>Италия<br>Taras Lobko</td>
+<td><font color="lightgrey">не проводился</font></td>
 </tr>
 <tr>
 <td>2017-2018</td>
@@ -2008,6 +2629,7 @@
 <td>Kilmarnock<br>Шотландия<br>Vladislav Yezhergin</td>
 <td>Tottenham Hotspur (London)<br>Англия<br>Alexander Sessa</td>
 <td>Ternana<br>Италия<br>Max Ratasoff</td>
+<td><font color="lightgrey">не проводился</font></td>
 </tr>
 <tr>
 <td>2018-2019</td>
@@ -2015,5 +2637,34 @@
 <td>ФК Ростов<br>Россия<br>Vladislav Yezhergin</td>
 <td>Augsburg<br>Германия<br>Андрей Новиков</td>
 <td>Ильичевец (Мариуполь)<br>Украина<br>Павел Хотюшин</td>
+<td><font color="lightgrey">не проводился</font></td>
+</tr>
+<td>2019-2020</td>
+<td>TSV 1860 München<br>Германия<br>Nikita Segal</td>
+<td>Olympique Marseille<br>Франция<br>Nikita Segal</td>
+<td>Calcio Catania<br>Италия<br>Михаил Сирота</td>
+<td>SC Telstar<br>Нидерланды<br>Михаил Сирота</td>
+<td><font color="lightgrey">не проводился</font></td>
+</tr>
+<td>2020-2021</td>
+<td>Olympique Marseille<br>Франция<br>Nikita Segal</td>
+<td>Ахмат (Грозный)<br>Россия<br>Oleg Mereuts</td>
+<td>Ахмат (Грозный)<br>Россия<br>Oleg Mereuts</td>
+<td>ФК Гомель<br>Беларусь<br>ВитЬя Барановский</td>
+<td><font color="lightgrey">не проводился</font></td>
+</tr>
+<td>2021-2022</td>
+<td>Olympique Marseille<br>Франция<br>Nikita Segal</td>
+<td>Динамо (Київ)<br>Украина<br>Vano Opulsky</td>
+<td>Динамо (Київ)<br>Украина<br>Vano Opulsky</td>
+<td>ФК Олександрія<br>Украина<br>Gleb Arsatov</td>
+<td>ФК Сочи<br>Россия<br>Олег Крупич</td>
+</tr>
+<td>2023-2024</td>
+<td>Славия (Мозырь)<br>Беларусь<br>Alex Baranovsky</td>
+<td>Спартак (Москва)<br>Россия<br>Serge Shibaev</td>
+<td>Wolverhampton<br>Англия<br>Nikita Segal</td>
+<td>UC Sampdoria<br>Италия<br>Кирилл Голощёков</td>
+<td>FC Braitenrain<br>Швейцария<br>Minotavr</td>
 </tr>
 </table>
