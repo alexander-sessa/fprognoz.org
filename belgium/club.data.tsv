@@ -1,1 +1,13 @@
 #код	файл с эмблемой клуба	название	город	год	стадион	мест	сайт
+ANDER	belgium/ANDER.gif	R.S.C. Anderlecht	Brussels	1908	Lotto Park	22500	https://www.rsca.be
+BRUGGE	belgium/BRUGGE.gif	Club Brugge KV	Bruges	1891	Jan Breydel Stadium	29062	https://www.clubbrugge.be/en
+GENK	belgium/GENK.gif	K.R.C. Genk	Genk	1988	Cegeka Arena	23718	http://www.krcgenk.be
+GENT	belgium/GENT.gif	K.A.A. Gent	Ghent	1864	Planet Group Arena	20175	http://www.kaagent.be
+LIERSE	belgium/LIERSE.gif	Lierse S.K.	Lier	1906		Herman Vanderpoortenstadion	14538	http://www.lierse.com
+MECHELEN	belgium/MECHELEN.gif	K.V. Mechelen	Mechelen	1904	Achter de Kazerne	16672	http://www.kvmechelen.be
+LOMMEL	belgium/LOMMEL.gif	Lommel S.K.	Lommel	1932	Soevereinstadion	8000	https://www.lommelsk.be
+HAREL	belgium/HAREL.gif	K.R.C. Harelbeke	Harelbeke	1930	Stedelijk Forestiersstadion	10000	https://www.krc-harelbeke.be
+LOKEREN	belgium/LOKEREN.gif	Lokeren-Temse	Lokeren	2020	Daknamstadion	12136	none
+BEVEREN	belgium/BEVEREN.gif	S.K. Beveren	Beveren	1936	Freethiel Stadion	8190	https://www.skbeveren.be
+STANDL	belgium/STANDL.gif	Standard Liege	Liege	1898	Stade Maurice Dufrasne	27670	http://www.standard.be
+UNIONST	belgium/UNIONST.gif	Royale Union Saint-Gilloise	Brussels	1897	Joseph Marien Stadium	9400	http://www.rusg.brussels
